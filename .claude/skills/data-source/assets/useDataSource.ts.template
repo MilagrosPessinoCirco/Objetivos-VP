@@ -1,0 +1,10 @@
+import { useDatasource } from '../../api';
+import { DatasourceHook } from '../../api/useDatasource';
+import { __LISTA__ } from '../../entities';
+import __LISTA__DataSource from './__LISTA__DataSource';
+
+function use__LISTA__DataSource(): DatasourceHook<__LISTA__> {
+	return useDatasource<__LISTA__>(new __LISTA__DataSource());
+}
+
+export default use__LISTA__DataSource;

@@ -1,0 +1,13 @@
+import { __LISTA__ } from '../../entities';
+
+export default interface I__LISTA__DataSource {
+
+	listTitle: string;
+
+	getItems(): Promise<__LISTA__[]>;
+	add(item: __LISTA__): Promise<__LISTA__>;
+	edit(item: __LISTA__): Promise<__LISTA__>;
+	delete(itemId: number): Promise<void>;
+	getById(itemId: number): Promise<__LISTA__>;
+__METODOS_OPCIONALES_FIRMA__
+}
