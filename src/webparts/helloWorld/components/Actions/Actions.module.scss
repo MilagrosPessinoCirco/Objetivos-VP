@@ -1,0 +1,53 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.Filters {
+	//@include ms-Grid;
+	width: 342px;
+
+	&_Row {
+		@include ms-Grid-row;
+
+		&_Buttons {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 12px;
+			min-width: 360px;
+			width: 100%;
+			//@include ms-Grid-col;
+			@include ms-sm6;
+			@include ms-md6;
+			@include ms-lg6;
+
+			&_ButtonAdd {
+				background-color: #0052b1;
+			}
+
+			&_ButtonEdit {
+				background-color: #0052b1;
+			}
+
+			&_ButtonDelete {
+				background-color: #0052b1;
+			}
+		}
+
+		&_Row_Filter {
+			display: none;
+		}
+
+		&_Row_Buttons_ButtonAdd,
+		&_Row_Buttons_ButtonEdit,
+		&_Row_Buttons_ButtonDelete,
+		&_Row_Filter_Button {
+			background-color: #0052b1;
+			color: #fff;
+			cursor: pointer;
+			padding: 5px 10px;
+			font-size: 14px;
+			flex-grow: 1;
+			min-width: 120px;
+			max-width: 200px;
+		}
+	}
+}

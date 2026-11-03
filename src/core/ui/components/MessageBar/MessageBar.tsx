@@ -1,0 +1,50 @@
+import * as React from "react";
+import { MessageBar as MessageBarFabric, MessageBarType } from '@fluentui/react';
+
+import { ShowPanel } from '../';
+import styles from "./MessageBar.module.scss";
+
+export interface IMessageBarProps {
+	text?: string;
+	messageType: MessageBarType;
+	time?: number;
+}
+
+const MessageBar: React.FunctionComponent<IMessageBarProps> = ({ text, messageType, time }) => {
+
+	const [showMessage, setShowMessage] = React.useState<boolean>(!!text);
+
+	const handleDismiss = () => (
+		setShowMessage(false)
+	);
+
+	React.useEffect(() => {
+		setShowMessage(!!text);
+		let timeoutId: string | number | NodeJS.Timeout | undefined;
+		if (time !== 0) {
+			timeoutId = setTimeout(() => {
+				handleDismiss();
+			}, 5000);
+		}
+		return () => {
+			return clearTimeout(timeoutId);
+		};
+	}, [text]);
+
+	return (
+		<ShowPanel show={showMessage}>
+			<div className={styles.container}>
+				<MessageBarFabric
+					messageBarType={messageType}
+					isMultiline={false}
+					onDismiss={handleDismiss}
+					dismissButtonAriaLabel='Close'
+				>
+					{text}
+				</MessageBarFabric>
+			</div>
+		</ShowPanel>
+	);
+};
+
+export default MessageBar;

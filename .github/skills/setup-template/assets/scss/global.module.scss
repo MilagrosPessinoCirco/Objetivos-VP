@@ -1,0 +1,13 @@
+:global {
+  body:not(.edit-mode) {
+    div[data-sp-feature-tag="Site header host"],
+    #spCommandBar,
+    .commandBarWrapper,
+    [class*="ar_f_"],
+    [role="region"][aria-label="Barra de comandos"],
+    #sp-appBar,
+    .sp-appBar {
+      display: none !important;
+    }
+  }
+}

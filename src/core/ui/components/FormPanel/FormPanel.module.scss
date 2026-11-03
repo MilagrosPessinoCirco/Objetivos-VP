@@ -1,0 +1,156 @@
+
+@import '~@fluentui/react/dist/sass/References.scss';
+
+// Export de clases para TS/JS
+:export {
+	customHeader: customHeader;
+	headerTitle: headerTitle;
+	closeButton: closeButton;
+}
+// Header personalizado para alineación perfecta
+.customHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: $ms-color-themeDarkAlt;
+	padding: 0 16px;
+	min-height: 56px;
+	width: 100%;
+	margin: 0;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+.headerTitle {
+	color: $ms-color-neutralLighter;
+	font-family: 'DIN', Arial, sans-serif !important;
+	font-size: 1.2rem;
+	font-weight: 400;
+	text-transform: uppercase;
+}
+
+.closeButton {
+	background: none;
+	border: none;
+	color: $ms-color-neutralLighter;
+	font-size: 2rem;
+	cursor: pointer;
+	padding: 0 8px;
+	height: 32px;
+	width: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.formPanel {
+	//@include ms-Grid;
+
+	   .row {
+		   padding: 30px;
+		   @include ms-Grid-row;
+
+		   .column {
+			   //@include ms-Grid-col;
+			   @include ms-sm12;
+			   margin-bottom: 15px;
+		   }
+	   }
+
+	:global(.ms-Panel-main) {
+		width: 100% !important;
+
+		@include ms-screen-md-up {
+			width: 100% !important;
+		}
+
+		@include ms-screen-lg-up {
+			width: 600px !important;
+		}
+	}
+
+	:global(.ms-Panel-navigation) {
+		background-color: $ms-color-themeDarkAlt;
+		position: relative;
+		z-index: 200;
+	}
+
+	:global(.ms-Panel-commands) {
+		margin-top: 0;
+	}
+
+	   :global(.ms-Panel-header) {
+		   background-color: $ms-color-themeDarkAlt;
+		   font-family: 'DIN', Arial, sans-serif !important;
+		   margin: 0;
+		   position: relative;
+		   z-index: 200;
+		   text-transform: uppercase;
+		   display: flex;
+		   flex-direction: row;
+		   align-items: center;
+		   justify-content: space-between;
+		   min-height: 56px;
+		   padding: 0 16px 0 0;
+		   box-sizing: border-box;
+		   gap: 0;
+	   }
+
+	   :global(.ms-Panel-headerText) {
+		   background-color: $ms-color-themeDarkAlt;
+		   font-family: 'DIN', Arial, sans-serif !important;
+		   margin: 0;
+		   padding: 0;
+		   color: $ms-color-neutralLighter;
+		   font-weight: 400;
+		   flex: 1;
+		   display: flex;
+		   align-items: center;
+		   min-height: 56px;
+		   font-size: 1.2rem;
+		   line-height: 1;
+	   }
+
+	:global(.ms-Panel-content) {
+		padding-left: 20px !important;
+		padding-right: 20px !important;
+	}
+
+	:global(.ms-Panel-footerInner) {
+		background-color: #fff;
+		position: relative;
+		z-index: 300;
+	}
+
+	   :global(.ms-Panel-closeButton),
+	   :global(.ms-Panel-closeButton:hover),
+	   :global(.ms-Panel-closeButton:active) {
+		   background: none;
+		   align-self: center;
+		   margin: 0 0 0 8px;
+		   padding: 0;
+		   height: 32px;
+		   width: 32px;
+		   display: flex;
+		   align-items: center;
+		   justify-content: center;
+		   position: relative;
+		   z-index: 1;
+	   }
+
+	:global(.ms-Button-flexContainer) {
+		color: #fff;
+	}
+
+	:global(.ms-Button-label) {
+		margin: 13px 0;
+	}
+
+	.rightButton {
+		margin-left: 15px;
+
+		:global(.ms-Button-textContainer) {
+			color: $ms-color-neutralDark;
+		}
+	}
+}
