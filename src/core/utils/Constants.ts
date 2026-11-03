@@ -6,3 +6,75 @@ export const AZURE_API:string = 'api';
 
 export const EMAIL_SUBJECT:string = 'Nuevo Item Creado';
 export const EMAIL_BODY:string = 'Se ha creado un nuevo item con el siguiente detalle:\n\nID: {Id}\nTítulo: {Titulo}';
+
+export enum Lista {
+	Palanca = "Palanca",
+	Vicepresidencia = "Vicepresidencia",
+	Departamento = "Departamento",
+	Gerencia = "Gerencia",
+	Area = "Area",
+	Objetivo = "Objetivo",
+	Usuario = "Usuario",
+	Iniciativa = "Iniciativa",
+	ComentarioIniciativa = "Comentario iniciativa",
+	ResultadoClave = "Resultado clave",
+	Tarea = "Tarea",
+	AvanceTarea = "Avance tarea",
+	Riesgo = "Riesgo",
+	PresupuestoTarea = "Presupuesto tarea",
+	Decision = "Decision"
+}
+
+export enum Duracion {
+	Anual = "Anual",
+	Plurianual = "Plurianual",
+	Permanente = "Permanente"
+}
+
+export enum Estado {
+	EnCurso = "En curso",
+	FinalizadoCumplido = "Finalizado cumplido",
+	FinalizadoIncumplido = "Finalizado incumplido"
+}
+
+export enum Rol {
+	Administrador = "Administrador",
+	CargadorObjetivo = "Cargador objetivo",
+	Usuario = "Usuario",
+	Visualizador = "Visualizador"
+}
+
+export enum EstadoIniciativa {
+	NoIniciada = "No iniciada",
+	EnCurso = "En curso",
+	Frenada = "Frenada",
+	Finalizada = "Finalizada",
+	Cancelada = "Cancelada"
+}
+
+export enum TipoMedicion {
+	Cantidad = "Cantidad",
+	Porcentaje = "Porcentaje",
+	Moneda = "Moneda",
+	Indicador = "Indicador"
+}
+
+export enum Prioridad {
+	Alta = "Alta",
+	Media = "Media",
+	Baja = "Baja"
+}
+
+export enum EstadoTarea {
+	NoIniciada = "No iniciada",
+	EnCurso = "En curso",
+	Frenada = "Frenada",
+	Finalizada = "Finalizada",
+	Cancelada = "Cancelada"
+}
+
+export enum EstadoRiesgo {
+	Activo = "Activo",
+	Escalado = "Escalado",
+	Resuelto = "Resuelto"
+}

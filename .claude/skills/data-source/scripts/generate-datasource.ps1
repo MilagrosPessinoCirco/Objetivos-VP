@@ -266,6 +266,7 @@ function Assert-ValidSpec {
             Tipo = $tipo
             TsKind = $script:TypeMap[$tipo]
             ChoiceOptions = if ($null -ne $campo.PSObject.Properties["opciones"]) { @($campo.opciones) } else { @() }
+            EnumName = if ($null -ne $campo.PSObject.Properties["enum"] -and -not [string]::IsNullOrWhiteSpace([string]$campo.enum)) { [string]$campo.enum } else { $internalName }
         })
     }
 
@@ -275,6 +276,7 @@ function Assert-ValidSpec {
 
     return [PSCustomObject]@{
         Lista = $listaName
+        TituloLista = if ($null -ne $Spec.PSObject.Properties["tituloLista"] -and -not [string]::IsNullOrWhiteSpace([string]$Spec.tituloLista)) { ([string]$Spec.tituloLista).Replace("\", "\\").Replace([string][char]34, "\" + [char]34) } else { $listaName }
         Campos = $fields
     }
 }
@@ -310,8 +312,8 @@ function Get-TsTypeForField {
         "lookupMultiple" { return "ILookupValue[] | undefined" }
         "url" { return "IUrlValue | undefined" }
         "calculated" { return "string | undefined" }
-        "choice" { return "$($Field.InternalName) | undefined" }
-        "choiceMultiple" { return "$($Field.InternalName)[] | undefined" }
+        "choice" { return "$($Field.EnumName) | undefined" }
+        "choiceMultiple" { return "$($Field.EnumName)[] | undefined" }
         default { throw "Tipo TS no resuelto para el campo '$($Field.InternalName)'." }
     }
 }
@@ -331,8 +333,8 @@ function Get-MapItemLineForField {
         "lookupMultiple" { return "`t`tthis.$name = toLookupValueArray(item.$name);" }
         "url" { return "`t`tthis.$name = toUrlValue(item.$name);" }
         "calculated" { return "`t`tthis.$name = item.$name ?? undefined;" }
-        "choice" { return "`t`tthis.$name = toChoiceValue($name, item.$name, '$name');" }
-        "choiceMultiple" { return "`t`tthis.$name = toChoiceValueArray($name, item.$name, '$name');" }
+        "choice" { return "`t`tthis.$name = toChoiceValue($($Field.EnumName), item.$name, '$name');" }
+        "choiceMultiple" { return "`t`tthis.$name = toChoiceValueArray($($Field.EnumName), item.$name, '$name');" }
         default { throw "Lectura no resuelta para el campo '$name'." }
     }
 }
@@ -343,13 +345,13 @@ function Get-ToListItemLineForField {
     $name = $Field.InternalName
     switch ($Field.TsKind) {
         "calculated" { return $null }
-        "lookup" { return "`t`t`t${name}Id: this.$name?.Id," }
-        "lookupMultiple" { return "`t`t`t${name}Id: this.$name?.map(v => v.Id)," }
-        "person" { return "`t`t`t${name}Id: this.$name?.Id," }
+        "lookup" { return "`t`t`t${name}Id: this.${name}?.Id," }
+        "lookupMultiple" { return "`t`t`t${name}Id: this.${name}?.map(v => v.Id)," }
+        "person" { return "`t`t`t${name}Id: this.${name}?.Id," }
         "personMultiple" { return "`t`t`t${name}Id: toPersonIds(this.$name)," }
         "url" { return "`t`t`t${name}: this.$name," }
-        "choice" { return "`t`t`t${name}: assertChoiceValue($name, this.$name, '$name')," }
-        "choiceMultiple" { return "`t`t`t${name}: this.$name?.map(v => assertChoiceValue($name, v, '$name'))," }
+        "choice" { return "`t`t`t${name}: assertChoiceValue($($Field.EnumName), this.$name, '$name')," }
+        "choiceMultiple" { return "`t`t`t${name}: this.${name}?.map(v => assertChoiceValue($($Field.EnumName), v, '$name'))," }
         default { return "`t`t`t${name}: this.$name," }
     }
 }
@@ -383,8 +385,19 @@ function New-EntityFile {
     if ($mapperImports.Count -gt 0) {
         $campoImportsLines.Add("import { $($mapperImports -join ', ') } from '../utils/Mappers';")
     }
+    $choiceImportNames = [System.Collections.Generic.List[string]]::new()
     foreach ($choiceField in $choiceFields) {
-        $script:Warnings.Add("El campo de elección '$($choiceField.InternalName)' requiere que el enum '$($choiceField.InternalName)' exista en el módulo de la entidad; agregarlo manualmente con las opciones reales de la lista antes de compilar.")
+        if (Test-ConstantsEnumExists -Name $choiceField.EnumName) {
+            if (-not $choiceImportNames.Contains($choiceField.EnumName)) {
+                $choiceImportNames.Add($choiceField.EnumName)
+            }
+        }
+        else {
+            $script:Warnings.Add("El campo de elección '$($choiceField.InternalName)' no declaró 'opciones' en el spec y el enum '$($choiceField.EnumName)' no existe en src/core/utils/Constants.ts; agregarlo manualmente con las opciones reales de la lista e importarlo en la entidad antes de compilar.")
+        }
+    }
+    if ($choiceImportNames.Count -gt 0) {
+        $campoImportsLines.Add("import { $($choiceImportNames -join ', ') } from '../utils/Constants';")
     }
 
     $mapItemLines = @($Fields | ForEach-Object { Get-MapItemLineForField -Field $_ })
@@ -482,10 +495,94 @@ function New-DataSourceFiles {
     Write-TextFile -Path (Join-Path $folder "useItem${Lista}DataSource.ts") -Content $useItemContent
 }
 
+# --- Enums de elección en Constants.ts -----------------------------------------
+
+function Get-ConstantsPath {
+    return Join-Path $script:ProjectRoot "src\core\utils\Constants.ts"
+}
+
+function Test-ConstantsEnumExists {
+    param([Parameter(Mandatory = $true)][string]$Name)
+
+    $constantsPath = Get-ConstantsPath
+    if (-not (Test-Path -LiteralPath $constantsPath -PathType Leaf)) {
+        return $false
+    }
+
+    $content = Read-TextFile -Path $constantsPath
+    return [regex]::IsMatch($content, "(?m)^\s*export\s+enum\s+$([regex]::Escape($Name))\b")
+}
+
+function ConvertTo-EnumKey {
+    param([Parameter(Mandatory = $true)][string]$Option)
+
+    $decomposed = $Option.Normalize([System.Text.NormalizationForm]::FormD)
+    $builder = [System.Text.StringBuilder]::new()
+    foreach ($char in $decomposed.ToCharArray()) {
+        if ([System.Globalization.CharUnicodeInfo]::GetUnicodeCategory($char) -ne [System.Globalization.UnicodeCategory]::NonSpacingMark) {
+            [void]$builder.Append($char)
+        }
+    }
+
+    $words = @([regex]::Split($builder.ToString(), '[^A-Za-z0-9]+') | Where-Object { $_.Length -gt 0 })
+    if ($words.Count -eq 0) {
+        throw "La opción de elección '$Option' no permite derivar un identificador válido."
+    }
+
+    $key = ($words | ForEach-Object { $_.Substring(0, 1).ToUpperInvariant() + $_.Substring(1) }) -join ""
+    if ($key -match '^[0-9]') {
+        $key = "_$key"
+    }
+    return $key
+}
+
+function Update-ChoiceEnums {
+    param([Parameter(Mandatory = $true)][System.Collections.Generic.List[object]]$Fields)
+
+    $constantsPath = Get-ConstantsPath
+    $content = if (Test-Path -LiteralPath $constantsPath -PathType Leaf) { Read-TextFile -Path $constantsPath } else { "" }
+    $original = $content
+
+    foreach ($field in @($Fields | Where-Object { $_.TsKind -in @("choice", "choiceMultiple") })) {
+        $enumName = $field.EnumName
+        if (@($field.ChoiceOptions).Count -eq 0) {
+            continue
+        }
+
+        if ([regex]::IsMatch($content, "(?m)^\s*export\s+enum\s+$([regex]::Escape($enumName))\b")) {
+            $script:Warnings.Add("El enum '$enumName' ya existe en src/core/utils/Constants.ts; se respeta sin modificarlo. Verificar que sus opciones coincidan con las de la lista.")
+            continue
+        }
+
+        $entries = [System.Collections.Generic.List[string]]::new()
+        $usedKeys = [System.Collections.Generic.HashSet[string]]::new()
+        foreach ($option in @($field.ChoiceOptions)) {
+            $optionText = [string]$option
+            $key = ConvertTo-EnumKey -Option $optionText
+            if (-not $usedKeys.Add($key)) {
+                throw "Las opciones del campo '$enumName' generan el identificador duplicado '$key'."
+            }
+            $escaped = $optionText.Replace("\", "\\").Replace('"', '\"')
+            $entries.Add("`t$key = `"$escaped`"")
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($content) -and -not $content.EndsWith([Environment]::NewLine)) {
+            $content += [Environment]::NewLine
+        }
+        $content += "$([Environment]::NewLine)export enum $enumName {$([Environment]::NewLine)$($entries -join ",$([Environment]::NewLine)")$([Environment]::NewLine)}$([Environment]::NewLine)"
+    }
+
+    if ($content -cne $original) {
+        Write-TextFile -Path $constantsPath -Content $content
+    }
+}
 # --- Enum Lista en Constants.ts ---------------------------------------------
 
 function Update-ListaEnum {
-    param([Parameter(Mandatory = $true)][string]$Lista)
+    param(
+        [Parameter(Mandatory = $true)][string]$Lista,
+        [Parameter(Mandatory = $false)][string]$Titulo = $Lista
+    )
 
     $constantsPath = Join-Path $script:ProjectRoot "src\core\utils\Constants.ts"
     $content = if (Test-Path -LiteralPath $constantsPath -PathType Leaf) { Read-TextFile -Path $constantsPath } else { "" }
@@ -496,7 +593,7 @@ function Update-ListaEnum {
         if (-not [string]::IsNullOrWhiteSpace($content) -and -not $content.EndsWith([Environment]::NewLine)) {
             $content += [Environment]::NewLine
         }
-        $content += "$([Environment]::NewLine)export enum Lista {$([Environment]::NewLine)`t$Lista = `"$Lista`"$([Environment]::NewLine)}$([Environment]::NewLine)"
+        $content += "$([Environment]::NewLine)export enum Lista {$([Environment]::NewLine)`t$Lista = `"$Titulo`"$([Environment]::NewLine)}$([Environment]::NewLine)"
         Write-TextFile -Path $constantsPath -Content $content
         return
     }
@@ -507,7 +604,7 @@ function Update-ListaEnum {
 
     if ($entryMatch.Success) {
         $script:Warnings.Add("El enum Lista ya tenía una entrada para '$Lista'; se corrige el formato sin tocar las demás entradas.")
-        $correctedBody = [regex]::Replace($enumBody, $entryPattern, "`t$Lista = `"$Lista`",")
+        $correctedBody = [regex]::Replace($enumBody, $entryPattern, "`t$Lista = `"$Titulo`",")
         $newContent = $content.Substring(0, $enumMatch.Groups[1].Index) + $correctedBody + $content.Substring($enumMatch.Groups[1].Index + $enumMatch.Groups[1].Length)
         Write-TextFile -Path $constantsPath -Content $newContent
         return
@@ -517,7 +614,7 @@ function Update-ListaEnum {
     if (-not $trimmedBody.EndsWith(",") -and $trimmedBody.Trim().Length -gt 0) {
         $trimmedBody += ","
     }
-    $newBody = "$trimmedBody$([Environment]::NewLine)`t$Lista = `"$Lista`"$([Environment]::NewLine)"
+    $newBody = "$trimmedBody$([Environment]::NewLine)`t$Lista = `"$Titulo`"$([Environment]::NewLine)"
     $newContent = $content.Substring(0, $enumMatch.Groups[1].Index) + $newBody + $content.Substring($enumMatch.Groups[1].Index + $enumMatch.Groups[1].Length)
     Write-TextFile -Path $constantsPath -Content $newContent
 }
@@ -547,6 +644,8 @@ try {
     $script:CurrentStage = "Artefactos compartidos"
     Ensure-Mappers
 
+    $script:CurrentStage = "Enums de elección"
+    Update-ChoiceEnums -Fields $spec.Campos
     $script:CurrentStage = "Generación de la entidad"
     New-EntityFile -Lista $spec.Lista -Fields $spec.Campos
     Update-EntitiesBarrel -Lista $spec.Lista
@@ -555,7 +654,7 @@ try {
     New-DataSourceFiles -Lista $spec.Lista -Fields $spec.Campos
 
     $script:CurrentStage = "Registro en el enum Lista"
-    Update-ListaEnum -Lista $spec.Lista
+    Update-ListaEnum -Lista $spec.Lista -Titulo $spec.TituloLista
 
     $script:CurrentStage = "Validación con lint"
     Invoke-LoggedCommand -Command "npm" -Arguments @("run", "lint") -Label "npm run lint"

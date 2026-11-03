@@ -1,2 +1,17 @@
 export { default as BaseEntity } from './BaseEntity';
 export { default as Item } from './Item';
+export { default as Palanca } from './Palanca';
+export { default as Vicepresidencia } from './Vicepresidencia';
+export { default as Departamento } from './Departamento';
+export { default as Gerencia } from './Gerencia';
+export { default as Area } from './Area';
+export { default as Objetivo } from './Objetivo';
+export { default as Usuario } from './Usuario';
+export { default as Iniciativa } from './Iniciativa';
+export { default as ComentarioIniciativa } from './ComentarioIniciativa';
+export { default as ResultadoClave } from './ResultadoClave';
+export { default as Tarea } from './Tarea';
+export { default as AvanceTarea } from './AvanceTarea';
+export { default as Riesgo } from './Riesgo';
+export { default as PresupuestoTarea } from './PresupuestoTarea';
+export { default as Decision } from './Decision';
