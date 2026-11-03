@@ -9,7 +9,7 @@ export default class Decision extends BaseEntity {
 
 	protected mapItem(item: any): void {
 		this.DecisionNecesaria = item.DecisionNecesaria ?? undefined;
-		this.FechaResolucion = toLookupValue(item.FechaResolucion);
+		this.FechaResolucion = toDateValue(item.FechaResolucion);
 		this.Riesgo = toLookupValue(item.Riesgo);
 		this.Responsable = item.Responsable ?? undefined;
 		this.FechaLimite = toDateValue(item.FechaLimite);
@@ -23,7 +23,7 @@ export default class Decision extends BaseEntity {
 		return {
 			...super.toListItem(),
 			DecisionNecesaria: this.DecisionNecesaria,
-			FechaResolucionId: this.FechaResolucion?.Id,
+			FechaResolucion: this.FechaResolucion,
 			RiesgoId: this.Riesgo?.Id,
 			Responsable: this.Responsable,
 			FechaLimite: this.FechaLimite,
@@ -31,7 +31,7 @@ export default class Decision extends BaseEntity {
 	}
 
 	public DecisionNecesaria?: string | undefined;
-	public FechaResolucion?: ILookupValue | undefined;
+	public FechaResolucion?: Date | null | undefined;
 	public Riesgo?: ILookupValue | undefined;
 	public Responsable?: string | undefined;
 	public FechaLimite?: Date | null | undefined;

@@ -1,6 +1,7 @@
 import { BaseEntity } from './';
 import { IPersonValue, toPersonValue, toDateValue } from '../utils/Mappers';
 import { IUrlValue, toUrlValue, toChoiceValue, toChoiceValueArray, assertChoiceValue } from '../utils/Mappers';
+import { ILookupValue, toLookupValue } from '../utils/Mappers';
 import { TipoMedicion } from '../utils/Constants';
 
 export default class ResultadoClave extends BaseEntity {
@@ -22,6 +23,7 @@ export default class ResultadoClave extends BaseEntity {
 		this.Fuente = item.Fuente ?? undefined;
 		this.Evidencia = toUrlValue(item.Evidencia);
 		this.ValorProyectado = item.ValorProyectado ?? undefined;
+		this.Iniciativa = toLookupValue(item.Iniciativa);
 		this.Created = toDateValue(item.Created);
 		this.Modified = toDateValue(item.Modified);
 		this.Author = toPersonValue(item.Author);
@@ -44,6 +46,7 @@ export default class ResultadoClave extends BaseEntity {
 			Fuente: this.Fuente,
 			Evidencia: this.Evidencia,
 			ValorProyectado: this.ValorProyectado,
+			IniciativaId: this.Iniciativa?.Id,
 		};
 	}
 
@@ -60,6 +63,7 @@ export default class ResultadoClave extends BaseEntity {
 	public Fuente?: string | undefined;
 	public Evidencia?: IUrlValue | undefined;
 	public ValorProyectado?: number | undefined;
+	public Iniciativa?: ILookupValue | undefined;
 
 	public Created?: Date | null;
 	public Modified?: Date | null;

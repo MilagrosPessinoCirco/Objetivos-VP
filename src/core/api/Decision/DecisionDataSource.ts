@@ -12,7 +12,7 @@ export default class DecisionDataSource implements IDecisionDataSource {
 	private selectProperties: Array<string> = [
 		'Id', 'Title',
 		'DecisionNecesaria',
-		'FechaResolucion/Id', 'FechaResolucion/Title',
+		'FechaResolucion',
 		'Riesgo/Id', 'Riesgo/Title',
 		'Responsable',
 		'FechaLimite',
@@ -20,7 +20,7 @@ export default class DecisionDataSource implements IDecisionDataSource {
 		'Author/Id', 'Author/Title', 'Author/EMail',
 		'Editor/Id', 'Editor/Title', 'Editor/EMail'
 	];
-	private expand: Array<string> = ['Author', 'Editor', 'FechaResolucion', 'Riesgo'];
+	private expand: Array<string> = ['Author', 'Editor', 'Riesgo'];
 
 	constructor() {
 		this._sp = getSP();

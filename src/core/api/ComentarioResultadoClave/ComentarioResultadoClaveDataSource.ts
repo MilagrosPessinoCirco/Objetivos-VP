@@ -32,6 +32,15 @@ export default class ComentarioResultadoClaveDataSource implements IComentarioRe
 		return items.map(item => new ComentarioResultadoClave(item));
 	}
 
+	public async getFilteredItems(resultadoClaveId: number): Promise<Array<ComentarioResultadoClave>> {
+		const items: any[] = await this._sp.web.lists.getByTitle(this.listTitle).items
+			.select(...this.selectProperties)
+			.expand(...this.expand)
+			.filter(`ResultadoClaveId eq ${resultadoClaveId}`)
+			.top(TOP_DEFAULT)();
+		return items.map(item => new ComentarioResultadoClave(item));
+	}
+
 	public add(item: ComentarioResultadoClave): Promise<ComentarioResultadoClave> {
 		const listItem = item.toListItem();
 		return this._sp.web.lists.getByTitle(this.listTitle).items.add(listItem).then((result: any) => {
