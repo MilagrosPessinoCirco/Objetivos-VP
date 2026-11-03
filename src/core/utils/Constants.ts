@@ -22,7 +22,8 @@ export enum Lista {
 	AvanceTarea = "Avance tarea",
 	Riesgo = "Riesgo",
 	PresupuestoTarea = "Presupuesto tarea",
-	Decision = "Decision"
+	Decision = "Decision",
+	ComentarioResultadoClave = "Comentario resultado clave"
 }
 
 export enum Duracion {

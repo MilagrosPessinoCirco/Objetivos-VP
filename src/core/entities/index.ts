@@ -15,3 +15,4 @@ export { default as AvanceTarea } from './AvanceTarea';
 export { default as Riesgo } from './Riesgo';
 export { default as PresupuestoTarea } from './PresupuestoTarea';
 export { default as Decision } from './Decision';
+export { default as ComentarioResultadoClave } from './ComentarioResultadoClave';
