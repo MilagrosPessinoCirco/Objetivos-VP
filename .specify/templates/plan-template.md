@@ -103,6 +103,33 @@ ios/ or android/
 **Structure Decision**: [Document the selected structure and reference the real
 directories captured above]
 
+## Interfaz y Design System
+
+<!--
+  ACTION REQUIRED: Completar si la feature tiene pantallas; si no tiene, indicar N/A.
+  Respetar el principio II de la constitución: la interfaz no se inventa.
+  No crear componentes propios para elementos sin equivalente en el Design System:
+  listarlos en "Elementos sin componente" para consultarlos antes de las tareas.
+-->
+
+**Diseño de referencia**: [rutas de las capturas en docs/pantallas/]
+
+**Design System**: `DESIGN-SYSTEM-SHP-TEMPLATE/`
+
+**Estructura de la pantalla**: [carpeta de la pantalla, componente principal y subcomponentes, con rutas reales]
+
+### Mapeo elemento → componente
+
+| Elemento de la pantalla | Componente del Design System | Observaciones |
+|-------------------------|------------------------------|---------------|
+| [ej. botón "Nueva iniciativa"] | [ej. ButtonWithIcon] | [variante, props relevantes] |
+
+### Elementos sin componente en el Design System
+
+[Listar cada elemento sin equivalente, con la alternativa propuesta (Fluent UI React u otra), o "Ninguno"]
+
+**Imágenes e íconos**: [archivos de src/core/ui/img/ y src/core/ui/img/svg/ que se usan, o placeholders con nombre descriptivo]
+
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
