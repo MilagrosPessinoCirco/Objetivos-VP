@@ -39,3 +39,6 @@ obj
 
 # Perfil de Edge usado para debug
 .vscode/edge-debug-profile/
+
+# Claude Code (configuración personal)
+.claude/settings.local.json
