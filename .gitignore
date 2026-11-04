@@ -42,3 +42,6 @@ obj
 
 # Claude Code (configuración personal)
 .claude/settings.local.json
+
+# Design system template (referencia local)
+DESIGN-SYSTEM-SHP-TEMPLATE/
