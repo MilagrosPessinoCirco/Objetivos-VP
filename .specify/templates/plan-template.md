@@ -112,7 +112,7 @@ directories captured above]
   listarlos en "Elementos sin componente" para consultarlos antes de las tareas.
 -->
 
-**Diseño de referencia**: [rutas de las capturas en docs/pantallas/]
+**Diseño de referencia**: [archivo y sección del prototipo en docs/Gestion-Objetivos-VP-RRII-prototipo_v5/]
 
 **Design System**: `DESIGN-SYSTEM-SHP-TEMPLATE/`
 

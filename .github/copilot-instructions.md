@@ -14,8 +14,8 @@
 - No realices cambios ni generes implementaciones cuando existan dudas funcionales sobre lo que debe construirse.
 - Antes de editar, identificá requerimientos ausentes, ambiguos, contradictorios o insuficientes que puedan modificar el comportamiento esperado.
 - Ante una duda funcional, detenete, explicá concretamente qué no está definido, formulá las preguntas necesarias y esperá una respuesta explícita antes de continuar.
-- No infieras reglas de negocio, estados, permisos, obligatoriedad de datos, comportamientos, validaciones ni relaciones entre entidades a partir de nombres, capturas, documentación parcial o código existente.
-- Las capturas de `docs/pantallas/` son la referencia visual de cada pantalla (disposición, componentes y textos). Las reglas de negocio surgen de `spec.md` y `plan.md`, no de las capturas.
+- No infieras reglas de negocio, estados, permisos, obligatoriedad de datos, comportamientos, validaciones ni relaciones entre entidades a partir de nombres, el prototipo, documentación parcial o código existente.
+- El prototipo navegable de `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` es la referencia visual de cada pantalla (disposición, componentes y textos); cada tarea cita el archivo y la sección del prototipo. Las reglas de negocio surgen de `spec.md` y `plan.md`, no del prototipo.
 - No consideres el silencio, una suposición probable ni una implementación previa como confirmación de un requerimiento funcional.
 - Resolvé sin consulta solamente las decisiones técnicas que no alteren el comportamiento funcional y que respeten la arquitectura y las convenciones existentes.
 

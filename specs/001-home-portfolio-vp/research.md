@@ -13,13 +13,13 @@ No quedaban `NEEDS CLARIFICATION` en el Technical Context. Esta investigación r
 ### D2. Contenedor de la tarjeta de bienvenida
 
 - **Decisión**: `Surface variant="raised"`.
-- **Motivo**: es la única superficie del catálogo con fondo blanco y sombra suave, como la tarjeta de la captura.
+- **Motivo**: es la única superficie del catálogo con fondo blanco y sombra suave, como la tarjeta del prototipo.
 - **Alternativas**: `Card` (descartada: pensada para contenido con acciones y fondos fijos azules).
 
 ### D3. Marca "by Plataformas 365 | IngSoft"
 
 - **Decisión**: `BrandLogo name="plataformas365"`.
-- **Motivo**: se verificó `foundations/brand/assets/plataformas365.png`; es la píldora completa de la captura.
+- **Motivo**: se verificó `foundations/brand/assets/plataformas365.png`; es la píldora completa del prototipo.
 
 ### D4. Textos
 
@@ -49,7 +49,7 @@ No quedaban `NEEDS CLARIFICATION` en el Technical Context. Esta investigación r
 
 ## Limitación
 
-No se midieron píxeles de la captura (no hay herramienta de análisis de imagen disponible en el entorno). Las posiciones, tamaños y colores del plan son estimaciones visuales; la equivalencia con tokens es aproximada y por eso se consulta (Q2).
+Las medidas del plan se tomaron del CSS del prototipo (`index.html`). Los valores que no tienen token del Design System se aproximaron al más cercano (Q7).
 
 ## Decisiones aprobadas posteriormente
 

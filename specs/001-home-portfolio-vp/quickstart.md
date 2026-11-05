@@ -11,13 +11,14 @@ Guía de validación de la feature. No contiene implementación.
 
 1. Compilar: `npm run build`. Debe terminar sin errores de lint ni de TypeScript.
 2. Levantar el entorno de desarrollo: `npm run start` (Heft, sin abrir navegador) y abrir el workbench o la página de prueba con el webpart `objetivosVp`. No se despliega ni se toca el tenant.
-3. Comparar la pantalla con `docs/pantallas/Home.png` a ancho de escritorio.
+3. Abrir el prototipo: ejecutar `iniciar-windows.bat` (o `./iniciar-mac-linux.sh`) dentro de `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` y abrir `http://localhost:8765/index.html`. Dejar el rol por defecto (Administrador, con el que se ven los cinco accesos).
+4. Comparar la pantalla con la pantalla Home del prototipo (`<section class="home">`) a ancho de escritorio.
 
 ## Resultados esperados
 
 | Verificación | Resultado | Requisito |
 |--------------|-----------|-----------|
-| Título y texto de la tarjeta | Idénticos a la captura | FR-001, FR-002 |
+| Título y texto de la tarjeta | Idénticos al prototipo | FR-001, FR-002 |
 | Ilustración | Presente dentro de la tarjeta | FR-003 |
 | Marca y "Manual de usuario" | Debajo de la tarjeta, marca a la izquierda y manual a la derecha | FR-004, FR-005 |
 | Accesos | Cinco, apilados, en el orden Mis tareas, Mis iniciativas, Palancas y objetivos, Tablero VP, ABM | FR-006 |
@@ -25,9 +26,9 @@ Guía de validación de la feature. No contiene implementación.
 | Disposición | Dos columnas: tarjeta (con marca y manual) a la izquierda, accesos a la derecha | FR-008 |
 | Cursor y teclado | Los accesos y el manual se perciben clickeables y se alcanzan con Tab | FR-009 |
 | Activación (clic, Enter, Espacio) | No navega, no abre pestañas, la pantalla no cambia | FR-010 |
-| Sin elementos extra | Sin barra superior del sitio, sin marca de agua, sin botones "Ver detalle" | FR-013, FR-014 |
+| Sin elementos extra | Sin barra superior del sitio ni elementos que no figuren en la pantalla Home del prototipo | FR-013, FR-014 |
 | Colores, tipografías y espaciados | Solo desde tokens del Design System (colores de los accesos desde `colorScales`) | Constitución II |
-| Excepciones aprobadas | "Manual de usuario" se ve como botón secundario; íconos y dos colores de accesos son aproximados y provisorios | plan.md, Q2–Q4 |
+| Excepciones aprobadas | "Manual de usuario" como botón secundario; íconos provisorios; colores de accesos, tamaños tipográficos, espaciados y alto de la tarjeta aproximados a tokens del DS; ABM siempre visible; sin efecto hover | plan.md, Q2–Q4, Q7, Q8 |
 
 ## Fuera de esta validación
 

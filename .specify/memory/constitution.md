@@ -1,15 +1,3 @@
-<!--
-Sync Impact Report (temporal; eliminar antes del commit)
-- Cambio de versión: 0.1.0 → 0.2.0 (MINOR: ampliación material de principios)
-- Principios modificados: I. Plataforma (stack explícito); II. La interfaz no se inventa
-  (Design System integrado en src/core/ui, reglas de uso en el catálogo, consulta obligatoria)
-- Principios agregados: V. Validación
-- Secciones modificadas: Flujo de desarrollo (tareas referencian componentes del DS, mapa de
-  componentes en el plan)
-- Pendientes: ninguno.
-- Plantillas dependientes: no se modifican aquí; leen la constitución en tiempo de ejecución.
--->
-
 # Constitución · Gestión de Portfolio VP
 
 ## Principios Fundamentales
@@ -25,7 +13,8 @@ Sync Impact Report (temporal; eliminar antes del commit)
 
 ### II. La interfaz no se inventa (NO NEGOCIABLE)
 
-- Cada pantalla DEBE construirse a partir de su diseño provisto, en `docs/pantallas/`. No se
+- Cada pantalla DEBE construirse a partir de su diseño provisto: el prototipo de
+  `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/`, citando archivo y sección. No se
   agregan pantallas, disposiciones ni elementos que no estén en el diseño.
 - Los elementos de la pantalla DEBEN resolverse con el Design System de YPF, ubicado en
   `src/core/ui`, siguiendo `docs/design-system-catalog.md`. Si ningún componente corresponde,
@@ -84,4 +73,4 @@ YPF para seguir palancas, objetivos, iniciativas, resultados clave y tareas.
 - Revisión de cumplimiento: el plan DEBE verificar su conformidad con estos principios y
   justificar cualquier desvío antes de generar las tareas.
 
-**Versión**: 0.3.0 | **Ratificada**: 2026-11-04 | **Última modificación**: 2026-11-05
+**Versión**: 0.4.0 | **Ratificada**: 2026-11-04 | **Última modificación**: 2026-11-05

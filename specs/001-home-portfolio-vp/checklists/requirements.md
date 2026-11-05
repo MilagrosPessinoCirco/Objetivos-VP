@@ -31,4 +31,4 @@
 
 ## Notes
 
-- [x] La referencia citada (`home-con-imagen.png`) no existe; se usó `docs/pantallas/Home.png` (ver Assumptions). **Confirmado.**
+- [x] La referencia de diseño es la pantalla Home del prototipo (`docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`).

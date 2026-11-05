@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "Home de Gestión de Portfolio VP: solo el diseño visual de la pantalla de entrada, sin navegación ni lógica. Diseño de referencia: docs/pantallas/Home.png."
+**Input**: User description: "Home de Gestión de Portfolio VP: solo el diseño visual de la pantalla de entrada, sin navegación ni lógica. Diseño de referencia: docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html, pantalla Home."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -16,7 +16,7 @@ Una persona que ingresa a la aplicación Gestión de Portfolio VP ve la pantalla
 
 **Why this priority**: Es la pantalla de entrada de la aplicación y el núcleo de esta feature. Sin ella no hay nada que mostrar; con ella sola ya se obtiene una pantalla reconocible y fiel al diseño aprobado.
 
-**Independent Test**: Abrir la pantalla y compararla lado a lado con `docs/pantallas/Home.png`: deben coincidir los textos, el orden de los accesos, los íconos, los colores y la disposición en dos columnas.
+**Independent Test**: Abrir la pantalla y compararla lado a lado con `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html` (pantalla Home): deben coincidir los textos, el orden de los accesos, los íconos, los colores y la disposición en dos columnas.
 
 **Acceptance Scenarios**:
 
@@ -61,7 +61,6 @@ Los cinco accesos y el "Manual de usuario" se ven y se comportan visualmente com
 
 - Los textos del diseño son fijos: no hay datos variables que puedan quedar vacíos, ser muy largos o fallar al cargar.
 - Las pantallas angostas (por ejemplo, móviles) quedan fuera de alcance: no se define cómo se ve la home por debajo del ancho del diseño.
-- La marca de agua "Activar Windows" que aparece en la captura no forma parte del diseño y no se reproduce.
 
 ## Requirements *(mandatory)*
 
@@ -79,7 +78,7 @@ Los cinco accesos y el "Manual de usuario" se ven y se comportan visualmente com
 - **FR-010**: Activar un acceso o el "Manual de usuario", con mouse o teclado, NO DEBE navegar, abrir ni ejecutar nada.
 - **FR-011**: Los cinco accesos DEBEN mostrarse siempre, sin depender del rol de la persona ni de datos.
 - **FR-012**: Todos los textos visibles DEBEN estar en español (Argentina) y coincidir literalmente con los del diseño.
-- **FR-013**: La pantalla NO DEBE reproducir la marca de agua "Activar Windows" ni los elementos de la barra superior del sitio de la captura.
+- **FR-013**: La pantalla NO DEBE reproducir los elementos de la barra superior del sitio del prototipo.
 - **FR-014**: La pantalla NO DEBE incluir elementos, disposiciones ni pantallas que no figuren en el diseño de referencia.
 
 ### Key Entities
@@ -90,17 +89,19 @@ No aplica: la pantalla no maneja datos ni entidades.
 
 ### Measurable Outcomes
 
-- **SC-001**: El 100 % de los textos del diseño (título, texto de bienvenida, marca, "Manual de usuario" y los cinco títulos de accesos) aparecen idénticos a la captura de referencia.
+- **SC-001**: El 100 % de los textos del diseño (título, texto de bienvenida, marca, "Manual de usuario" y los cinco títulos de accesos) aparecen idénticos al prototipo de referencia.
 - **SC-002**: Los cinco accesos aparecen siempre, en el orden del diseño, para el 100 % de las personas que abren la pantalla.
-- **SC-003**: En una comparación visual lado a lado con la captura de referencia, a un mismo ancho de escritorio, una persona revisora no encuentra diferencias de disposición, orden ni textos. Los colores, íconos y el estilo del "Manual de usuario" corresponden a las aproximaciones aprobadas en el plan.
+- **SC-003**: En una comparación visual lado a lado con el prototipo de referencia, a un mismo ancho de escritorio, una persona revisora no encuentra diferencias de disposición, orden ni textos. Los colores, íconos y el estilo del "Manual de usuario" corresponden a las aproximaciones aprobadas en el plan.
 - **SC-004**: El 100 % de las activaciones (clic o teclado) sobre los cinco accesos y el "Manual de usuario" dejan la pantalla sin cambios y sin navegación.
 
 
 ## Assumptions
 
-- El diseño de referencia es `docs/pantallas/Home.png`.
-- La captura es la única fuente de los íconos, los colores y la ilustración; la resolución de esos elementos con los recursos del Design System de YPF (constitución, principio II) se define en el plan.
-- Colores de los accesos, según la captura: "Mis tareas" azul marino, "Mis iniciativas" violeta oscuro, "Palancas y objetivos" violeta claro, "Tablero VP" azul acero y "ABM" azul petróleo. Íconos: tarea con tilde, cuadrícula de cuatro módulos, diana, gráfico de barras y persona con signo más; el "Manual de usuario" lleva un ícono de persona dentro de un recuadro.
-- Los colores de los accesos (paleta del Design System), los íconos (provisorios, blancos por filtro) y el "Manual de usuario" (`Button` secondary) son aproximaciones aprobadas respecto de la captura. La referencia es `docs/pantallas/Home.png`.
-- La pantalla se diseña para ancho de escritorio, como la captura.
+- El diseño de referencia es `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html` (pantalla Home).
+- El prototipo es la única fuente de los íconos, los colores y la ilustración; la resolución de esos elementos con los recursos del Design System de YPF (constitución, principio II) se define en el plan.
+- Colores de los accesos, según el prototipo: "Mis tareas" azul marino, "Mis iniciativas" violeta oscuro, "Palancas y objetivos" violeta claro, "Tablero VP" azul acero y "ABM" azul petróleo. Íconos: tarea con tilde, cuadrícula de cuatro módulos, diana, gráfico de barras y persona con signo más; el "Manual de usuario" lleva un ícono de persona dentro de un recuadro.
+- Los colores de los accesos (paleta del Design System), los tamaños tipográficos y espaciados (los tokens más cercanos del Design System), el alto de la tarjeta (determinado por su contenido), los íconos (provisorios, blancos por filtro) y el "Manual de usuario" (`Button` secondary) son aproximaciones aprobadas respecto del prototipo.
+- En el prototipo, "ABM" solo se muestra al rol Administrador (el rol por defecto, con el que se ven los cinco accesos). Esta feature lo muestra siempre porque los roles están fuera de alcance: desvío aprobado.
+- El efecto hover del prototipo (desplazamiento y sombra de los accesos) no se reproduce: los accesos no navegan y el fondo no cambia al pasar el cursor.
+- La pantalla se diseña para ancho de escritorio, como el prototipo.
 - Fuera de alcance: navegación, permisos por rol, datos y adaptación a pantallas angostas.
