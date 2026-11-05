@@ -1,0 +1,342 @@
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #dbdbdb;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.toolbar {
+  display: flex;
+  min-height: 44px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid #dbdbdb;
+  background: #ffffff;
+}
+
+.table {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #1f1f1f;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.headerCell {
+  height: 40px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dbdbdb;
+  background: #ffffff;
+  color: #1f1f1f;
+  font-weight: 600;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.bodyCell {
+  min-height: 40px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-bottom: 1px solid #ededed;
+  background: #ffffff;
+  vertical-align: middle;
+}
+
+.groupRow .groupCell {
+  padding: 10px 12px;
+  border-bottom: 1px solid #dbdbdb;
+  background: #faf9f8;
+  color: #1f1f1f;
+  font-weight: 600;
+  text-align: left;
+}
+
+.emptyCell {
+  padding: 24px 12px;
+  color: #5c5c5c;
+  text-align: center;
+}
+
+.bodyRow:hover .bodyCell {
+  background: #f7f7f7;
+}
+
+.selected .bodyCell {
+  background: #e7efff;
+}
+
+.dark .headerCell,
+.dark .bodyCell,
+.dark .toolbar,
+.dark .groupRow .groupCell {
+  border-color: #484644;
+  background: #1f1f1f;
+  color: #f3f2f1;
+}
+
+.dark .emptyCell {
+  color: #c8c6c4;
+}
+
+.dark .bodyRow:hover .bodyCell,
+.dark .selected .bodyCell {
+  background: #323130;
+}
+
+.twoLines {
+  white-space: normal;
+}
+
+.cellContent {
+  display: flex;
+  min-width: 0;
+  min-height: 20px;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.checkbox,
+.radio {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #dbdbdb;
+  background: #ffffff;
+  cursor: pointer;
+  flex: 0 0 20px;
+}
+
+.checkbox {
+  border-radius: 4px;
+}
+
+.radio {
+  border-radius: 50%;
+}
+
+.checkbox:hover,
+.radio:hover {
+  border-color: #afafaf;
+}
+
+.checkbox:checked {
+  border-color: #0451dd;
+  background: #0451dd url('../../foundations/icons/assets/general/checkmark.svg') center / 14px 14px no-repeat;
+}
+
+.radio:checked {
+  border-color: #0451dd;
+}
+
+.radio:checked::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #0451dd;
+  content: '';
+  transform: translate(-50%, -50%);
+}
+
+.dark .checkbox,
+.dark .radio {
+  border-color: #605e5c;
+  background: transparent;
+}
+
+.dark .checkbox:hover,
+.dark .radio:hover {
+  border-color: #afafaf;
+}
+
+.dark .checkbox:checked {
+  border-color: #0451dd;
+  background: #0451dd url('../../foundations/icons/assets/general/checkmark.svg') center / 14px 14px no-repeat;
+}
+
+.dark .radio:checked {
+  border-color: #0451dd;
+}
+
+.dark .radio:checked::after {
+  background: #0451dd;
+}
+
+.checkbox:focus-visible,
+.radio:focus-visible,
+.dropdown:focus-visible,
+.link:focus-visible {
+  outline: 2px solid #0451dd;
+  outline-offset: 2px;
+}
+
+.icon,
+.trailIcons {
+  display: inline-flex;
+  min-width: 24px;
+  align-items: center;
+  gap: 4px;
+}
+
+.chip {
+  display: inline-flex;
+  min-height: 20px;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: #e7efff;
+  color: #0d0d0d;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.dark .chip {
+  background: #02225d;
+  color: #fcfcfc;
+}
+
+.link {
+  color: #0451dd;
+  text-decoration: underline;
+}
+
+.link {
+  overflow-wrap: anywhere;
+}
+
+.dark .link {
+  color: #a1c2fd;
+}
+
+.dropdown {
+  max-width: 100%;
+  padding: 4px 24px 4px 8px;
+  border: 1px solid #dbdbdb;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.dark .dropdown {
+  border-color: #605e5c;
+}
+
+.table:global(.ms-DetailsList) {
+  width: 100% !important;
+  min-width: 0;
+  color: #1f1f1f;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.table :global(.ms-List),
+.table :global(.ms-List-surface),
+.table :global(.ms-DetailsHeader),
+.table :global(.ms-DetailsRow),
+.table :global(.ms-GroupHeader) {
+  width: 100% !important;
+}
+
+.table :global(.ms-DetailsHeader) {
+  height: 40px;
+  padding: 0;
+  box-sizing: border-box;
+  border-bottom: 2px solid #afafaf;
+  background: #f1f1f1;
+}
+
+.table :global(.ms-DetailsHeader-cell) {
+  height: 38px;
+  padding: 9px 12px;
+  background: #f1f1f1;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.table :global(.ms-DetailsRow) {
+  min-height: 40px;
+  border-bottom: 1px solid #ededed;
+  background: #ffffff;
+}
+
+.table :global(.ms-DetailsRow-cell) {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 10px 12px;
+  color: #1f1f1f;
+}
+
+.table :global(.ms-DetailsRow):hover,
+.table :global(.ms-DetailsRow.is-selected) {
+  background: #e7efff;
+}
+
+.table :global(.ms-DetailsRow.is-selected):before {
+  background: #0451dd;
+}
+
+.table :global(.ms-GroupHeader) {
+  min-height: 40px;
+  border-bottom: 1px solid #dbdbdb;
+  background: #f1f1f1;
+}
+
+.table :global(.ms-GroupHeader-title) {
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dark .table :global(.ms-DetailsRow),
+.dark .table :global(.ms-DetailsRow-cell) {
+  border-color: #484644;
+  background: #1f1f1f;
+  color: #fcfcfc;
+}
+
+.dark .table :global(.ms-DetailsHeader),
+.dark .table :global(.ms-DetailsHeader-cell) {
+  border-color: #5c5c5c;
+  background: #3d3d3d;
+  color: #fcfcfc;
+}
+
+.dark .table :global(.ms-DetailsRow):hover,
+.dark .table :global(.ms-DetailsRow.is-selected) {
+  background: #02225d;
+}
+
+.dark .table :global(.ms-DetailsRow.is-selected):before {
+  background: #a1c2fd;
+}
+
+.dark .table :global(.ms-GroupHeader) {
+  border-color: #484644;
+  background: #1f1f1f;
+}
+
+.dark .table :global(.ms-GroupHeader-title) {
+  color: #fcfcfc;
+}
+
+.selectAll {
+  top: 3px;
+}

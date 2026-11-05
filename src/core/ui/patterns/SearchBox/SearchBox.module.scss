@@ -1,0 +1,42 @@
+.searchBox {
+  display: flex;
+  width: 300px;
+  height: 30px;
+  box-sizing: border-box;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 2px 0 8px;
+  border: 1px solid #1f1f1f;
+  background: #ffffff;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  object-fit: contain;
+}
+
+.input {
+  min-width: 0;
+  height: 30px;
+  flex: 1 1 auto;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #1f1f1f;
+  font: 400 14px/20px "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.input::placeholder {
+  color: #5c5c5c;
+  opacity: 1;
+}
+
+.searchBox:focus-within {
+  border: 2px solid #0451dd;
+  padding-left: 7px;
+}

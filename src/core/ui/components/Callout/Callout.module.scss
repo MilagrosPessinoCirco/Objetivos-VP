@@ -1,0 +1,106 @@
+.anchor {
+  display: inline-flex;
+  align-items: center;
+}
+
+.legacyAnchor {
+  display: inline-block;
+  width: 1px;
+  height: 1px;
+}
+
+.trigger {
+  min-width: 0;
+  border: 1px solid #0451dd;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #0451dd;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.trigger:hover,
+.trigger:focus-visible {
+  border-color: #0451dd;
+  background: #f1f6ff;
+  color: #0451dd;
+}
+
+.callout {
+  width: 369px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.callout :global(.ms-Callout-main) {
+  overflow: hidden;
+  padding: 24px;
+  background: #ffffff;
+}
+
+.dark :global(.ms-Callout-main) {
+  background: #1f1f1f;
+}
+
+.dark :global(.ms-Callout-beak),
+.dark :global(.ms-Callout-beakCurtain) {
+  background: #1f1f1f !important;
+}
+
+.body {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+.title,
+.description {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: 400;
+}
+
+.title {
+  color: #1f1f1f;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.description {
+  color: #1f1f1f;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.dark .title,
+.dark .description {
+  color: #fcfcfc;
+}
+
+.link {
+  color: #0451dd;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.dark .link {
+  color: #a1c2fd;
+}
+
+.slot {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.action {
+  min-width: 0;
+}

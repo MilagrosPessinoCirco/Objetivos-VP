@@ -1,0 +1,201 @@
+.card {
+  box-sizing: border-box;
+  border-radius: 8px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+/* Simple */
+.simple {
+  display: flex;
+  width: 100%;
+  max-width: 565px;
+  min-height: 112px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 19px;
+  border: 1px solid #0451dd;
+  background: #e7efff;
+}
+
+.simpleText {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #0451dd;
+}
+
+.simpleTitle {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.simpleValue {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+/* Bandeja */
+.bandeja {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px;
+  background: #015f7f;
+}
+
+.bandejaText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bandejaTitle {
+  margin: 0;
+  color: #e6f9ff;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.bandejaValue {
+  margin: 0;
+  color: #e6f9ff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.textButton {
+  align-self: flex-start;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #e7efff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.textButton:hover,
+.textButton:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+/* Simple button / Detail */
+.raised {
+  display: flex;
+  width: 100%;
+  max-width: 602px;
+  min-height: 185px;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  background: #e7efff;
+  box-shadow: 0 1px 2px rgba(21, 34, 50, 0.08);
+}
+
+.body {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.bodyDetail {
+  gap: 10px;
+}
+
+.raisedTitle {
+  margin: 0;
+  width: 100%;
+  color: #02225d;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #032e7d;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.details p {
+  margin: 0;
+}
+
+.compo {
+  display: flex;
+  width: 100%;
+  flex: 1 1 auto;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.raisedTitleInline {
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  align-self: center;
+  color: #02225d;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.primaryButton {
+  flex: 0 0 auto;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: #0451dd;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  background: #003fa3;
+  outline: none;
+}
+
+.icon {
+  display: inline-flex;
+  width: 72px;
+  height: 72px;
+  flex: 0 0 72px;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon img,
+.icon svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

@@ -1,0 +1,173 @@
+.inputField {
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.label {
+  display: flex;
+  gap: 4px;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  line-height: 1;
+}
+
+.required,
+.errorMessage {
+  color: #ab0017;
+}
+
+.control {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  box-sizing: border-box;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 2px 0 8px;
+  border: 1px solid #1f1f1f;
+  background: #ffffff;
+}
+
+.control:focus-within {
+  border-color: #1f1f1f;
+  box-shadow: inset 0 0 0 1px #0451dd;
+}
+
+.textField,
+.textFieldRoot,
+.textFieldWrapper,
+.textFieldGroup {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.textFieldRoot {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+
+.textFieldWrapper {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.textFieldGroup {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+}
+
+.textFieldGroup :global(.ms-TextField-field) {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.textFieldGroup :global(.ms-TextField-prefix),
+.textFieldGroup :global(.ms-TextField-suffix) {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 auto;
+}
+
+.textFieldGroup:hover,
+.textFieldGroup:focus-within {
+  border: 0;
+  box-shadow: none;
+}
+
+.textFieldGroup::after,
+.textFieldGroup:focus-within::after {
+  display: none !important;
+}
+
+.error .control {
+  box-shadow: inset 0 0 0 1px #ab0017;
+}
+
+.disabled .label {
+  color: #afafaf;
+}
+
+.disabled .control,
+.readOnly .control {
+  background: #f1f1f1;
+}
+
+.disabled .control {
+  border: 0;
+}
+
+.readOnly .control {
+  border-color: #dbdbdb;
+}
+
+.input {
+  min-width: 0;
+  height: 30px;
+  flex: 1 1 auto;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #1f1f1f;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.input:focus,
+.input:focus-visible {
+  outline: 0 !important;
+}
+
+.fluentErrorMessage {
+  display: none;
+}
+
+.input::placeholder {
+  color: #5c5c5c;
+  opacity: 1;
+}
+
+.disabled .input {
+  color: #999999;
+}
+
+.readOnly .input {
+  color: #1f1f1f;
+}
+
+.icon {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+}
+
+.errorMessage {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.24px;
+  line-height: 1;
+}

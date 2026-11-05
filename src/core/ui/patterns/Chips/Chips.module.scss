@@ -1,0 +1,225 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.chipWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chip {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.chip :global(.ms-Button-flexContainer) {
+  gap: 4px;
+}
+
+.chip:global(.ms-Button):focus-visible {
+  outline: 2px solid #0451dd;
+  outline-offset: 1px;
+}
+
+.small {
+  min-width: 0;
+  height: 20px;
+  padding: 4px 8px;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.medium {
+  min-width: 0;
+  height: 32px;
+  padding: 8px 10px;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.large {
+  min-width: 0;
+  height: 36px;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.large .removeButton {
+  margin-left: 4px;
+}
+
+.outline {
+  border-color: #5c5c5c;
+}
+
+.filled,
+.subtle {
+  border-color: transparent;
+}
+
+.stroke {
+  border-style: solid;
+}
+
+.chip:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.nonClickable {
+  cursor: default;
+  transition: none;
+}
+
+.nonClickable:hover {
+  filter: none;
+}
+
+.nonClickable .removeButton {
+  cursor: pointer;
+}
+
+.selected {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.neutral {
+  background: #f1f1f1;
+  color: #0d0d0d;
+}
+
+.brand {
+  background: #e7efff;
+  color: #0d0d0d;
+}
+
+.secondary {
+  background: #9ae5fe;
+  color: #0d0d0d;
+}
+
+.success {
+  background: #cbffdc;
+  color: #0d0d0d;
+}
+
+.warning {
+  background: #ffe5cb;
+  color: #0d0d0d;
+}
+
+.danger {
+  background: #ffcbd2;
+  color: #0d0d0d;
+}
+
+.stroke.neutral { border-color: #5c5c5c; }
+.stroke.brand { border-color: #03399c; }
+.stroke.secondary { border-color: #0180aa; }
+.stroke.success { border-color: #00ab39; }
+.stroke.warning { border-color: #ab5600; }
+.stroke.danger { border-color: #ab0017; }
+
+.dark {
+  color: #f3f2f1;
+}
+
+.dark .chip,
+.chip.dark {
+  color: #fcfcfc;
+}
+
+.dark .neutral,
+.chip.dark.neutral {
+  background: #1f1f1f;
+}
+
+.dark .brand,
+.chip.dark.brand {
+  background: #02225d;
+}
+
+.dark .secondary,
+.chip.dark.secondary {
+  background: #002633;
+}
+
+.dark .success,
+.chip.dark.success {
+  background: #003311;
+}
+
+.dark .warning,
+.chip.dark.warning {
+  background: #552b00;
+}
+
+.dark .danger,
+.chip.dark.danger {
+  background: #55000b;
+}
+
+.dark .stroke.neutral, .chip.dark.stroke.neutral { border-color: #5c5c5c; }
+.dark .stroke.brand, .chip.dark.stroke.brand { border-color: #0451dd; }
+.dark .stroke.secondary, .chip.dark.stroke.secondary { border-color: #0180aa; }
+.dark .stroke.success, .chip.dark.stroke.success { border-color: #00ab39; }
+.dark .stroke.warning, .chip.dark.stroke.warning { border-color: #ab5600; }
+.dark .stroke.danger, .chip.dark.stroke.danger { border-color: #ab0017; }
+
+.icon,
+.trailingIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.trailingAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeButton {
+  display: inline-flex;
+  width: 12px;
+  height: 12px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.removeButton :global(.icon) {
+  width: 100%;
+  height: 100%;
+}
+
+.dark .removeButton :global(.icon),
+.chip.dark .removeButton :global(.icon) {
+  filter: brightness(0) invert(1);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="General / Archive" clip-path="url(#clip0_0_38)">
+<path id="color" d="M4.5 6C4.22386 6 4 6.22386 4 6.5C4 6.77614 4.22386 7 4.5 7H7.5C7.77614 7 8 6.77614 8 6.5C8 6.22386 7.77614 6 7.5 6H4.5ZM-1 1.5C-1 0.671573 -0.328427 0 0.5 0H11.5C12.3284 0 13 0.671573 13 1.5V2.5C13 3.15311 12.5826 3.70873 12 3.91465V9.5C12 10.8807 10.8807 12 9.5 12H2.5C1.11929 12 0 10.8807 0 9.5V3.91465C-0.582596 3.70873 -1 3.15311 -1 2.5V1.5ZM0.5 1C0.223858 1 0 1.22386 0 1.5V2.5C0 2.77614 0.223858 3 0.5 3H11.5C11.7761 3 12 2.77614 12 2.5V1.5C12 1.22386 11.7761 1 11.5 1H0.5ZM1 4V9.5C1 10.3284 1.67157 11 2.5 11H9.5C10.3284 11 11 10.3284 11 9.5V4H1Z" fill="#0D0D0D"/>
+</g>
+<defs>
+<clipPath id="clip0_0_38">
+<rect width="12" height="12" fill="white"/>
+</clipPath>
+</defs>
+</svg>

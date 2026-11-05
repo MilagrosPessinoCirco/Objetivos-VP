@@ -1,0 +1,392 @@
+.messageBar {
+  display: flex;
+  width: 468px;
+  min-height: 32px;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 8px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon,
+.close,
+.toggle {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 16px;
+}
+
+.icon img,
+.close img,
+.toggle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.message {
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toastText {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toastTitle {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.close,
+.toggle {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.success {
+  background: #e6ffee;
+  color: #1f1f1f;
+}
+
+.info {
+  background: #e6f4ff;
+  color: #1f1f1f;
+}
+
+.warning {
+  background: #fff4ce;
+  color: #1f1f1f;
+}
+
+.error,
+.blocked {
+  background: #ffe6e9;
+  color: #000000;
+}
+
+.dark.success {
+  background: #00802b;
+  color: #fcfcfc;
+}
+
+.dark.info {
+  background: #0078d4;
+  color: #fcfcfc;
+}
+
+.dark.warning {
+  background: #a36a00;
+  color: #fcfcfc;
+}
+
+.dark.error,
+.dark.blocked {
+  background: #a4262c;
+  color: #fcfcfc;
+}
+
+.open .content {
+  align-items: flex-start;
+}
+
+.open .message {
+  overflow: visible;
+  white-space: normal;
+}
+
+.fluentMessageBar {
+  display: flex;
+  width: min(720px, 100%);
+  max-width: 100%;
+  min-height: 32px;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 8px 0;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-content) {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  line-height: 16px;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-icon) {
+  display: inline-flex;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  min-height: 16px;
+  flex: 0 0 16px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-icon .ms-Icon) {
+  color: currentColor;
+  font-size: 16px;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-icon [data-icon-name]) {
+  font-weight: 700;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-text) {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-innerText) {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-dismissSingleLine),
+.fluentMessageBar :global(.ms-MessageBar-dismissal) {
+  display: inline-flex;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-dismissal),
+.fluentMessageBar :global(.ms-MessageBar-expand) {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-dismissal .ms-Icon),
+.fluentMessageBar :global(.ms-MessageBar-expand .ms-Icon) {
+  color: currentColor;
+  font-size: 16px;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-expandSingleLine) {
+  display: inline-flex;
+  width: 12px;
+  min-width: 12px;
+  height: 16px;
+  flex: 0 0 12px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-expand) {
+  width: 12px;
+  min-width: 12px;
+  height: 16px;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-expand .ms-Icon) {
+  font-size: 12px;
+}
+
+.fluentMessageBar.fluentSuccess {
+  background: #e6ffee;
+  color: #1f1f1f;
+}
+
+.fluentMessageBar.fluentInfo {
+  background: #f1f1f1;
+  color: #000000;
+}
+
+.fluentMessageBar.fluentWarning {
+  background: #fff3e6;
+  color: #000000;
+}
+
+.fluentMessageBar.fluentWarning :global(.ms-MessageBar-icon [data-icon-name="Warning"]) {
+  color: #d97706 !important;
+}
+
+.fluentMessageBar.fluentError,
+.fluentMessageBar.fluentBlocked {
+  background: #ffe6e9;
+  color: #000000;
+}
+
+.fluentMessageBar.fluentError :global(.ms-MessageBar-icon .ms-Icon) {
+  color: #0d0d0d;
+}
+
+.fluentMessageBar.fluentSevereWarning {
+  background: #fed9cc;
+  color: #323130;
+}
+
+.fluentMessageBar.fluentDark.fluentSuccess {
+  background: #00802b;
+  color: #fcfcfc;
+}
+
+.fluentMessageBar.fluentDark.fluentSuccess :global(.ms-MessageBar-icon [data-icon-name]) {
+  color: #ffffff !important;
+}
+
+.fluentMessageBar.fluentDark.fluentInfo {
+  background: #5c5c5c;
+  color: #fcfcfc;
+}
+
+.fluentMessageBar.fluentDark.fluentInfo :global(.ms-MessageBar-icon [data-icon-name]) {
+  color: #ffffff !important;
+}
+
+.fluentMessageBar.fluentDark.fluentWarning {
+  background: #552b00;
+  color: #fcfcfc;
+}
+
+.fluentMessageBar.fluentDark.fluentWarning :global(.ms-MessageBar-icon [data-icon-name="Warning"]) {
+  color: #d97706 !important;
+}
+
+.fluentMessageBar.fluentDark.fluentError,
+.fluentMessageBar.fluentDark.fluentBlocked {
+  background: #55000b;
+  color: #fcfcfc;
+}
+
+.fluentMessageBar.fluentDark.fluentError :global(.ms-MessageBar-icon .ms-Icon) {
+  color: #fcfcfc;
+}
+
+.fluentMessageBar.fluentDark.fluentSevereWarning {
+  background: #552b00;
+  color: #fcfcfc;
+}
+
+.fluentActions,
+.fluentMessageBar :global(.ms-MessageBar-actions) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-actionsSingleLine) {
+  justify-content: flex-end;
+  margin: 0 8px 0 auto;
+}
+
+.fluentMessageBar :global(.ms-MessageBar-actions) {
+  width: 100%;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  margin: 0 8px;
+  padding-right: 8px;
+}
+
+.fluentActions :global(.ms-Button),
+.fluentMessageBar :global(.ms-MessageBar-actions .ms-Button) {
+  min-height: 28px;
+  height: 28px;
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.fluentMessageBar.fluentMultiline .fluentActions {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.fluentMessageBar.fluentMultiline {
+  height: auto;
+  min-height: 32px;
+}
+
+.fluentMessageBar.fluentMultiline :global(.ms-MessageBar-innerText) {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.fluentMessageBar.fluentOpen {
+  min-height: 64px;
+}
+
+.fluentMessageBar.fluentOpen :global(.ms-MessageBar-content) {
+  align-items: center;
+}
+
+.fluentMessageBar.fluentOpen :global(.ms-MessageBar-dismissSingleLine),
+.fluentMessageBar.fluentOpen :global(.ms-MessageBar-dismissal) {
+  align-self: flex-start;
+  margin-top: 0;
+}
+
+.fluentMessageBar.fluentOpen :global(.ms-MessageBar-innerText) {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.fluentCustomIcon {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.fluentHasCustomIcon :global(.ms-MessageBar-icon) {
+  display: none;
+}
+
+.fluentCustomContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}

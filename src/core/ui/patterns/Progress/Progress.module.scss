@@ -1,0 +1,147 @@
+.spinner {
+  display: flex;
+  width: 168px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #0451dd;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.above,
+.below {
+  flex-direction: column;
+}
+
+.left {
+  flex-direction: row-reverse;
+  width: 158px;
+}
+
+.right {
+  flex-direction: row;
+  width: 158px;
+}
+
+.fluentSpinnerRoot {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.fluentSpinnerCircle {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+  border-top-color: #0451dd;
+  border-right-color: #dbdbdb;
+  border-bottom-color: #dbdbdb;
+  border-left-color: #dbdbdb;
+}
+
+.fluentSpinnerLabel {
+  margin: 8px 0 0;
+  color: #0451dd;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.dark {
+  color: #a1c2fd;
+}
+
+.dark .fluentSpinnerCircle {
+  border-top-color: #73a4fc;
+  border-right-color: #605e5c;
+  border-bottom-color: #605e5c;
+  border-left-color: #605e5c;
+}
+
+.dark .fluentSpinnerLabel {
+  color: #73a4fc;
+}
+
+.progress {
+  display: flex;
+  width: 561px;
+  max-width: 100%;
+  flex-direction: column;
+  gap: 8px;
+  color: #1f1f1f;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.fluentProgressRoot {
+  width: 100%;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.fluentProgressTitle {
+  padding-top: 0;
+  color: #1f1f1f;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.fluentProgressDescription {
+  color: #5c5c5c;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.fluentProgressTrackWrapper {
+  height: 2px;
+  padding: 0;
+}
+
+.fluentProgressTrack {
+  height: 2px;
+  background: #dbdbdb;
+}
+
+.fluentProgressValue {
+  height: 2px;
+  background: #0451dd;
+}
+
+.progressTitle,
+.progressDescription {
+  margin: 0;
+}
+
+.progressTitle {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.progressDescription {
+  color: #5c5c5c;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.dark.progress {
+  color: #fcfcfc;
+}
+
+.dark .fluentProgressTitle {
+  color: #fcfcfc;
+}
+
+.dark .fluentProgressDescription {
+  color: #c8c6c4;
+}
+
+.dark .fluentProgressTrack {
+  background: #605e5c;
+}
+
+.dark .fluentProgressValue {
+  background: #a1c2fd;
+}

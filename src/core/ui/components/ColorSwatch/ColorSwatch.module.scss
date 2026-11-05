@@ -1,0 +1,42 @@
+.swatch {
+  display: flex;
+  width: min(140px, 100%);
+  min-height: 140px;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 34px 40px 10px 10px;
+  background: var(--ds-swatch-color);
+  color: var(--ds-swatch-text-color, var(--ds-color-neutral-text));
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+  font-family: 'IBM Plex Sans', var(--ds-font-family-base, "Segoe UI", sans-serif);
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.details {
+  display: grid;
+  gap: 20px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  line-height: 1;
+}
+
+.scale {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 1;
+}
+
+.value {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  line-height: 1;
+}

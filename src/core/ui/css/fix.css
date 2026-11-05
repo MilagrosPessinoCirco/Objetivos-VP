@@ -1,0 +1,214 @@
+.webPartContainer > div:first-child
+> div:nth-child(2)
+> div{
+	display:none!important;
+}
+#spSiteHeader div[class^="sideActionsWrapper-"] {
+	display: none !important;
+}
+/*Clases para ocultar acciones de edición de la Página*/
+div[class^="commandBarWrapper"]  {
+	display: none !important;
+}
+
+#spCommandBar {
+	display: none !important;
+}
+/*Fin clases para ocultar acciones de edición de la Página*/
+
+#spSiteHeader div[class^="actionsSubcell-"] {
+	display: none !important;
+}
+
+#spSiteHeader div[class^="searchCell-"] {
+	display: none !important;
+}
+
+#spSiteHeader div[class^="searchBoxContainer"] {
+	display: none !important;
+}
+
+#spSiteHeader button[class^="chevronButton-"] {
+	display: none !important;
+}
+
+#spSiteHeader .navArbol button::after {
+	display: none;
+}
+
+#spSiteHeader div[class^="logoCell-"] {
+	display: none !important;
+}
+#RecommendedItems{
+	display: none;
+}
+#spSiteHeader
+	span[class^="ms-HorizontalNavItem"]
+	> a[title="Papelera de reciclaje"] {
+	display: none !important;
+}
+div[class^="CanvasZone"] {
+	padding: 0 !important;
+}
+.CanvasZone > div:first-child {
+	max-width: none!important;
+}
+#spSiteHeader a[href*="RecycleBin.aspx"] {display:none;}
+/*#spSiteHeader .ms-HorizontalNavItems .ms-HorizontalNavItem:nth-last-child(2) {
+	display: none !important;
+}*/
+
+#spSiteHeader .ms-HorizontalNavItems > div {
+	display: none !important;
+}
+
+#spSiteHeader button[class^="editButton-"] {
+	display: none !important;
+}
+div[id^="sp-appBar"] {
+	display: none !important;
+}
+
+#spSiteHeader
+	> div:first-child
+	> div:nth-child(2)
+	> div:first-child
+	> div:first-child {
+	display: none !important;
+}
+
+div[id^="workbenchPageContent"] {
+	padding: 0 !important;
+	margin: 0 auto !important;
+	width: 100% !important;
+}
+
+#spSiteHeader div[class^="pageContent"] {
+	padding: 0 !important;
+	margin: 0 auto !important;
+	width: 100% !important;
+	right: 0 !important;
+	left: 0 !important;
+}
+#spLeftNav{
+    display: none!important;
+}
+#CommentsWrapper {
+    display:none;
+}
+.webPartContainer{
+  display:none;
+}
+#RecommendedItems{
+  display: none !important;
+}
+:global(#spSiteHeader .pageContent) {
+	right: 0 !important;
+	left: 0 !important;
+	border: 1px solid #216EC0 !important;
+}
+
+#spSiteHeader div[class^="headerRow"] {
+	display: none !important;
+	background-color: #216EC0 !important;
+}
+
+#spSiteHeader a[class^="ms-HorizontalNavItem-link"] {
+	color: white !important;
+}
+
+#spSiteHeader a[class^="linkSelected-"] {
+	color: white !important;
+	border-color: #216EC0 !important;
+}
+
+#spSiteHeader a[class^="title-"] {
+	color: white !important;
+}
+
+#spSiteHeader a[class^="shyTitle-"] {
+	color: white !important;
+}
+
+div[id^="centerRegion"] div {
+	display: none !important;
+}
+
+.ControlZone{
+	margin: 0 !important;
+}
+
+.CanvasSection {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+.CanvasSection-col {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+div[class*="CanvasSection"] {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+div[class*="CanvasSection"] > div {
+	width: 100% !important;
+	max-width: 100% !important;
+	flex: 0 0 100% !important;
+}
+
+.row {
+	width: 100% !important;
+}
+
+section.ds-webpart-root {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.CanvasZone {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+div[class*="CanvasZone"] {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+div[class*="Canvas"] {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+div[class*="sp-pageLayout-sideNav"]{
+	border-radius: 0 !important;
+	margin: 0 !important;
+}
+
+div[class*="sp-pageLayout-horizontalNav"]{
+	border-radius: 0 !important;
+	margin: 0 !important;
+}
+
+@media screen and (min-width: 1024px) {
+	.CanvasClassB {
+		max-width: none !important;
+	}
+
+	.CanvasClassB > div:first-child {
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+	}
+
+	.CanvasClassC {
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	.CanvasClassA {
+		padding: 0 !important;
+	}
+}

@@ -1,0 +1,215 @@
+.header {
+  display: flex;
+  width: 100%;
+  min-height: 60px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 35px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.blue {
+  background: #02225d;
+  color: #ffffff;
+}
+
+.dark {
+  background: #0d0d0d;
+  color: #ffffff;
+}
+
+.white {
+  background: #fcfcfc;
+  color: #3d3d3d;
+}
+
+.mobile {
+  width: 100%;
+}
+
+.main {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.header :global(.ms-Button).menu {
+  display: inline-flex;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  box-sizing: border-box;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+}
+
+.blue :global(.ms-Button).menu:hover,
+.dark :global(.ms-Button).menu:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.white :global(.ms-Button).menu:hover {
+  background: rgba(13, 13, 13, 0.06);
+}
+
+.blue .menuIcon,
+.dark .menuIcon {
+  filter: brightness(0) invert(1);
+}
+
+.divider {
+  width: 1px;
+  height: 30px;
+  flex: 0 0 1px;
+}
+
+.divider2 {
+  width: 1px;
+  height: 30px;
+  flex: 0 0 1px;
+}
+
+.blue .divider,
+.dark .divider {
+  background: #fcfcfc;
+}
+
+.white .divider {
+  background: #3d3d3d;
+}
+
+.blue .divider2,
+.dark .divider2 {
+  background: #fcfcfc;
+}
+
+.white .divider2 {
+  background: #3d3d3d;
+}
+
+.brandGroup {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand {
+  display: flex;
+  height: 30px;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+}
+
+.appIcon {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+}
+
+.title {
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description {
+  margin-top: 3px;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 30px;
+  padding: 10px;
+}
+
+.platform {
+  display: inline-flex;
+  align-items: center;
+}
+
+.user {
+  display: flex;
+  max-width: 280px;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.userName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userRole {
+  white-space: nowrap;
+}
+
+.native {
+  min-height: 46px;
+  padding: 0 55px;
+  background: #0078d4;
+}
+
+.native .main {
+  flex: 0 0 auto;
+  gap: 32px;
+}
+
+.native .title {
+  font-size: 15px;
+  line-height: 11px;
+}
+
+.nativeSearch {
+  display: flex;
+  width: min(442px, 35vw);
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+  background: #cce4f6;
+  color: #3073a3;
+  font-size: 11px;
+}
+
+.nativeRight {
+  width: 280px;
+}
+
+@media (max-width: 700px) {
+  .header {
+    padding: 8px 16px;
+  }
+
+  .right {
+    gap: 12px;
+  }
+
+  .user {
+    display: none;
+  }
+}

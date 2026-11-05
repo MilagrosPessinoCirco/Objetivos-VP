@@ -1,0 +1,727 @@
+.button,
+:global(.ms-Button).button {
+  display: inline-flex;
+  min-height: 32px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.primary,
+:global(.ms-Button).button.primary {
+  border-color: transparent;
+}
+
+.secondary,
+:global(.ms-Button).button.secondary {
+  background: transparent;
+}
+
+.blue.primary,
+:global(.ms-Button).button.blue.primary {
+  border-color: #0451dd;
+  background: #0451dd;
+  color: #ffffff;
+}
+
+.blue.secondary,
+:global(.ms-Button).button.blue.secondary {
+  border-color: #0451dd;
+  color: #0451dd;
+}
+
+.red.primary,
+:global(.ms-Button).button.red.primary {
+  border-color: #ab0017;
+  background: #ab0017;
+  color: #ffffff;
+}
+
+.red.secondary,
+:global(.ms-Button).button.red.secondary {
+  border-color: #ab0017;
+  color: #ab0017;
+}
+
+.green.primary,
+:global(.ms-Button).button.green.primary {
+  border-color: #00ab39;
+  background: #00ab39;
+  color: #ffffff;
+}
+
+.green.secondary,
+:global(.ms-Button).button.green.secondary {
+  border-color: #00ab39;
+  color: #00ab39;
+}
+
+.blue.primary:hover:not(:disabled) {
+  background: #032e7d;
+}
+
+.blue.primary:active:not(:disabled) {
+  background: #02225d;
+}
+
+.red.primary:hover:not(:disabled) {
+  border-color: #800011;
+  background: #800011;
+}
+
+.red.primary:active:not(:disabled) {
+  border-color: #55000b;
+  background: #55000b;
+}
+
+.green.primary:hover:not(:disabled) {
+  border-color: #00802b;
+  background: #00802b;
+}
+
+.green.primary:active:not(:disabled) {
+  border-color: #00551c;
+  background: #00551c;
+}
+
+.blue.secondary:hover:not(:disabled) {
+  border-color: #0451dd;
+  background: #e7efff;
+  color: #0451dd;
+}
+
+.red.secondary:hover:not(:disabled) {
+  border-color: #800011;
+  background: #ffe6e9;
+  color: #800011;
+}
+
+.green.secondary:hover:not(:disabled) {
+  border-color: #00802b;
+  background: #e6ffee;
+  color: #00802b;
+}
+
+.blue.secondary:active:not(:disabled) {
+  border-color: #02225d;
+  background: #e7efff;
+  color: #02225d;
+}
+
+.red.secondary:active:not(:disabled) {
+  border-color: #55000b;
+  background: #ffe6e9;
+  color: #55000b;
+}
+
+.green.secondary:active:not(:disabled) {
+  border-color: #00551c;
+  background: #e6ffee;
+  color: #00551c;
+}
+
+.button:focus-visible {
+  outline: 2px solid #0451dd;
+  outline-offset: 2px;
+}
+
+.button:disabled,
+:global(.ms-Button).button:global(.is-disabled),
+.split :global(.ms-Button.is-disabled) {
+  border-color: #c5c5c5 !important;
+  background: #c5c5c5 !important;
+  color: #ffffff !important;
+  cursor: not-allowed;
+}
+
+.secondary:disabled,
+:global(.ms-Button).button.secondary:global(.is-disabled) {
+  background: transparent !important;
+  color: #c5c5c5 !important;
+}
+
+.button.circular {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.button.circular.small {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+}
+
+.button.iconOnly {
+  width: 40px;
+  min-width: 40px;
+  height: 28px;
+  min-height: 28px;
+  padding: 4px 12px;
+}
+
+.button.iconOnly.small {
+  width: 28px;
+  min-width: 28px;
+  padding: 4px;
+}
+
+.button.iconButton.blue.secondary {
+  width: 40px;
+  min-width: 40px;
+  height: 28px;
+  min-height: 28px;
+  padding: 6px 12px;
+  border: 0 !important;
+  background: transparent;
+  color: #0451dd;
+}
+
+.button.iconButton.blue.secondary:hover:not(:disabled) {
+  border: 0 !important;
+  background: #e7efff;
+  color: #0451dd;
+}
+
+.button.iconButton.blue.secondary:active:not(:disabled) {
+  border: 0 !important;
+  background: #e7efff;
+  color: #02225d;
+}
+
+.button.iconButton.red.secondary {
+  width: 40px;
+  min-width: 40px;
+  height: 28px;
+  min-height: 28px;
+  padding: 6px 12px;
+  border: 0 !important;
+  background: transparent;
+  color: #ab0017;
+}
+
+.button.iconButton.red.secondary:hover:not(:disabled) {
+  border: 0 !important;
+  background: #ffe6e9;
+  color: #800011;
+}
+
+.button.iconButton.green.secondary {
+  width: 40px;
+  min-width: 40px;
+  height: 28px;
+  min-height: 28px;
+  padding: 6px 12px;
+  border: 0 !important;
+  background: transparent;
+  color: #00ab39;
+}
+
+.button.iconButton.green.secondary:hover:not(:disabled) {
+  border: 0 !important;
+  background: #e6ffee;
+  color: #00802b;
+}
+
+.button.iconButton.secondary:disabled,
+:global(.ms-Button).button.iconButton.secondary:global(.is-disabled) {
+  border: 0 !important;
+  background: transparent !important;
+  color: #c5c5c5 !important;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.compound {
+  width: 180px;
+  min-width: 180px;
+}
+
+.compoundRoot {
+  width: 180px !important;
+  min-width: 180px !important;
+  min-height: 73px !important;
+  height: 73px !important;
+  box-sizing: border-box !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  padding: 16px 12px !important;
+  text-align: left !important;
+}
+
+.compoundFlexContainer {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+}
+
+.compoundContent {
+  display: flex !important;
+  width: 100% !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  text-align: left !important;
+}
+
+.compoundLabel {
+  display: block !important;
+  order: 0 !important;
+  width: 100% !important;
+  margin: 0 0 5px !important;
+  color: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+  text-align: left !important;
+}
+
+.compoundDescription,
+.compoundDescriptionDark {
+  display: block !important;
+  order: 1 !important;
+  width: 156px;
+  margin: 0 !important;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 16px !important;
+  text-align: left !important;
+}
+
+.compoundDescription {
+  color: #ffffff !important;
+}
+
+.compoundDescriptionDark {
+  color: #011232 !important;
+}
+
+.split {
+  min-width: 0;
+}
+
+.splitMenu {
+  border-left: 1px solid currentColor;
+}
+
+.splitChevron {
+  display: inline-flex;
+  width: 12px;
+  height: 12px;
+  align-items: center;
+  justify-content: center;
+  background-color: currentColor;
+  mask: url('./assets/button-chevron.svg') center / 12px 12px no-repeat;
+}
+
+.splitButtonContainer {
+  display: inline-flex;
+  width: 98px;
+  height: 32px;
+  align-items: stretch;
+}
+
+.splitButtonContainer.iconOnly {
+  width: 64px;
+  height: 28px;
+}
+
+.splitButtonContainer.iconSplit {
+  position: relative;
+  width: 64px;
+  height: 28px;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.splitButtonContainer.iconSplit :global(.ms-Button--default),
+.splitButtonContainer.iconSplit :global(.ms-Button--primary) {
+  width: 40px;
+  min-width: 40px;
+  height: 28px;
+  min-height: 28px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #0451dd;
+}
+
+.splitButtonContainer.iconSplit :global(.ms-Button--default:hover),
+.splitButtonContainer.iconSplit :global(.ms-Button--default:active),
+.splitButtonContainer.iconSplit :global(.ms-Button--primary:hover),
+.splitButtonContainer.iconSplit :global(.ms-Button--primary:active) {
+  border: 0 !important;
+  background: transparent !important;
+  color: #0451dd;
+}
+
+.splitButtonContainer.primary {
+  color: #ffffff;
+}
+
+.splitButtonContainer.secondary.blue {
+  color: #0451dd;
+}
+
+.splitButtonContainer.secondary.red {
+  color: #ab0017;
+}
+
+.splitButtonContainer.secondary.green {
+  color: #00ab39;
+}
+
+.splitButtonContainer.dark.primary {
+  color: #011232;
+}
+
+.splitButtonContainer.dark.secondary.blue {
+  color: #a1c2fd;
+}
+
+.splitButtonContainer.dark.secondary.red {
+  color: #ffcbd2;
+}
+
+.splitButtonContainer.dark.secondary.green {
+  color: #cbffdc;
+}
+
+.splitButtonMenuButton {
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 6px;
+  border: 1px solid currentColor;
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+  background: transparent;
+  color: inherit;
+}
+
+.splitButtonMenuButton.iconOnly {
+  width: 24px;
+  height: 28px;
+}
+
+.splitButtonMenuButton.iconSplit {
+  width: 24px !important;
+  min-width: 24px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #0451dd;
+}
+
+.splitButtonMenuButton.primary.blue {
+  border-color: #0451dd;
+  background: #0451dd;
+  color: #ffffff;
+}
+
+.splitButtonMenuButton.primary.red {
+  border-color: #ab0017;
+  background: #ab0017;
+  color: #ffffff;
+}
+
+.splitButtonMenuButton.primary.green {
+  border-color: #00ab39;
+  background: #00ab39;
+  color: #ffffff;
+}
+
+.splitButtonMenuButton.dark.primary.blue {
+  border-color: #a1c2fd;
+  background: #a1c2fd;
+  color: #011232;
+}
+
+.splitButtonMenuButton.dark.primary.red {
+  border-color: #ffcbd2;
+  background: #ffcbd2;
+  color: #011232;
+}
+
+.splitButtonMenuButton.dark.primary.green {
+  border-color: #cbffdc;
+  background: #cbffdc;
+  color: #011232;
+}
+
+.splitButtonDivider {
+  position: absolute;
+  top: 8px;
+  right: 31px;
+  bottom: 8px;
+  width: 1px;
+  background: currentColor;
+}
+
+.splitButtonDivider.primary {
+  background: #ffffff;
+  color: #ffffff;
+}
+
+.splitButtonDivider.secondary.blue {
+  color: #0451dd;
+}
+
+.splitButtonDivider.secondary.red {
+  color: #ab0017;
+}
+
+.splitButtonDivider.secondary.green {
+  color: #00ab39;
+}
+
+.splitButtonDivider.dark.primary {
+  background: #ffffff;
+  color: #ffffff;
+}
+
+.splitButtonDivider.dark.secondary.blue {
+  color: #a1c2fd;
+}
+
+.splitButtonDivider.dark.secondary.red {
+  color: #ffcbd2;
+}
+
+.splitButtonDivider.dark.secondary.green {
+  color: #cbffdc;
+}
+
+.splitButtonDivider.iconOnly {
+  top: 6px;
+  right: 23px;
+  bottom: 6px;
+}
+
+.splitButtonDivider.iconSplit {
+  top: 6px;
+  right: 29px;
+  bottom: 6px;
+  width: 1px;
+  color: #0451dd;
+}
+
+.splitButtonDivider.dark.primary {
+  background: #011232 !important;
+  background-color: #011232 !important;
+  color: #011232 !important;
+}
+
+.icon {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.small {
+  min-height: 28px;
+  padding: 4px 12px;
+}
+
+.contextualMenu {
+  min-width: 0;
+}
+
+.splitButtonContainer.contextualMenu {
+  width: 120px;
+  height: 32px;
+}
+
+.splitButtonContainer.contextualMenu > span {
+  width: 100%;
+}
+
+.splitButtonContainer.contextualMenu :global(.ms-Button--default) {
+  width: 88px;
+  min-width: 88px;
+  max-width: 88px;
+  height: 32px;
+  flex: 0 0 88px;
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.splitButtonContainer.contextualMenu :global(.ms-Button-flexContainer) {
+  flex-wrap: nowrap;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.splitButtonContainer.contextualMenu .content {
+  flex-wrap: nowrap;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.contextualLabel {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.contextualIcon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+.contextualIcon img {
+  display: block;
+  width: 12px;
+  height: 12px;
+}
+
+.dark.blue.primary,
+:global(.ms-Button).button.dark.blue.primary {
+  border-color: #a1c2fd;
+  background: #a1c2fd;
+  color: #011232;
+}
+
+.dark.red.primary,
+:global(.ms-Button).button.dark.red.primary {
+  border-color: #ffcbd2;
+  background: #ffcbd2;
+  color: #011232;
+}
+
+.dark.green.primary,
+:global(.ms-Button).button.dark.green.primary {
+  border-color: #cbffdc;
+  background: #cbffdc;
+  color: #011232;
+}
+
+.dark.blue.secondary,
+:global(.ms-Button).button.dark.blue.secondary {
+  border-color: #a1c2fd;
+  color: #a1c2fd;
+}
+
+.dark.red.secondary,
+:global(.ms-Button).button.dark.red.secondary {
+  border-color: #ffcbd2;
+  color: #ffcbd2;
+}
+
+.dark.green.secondary,
+:global(.ms-Button).button.dark.green.secondary {
+  border-color: #cbffdc;
+  color: #cbffdc;
+}
+
+.dark.blue.primary:hover:not(:disabled) {
+  border-color: #73a4fc;
+  background: #73a4fc;
+}
+
+.dark.red.primary:hover:not(:disabled) {
+  border-color: #ff99a7;
+  background: #ff99a7;
+}
+
+.dark.green.primary:hover:not(:disabled) {
+  border-color: #99ffbb;
+  background: #99ffbb;
+}
+
+.dark.blue.primary:active:not(:disabled) {
+  border-color: #4486fb;
+  background: #4486fb;
+}
+
+.dark.red.primary:active:not(:disabled) {
+  border-color: #ff667a;
+  background: #ff667a;
+}
+
+.dark.green.primary:active:not(:disabled) {
+  border-color: #66ff99;
+  background: #66ff99;
+}
+
+.dark.blue.secondary:hover:not(:disabled) {
+  border-color: #4486fb;
+  background: rgba(2, 34, 93, 0.2);
+  color: #4486fb;
+}
+
+.dark.red.secondary:hover:not(:disabled) {
+  border-color: #ff99a7;
+  background: rgba(255, 203, 210, 0.15);
+  color: #ff99a7;
+}
+
+.dark.green.secondary:hover:not(:disabled) {
+  border-color: #99ffbb;
+  background: rgba(203, 255, 220, 0.15);
+  color: #99ffbb;
+}
+
+.dark.blue.secondary:active:not(:disabled) {
+  border-color: #73a4fc;
+  background: rgba(2, 34, 93, 0.2);
+  color: #73a4fc;
+}
+
+.dark.red.secondary:active:not(:disabled) {
+  border-color: #ff667a;
+  background: rgba(255, 203, 210, 0.15);
+  color: #ff667a;
+}
+
+.dark.green.secondary:active:not(:disabled) {
+  border-color: #66ff99;
+  background: rgba(203, 255, 220, 0.15);
+  color: #66ff99;
+}
+
+.dark.green.primary:disabled,
+.dark.red.primary:disabled,
+.dark.blue.primary:disabled,
+:global(.ms-Button).button.dark.primary:global(.is-disabled) {
+  border-color: #3d3d3d !important;
+  background: #3d3d3d !important;
+  color: #afafaf !important;
+}
+
+.dark.secondary:disabled,
+:global(.ms-Button).button.dark.secondary:global(.is-disabled) {
+  border-color: #5c5c5c !important;
+  background: transparent !important;
+  color: #5c5c5c !important;
+}

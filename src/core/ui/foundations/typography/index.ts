@@ -1,0 +1,46 @@
+export const typography = {
+  family: {
+    base: '"Segoe UI", "Segoe UI Web (West European)", sans-serif',
+  },
+  weight: {
+    regular: 400,
+    semibold: 600,
+    bold: 700,
+  },
+  size: {
+    42: '42px',
+    32: '32px',
+    28: '28px',
+    24: '24px',
+    20: '20px',
+    18: '18px',
+    16: '16px',
+    14: '14px',
+    12: '12px',
+    10: '10px',
+    display: '42px',
+    heading: '32px',
+    body: '16px',
+    subtitle: '14px',
+    caption: '12px',
+  },
+  lineHeight: {
+    42: '52px',
+    32: '40px',
+    28: '36px',
+    24: '32px',
+    20: '28px',
+    18: '24px',
+    16: '22px',
+    14: '20px',
+    12: '16px',
+    10: '14px',
+    display: '52px',
+    heading: '40px',
+    body: '22px',
+    subtitle: '20px',
+    caption: '16px',
+  },
+} as const;
+
+export type DesignSystemTypography = typeof typography;

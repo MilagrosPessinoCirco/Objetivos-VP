@@ -1,0 +1,124 @@
+.slider {
+  display: inline-flex;
+}
+
+.root {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif !important;
+}
+
+.titleLabel {
+  padding: 0 !important;
+  color: #1f1f1f !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+}
+
+:global(.ms-Slider-disabled) .titleLabel {
+  color: #afafaf !important;
+}
+
+.container {
+  gap: 10px !important;
+}
+
+.slideBox {
+  padding: 0 !important;
+}
+
+:global(.ms-Slider-row) .slideBox {
+  height: 16px !important;
+}
+
+:global(.ms-Slider-row) .line {
+  width: 228px !important;
+}
+
+:global(.ms-Slider-column) .slideBox,
+:global(.ms-Slider-column) .line {
+  height: 228px !important;
+}
+
+.lineContainer {
+  border-radius: 2px !important;
+}
+
+.activeSection {
+  background: #3d3d3d !important;
+}
+
+.inactiveSection {
+  background: #999999 !important;
+}
+
+.thumb {
+  width: 16px !important;
+  height: 16px !important;
+  border-width: 2px !important;
+  border-color: #3d3d3d !important;
+  background: #fcfcfc !important;
+}
+
+.valueLabel {
+  color: #1f1f1f !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+}
+
+:global(.ms-Slider-disabled) .activeSection {
+  background: #c5c5c5 !important;
+}
+
+:global(.ms-Slider-disabled) .inactiveSection {
+  background: #f1f1f1 !important;
+}
+
+:global(.ms-Slider-disabled) .thumb {
+  border-color: #c5c5c5 !important;
+  background: #fcfcfc !important;
+}
+
+:global(.ms-Slider-disabled) .valueLabel {
+  color: #afafaf !important;
+}
+
+.dark .titleLabel,
+.dark .valueLabel {
+  color: #fcfcfc !important;
+}
+
+.dark .inactiveSection {
+  background: #605e5c !important;
+}
+
+.dark .activeSection {
+  background: #fcfcfc !important;
+}
+
+.dark .thumb {
+  border-color: #fcfcfc !important;
+  background: #1f1f1f !important;
+}
+
+.dark:global(.ms-Slider-disabled) .activeSection {
+  background: #5c5c5c !important;
+}
+
+.dark:global(.ms-Slider-disabled) .inactiveSection {
+  background: #3d3d3d !important;
+}
+
+.dark:global(.ms-Slider-disabled) .thumb {
+  border-color: #5c5c5c !important;
+  background: #1f1f1f !important;
+}
+
+.dark:global(.ms-Slider-disabled) .titleLabel,
+.dark:global(.ms-Slider-disabled) .valueLabel {
+  color: #797775 !important;
+}
+
