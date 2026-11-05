@@ -2,22 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "hello-world-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/helloWorld/HelloWorldWebPart.js",
-          "manifest": "./src/webparts/helloWorld/HelloWorldWebPart.manifest.json"
-        }
-      ]
-    },
-    "template-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/template/TemplateWebPart.js",
-          "manifest": "./src/webparts/template/TemplateWebPart.manifest.json"
-        }
-      ]
-    },
     "objetivos-vp-web-part": {
       "components": [
         {
@@ -29,8 +13,6 @@
   },
   "externals": {},
   "localizedResources": {
-    "HelloWorldWebPartStrings": "lib/webparts/helloWorld/loc/{locale}.js",
-    "TemplateWebPartStrings": "lib/webparts/template/loc/{locale}.js",
     "ObjetivosVpWebPartStrings": "lib/webparts/objetivosVp/loc/{locale}.js"
   }
 }
