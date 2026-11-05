@@ -21,8 +21,7 @@ description: "Tareas de implementación de la Home de Gestión de Portfolio VP"
 ## Reglas que aplican a TODAS las tareas
 
 - **Validación (constitución V)**: cada tarea termina con `npm run build` sin errores (incluye lint y tipos). Es parte del criterio de terminado de cada tarea.
-- **`src/core/ui` es de solo lectura**: no se modifica nada del DS. La única excepción es T001 (mover `backgroundHome.png`, aprobado en Q1 del plan).
-- **Imports del DS por capa, nunca el índice completo de `core` ni de `core/ui`**:
+- **`src/core/ui` es de solo lectura**: no se modifica nada del DS.- **Imports del DS por capa, nunca el índice completo de `core` ni de `core/ui`**:
   - `…/core/ui/patterns` (`Surface`), `…/core/ui/components` (`Button`), `…/core/ui/foundations` (`BrandLogo`, `FigmaIcon`, `colorScales`, `colors`, `spacing`, `typography`).
   - Desde `Home/Home.tsx`: `../../../../core/ui/<capa>`. Desde `Home/<Pieza>/<Archivo>.tsx`: `../../../../../core/ui/<capa>`.
 - **Colores, tipografías y espaciados solo desde tokens**: valores de `colors`, `colorScales`, `spacing` y `typography` (constantes TypeScript) aplicados con la prop `style` o `styles` del componente. Los `.module.scss` contienen solo estructura (display, flex/grid, proporciones, `cursor`, `filter`, anchos relativos). **Prohibido escribir colores hexadecimales o valores en px de espaciado/tipografía en código nuevo.** No fijar alturas en px: la altura sale del padding y del `lineHeight`.
@@ -35,14 +34,6 @@ description: "Tareas de implementación de la Home de Gestión de Portfolio VP"
 ## Path Conventions
 
 Raíz del webpart: `src/webparts/objetivosVp/`. Pantalla: `src/webparts/objetivosVp/components/Home/`.
-
----
-
-## Phase 1: Setup
-
-**Purpose**: dejar la ilustración en el lugar definido por el plan.
-
-- [ ] T001 Mover la ilustración fuera del DS con `git mv src/core/ui/foundations/images/assets/backgroundHome.png src/webparts/objetivosVp/assets/backgroundHome.png` (crear antes la carpeta `src/webparts/objetivosVp/assets/`). No tocar `imageAssets.ts` ni ningún otro archivo de `core/ui` (ningún archivo de `src` referencia `backgroundHome`). **Hecho cuando**: el archivo está en `assets/` del webpart, ya no existe en `core/ui`, `git status` lo muestra como renombrado y `npm run build` pasa.
 
 ---
 
@@ -88,6 +79,8 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantalla: `src/webparts/objetivo
   - `<h2>` con `strings.HomeTitle`: `style` con `typography.size[28]`, `typography.lineHeight[28]`, `typography.weight.semibold`, `color: colors.neutral.textMuted`, `fontFamily: typography.family.base`, `margin: 0`.
   - `<p>` con `strings.HomeWelcomeText`: `typography.size[20]`, `typography.lineHeight[20]`, `typography.weight.regular`, `color: colors.neutral.textMuted`, `margin: 0`.
   - `<img>` con `src` obtenido por `const backgroundHome: string = require('../../../assets/backgroundHome.png');`, `alt=""` (decorativa), ancho `50%` de la tarjeta (en `WelcomeCard.module.scss`, `height: auto`), alineada abajo a la izquierda, con `marginTop: spacing.xl`.
+
+  Si ESLint marca el `require`, se detiene y se reporta; no se suprime la regla.
 
   **Hecho cuando**: el componente existe, importa del DS solo por capas, no contiene hexadecimales ni textos literales y `npm run build` pasa.
 
@@ -149,7 +142,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantalla: `src/webparts/objetivo
 
 ### Implementation for User Story 3
 
-- [ ] T011 [US3] En `src/webparts/objetivosVp/components/Home/AccessList/AccessButton.module.scss` agregar la clase `.button` con `cursor: pointer` y su regla `:focus-visible` con `outline: 2px solid var(--ds-color-neutral-white)` y `outline-offset: -4px` (la variable la define el mixin incluido en T003 sobre `.objetivosVp`), y pasarla al `DefaultButton` de `AccessButton.tsx` con `className={styles.button}`. No usar hexadecimales. **Hecho cuando**: el cursor cambia a mano sobre cada acceso, el foco con teclado se ve sobre los cinco fondos y `npm run build` pasa.
+- [ ] T011 [US3] En `src/webparts/objetivosVp/components/Home/AccessList/AccessButton.module.scss` agregar la clase `.button` con `cursor: pointer` y su regla `:focus-visible` con `outline: 2px solid var(--ds-color-neutral-white)` y `outline-offset: calc(-1 * var(--ds-space-xs))` (la variable la define el mixin incluido en T003 sobre `.objetivosVp`), y pasarla al `DefaultButton` de `AccessButton.tsx` con `className={styles.button}`. No usar hexadecimales. **Hecho cuando**: el cursor cambia a mano sobre cada acceso, el foco con teclado se ve sobre los cinco fondos y `npm run build` pasa.
 
 - [ ] T012 [US3] Verificar que no hay acción en ninguno de los seis elementos, sin modificar la lógica si ya cumple: buscar en `src/webparts/objetivosVp/components/Home/` las cadenas `onClick`, `href`, `window.`, `Utils`, `location` y `history`; no debe haber ninguna coincidencia. Probar en el navegador Tab (recorre los cinco accesos y el manual), Enter y Espacio sobre cada uno: la pantalla no cambia y no se abre ninguna pestaña. **Hecho cuando**: la búsqueda no devuelve coincidencias, la prueba manual confirma FR-009 y FR-010 y `npm run build` pasa. Si hay coincidencias, eliminarlas en el archivo correspondiente.
 
@@ -159,9 +152,9 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantalla: `src/webparts/objetivo
 
 ## Phase 6: Polish
 
-- [ ] T013 Buscar en `src/webparts/objetivosVp/components/Home/` colores hexadecimales (`#[0-9a-fA-F]{3,8}`), valores en px de espaciado o tipografía en los `.module.scss` y textos de interfaz escritos en el código: no debe quedar ninguno. Corregir lo que aparezca usando tokens y `strings`. **Hecho cuando**: la búsqueda no encuentra coincidencias y `npm run build` pasa.
+- [ ] T013 Buscar en `src/webparts/objetivosVp/components/Home/` colores hexadecimales (`#[0-9a-fA-F]{3,8}`), valores en px de espaciado o tipografía en los `.module.scss` y textos de interfaz escritos en el código: no debe quedar ninguno. La prohibición de px aplica a espaciado y tipografía, no a anchos de borde (por ejemplo, el `2px` del `outline` de T011). Corregir lo que aparezca usando tokens y `strings`. **Hecho cuando**: la búsqueda no encuentra coincidencias y `npm run build` pasa.
 
-- [ ] T014 Ejecutar la validación de `specs/001-home-portfolio-vp/quickstart.md` completa: `npm run build`, `npm run start` (Heft, sin desplegar) y comparación lado a lado con `docs/pantallas/Home.png` a ancho de escritorio. Informar las diferencias esperadas y aprobadas: botón "Manual de usuario" secundario (Q3), íconos provisorios (Q4), colores aproximados (Q2) e íconos en blanco por filtro (Q6). **Hecho cuando**: todas las filas de la tabla de `quickstart.md` están verificadas o documentadas como diferencia aprobada.
+- [ ] T014 Ejecutar la validación de `specs/001-home-portfolio-vp/quickstart.md` completa: `npm run build`, `npm run start` (Heft, sin desplegar) y comparación lado a lado con `docs/pantallas/Home.png` a un mismo ancho de escritorio (SC-003). Verificar que no hay diferencias de disposición, orden ni textos. Los colores (paleta del DS), los íconos (provisorios, blancos por filtro) y el estilo del "Manual de usuario" (`Button` secondary) corresponden a las aproximaciones aprobadas en el plan; informarlos como tales. **Hecho cuando**: todas las filas de la tabla de `quickstart.md` están verificadas o documentadas como aproximación aprobada.
 
 ---
 
@@ -169,8 +162,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantalla: `src/webparts/objetivo
 
 ### Phase Dependencies
 
-- **Setup (Fase 1)**: sin dependencias.
-- **Foundational (Fase 2)**: T002 y T003 pueden hacerse en paralelo con T001 (archivos distintos); bloquean todas las historias.
+- **Foundational (Fase 2)**: T002 y T003 pueden hacerse en paralelo (archivos distintos); bloquean todas las historias.
 - **US1 (Fase 3)**: depende de la Fase 2. T004 y T005 en paralelo; T006 depende de T005; T007 de T003, T004 y T006; T008 de T007.
 - **US2 (Fase 4)**: T009 depende de T002 y puede empezar en paralelo con US1; T010 depende de T009 y T007.
 - **US3 (Fase 5)**: depende de T005 (T011) y de T009 (T012).
@@ -183,7 +175,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantalla: `src/webparts/objetivo
 
 ### Parallel Opportunities
 
-- T001 ∥ T002 ∥ T003
+- T002 ∥ T003
 - T004 ∥ T005, y T009 ∥ T004 ∥ T005 (archivos distintos)
 
 ---
@@ -202,13 +194,13 @@ Task: "T009 HomeFooter en src/webparts/objetivosVp/components/Home/HomeFooter/Ho
 
 ### MVP First (US1)
 
-1. Fase 1 y Fase 2 (T001–T003).
+1. Fase 2 (T002–T003).
 2. Fase 3 (T004–T008).
 3. **Detenerse y validar**: comparar con `docs/pantallas/Home.png`.
 
 ### Incremental Delivery
 
-1. Setup + Foundational.
+1. Foundational.
 2. US1 → validar (MVP).
 3. US2 → validar.
 4. US3 → validar.

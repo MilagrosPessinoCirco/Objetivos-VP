@@ -30,7 +30,10 @@ Sync Impact Report (temporal; eliminar antes del commit)
 - Los elementos de la pantalla DEBEN resolverse con el Design System de YPF, ubicado en
   `src/core/ui`, siguiendo `docs/design-system-catalog.md`. Si ningún componente corresponde,
   se detiene y se consulta; no se crean componentes ad hoc.
-- `src/core/ui` es de solo lectura.
+- `src/core/ui` DEBE mantenerse alineado con el Design System de YPF. Solo se modifica
+  cuando el plan lo decide explícitamente y lo registra en Complexity Tracking; el agente
+  no lo modifica por iniciativa propia. Toda modificación se anota en
+  `docs/design-system-cambios.md` para poder reaplicarla al actualizar el DS.
 - NO se definen colores, tipografías ni espaciados propios por fuera del Design System.
 - Estructura de cada pantalla: una carpeta por pantalla con su componente principal
   (`NombrePantalla.tsx`) y sus estilos (`NombrePantalla.module.scss`); las piezas que la
@@ -81,4 +84,4 @@ YPF para seguir palancas, objetivos, iniciativas, resultados clave y tareas.
 - Revisión de cumplimiento: el plan DEBE verificar su conformidad con estos principios y
   justificar cualquier desvío antes de generar las tareas.
 
-**Versión**: 0.2.0 | **Ratificada**: 2026-11-04 | **Última modificación**: 2026-11-05
+**Versión**: 0.3.0 | **Ratificada**: 2026-11-04 | **Última modificación**: 2026-11-05

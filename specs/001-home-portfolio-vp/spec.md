@@ -73,7 +73,7 @@ Los cinco accesos y el "Manual de usuario" se ven y se comportan visualmente com
 - **FR-004**: Debajo de la tarjeta, la pantalla DEBE mostrar la marca "by Plataformas 365 | IngSoft".
 - **FR-005**: Debajo de la tarjeta, la pantalla DEBE mostrar un acceso "Manual de usuario" con su ícono.
 - **FR-006**: La pantalla DEBE mostrar cinco accesos apilados verticalmente, en este orden: "Mis tareas", "Mis iniciativas", "Palancas y objetivos", "Tablero VP" y "ABM".
-- **FR-007**: Cada acceso DEBE mostrar su título, su ícono y un color de fondo propio, distinto del de los demás, según el diseño de referencia. La correspondencia de esos colores con el Design System se define en el plan.
+- **FR-007**: Cada acceso DEBE mostrar su título, su ícono y un color de fondo propio, distinto del de los demás, según el diseño de referencia. Los colores e íconos se resuelven con el Design System según las aproximaciones aprobadas en el plan.
 - **FR-008**: La pantalla DEBE organizarse en dos columnas: la tarjeta de bienvenida (con la marca y el "Manual de usuario" debajo) a la izquierda y los cinco accesos a la derecha.
 - **FR-009**: Los cinco accesos y el "Manual de usuario" DEBEN verse y poder enfocarse como elementos clickeables.
 - **FR-010**: Activar un acceso o el "Manual de usuario", con mouse o teclado, NO DEBE navegar, abrir ni ejecutar nada.
@@ -92,7 +92,7 @@ No aplica: la pantalla no maneja datos ni entidades.
 
 - **SC-001**: El 100 % de los textos del diseño (título, texto de bienvenida, marca, "Manual de usuario" y los cinco títulos de accesos) aparecen idénticos a la captura de referencia.
 - **SC-002**: Los cinco accesos aparecen siempre, en el orden del diseño, para el 100 % de las personas que abren la pantalla.
-- **SC-003**: En una comparación visual lado a lado con la captura de referencia a un mismo ancho de pantalla de escritorio, una persona revisora no encuentra diferencias de disposición, orden ni textos, y los íconos y colores son los acordados en el plan.
+- **SC-003**: En una comparación visual lado a lado con la captura de referencia, a un mismo ancho de escritorio, una persona revisora no encuentra diferencias de disposición, orden ni textos. Los colores, íconos y el estilo del "Manual de usuario" corresponden a las aproximaciones aprobadas en el plan.
 - **SC-004**: El 100 % de las activaciones (clic o teclado) sobre los cinco accesos y el "Manual de usuario" dejan la pantalla sin cambios y sin navegación.
 
 
@@ -101,5 +101,6 @@ No aplica: la pantalla no maneja datos ni entidades.
 - El diseño de referencia es `docs/pantallas/Home.png`.
 - La captura es la única fuente de los íconos, los colores y la ilustración; la resolución de esos elementos con los recursos del Design System de YPF (constitución, principio II) se define en el plan.
 - Colores de los accesos, según la captura: "Mis tareas" azul marino, "Mis iniciativas" violeta oscuro, "Palancas y objetivos" violeta claro, "Tablero VP" azul acero y "ABM" azul petróleo. Íconos: tarea con tilde, cuadrícula de cuatro módulos, diana, gráfico de barras y persona con signo más; el "Manual de usuario" lleva un ícono de persona dentro de un recuadro.
+- Los colores de los accesos (paleta del Design System), los íconos (provisorios, blancos por filtro) y el "Manual de usuario" (`Button` secondary) son aproximaciones aprobadas respecto de la captura. La referencia es `docs/pantallas/Home.png`.
 - La pantalla se diseña para ancho de escritorio, como la captura.
 - Fuera de alcance: navegación, permisos por rol, datos y adaptación a pantallas angostas.

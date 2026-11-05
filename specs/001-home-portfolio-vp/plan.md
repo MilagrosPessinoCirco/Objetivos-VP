@@ -154,7 +154,7 @@ Nota: `FigmaIcon` ignora `size` y `variant` para estos íconos (solo escala el `
 - **Montaje**: hoy `ObjetivosVp.tsx` muestra un título y la prop `description` (contenido de plantilla). La Home lo reemplaza: `ObjetivosVp.tsx` renderiza `<Home />`. Esto toca `ObjetivosVp.tsx` y deja sin uso la prop `description` (el webpart y el panel de propiedades no se modifican en esta feature). Se registra aquí porque cambia el comportamiento existente del webpart.
 - **Sin router**: el repo no incorpora un router; no se agrega (la navegación está fuera de alcance).
 - **Textos**: el webpart tiene un solo idioma, `loc/en-us.js`, con su contrato `loc/mystrings.d.ts`. Los textos de la Home se agregan como claves nuevas en ambos archivos, manteniéndolos sincronizados. Los valores van en español (Argentina) aunque el archivo se llame `en-us.js`; no se crea ningún idioma nuevo.
-- **Estilos**: `ThemeProvider` de `ObjetivosVp.tsx` y `ObjetivosVp.module.scss` se conservan.
+- **Estilos**: `ThemeProvider` de `ObjetivosVp.tsx` se conserva. `ObjetivosVp.module.scss` se modifica en T003 para incluir el mixin `design-system-theme` en `.objetivosVp`, de modo que las variables `--ds-*` queden disponibles para toda la Home.
 
 ### Estructura de carpetas
 
@@ -176,7 +176,7 @@ src/webparts/objetivosVp/
     │   └── ObjetivosVp.tsx           # monta <Home />
     └── Home/
         ├── Home.tsx                  # layout de dos columnas, compone las piezas
-        ├── Home.module.scss          # grilla de dos columnas y espaciados (tokens)
+        ├── Home.module.scss          # solo grilla y estructura; los tokens se aplican desde el TSX
         ├── WelcomeCard/
         │   ├── WelcomeCard.tsx       # Surface + título + texto + ilustración (R3, R4)
         │   └── WelcomeCard.module.scss

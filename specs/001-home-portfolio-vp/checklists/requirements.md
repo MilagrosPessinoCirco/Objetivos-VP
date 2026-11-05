@@ -31,4 +31,4 @@
 
 ## Notes
 
-- La referencia citada (`home-con-imagen.png`) no existe; se usó `docs/pantallas/Home.png` (ver Assumptions). Confirmar antes de planificar.
+- [x] La referencia citada (`home-con-imagen.png`) no existe; se usó `docs/pantallas/Home.png` (ver Assumptions). **Confirmado.**

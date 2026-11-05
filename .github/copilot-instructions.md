@@ -48,7 +48,7 @@
 
 - Toda la interfaz se construye con el Design System de YPF ubicado en `src/core/ui`.
 - Antes de construir o modificar cualquier elemento visual, leé `docs/design-system-catalog.md` y seguí su sección "Reglas de uso".
-- `src/core/ui` es de solo lectura: no modifiques sus componentes, estilos, assets ni archivos `index.ts`, y no lo reexportes desde `core/index.ts`.
+- No modifiques `src/core/ui` salvo que la tarea lo indique explícitamente. Si creés que un componente del Design System necesita un cambio, detenete y consultá. No reexportes `ui` desde `core/index.ts`.
 - Si ningún componente del catálogo corresponde a un elemento del diseño, detenete y consultá. No crees componentes ad hoc ni uses HTML nativo en su lugar.
 
 ## Conflictos entre fuentes y alternativas
