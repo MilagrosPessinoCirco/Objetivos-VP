@@ -17,11 +17,20 @@
           "manifest": "./src/webparts/template/TemplateWebPart.manifest.json"
         }
       ]
+    },
+    "objetivos-vp-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/objetivosVp/ObjetivosVpWebPart.js",
+          "manifest": "./src/webparts/objetivosVp/ObjetivosVpWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "HelloWorldWebPartStrings": "lib/webparts/helloWorld/loc/{locale}.js",
-    "TemplateWebPartStrings": "lib/webparts/template/loc/{locale}.js"
+    "TemplateWebPartStrings": "lib/webparts/template/loc/{locale}.js",
+    "ObjetivosVpWebPartStrings": "lib/webparts/objetivosVp/loc/{locale}.js"
   }
 }

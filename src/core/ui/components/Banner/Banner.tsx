@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import backgroundImage280 from '../../img/backgroundImage280.jpg';
+import backgroundImage from '../../img/backgroundHome.png';
 import styles from './Banner.module.scss';
 
 export interface IBannerProps {
@@ -12,7 +12,7 @@ export interface IBannerProps {
 const Banner: React.FunctionComponent<IBannerProps> = ({ backgroundSrc, title, description }) => (
 	<div className={styles.banner}>
 		<img
-			src={backgroundSrc || backgroundImage280}
+			src={backgroundSrc || backgroundImage}
 			className={styles.image}
 			alt="Image main page"
 		/>
