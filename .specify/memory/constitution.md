@@ -1,11 +1,12 @@
 <!--
 Sync Impact Report (temporal; eliminar antes del commit)
-- Cambio de versión: (plantilla sin completar) → 0.1.0
-- Principios agregados: I. Plataforma; II. La interfaz no se inventa (NO NEGOCIABLE);
-  III. Datos desacoplados; IV. Simplicidad y cambios acotados
-- Secciones agregadas: Contexto; Flujo de desarrollo; Gobernanza (con enmiendas, versionado y revisión)
-- Secciones eliminadas: ninguna (se reemplazaron los slots PRINCIPLE_5 y SECTION_* de la plantilla)
-- Pendientes: ninguno. Ratificación fijada en la fecha de adopción de esta versión.
+- Cambio de versión: 0.1.0 → 0.2.0 (MINOR: ampliación material de principios)
+- Principios modificados: I. Plataforma (stack explícito); II. La interfaz no se inventa
+  (Design System integrado en src/core/ui, reglas de uso en el catálogo, consulta obligatoria)
+- Principios agregados: V. Validación
+- Secciones modificadas: Flujo de desarrollo (tareas referencian componentes del DS, mapa de
+  componentes en el plan)
+- Pendientes: ninguno.
 - Plantillas dependientes: no se modifican aquí; leen la constitución en tiempo de ejecución.
 -->
 
@@ -15,32 +16,34 @@ Sync Impact Report (temporal; eliminar antes del commit)
 
 ### I. Plataforma
 
-- La solución MUST usar SharePoint Framework (SPFx) con React y TypeScript.
-- Las versiones MUST ser las fijadas en el `package.json` del repo. No se actualizan ni se
-  agregan dependencias sin una decisión explícita registrada en el plan.
+- La solución DEBE usar SharePoint Framework 1.22.2 con React 17, TypeScript, Fluent UI v8
+  y PnPjs, sobre la plantilla SPFx de YPF.
+- Las versiones DEBEN ser las fijadas en el `package.json` del repo. No se agregan, quitan ni
+  actualizan dependencias sin una decisión explícita registrada en el plan.
+- `src/core` concentra lo compartido (actions, api, entities, pnp, ui, utils) y `src/webparts`
+  lo consume.
 
 ### II. La interfaz no se inventa (NO NEGOCIABLE)
 
-- Cada pantalla MUST construirse a partir de su diseño provisto, en `docs/pantallas/`. No se
+- Cada pantalla DEBE construirse a partir de su diseño provisto, en `docs/pantallas/`. No se
   agregan pantallas, disposiciones ni elementos que no estén en el diseño.
-- Los elementos de la pantalla MUST resolverse con componentes del Design System, ubicado en
-  `DESIGN-SYSTEM-SHP-TEMPLATE/`. Si no hay un componente que corresponda, se consulta antes de
-  crear uno propio.
-- Para lo que el Design System no cubra, se usa Fluent UI React.
+- Los elementos de la pantalla DEBEN resolverse con el Design System de YPF, ubicado en
+  `src/core/ui`, siguiendo `docs/design-system-catalog.md`. Si ningún componente corresponde,
+  se detiene y se consulta; no se crean componentes ad hoc.
+- `src/core/ui` es de solo lectura.
 - NO se definen colores, tipografías ni espaciados propios por fuera del Design System.
-- Si falta una imagen o un ícono, se usa un placeholder con nombre descriptivo.
-- Primero funcionalidad correcta, con la pantalla lo más cercana posible al diseño.
 - Estructura de cada pantalla: una carpeta por pantalla con su componente principal
-  (`NombrePantalla.tsx`) y sus estilos (`NombrePantalla.module.scss`); las piezas que la componen
-  van en subcarpetas y se importan desde el componente principal.
-- Las imágenes se toman de `src/core/ui/img/` y los íconos de `src/core/ui/img/svg/`.
+  (`NombrePantalla.tsx`) y sus estilos (`NombrePantalla.module.scss`); las piezas que la
+  componen van en subcarpetas y se importan desde el componente principal.
+- Textos de interfaz en español (Argentina).
 
 ### III. Datos desacoplados
 
-- Los componentes NO acceden a SharePoint directamente: usan servicios con interfaces definidas.
-- Cada servicio MUST tener una implementación mock, para poder construir pantallas sin depender
-  de las listas ni del tenant.
-- Los tipos de cada entidad se definen una sola vez y se comparten.
+- Los componentes NO acceden a SharePoint directamente: usan servicios con interfaces
+  definidas, sobre el Datasource de `core/api` y el contexto de `core/pnp`.
+- Cada servicio DEBE tener una implementación mock, para poder construir pantallas sin
+  depender de las listas ni del tenant.
+- Los tipos de cada entidad se definen una sola vez en `core/entities` y se comparten.
 
 ### IV. Simplicidad y cambios acotados
 
@@ -48,29 +51,34 @@ Sync Impact Report (temporal; eliminar antes del commit)
 - No se modifica código existente que la tarea no requiera tocar.
 - Dominio, servicios y componentes NO se mezclan.
 - TypeScript en modo estricto. Sin `any` salvo justificación explícita.
+- Sin comentarios de código, salvo para explicar una incompatibilidad concreta entre el
+  diseño y Fluent UI.
+
+### V. Validación
+
+- Cada tarea termina con `npm run build` sin errores.
 
 ## Contexto
 
-Gestión de Portfolio VP es una aplicación interna de la VP de Relaciones Institucionales de YPF
-para seguir palancas, objetivos, iniciativas, resultados clave y tareas.
+Gestión de Portfolio VP es una aplicación interna de la VP de Relaciones Institucionales de
+YPF para seguir palancas, objetivos, iniciativas, resultados clave y tareas.
 
 ## Flujo de desarrollo
 
 - Una feature de Spec Kit por rama: specify → clarify → plan → tasks → analyze → implement.
-- La especificación, el plan y las tareas se generan con Claude Code; la implementación puede
-  hacerse con GitHub Copilot. Por eso `tasks.md` MUST ser autosuficiente: cada tarea indica el
-  archivo exacto que toca y su criterio de terminado.
-- Durante la implementación NO se modifican `spec.md` ni `plan.md`. Si aparece un problema, se
-  corrige del lado de la especificación y se regeneran las tareas.
+- La especificación, el plan y las tareas se generan con Claude Code; la implementación
+  puede hacerse con GitHub Copilot. Por eso `tasks.md` DEBE ser autosuficiente: cada tarea
+  indica el archivo exacto que toca, los componentes del Design System que usa y su criterio
+  de terminado.
+- El plan de cada pantalla DEBE incluir un mapa de componentes: región del diseño →
+  componente del Design System y variante, o "consultar" si no hay correspondencia.
+- Durante la implementación NO se modifican `spec.md` ni `plan.md`. Si aparece un problema,
+  se corrige del lado de la especificación y se regeneran las tareas.
 
 ## Gobernanza
 
 - Esta constitución prevalece sobre cualquier spec, plan o tarea.
-- Enmiendas: se proponen por cambio versionado en este archivo, indicando el motivo, y rigen una
-  vez incorporadas a la rama principal.
-- Versionado (semántico): MAJOR por eliminación o redefinición incompatible de principios;
-  MINOR por principio o sección nuevos o ampliación material; PATCH por aclaraciones o redacción.
-- Revisión de cumplimiento: el plan MUST verificar su conformidad con estos principios y
+- Revisión de cumplimiento: el plan DEBE verificar su conformidad con estos principios y
   justificar cualquier desvío antes de generar las tareas.
 
-**Versión**: 0.1.0 | **Ratificada**: 2026-11-04 | **Última modificación**: 2026-11-04
+**Versión**: 0.2.0 | **Ratificada**: 2026-11-04 | **Última modificación**: 2026-11-05
