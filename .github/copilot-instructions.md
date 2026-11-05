@@ -15,6 +15,7 @@
 - Antes de editar, identificá requerimientos ausentes, ambiguos, contradictorios o insuficientes que puedan modificar el comportamiento esperado.
 - Ante una duda funcional, detenete, explicá concretamente qué no está definido, formulá las preguntas necesarias y esperá una respuesta explícita antes de continuar.
 - No infieras reglas de negocio, estados, permisos, obligatoriedad de datos, comportamientos, validaciones ni relaciones entre entidades a partir de nombres, capturas, documentación parcial o código existente.
+- Las capturas de `docs/pantallas/` son la referencia visual de cada pantalla (disposición, componentes y textos). Las reglas de negocio surgen de `spec.md` y `plan.md`, no de las capturas.
 - No consideres el silencio, una suposición probable ni una implementación previa como confirmación de un requerimiento funcional.
 - Resolvé sin consulta solamente las decisiones técnicas que no alteren el comportamiento funcional y que respeten la arquitectura y las convenciones existentes.
 
@@ -43,6 +44,13 @@
 - Exponé únicamente los contratos necesarios y ocultá los detalles internos.
 - Evitá código duplicado, código muerto, abstracciones innecesarias y funciones o clases con responsabilidades múltiples.
 
+## Design System
+
+- Toda la interfaz se construye con el Design System de YPF ubicado en `src/core/ui`.
+- Antes de construir o modificar cualquier elemento visual, leé `docs/design-system-catalog.md` y seguí su sección "Reglas de uso".
+- `src/core/ui` es de solo lectura: no modifiques sus componentes, estilos, assets ni archivos `index.ts`, y no lo reexportes desde `core/index.ts`.
+- Si ningún componente del catálogo corresponde a un elemento del diseño, detenete y consultá. No crees componentes ad hoc ni uses HTML nativo en su lugar.
+
 ## Conflictos entre fuentes y alternativas
 
 - No corrijas silenciosamente una inconsistencia que pueda cambiar contratos, datos, permisos o comportamiento existente. Exponela antes de modificar.
@@ -62,6 +70,12 @@
 - No crees, modifiques ni elimines listas, columnas, vistas, permisos, grupos, archivos o datos reales de SharePoint sin autorización explícita.
 - No despliegues paquetes ni ejecutes acciones contra entornos reales sin autorización explícita.
 - Aplicá el principio de mínimo privilegio.
+
+## Spec Kit
+
+- El proyecto se rige por `.specify/memory/constitution.md`, que prevalece sobre cualquier spec, plan o tarea.
+- Al implementar, seguí `tasks.md` de la feature activa en el orden indicado, una tarea por vez, usando los componentes del Design System que cada tarea nombra.
+- Durante la implementación no modifiques `spec.md` ni `plan.md`. Si una tarea no puede cumplirse como está escrita, detenete y explicá el motivo.
 
 ## Validación y entrega
 
