@@ -36,7 +36,7 @@ const getColorStep = (group: string, scale: string): IColorScaleStep => {
 
 const AccessList: React.FC = () => {
 	return (
-		<div className={styles.list} style={{ rowGap: spacing.lg }}>
+		<div className={styles.list} style={{ rowGap: spacing.sm }}>
 			{ACCESS_ITEMS.map((item) => {
 				const step = getColorStep(item.colorGroup, item.colorScale);
 

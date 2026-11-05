@@ -25,7 +25,11 @@ const AccessButton: React.FC<IAccessButtonProps> = ({ title, iconName, backgroun
 			borderRadius: spacing.lg,
 			width: '100%',
 			height: 'auto',
-			padding: `${spacing.xl} ${spacing.xl}`
+			padding: `${spacing.xl} ${spacing.xl}`,
+			fontFamily: typography.family.base,
+			fontSize: typography.size[28],
+			lineHeight: typography.lineHeight[28],
+			fontWeight: typography.weight.bold
 		},
 		rootHovered: fixedState,
 		rootPressed: fixedState,
@@ -35,11 +39,7 @@ const AccessButton: React.FC<IAccessButtonProps> = ({ title, iconName, backgroun
 			width: '100%'
 		},
 		label: {
-			margin: 0,
-			fontFamily: typography.family.base,
-			fontSize: typography.size[32],
-			lineHeight: typography.lineHeight[32],
-			fontWeight: typography.weight.bold
+			margin: 0
 		}
 	};
 

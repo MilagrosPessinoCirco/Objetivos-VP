@@ -12,6 +12,9 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import ObjetivosVp, { IObjetivosVpProps } from './components/ObjetivosVp/ObjetivosVp';
 import { getSP } from '../../core/pnp/sp/pnpjs-presets';
 
+require('../../core/ui/css/fix.css');
+require('../../core/ui/css/formatWorkbench.css');
+
 export interface IObjetivosVpWebPartProps {
 	description: string;
 }
