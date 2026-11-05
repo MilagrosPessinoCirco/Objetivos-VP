@@ -4,7 +4,7 @@ Referencia generada a partir de `DESIGN-SYSTEM-SHP-TEMPLATE/src/core/ui`. Es la 
 
 ## Reglas de uso
 
-- `src/core/ui` es de solo lectura: no se modifican sus componentes, estilos, assets ni `index.ts`, y no se reexporta desde `core/index.ts`.
+- `src/core/ui` no se modifica salvo decisión explícita del plan, registrada en `docs/design-system-cambios.md`. No se reexporta desde `core/index.ts`.
 - Imports selectivos por capa, nunca el índice completo de `core` ni de `core/ui`:
 
 ```ts
