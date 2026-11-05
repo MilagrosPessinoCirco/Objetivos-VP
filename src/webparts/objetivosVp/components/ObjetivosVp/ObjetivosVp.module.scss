@@ -1,4 +1,8 @@
+@use '../../../../core/ui/foundations/theme/tokens' as designTokens;
+
 .objetivosVp {
+	@include designTokens.design-system-theme();
+
 	.title {
 		margin: 0 0 8px;
 	}

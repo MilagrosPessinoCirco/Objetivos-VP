@@ -1,0 +1,11 @@
+.home {
+	display: grid;
+	grid-template-columns: 6fr 5fr;
+	align-items: stretch;
+}
+
+.leftColumn,
+.rightColumn {
+	display: flex;
+	flex-direction: column;
+}

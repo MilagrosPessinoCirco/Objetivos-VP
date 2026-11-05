@@ -3,6 +3,15 @@ declare interface IObjetivosVpWebPartStrings {
 	BasicGroupName: string;
 	DescriptionFieldLabel: string;
 	Title: string;
+	HomeTitle: string;
+	HomeWelcomeText: string;
+	AccessMyTasks: string;
+	AccessMyInitiatives: string;
+	AccessLeversObjectives: string;
+	AccessVpDashboard: string;
+	AccessAbm: string;
+	UserManual: string;
+	BrandLogoAlt: string;
 }
 
 declare module 'ObjetivosVpWebPartStrings' {
