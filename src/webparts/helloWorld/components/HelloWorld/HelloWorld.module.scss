@@ -1,0 +1,57 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "../../../../core/ui/scss/main.module.scss";
+
+.Home {
+	width: 100%;
+	padding: 0;
+
+	&_Container {
+		background-color: #f2f2f2;
+		//@include ms-Grid;
+		width: 100%;
+		margin: 0 auto;
+		padding: 0 15px;
+
+		&_Row {
+			padding: 0;
+			@include ms-Grid-row;
+
+			&_Column {
+				padding: 0;
+				//@include ms-Grid-col;
+				@include ms-sm12;
+				position: relative;
+				z-index: 100;
+			}
+		}
+	}
+}
+
+.messageBarContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  margin: 0;
+  z-index: 1000;
+  width: 500px;
+  max-width: 90vw;
+  pointer-events: none;
+}
+
+:global {
+  body:not(.edit-mode) {
+    div[data-sp-feature-tag="Site header host"],
+    #spCommandBar,
+    .commandBarWrapper,
+    [class*="ar_f_"],
+    [role="region"][aria-label="Barra de comandos"],
+    #sp-appBar,
+    .sp-appBar {
+      display: none !important;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.eslintrc.js
+lib/
+lib-commonjs/
+dist/
+release/
+temp/
+node_modules/
