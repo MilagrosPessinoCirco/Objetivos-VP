@@ -14,13 +14,13 @@ export default class ObjetivoDataSource implements IObjetivoDataSource {
 		'Nombre',
 		'Descripcion',
 		'Palanca/Id', 'Palanca/Title',
-		'Responsable/Id', 'Responsable/Title', 'Responsable/EMail',
 		'Duracion',
 		'CantidadAnios',
 		'Peso',
 		'FechaInicio',
 		'FechaCompromiso',
 		'Estado',
+		'EsDeVp',
 		'VP/Id', 'VP/Title',
 		'Departamento/Id', 'Departamento/Title',
 		'Gerencia/Id', 'Gerencia/Title',
@@ -28,7 +28,7 @@ export default class ObjetivoDataSource implements IObjetivoDataSource {
 		'Author/Id', 'Author/Title', 'Author/EMail',
 		'Editor/Id', 'Editor/Title', 'Editor/EMail'
 	];
-	private expand: Array<string> = ['Author', 'Editor', 'Palanca', 'Responsable', 'VP', 'Departamento', 'Gerencia'];
+	private expand: Array<string> = ['Author', 'Editor', 'Palanca', 'VP', 'Departamento', 'Gerencia'];
 
 	constructor() {
 		this._sp = getSP();
