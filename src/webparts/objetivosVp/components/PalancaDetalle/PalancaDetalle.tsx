@@ -2,14 +2,16 @@ import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../../core/ui/components';
-import { Chip, MessageBar, Spinner } from '../../../../core/ui/patterns';
+import { Chip, MessageBar, Spinner, Toast } from '../../../../core/ui/patterns';
 import { FigmaIcon, spacing } from '../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../core/api/Palanca/usePalancaDataSource';
+import { Palanca } from '../../../../core/entities';
 import { Utils } from '../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { PALANCAS_PATH } from '../ObjetivosVp/routes';
 import { formatPalancaId } from '../Palancas/formatPalancaId';
 import { PAGE_TITLE_STYLE } from '../Palancas/pageTitleStyle';
+import PalancaForm from '../PalancaForm/PalancaForm';
 import PalancaBreadcrumb from './PalancaBreadcrumb/PalancaBreadcrumb';
 import PalancaInfo from './PalancaInfo/PalancaInfo';
 import styles from './PalancaDetalle.module.scss';
@@ -21,18 +23,22 @@ export interface IPalancaDetalleProps {
 type LoadError = 'notFound' | 'error';
 
 const NOT_FOUND_STATUS = 404;
+const TOAST_DURATION_MS = 7000;
 
 const isNotFoundError = (error: unknown): boolean =>
 	typeof error === 'object' && error !== null && 'status' in error &&
 	(error as { status: unknown }).status === NOT_FOUND_STATUS;
 
-const PalancaDetalle: React.FC<IPalancaDetalleProps> = () => {
+const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage }) => {
 	const { id } = useParams<{ id: string }>();
 	const palancaId = Number(id);
 	const isValidId = Number.isInteger(palancaId) && palancaId > 0;
 	const navigate = useNavigate();
-	const [state, , , , , getById] = usePalancaDataSource();
+	const [state, , , editItem, , getById] = usePalancaDataSource();
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
+	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
+	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
+	const closeToast = React.useCallback((): void => setSuccessMessage(undefined), []);
 
 	React.useEffect(() => {
 		setLoadError(undefined);
@@ -45,6 +51,12 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = () => {
 
 	const palanca = !loadError && state.item?.Id === palancaId ? state.item : undefined;
 	const goPalancas = (): void => navigate(PALANCAS_PATH);
+
+	const updatePalanca = async (edited: Palanca): Promise<void> => {
+		await editItem(edited);
+		setIsFormOpen(false);
+		setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', edited.Nombre ?? ''));
+	};
 
 	const renderBody = (): React.ReactNode => {
 		if (loadError === 'notFound') {
@@ -85,7 +97,22 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = () => {
 				<Button variant="secondary" onClick={goPalancas}>
 					{strings.Cancel}
 				</Button>
+				{canManage && palanca && (
+					<Button variant="primary" onClick={() => setIsFormOpen(true)}>
+						{strings.Edit}
+					</Button>
+				)}
 			</div>
+			{isFormOpen && palanca && (
+				<PalancaForm palanca={palanca} onSave={updatePalanca} onCancel={() => setIsFormOpen(false)} />
+			)}
+			<Toast
+				variant="success"
+				open={successMessage !== undefined}
+				message={successMessage ?? ''}
+				duration={TOAST_DURATION_MS}
+				onClose={closeToast}
+			/>
 		</div>
 	);
 };

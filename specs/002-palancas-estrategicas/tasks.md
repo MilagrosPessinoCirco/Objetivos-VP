@@ -163,7 +163,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
 
 **Independent Test**: quickstart, pasos 7–11.
 
-- [ ] T018 [US2] Crear `src/webparts/objetivosVp/components/PalancaForm/PalancaForm.tsx` y `PalancaForm.module.scss` (formulario compartido; contrato en `contracts/ui-contracts.md` sección 2). Props: `palanca?: Palanca`, `onSave: (palanca: Palanca) => Promise<void>`, `onCancel: () => void`.
+- [X] T018 [US2] Crear `src/webparts/objetivosVp/components/PalancaForm/PalancaForm.tsx` y `PalancaForm.module.scss` (formulario compartido; contrato en `contracts/ui-contracts.md` sección 2). Props: `palanca?: Palanca`, `onSave: (palanca: Palanca) => Promise<void>`, `onCancel: () => void`.
   - Estado local: `nombre`, `descripcion` y `activa` (inicializados desde `palanca` o con `''`, `''`, `true`), más `submitted`, `isSaving` y `saveFailed`.
   - Validación (data-model, "Validaciones"): Nombre "obligatorio, no vacío ni solo espacios"; Descripción "obligatoria, no vacía ni solo espacios". El error es `strings.RequiredField` y se muestra solo si `submitted` y el valor recortado está vacío, así que se limpia solo al completar el campo.
   - Guardar: `setSubmitted(true)`; si hay errores, no hace nada más. Si no: `new Palanca()` con `Id` = `palanca?.Id` (solo en edición), `Nombre` = nombre recortado (el `Title` de la lista lo completa `toListItem`, T004), `Descripcion` = descripción recortada y `Activa`; `setIsSaving(true)`; `setSaveFailed(false)`; `await onSave(p)` dentro de `try/catch`. Si falla, `setSaveFailed(true)` y se conservan los datos. Siempre `setIsSaving(false)`.
@@ -171,7 +171,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
   - Contenido: si `saveFailed`, `MessageBar type="error" message={strings.PalancaSaveError}`; `Input label={strings.PalancaFormName} required value onChange errorMessage`; `Multiline label={strings.PalancaFormDescription} required value onChange errorMessage`; `Dropdown label={strings.PalancaFormActive} required options={[{ key: ACTIVE_KEY, text: strings.Yes }, { key: INACTIVE_KEY, text: strings.No }]} value onChange`, con `ACTIVE_KEY`/`INACTIVE_KEY` como constantes locales. El `onChange` del `Dropdown` recibe `string | string[]`: estrechar a `string`.
   - SCSS: `.fields` flex en columna (el `gap` con `spacing.lg` desde el TSX); Nombre y Descripción al 100 % de ancho.
   **Referencia**: `<sc-if value="{{m.is.palanca}}">` (`.mGrid`, `.wide`, `mPn`, `mPd`, `mPa`); botones "Cancelar"/"Guardar" (`var close`, `save`) y error "Este campo es obligatorio." (`R`). **Terminado**: build OK.
-- [ ] T019 [US2] Alta desde la grilla en `src/webparts/objetivosVp/components/Palancas/Palancas.tsx`. Depende de T013 y T018.
+- [X] T019 [US2] Alta desde la grilla en `src/webparts/objetivosVp/components/Palancas/Palancas.tsx`. Depende de T013 y T018.
   - Tomar `addItem` del hook (`const [state, getItems, addItem] = …`).
   - Estado local `form: { mode: 'new' } | { mode: 'edit'; palanca: Palanca } | undefined` y `successMessage: string | undefined`.
   - Pasar `onNew={() => setForm({ mode: 'new' })}` a `PalancasHeader`.
@@ -190,12 +190,12 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
 
 **Independent Test**: quickstart, pasos 12 y 17 (solo la edición), y S2 contra SharePoint.
 
-- [ ] T020 [US3] Edición desde la grilla en `src/webparts/objetivosVp/components/Palancas/Palancas.tsx`. Depende de T019.
+- [X] T020 [US3] Edición desde la grilla en `src/webparts/objetivosVp/components/Palancas/Palancas.tsx`. Depende de T019.
   - Tomar `editItem` del hook (cuarto elemento).
   - Pasar `onEdit={(palanca) => setForm({ mode: 'edit', palanca })}` a `PalancasTable`.
   - En modo `edit`, `PalancaForm palanca={form.palanca}`. `onSave`: `setLastOperation('save')`; `await editItem(p)` (relanza si falla, T002); luego `setForm(undefined)` y `setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', p.Nombre ?? ''))`.
   **Terminado**: quickstart, paso 12; build OK.
-- [ ] T021 [US3] Edición desde el detalle en `src/webparts/objetivosVp/components/PalancaDetalle/PalancaDetalle.tsx`. Depende de T016 y T018.
+- [X] T021 [US3] Edición desde el detalle en `src/webparts/objetivosVp/components/PalancaDetalle/PalancaDetalle.tsx`. Depende de T016 y T018.
   - Tomar `editItem` del hook (`const [state, , , editItem, , getById] = …`).
   - Estado local `isFormOpen` y `successMessage`.
   - Pie: si `canManage` y hay palanca, agregar después de "Cancelar" `Button variant="primary"` con `strings.Edit` → `setIsFormOpen(true)`.
