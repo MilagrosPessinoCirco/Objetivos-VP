@@ -10,9 +10,10 @@ export interface IAccessButtonProps {
 	iconName: FigmaIconName;
 	backgroundColor: string;
 	textColor: string;
+	onClick: () => void;
 }
 
-const AccessButton: React.FC<IAccessButtonProps> = ({ title, iconName, backgroundColor, textColor }) => {
+const AccessButton: React.FC<IAccessButtonProps> = ({ title, iconName, backgroundColor, textColor, onClick }) => {
 	const fixedState = {
 		backgroundColor,
 		color: textColor
@@ -44,7 +45,7 @@ const AccessButton: React.FC<IAccessButtonProps> = ({ title, iconName, backgroun
 	};
 
 	return (
-		<DefaultButton className={styles.button} styles={buttonStyles}>
+		<DefaultButton className={styles.button} styles={buttonStyles} onClick={onClick}>
 			<span>{title}</span>
 			<FigmaIcon name={iconName} size="xxl" className={styles.icon} />
 		</DefaultButton>

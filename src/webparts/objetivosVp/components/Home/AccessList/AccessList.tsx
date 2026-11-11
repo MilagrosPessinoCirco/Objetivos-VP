@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { colorScales, spacing } from '../../../../../core/ui/foundations';
 import type { FigmaIconName, IColorScaleStep } from '../../../../../core/ui/foundations';
@@ -11,14 +12,17 @@ interface IAccessItem {
 	iconName: FigmaIconName;
 	colorGroup: string;
 	colorScale: string;
+	route: string;
 }
 
 const ACCESS_ITEMS: IAccessItem[] = [
-	{ title: strings.AccessMyTasks, iconName: 'checkmark', colorGroup: 'Primary', colorScale: '800' },
-	{ title: strings.AccessMyInitiatives, iconName: 'applications', colorGroup: 'Tertiary', colorScale: '800' },
-	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '500' },
-	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Primary', colorScale: '600' },
-	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '700' }
+	{ title: strings.AccessMyTasks, iconName: 'checkmark', colorGroup: 'Primary', colorScale: '800', route: '/tarea' },
+	{ title: strings.AccessMyInitiatives, iconName: 'applications', colorGroup: 'Tertiary', colorScale: '800', route: '/iniciativa' },
+	{ title: strings.AccessObjectives, iconName: 'list', colorGroup: 'Primary', colorScale: '600', route: '/objetivo' },
+	{ title: strings.AccessLevers, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '500', route: '/palanca' }
+	// Pendientes de implementar:
+	// { title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Primary', colorScale: '600', route: '/tablero' },
+	// { title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '700', route: '/abm' }
 ];
 
 const getColorStep = (group: string, scale: string): IColorScaleStep => {
@@ -35,8 +39,10 @@ const getColorStep = (group: string, scale: string): IColorScaleStep => {
 };
 
 const AccessList: React.FC = () => {
+	const navigate = useNavigate();
+
 	return (
-		<div className={styles.list} style={{ rowGap: spacing.lg }}>
+		<div className={styles.list} style={{ rowGap: spacing.sm }}>
 			{ACCESS_ITEMS.map((item) => {
 				const step = getColorStep(item.colorGroup, item.colorScale);
 
@@ -47,6 +53,7 @@ const AccessList: React.FC = () => {
 						iconName={item.iconName}
 						backgroundColor={step.value}
 						textColor={step.textColor}
+						onClick={() => navigate(item.route)}
 					/>
 				);
 			})}
