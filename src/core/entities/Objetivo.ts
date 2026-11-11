@@ -12,13 +12,13 @@ export default class Objetivo extends BaseEntity {
 		this.Nombre = item.Nombre ?? undefined;
 		this.Descripcion = item.Descripcion ?? undefined;
 		this.Palanca = toLookupValue(item.Palanca);
-		this.Responsable = toPersonValue(item.Responsable);
 		this.Duracion = toChoiceValue(Duracion, item.Duracion, 'Duracion');
 		this.CantidadAnios = item.CantidadAnios ?? undefined;
 		this.Peso = item.Peso ?? undefined;
 		this.FechaInicio = toDateValue(item.FechaInicio);
 		this.FechaCompromiso = toDateValue(item.FechaCompromiso);
 		this.Estado = toChoiceValue(Estado, item.Estado, 'Estado');
+		this.EsDeVp = item.EsDeVp ?? undefined;
 		this.VP = toLookupValue(item.VP);
 		this.Departamento = toLookupValue(item.Departamento);
 		this.Gerencia = toLookupValue(item.Gerencia);
@@ -34,13 +34,13 @@ export default class Objetivo extends BaseEntity {
 			Nombre: this.Nombre,
 			Descripcion: this.Descripcion,
 			PalancaId: this.Palanca?.Id,
-			ResponsableId: this.Responsable?.Id,
 			Duracion: assertChoiceValue(Duracion, this.Duracion, 'Duracion'),
 			CantidadAnios: this.CantidadAnios,
 			Peso: this.Peso,
 			FechaInicio: this.FechaInicio,
 			FechaCompromiso: this.FechaCompromiso,
 			Estado: assertChoiceValue(Estado, this.Estado, 'Estado'),
+			EsDeVp: this.EsDeVp,
 			VPId: this.VP?.Id,
 			DepartamentoId: this.Departamento?.Id,
 			GerenciaId: this.Gerencia?.Id,
@@ -50,13 +50,13 @@ export default class Objetivo extends BaseEntity {
 	public Nombre?: string | undefined;
 	public Descripcion?: string | undefined;
 	public Palanca?: ILookupValue | undefined;
-	public Responsable?: IPersonValue | undefined;
 	public Duracion?: Duracion | undefined;
 	public CantidadAnios?: number | undefined;
 	public Peso?: number | undefined;
 	public FechaInicio?: Date | null | undefined;
 	public FechaCompromiso?: Date | null | undefined;
 	public Estado?: Estado | undefined;
+	public EsDeVp?: boolean | undefined;
 	public VP?: ILookupValue | undefined;
 	public Departamento?: ILookupValue | undefined;
 	public Gerencia?: ILookupValue | undefined;
