@@ -42,7 +42,7 @@ const AccessList: React.FC = () => {
 	const navigate = useNavigate();
 
 	return (
-		<div className={styles.list} style={{ rowGap: spacing.sm }}>
+		<div className={styles.list} style={{ rowGap: spacing.lg }}>
 			{ACCESS_ITEMS.map((item) => {
 				const step = getColorStep(item.colorGroup, item.colorScale);
 
