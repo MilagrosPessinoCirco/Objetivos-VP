@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Hosted Manifests",
+      "name": "Hosted Workbench",
       "type": "msedge",
       "request": "launch",
-      "url": "https://ypf.sharepoint.com/sites/{siteName}?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js",
+      "url": "https://circo.sharepoint.com/sites/PruebaCircoStudia/_layouts/15/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -16,6 +16,23 @@
       },
       "runtimeArgs": [
         "--remote-debugging-port=9222"
+      ]
+    },
+    {
+      "name": "Hosted Manifests",
+      "type": "msedge",
+      "request": "launch",
+      "url": "https://circo.sharepoint.com/sites/PruebaCircoStudia/SitePages/CollabHome.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js",
+      "webRoot": "${workspaceRoot}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9223"
       ]
     }
   ]
