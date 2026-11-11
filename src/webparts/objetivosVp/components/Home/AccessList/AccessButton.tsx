@@ -10,7 +10,7 @@ export interface IAccessButtonProps {
 	iconName: FigmaIconName;
 	backgroundColor: string;
 	textColor: string;
-	onClick: () => void;
+	onClick?: () => void;
 }
 
 const AccessButton: React.FC<IAccessButtonProps> = ({ title, iconName, backgroundColor, textColor, onClick }) => {

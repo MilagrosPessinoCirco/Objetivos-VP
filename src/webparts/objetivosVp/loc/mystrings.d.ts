@@ -8,8 +8,6 @@ declare interface IObjetivosVpWebPartStrings {
 	AccessMyTasks: string;
 	AccessMyInitiatives: string;
 	AccessLeversObjectives: string;
-	AccessLevers: string;
-	AccessObjectives: string;
 	AccessVpDashboard: string;
 	AccessAbm: string;
 	UserManual: string;

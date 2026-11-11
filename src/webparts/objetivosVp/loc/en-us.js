@@ -9,8 +9,6 @@ define([], function () {
 		"AccessMyTasks": "Mis tareas",
 		"AccessMyInitiatives": "Mis iniciativas",
 		"AccessLeversObjectives": "Palancas y objetivos",
-		"AccessLevers": "Palancas",
-		"AccessObjectives": "Objetivos",
 		"AccessVpDashboard": "Tablero VP",
 		"AccessAbm": "ABM",
 		"UserManual": "Manual de usuario",
