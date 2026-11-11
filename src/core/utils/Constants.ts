@@ -33,6 +33,7 @@ export enum Duracion {
 }
 
 export enum Estado {
+	NoIniciada = "No iniciada",
 	EnCurso = "En curso",
 	FinalizadoCumplido = "Finalizado cumplido",
 	FinalizadoIncumplido = "Finalizado incumplido"
@@ -79,3 +80,5 @@ export enum EstadoRiesgo {
 	Escalado = "Escalado",
 	Resuelto = "Resuelto"
 }
+
+export const VP_RRII_NOMBRE: string = 'VP RRII';

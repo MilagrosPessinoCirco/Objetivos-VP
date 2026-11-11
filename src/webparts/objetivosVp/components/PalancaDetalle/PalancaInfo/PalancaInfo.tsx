@@ -26,12 +26,12 @@ const VALUE_STYLE: React.CSSProperties = {
 	color: colors.neutral.text
 };
 
-interface IFieldProps {
+export interface IFieldProps {
 	label: string;
 	value: string;
 }
 
-const Field: React.FC<IFieldProps> = ({ label, value }) => (
+export const Field: React.FC<IFieldProps> = ({ label, value }) => (
 	<div className={styles.field} style={{ gap: spacing.xs }}>
 		<span style={LABEL_STYLE}>{label}</span>
 		<p className={styles.value} style={VALUE_STYLE}>{value}</p>

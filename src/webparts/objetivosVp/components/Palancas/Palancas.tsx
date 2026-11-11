@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { MessageBar, Spinner, Toast } from '../../../../core/ui/patterns';
+import { MessageBar, Spinner, Surface, Tabs, Toast } from '../../../../core/ui/patterns';
 import { spacing } from '../../../../core/ui/foundations';
-import { Palanca } from '../../../../core/entities';
+import { Objetivo, Palanca } from '../../../../core/entities';
 import usePalancaDataSource from '../../../../core/api/Palanca/usePalancaDataSource';
+import useObjetivoDataSource from '../../../../core/api/Objetivo/useObjetivoDataSource';
 import { Utils } from '../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { HOME_PATH, getPalancaPath } from '../ObjetivosVp/routes';
+import { HOME_PATH, getObjetivoNewPath, getObjetivoPath, getPalancaPath } from '../ObjetivosVp/routes';
+import ObjetivosTable from '../ObjetivosTable/ObjetivosTable';
+import { ObjetivosFiltro, filterObjetivos, isVpRrii } from '../objetivoUtils';
+import useObjetivoNames from '../useObjetivoNames';
 import PalancaForm from '../PalancaForm/PalancaForm';
 import { formatPalancaId } from './formatPalancaId';
 import PalancasHeader from './PalancasHeader/PalancasHeader';
@@ -16,6 +20,9 @@ import styles from './Palancas.module.scss';
 
 export interface IPalancasProps {
 	canManage: boolean;
+	canCreateObjetivo: boolean;
+	filtro: ObjetivosFiltro;
+	onFiltroChange: (filtro: ObjetivosFiltro) => void;
 }
 
 type Operation = 'load' | 'save';
@@ -30,8 +37,10 @@ const matchesSearch = (palanca: Palanca, search: string): boolean =>
 	formatPalancaId(palanca.Id).toLowerCase().indexOf(search) >= 0 ||
 	(palanca.Nombre ?? '').toLowerCase().indexOf(search) >= 0;
 
-const Palancas: React.FC<IPalancasProps> = ({ canManage }) => {
+const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filtro, onFiltroChange }) => {
 	const [state, getItems, addItem, editItem] = usePalancaDataSource();
+	const [objetivoState, getObjetivos] = useObjetivoDataSource();
+	const names = useObjetivoNames();
 	const navigate = useNavigate();
 	const [searchText, setSearchText] = React.useState<string>('');
 	const [lastOperation, setLastOperation] = React.useState<Operation>('load');
@@ -40,11 +49,13 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage }) => {
 
 	React.useEffect(() => {
 		getItems();
+		getObjetivos();
 	}, []);
 
 	const refresh = (): void => {
 		setLastOperation('load');
 		getItems();
+		getObjetivos();
 	};
 
 	const closeToast = React.useCallback((): void => setSuccessMessage(undefined), []);
@@ -70,6 +81,20 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage }) => {
 		.sort(byNombre);
 	const emptyText = search === '' ? strings.PalancasEmpty : strings.PalancasEmptySearch;
 
+	const objetivosError = objetivoState.error || names.error;
+	const objetivosReady = !objetivosError && !objetivoState.isLoading && names.ready;
+	const objetivos = objetivosReady ? names.resolve(objetivoState.items) : [];
+	const objetivosByPalanca = objetivosReady
+		? filterObjetivos(objetivos, filtro).reduce<Record<number, Objetivo[]>>((byPalanca, objetivo) => {
+			const palancaId = objetivo.Palanca?.Id;
+			if (palancaId !== undefined) {
+				byPalanca[palancaId] = (byPalanca[palancaId] ?? []).concat([objetivo]);
+			}
+			return byPalanca;
+		}, {})
+		: undefined;
+	const otrasVpObjetivos = objetivos.filter((objetivo) => !isVpRrii(objetivo.VP?.Title));
+
 	const renderBody = (): React.ReactNode => {
 		if (state.isLoading && state.items.length === 0) {
 			return <Spinner />;
@@ -82,7 +107,9 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage }) => {
 				palancas={visiblePalancas}
 				emptyText={emptyText}
 				canManage={canManage}
+				objetivosByPalanca={objetivosByPalanca}
 				onView={(id) => navigate(getPalancaPath(id))}
+				onViewObjetivo={(id) => navigate(getObjetivoPath(id))}
 				onEdit={(palanca) => setForm({ mode: 'edit', palanca })}
 			/>
 		);
@@ -97,8 +124,32 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage }) => {
 				onRefresh={refresh}
 				canManage={canManage}
 				onNew={() => setForm({ mode: 'new' })}
+				canCreateObjetivo={canCreateObjetivo}
+				onNewObjetivo={() => navigate(getObjetivoNewPath())}
 			/>
+			<Tabs
+				variant="filled"
+				size="small"
+				ariaLabel={strings.ObjetivosFilterAriaLabel}
+				items={[
+					{ key: 'delVp', label: strings.ObjetivosFilterVp },
+					{ key: 'todos', label: strings.ObjetivosFilterAll }
+				]}
+				value={filtro}
+				onChange={(key) => onFiltroChange(key as ObjetivosFiltro)}
+			/>
+			{objetivosError && <MessageBar type="error" message={strings.ObjetivosLoadError} />}
 			{renderBody()}
+			{filtro === 'todos' && objetivosReady && (
+				<Surface variant="outline" padding="comfortable" header={strings.OtherVpObjectivesSection}>
+					<ObjetivosTable
+						objetivos={otrasVpObjetivos}
+						variant="otrasVp"
+						emptyText={strings.OtherVpObjectivesEmpty}
+						onView={(id) => navigate(getObjetivoPath(id))}
+					/>
+				</Surface>
+			)}
 			{form?.mode === 'new' && <PalancaForm onSave={createPalanca} onCancel={() => setForm(undefined)} />}
 			{form?.mode === 'edit' && <PalancaForm palanca={form.palanca} onSave={updatePalanca} onCancel={() => setForm(undefined)} />}
 			<Toast

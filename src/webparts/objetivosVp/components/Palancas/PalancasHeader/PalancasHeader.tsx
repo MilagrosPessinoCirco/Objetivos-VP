@@ -14,9 +14,11 @@ export interface IPalancasHeaderProps {
 	onRefresh: () => void;
 	canManage: boolean;
 	onNew?: () => void;
+	canCreateObjetivo: boolean;
+	onNewObjetivo?: () => void;
 }
 
-const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchChange, onBack, onRefresh, canManage, onNew }) => {
+const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchChange, onBack, onRefresh, canManage, onNew, canCreateObjetivo, onNewObjetivo }) => {
 	return (
 		<div className={styles.header} style={{ gap: spacing.md }}>
 			<div className={styles.left} style={{ gap: spacing.md }}>
@@ -39,6 +41,11 @@ const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchCh
 				{canManage && onNew && (
 					<Button variant="primary" iconLeft={<FigmaIcon name="add" />} onClick={onNew}>
 						{strings.PalancaNew}
+					</Button>
+				)}
+				{canCreateObjetivo && onNewObjetivo && (
+					<Button variant="primary" iconLeft={<FigmaIcon name="add" />} onClick={onNewObjetivo}>
+						{strings.ObjetivoNew}
 					</Button>
 				)}
 			</div>

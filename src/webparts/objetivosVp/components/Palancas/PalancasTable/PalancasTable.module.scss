@@ -1,8 +1,18 @@
 .actions {
 	display: flex;
+	align-items: center;
 	justify-content: flex-end;
 }
 
 .description {
 	white-space: normal;
+}
+
+.srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
 }

@@ -2,13 +2,17 @@ import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../../core/ui/components';
-import { Chip, MessageBar, Spinner, Toast } from '../../../../core/ui/patterns';
+import { Chip, MessageBar, Spinner, Surface, Toast } from '../../../../core/ui/patterns';
 import { FigmaIcon, spacing } from '../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../core/api/Palanca/usePalancaDataSource';
+import useObjetivoDataSource from '../../../../core/api/Objetivo/useObjetivoDataSource';
 import { Palanca } from '../../../../core/entities';
 import { Utils } from '../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { PALANCAS_PATH } from '../ObjetivosVp/routes';
+import { PALANCAS_PATH, getObjetivoNewPath, getObjetivoPath } from '../ObjetivosVp/routes';
+import ObjetivosTable from '../ObjetivosTable/ObjetivosTable';
+import { ObjetivosFiltro, filterObjetivos, isNotFoundError } from '../objetivoUtils';
+import useObjetivoNames from '../useObjetivoNames';
 import { formatPalancaId } from '../Palancas/formatPalancaId';
 import { PAGE_TITLE_STYLE } from '../Palancas/pageTitleStyle';
 import PalancaForm from '../PalancaForm/PalancaForm';
@@ -18,23 +22,22 @@ import styles from './PalancaDetalle.module.scss';
 
 export interface IPalancaDetalleProps {
 	canManage: boolean;
+	canCreateObjetivo: boolean;
+	filtro: ObjetivosFiltro;
 }
 
 type LoadError = 'notFound' | 'error';
 
-const NOT_FOUND_STATUS = 404;
 const TOAST_DURATION_MS = 7000;
 
-const isNotFoundError = (error: unknown): boolean =>
-	typeof error === 'object' && error !== null && 'status' in error &&
-	(error as { status: unknown }).status === NOT_FOUND_STATUS;
-
-const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage }) => {
+const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateObjetivo, filtro }) => {
 	const { id } = useParams<{ id: string }>();
 	const palancaId = Number(id);
 	const isValidId = Number.isInteger(palancaId) && palancaId > 0;
 	const navigate = useNavigate();
 	const [state, , , editItem, , getById] = usePalancaDataSource();
+	const [objetivoState, getObjetivos] = useObjetivoDataSource();
+	const names = useObjetivoNames();
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
@@ -46,6 +49,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage }) => {
 			setLoadError('notFound');
 			return;
 		}
+		getObjetivos();
 		getById(palancaId).catch((error: unknown) => setLoadError(isNotFoundError(error) ? 'notFound' : 'error'));
 	}, [palancaId]);
 
@@ -68,7 +72,23 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage }) => {
 		if (!palanca) {
 			return state.isLoading ? <Spinner /> : null;
 		}
-		return <PalancaInfo palanca={palanca} />;
+		return (
+			<>
+				<PalancaInfo palanca={palanca} />
+				<Surface variant="outline" padding="comfortable" header={strings.PalancaObjectivesSection}>
+					{objetivoState.error || names.error ? (
+						<MessageBar type="error" message={strings.ObjetivosLoadError} />
+					) : (
+						<ObjetivosTable
+							objetivos={filterObjetivos(names.resolve(objetivoState.items), filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId)}
+							variant="palanca"
+							emptyText={strings.PalancaObjectivesEmpty}
+							onView={(objetivoId) => navigate(getObjetivoPath(objetivoId))}
+						/>
+					)}
+				</Surface>
+			</>
+		);
 	};
 
 	return (
@@ -97,6 +117,11 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage }) => {
 				<Button variant="secondary" onClick={goPalancas}>
 					{strings.Cancel}
 				</Button>
+				{canCreateObjetivo && palanca && (
+					<Button variant="primary" iconLeft={<FigmaIcon name="add" />} onClick={() => navigate(getObjetivoNewPath(palancaId))}>
+						{strings.ObjetivoNew}
+					</Button>
+				)}
 				{canManage && palanca && (
 					<Button variant="primary" onClick={() => setIsFormOpen(true)}>
 						{strings.Edit}
