@@ -45,7 +45,7 @@ function useDatasource<TItem extends BaseEntity>(
 
 	const datasourceReducer = createReducer<IDatasourceState<TItem>>({
 		[LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-		[ERROR]: (state) => ({ ...state, error: true }),
+		[ERROR]: (state) => ({ ...state, isLoading: false, error: true }),
 		[ADD]: (state, action) => ({ items: [...state.items, action.payload], item: action.payload, isLoading: false, error: false }),
 		[EDIT]: (state, action) => ({
 			items: state.items.map(entity => entity.Id === action.payload.Id ? action.payload : entity),
@@ -77,14 +77,35 @@ function useDatasource<TItem extends BaseEntity>(
 		}
 	);
 
+	const handleAsyncAndRethrow = (asyncFn: (...args: any[]) => Promise<void>) => (
+		async (...args: any[]) => {
+			try {
+				await asyncFn(...args);
+			}
+			catch (error) {
+				console.log("ERROR: ",error);
+				console.error(error);
+				dispatch({ type: ERROR });
+				throw error;
+			}
+		}
+	);
+
 	const addItem = async (item: TItem): Promise<TItem> => {
-		dispatch({ type: LOAD });
-		const itemResult = await datasource.add(item);
-		dispatch({ type: ADD, payload: itemResult });
-		return itemResult;
+		try {
+			dispatch({ type: LOAD });
+			const itemResult = await datasource.add(item);
+			dispatch({ type: ADD, payload: itemResult });
+			return itemResult;
+		}
+		catch (error) {
+			console.error(error);
+			dispatch({ type: ERROR });
+			throw error;
+		}
 	};
 
-	const editItem = handleAsync(async (item: TItem) => {
+	const editItem = handleAsyncAndRethrow(async (item: TItem) => {
 		dispatch({ type: LOAD });
 		const itemResult = await datasource.edit(item);
 		dispatch({ type: EDIT, payload: itemResult });
@@ -102,7 +123,7 @@ function useDatasource<TItem extends BaseEntity>(
 		dispatch({ type: GET_ALL, payload: itemsResult });
 	});
 
-	const getById = handleAsync(async (itemId: number) => {
+	const getById = handleAsyncAndRethrow(async (itemId: number) => {
 		dispatch({ type: LOAD });
 		const item = await datasource.getById(itemId);
 		dispatch({ type: GET_BY_ID, payload: item });
