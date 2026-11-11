@@ -100,7 +100,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
   - En `src/webparts/objetivosVp/components/Home/AccessList/AccessButton.tsx`, `onClick` pasa a ser opcional (`onClick?: () => void`) y se sigue pasando a `DefaultButton`.
   - En `src/webparts/objetivosVp/components/Home/AccessList/AccessList.tsx`, `IAccessItem.route` pasa a ser opcional y `ACCESS_ITEMS` queda exactamente así, en este orden: `AccessMyTasks` · `checkmark` · Primary 800; `AccessMyInitiatives` · `applications` · Tertiary 800; `AccessLeversObjectives` · `flag` · Tertiary 500 · `route: PALANCAS_PATH`; `AccessVpDashboard` · `list` · Primary 600; `AccessAbm` · `users` · Secondary 700. Sin comentarios ni ítems comentados.
   - `onClick` se pasa solo si el ítem tiene `route`: `onClick={item.route ? () => navigate(item.route) : undefined}`, con la variable estrechada para el tipo.
-  - No cambiar `rowGap`, `getColorStep` ni los estilos (el espaciado de los accesos es una decisión pendiente fuera de esta feature).
+  - No cambiar `rowGap`, `getColorStep` ni los estilos: la separación ya se restauró en el commit `1689f29` (plan, "Ajustes a la Home que vinieron con el merge del router").
   - Quitar `AccessLevers` y `AccessObjectives` de `src/webparts/objetivosVp/loc/mystrings.d.ts` y `src/webparts/objetivosVp/loc/en-us.js`, que quedan sin uso.
   **Referencia**: spec 001 FR-006 y su plan ("Mapa de componentes", R7–R11). **Terminado**: cinco accesos; solo "Palancas y objetivos" navega a `#/palanca`; los demás no hacen nada; build OK.
 - [ ] T011 [P] [US1] Crear `src/webparts/objetivosVp/components/Palancas/PalancasHeader/PalancasHeader.tsx` y `PalancasHeader.module.scss` (región G1 + G2; desvío registrado: no usar `TableFilters`). Props: `searchText: string`, `onSearchChange: (value: string) => void`, `onBack: () => void`, `onRefresh: () => void`, `canManage: boolean`, `onNew?: () => void`.
@@ -275,5 +275,6 @@ US3:      T020 · T021
 
 ## Notes
 
-- **Pendiente fuera de esta feature**: el merge de `Router` dejó los accesos de la home con `rowGap: spacing.sm` y `justify-content: center`; el plan de la 001 aprobó `spacing.lg` (Q7). Ninguna tarea lo cambia hasta que la usuaria decida.
+- Los ajustes a la Home que vinieron con el merge ya están resueltos (plan, "Ajustes a la Home que vinieron con el merge del router"; commit `1689f29`).
+- No correr `npm audit fix`: puede subir versiones incompatibles con SPFx 1.22.2.
 - Hacer un commit por tarea o por grupo lógico, sin mezclar con T000.

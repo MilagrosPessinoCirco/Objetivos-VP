@@ -46,7 +46,15 @@ La compilación base fallaba con 13 errores de TypeScript por `components/Home/H
 
 `npm run build` pasa sin errores después de los tres pasos.
 
-**Pendiente de la usuaria, fuera de esta feature**: el merge dejó los accesos de la home más juntos (`rowGap: spacing.sm` y `justify-content: center` en `AccessList`), mientras que el plan de la 001 aprobó `spacing.lg` (Q7). Esta feature no toca esos estilos.
+### Ajustes a la Home que vinieron con el merge del router
+
+Revisados contra la spec y el plan de la 001. Decisión de la usuaria:
+
+| Cambio del merge | Decisión | Estado |
+|---|---|---|
+| Contenedor de página en `Home.tsx`/`Home.module.scss` (ancho máximo 1200 px, centrado, padding `spacing.xl`/`spacing.xxl`) | **Queda.** Es un ajuste a la Home aceptado. | Sin cambios. |
+| Accesos más juntos (`rowGap: spacing.sm` y `justify-content: center` en `AccessList`) | Se vuelve a lo aprobado en la 001 (Q7): `spacing.lg` y `space-between`. | Hecho, commit `1689f29`. |
+| Variantes de la copia anidada que el merge no trajo (letra de 28 px en los accesos, footer sin el logo de Plataformas 365) | No se aplican. | La Home sigue con 32 px y con el logo. |
 
 ## Constitution Check
 

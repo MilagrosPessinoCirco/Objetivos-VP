@@ -66,7 +66,7 @@ No quedan `NEEDS CLARIFICATION`. Las cuatro consultas técnicas (C1–C4) se res
 - **Home**: la rama cambió la home a cuatro accesos que navegan todos. La usuaria decidió que vale la spec de la 001: se vuelven a los cinco accesos ("Mis tareas", "Mis iniciativas", "Palancas y objetivos", "Tablero VP", "ABM", con sus íconos y colores aprobados) y solo "Palancas y objetivos" navega, a `PALANCAS_PATH`. `AccessButton.onClick` vuelve a ser opcional. En `loc/` se restaura `AccessLeversObjectives` y se quitan `AccessLevers` y `AccessObjectives`, que la rama agregó y quedan sin uso.
 - **`.vscode/launch.json`**: el merge conserva la versión de 002, porque la rama versionaba URLs de un tenant, algo que el repo no permite.
 
-### D8b. Enlace directo a una palanca inactiva
+### D8b. Enlace directo a una palanca inactiva (aprobado por la usuaria)
 
 Con el router, el detalle se puede abrir escribiendo la URL (`#/palanca/<Id>`), también para una palanca inactiva. La spec (aclaración P1-A) dice que la app no ofrece forma de llegar a una inactiva: la grilla y la búsqueda no la muestran y ningún elemento de la interfaz lleva a ella. El enlace escrito a mano no es un camino que ofrezca la interfaz, así que el detalle se muestra igual, con el chip "Inactiva". No se oculta nada, porque toda la VP ve toda la información (RF-19).
 
