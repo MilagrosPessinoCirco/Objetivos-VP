@@ -19,7 +19,7 @@ export const getPalancaPath = (id: number): string => `${PALANCAS_PATH}/${id}`;
 | `PALANCAS_PATH` | `<Palancas canManage />` | Reemplaza la pantalla provisoria "Palanca: Bandeja". |
 | `PALANCA_DETAIL_PATH` | `<PalancaDetalle canManage />` | Reemplaza la pantalla provisoria "Palanca: Detalle". |
 | `/palanca/new`, `/palanca/edit/:id` | — | **Se quitan**: el formulario es un modal. |
-| Rutas de objetivo, iniciativa y tarea | provisorias | Sin cambios (fuera de alcance). |
+| Rutas de objetivo, iniciativa y tarea | — | **Se quitan** completas, con sus comentarios y textos fijos. Cada feature agrega la suya. |
 
 - Se navega con `useNavigate()` de `react-router-dom`. Nunca con `window.location`, `history.pushState` ni `Utils.openInSelfTab`/`openInNewTab`.
 - `canManage` se pasa en `true` desde las rutas (research D9).
@@ -96,7 +96,7 @@ Las pantallas usan solo `usePalancaDataSource()` (`src/core/api/Palanca/usePalan
 | `getById(id)` | Detalle, al montar | **Relanza** el error (cambio) y deja `error = true`, `isLoading = false`. |
 | `deleteItem` | — | No se usa (FR-015). |
 
-- `usePalancaDataSource` pasa `new PalancaMock()` como mock: fuera de SharePoint (workbench local) se usan los datos en memoria.
+- `usePalancaDataSource` pasa `new PalancaMock()` como mock: fuera de un entorno SharePoint (pruebas sin conexión) se usan los datos en memoria. En el workbench hospedado se usa la lista real.
 - Detalle: si `getById` falla con estado HTTP 404, muestra "No se encontró la palanca."; con cualquier otro error, "No se pudo cargar la palanca.". En ambos casos el usuario puede volver con las migas o "Volver".
 
 ## 4. Textos (`loc/mystrings.d.ts` y `loc/en-us.js`)

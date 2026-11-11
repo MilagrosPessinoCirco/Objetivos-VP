@@ -26,7 +26,7 @@ Desde el acceso de palancas de la home, la persona llega a la "Galería de palan
 2. **Given** palancas activas e inactivas registradas, **When** se abre la grilla, **Then** se listan solo las activas, cada una con su ID, nombre y descripción.
 3. **Given** la grilla abierta, **When** la persona elige "Ver palanca" en una fila, **Then** se abre el detalle de esa palanca con su ID, nombre, estado (Activa / Inactiva) y descripción.
 4. **Given** el detalle de una palanca, **When** la persona observa la parte superior, **Then** ve las migas de pan "Inicio → Palancas → [nombre de la palanca]", donde "Inicio" y "Palancas" son links y el último nivel es el actual.
-5. **Given** el detalle de una palanca, **When** la persona activa "Inicio", "Palancas" o el botón Volver, **Then** llega respectivamente a la home, a la grilla de palancas o a la pantalla anterior.
+5. **Given** el detalle de una palanca, **When** la persona activa "Inicio", "Palancas" o el botón Volver, **Then** "Inicio" lleva a la home, y "Palancas" y el botón Volver llevan a la grilla de palancas.
 6. **Given** la grilla abierta, **When** la persona activa el botón Volver, **Then** vuelve a la home.
 7. **Given** la grilla abierta, **When** la persona escribe en la búsqueda rápida parte del ID o del nombre de una palanca, **Then** la grilla muestra solo las palancas activas cuyo ID o nombre contienen el texto, sin distinguir mayúsculas de minúsculas.
 8. **Given** una búsqueda sin coincidencias, **When** se aplica, **Then** la grilla muestra el estado vacío "No hay palancas con esta búsqueda."
@@ -116,14 +116,14 @@ Cuando una palanca deja de usarse, la persona la marca como inactiva desde el fo
 - **FR-001**: El acceso "Palancas y objetivos" de la home DEBE abrir la "Galería de palancas estratégicas". Los demás accesos de la home no cambian su comportamiento.
 - **FR-002**: La grilla DEBE mostrar solo las palancas activas, con las columnas ID, Palanca (nombre) y Descripción, y en cada fila las acciones "Editar palanca" y "Ver palanca".
 - **FR-003**: La grilla DEBE ofrecer la acción "Nueva palanca" y un botón Volver que lleva a la home.
-- **FR-004**: La grilla DEBE ofrecer, además de "Nueva palanca", una búsqueda rápida con el texto de ayuda "Buscar palanca", que filtra las palancas activas por coincidencia parcial con su ID o su nombre, sin distinguir mayúsculas de minúsculas, y un botón "Actualizar" que vuelve a cargar las palancas conservando la búsqueda. El panel de Filtros del prototipo NO forma parte de esta feature.
+- **FR-004**: La grilla DEBE ofrecer una búsqueda rápida con el texto de ayuda "Buscar palanca", que filtra las palancas activas por coincidencia parcial con su ID o su nombre, sin distinguir mayúsculas de minúsculas, y un botón "Actualizar" que vuelve a cargar las palancas conservando la búsqueda. El panel de Filtros del prototipo NO forma parte de esta feature.
 - **FR-004a**: Si la búsqueda no tiene coincidencias, la grilla DEBE mostrar solo el texto "No hay palancas con esta búsqueda.". Si no hay ninguna palanca activa y la búsqueda está vacía, DEBE mostrar solo el texto "No hay palancas cargadas." y mantener disponible "Nueva palanca". Ningún estado vacío lleva textos de ayuda ni aclaraciones adicionales.
 
 **Detalle de palanca**
 
 - **FR-005**: El detalle DEBE mostrar el ID y el nombre como título, el estado (Activa / Inactiva) como indicador, y una sección "Información general" con ID, Palanca, Activa (Sí / No) y Descripción.
 - **FR-006**: El detalle DEBE mostrar migas de pan "Inicio → Palancas → [nombre de la palanca]", con "Inicio" enlazado a la home, "Palancas" enlazado a la grilla y el nombre como nivel actual, no enlazado. Es un desvío aprobado respecto del prototipo, cuyo detalle de palanca no tiene migas de pan: se reproduce el estilo de migas del detalle de objetivo del prototipo (`nav.crumb`), y el plan DEBE registrar el desvío.
-- **FR-007**: El detalle DEBE ofrecer un botón Volver que lleva a la pantalla anterior, y un pie con "Cancelar" (vuelve a la pantalla anterior) y "Editar" (abre el formulario de edición).
+- **FR-007**: El detalle DEBE ofrecer un botón Volver que lleva a la grilla de palancas, y un pie con "Cancelar" (lleva a la grilla de palancas) y "Editar" (abre el formulario de edición).
 
 **Alta, edición e inactivación**
 

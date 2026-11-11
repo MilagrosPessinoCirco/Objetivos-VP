@@ -13,7 +13,8 @@ No quedan `NEEDS CLARIFICATION`. Las cuatro consultas técnicas (C1–C4) se res
 ### D2. Mock de palancas (principio III)
 
 - **Decisión**: agregar `src/core/api/Palanca/PalancaMock.ts`, que implementa `IPalancaDataSource` en memoria, y pasarlo como segundo argumento en `usePalancaDataSource`.
-- **Motivo**: la constitución exige un mock por servicio. `useDatasource` ya elige el mock cuando la app no corre en SharePoint (workbench local); hoy, sin mock, el hook lanza `Datasource o mock no validos.` fuera de SharePoint.
+- **Motivo**: la constitución exige un mock por servicio. `useDatasource` ya elige el mock cuando la app no corre en un entorno SharePoint; hoy, sin mock, el hook lanza `Datasource o mock no validos.` fuera de SharePoint.
+- **Alcance del mock**: SPFx 1.22 no tiene workbench local; el workbench hospedado es un entorno SharePoint y usa la lista real. El mock queda para pruebas sin conexión a SharePoint. La validación funcional se hace contra la lista del sitio de desarrollo (quickstart). No se fuerza el mock ni se cambia la condición de `useDatasource` (decisión de la usuaria).
 - **Datos**: las cinco palancas del prototipo (`index.html`, `D.pals`), cuatro activas y una inactiva (`Eficiencia en el canal`), para poder probar el filtro de activas.
 - **Estado compartido**: el arreglo vive a nivel de módulo, de modo que la grilla y el detalle ven los mismos cambios durante la sesión. Se reinicia al recargar, como el prototipo.
 - **Patrón**: igual que `ItemMock.ts` (promesas resueltas, sin dependencias).
@@ -60,7 +61,8 @@ No quedan `NEEDS CLARIFICATION`. Las cuatro consultas técnicas (C1–C4) se res
   - `/palanca/:id`: detalle (`PalancaDetalle`), que lee el Id con `useParams`.
   Las rutas `/palanca/new` y `/palanca/edit/:id` de la rama se **quitan**, porque el formulario es un modal sobre la grilla o el detalle, como el prototipo (decisión de la usuaria).
 - **Navegación**: con `useNavigate` de `react-router-dom`, la API del router, como pide la regla de seguridad para rutas administradas por un router. No se usan `Utils.openInSelfTab`/`openInNewTab`, que son para documentos y enlaces.
-- **Rutas en un único lugar**: `components/ObjetivosVp/routes.ts` define `HOME_PATH`, `PALANCAS_PATH` y `getPalancaPath(id)`. Lo usan las rutas, la home, la grilla, el detalle y las migas, para no repetir textos de ruta. Las rutas de las demás entidades quedan como están en la rama (fuera de alcance).
+- **Rutas en un único lugar**: `components/ObjetivosVp/routes.ts` define `HOME_PATH`, `PALANCAS_PATH` y `getPalancaPath(id)`. Lo usan las rutas, la home, la grilla, el detalle y las migas, para no repetir textos de ruta.
+- **Rutas provisorias de otras entidades**: se quitan las de objetivo, iniciativa y tarea que trajo la rama, con sus comentarios `TODO` y textos fijos, que violaban la constitución (sin comentarios) y la localización. Solo se alcanzaban escribiendo la URL, igual que `/palanca/new`. Cada feature agrega su ruta al implementarse (decisión de la usuaria).
 - **"Volver"**: en la grilla va a `HOME_PATH` y en el detalle a `PALANCAS_PATH`. Son destinos fijos, no `navigate(-1)`, porque el detalle también se puede abrir con un enlace directo (`#/palanca/3`) y "atrás" saldría de la app.
 - **Id inválido** (por ejemplo `#/palanca/abc`): el detalle muestra "No se encontró la palanca." sin consultar la lista.
 - **Home**: la rama cambió la home a cuatro accesos que navegan todos. La usuaria decidió que vale la spec de la 001: se vuelven a los cinco accesos ("Mis tareas", "Mis iniciativas", "Palancas y objetivos", "Tablero VP", "ABM", con sus íconos y colores aprobados) y solo "Palancas y objetivos" navega, a `PALANCAS_PATH`. `AccessButton.onClick` vuelve a ser opcional. En `loc/` se restaura `AccessLeversObjectives` y se quitan `AccessLevers` y `AccessObjectives`, que la rama agregó y quedan sin uso.

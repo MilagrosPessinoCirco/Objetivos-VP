@@ -24,7 +24,7 @@ Enfoque técnico:
 
 **Storage**: lista de SharePoint `Palanca` (`Lista.Palanca`), que ya existe. Columnas `Title`, `Nombre`, `Descripcion` y `Activa` (ver [data-model.md](./data-model.md)). Mock en memoria fuera de SharePoint.
 
-**Testing**: no hay runner de pruebas declarado. Validación: `npm run build` (= `npm run lint && heft build --clean`, principio V), los escenarios de [quickstart.md](./quickstart.md) con el mock (`npm start`) y contra la lista real, y comparación visual con el prototipo.
+**Testing**: no hay runner de pruebas declarado. Validación: `npm run build` (= `npm run lint && heft build --clean`, principio V), los escenarios de [quickstart.md](./quickstart.md) en el workbench hospedado del sitio de desarrollo, contra su lista `Palanca` (SPFx 1.22 no tiene workbench local; se escribe solo en la lista de desarrollo, nunca en producción y con autorización explícita), y comparación visual con el prototipo. `PalancaMock` queda para pruebas sin conexión a SharePoint; no se fuerza ni se toca la condición de `useDatasource`.
 
 **Target Platform**: SharePoint Online, navegador de escritorio
 
@@ -34,7 +34,7 @@ Enfoque técnico:
 
 **Constraints**: ancho de escritorio; sin colores, tipografías ni espaciados fuera del Design System; `src/core/ui` de solo lectura; textos en español (Argentina) con el mecanismo de localización existente; sin acción de eliminar.
 
-**Scale/Scope**: 2 pantallas nuevas y 1 formulario compartido, 1 mock nuevo, 1 módulo de rutas nuevo, 3 archivos de `core` modificados, `ObjetivosVp.tsx` y 3 archivos de la home modificados, 44 claves de texto nuevas.
+**Scale/Scope**: 2 pantallas nuevas y 1 formulario compartido, 1 mock nuevo, 1 módulo de rutas nuevo, 3 archivos de `core` modificados, `ObjetivosVp.tsx` y 2 archivos de la home modificados (`AccessList.tsx` y `AccessButton.tsx`), 44 claves de texto nuevas.
 
 ## Precondición (resuelta)
 
@@ -63,7 +63,7 @@ Revisados contra la spec y el plan de la 001. Decisión de la usuaria:
 | Principio | Estado | Verificación |
 |-----------|--------|--------------|
 | I. Plataforma | ✅ Cumple | SPFx 1.22.2, React 17.0.1, Fluent UI v8 y PnPjs 4.18 ya declarados. `react-router-dom 6.30.6` llegó con el merge de `Router`, por decisión explícita registrada en este plan (Technical Context). Esta feature no agrega dependencias: `Breadcrumb` es parte de `@fluentui/react`. |
-| II. La interfaz no se inventa | ✅ Cumple, con desvíos aprobados | Pantallas tomadas de `scr.palancas`, `scr.palanca` y `m.is.palanca` del prototipo, sin los elementos de otras features (FR-020). Desvíos aprobados: las migas de pan (spec, P3-A), `Breadcrumb` de Fluent UI v8 (C1) y el encabezado de la grilla compuesto a mano. Las aproximaciones visuales están listadas en "Aproximaciones". |
+| II. La interfaz no se inventa | ✅ Cumple, con desvíos aprobados | Pantallas tomadas de `scr.palancas`, `scr.palanca` y `m.is.palanca` del prototipo, sin los elementos de otras features (FR-020). Desvíos aprobados: las migas de pan (spec, P3-A), `Breadcrumb` de Fluent UI v8 (C1), el encabezado de la grilla compuesto a mano y el indicador de carga (`Spinner` del DS). Las aproximaciones visuales están listadas en "Aproximaciones". |
 | II. `core/ui` de solo lectura | ✅ Cumple | No se modifica el Design System. |
 | II. Estructura de pantalla | ✅ Cumple | `Palancas/` y `PalancaDetalle/`, cada una con su `.tsx` y `.module.scss` y las piezas en subcarpetas. El formulario `PalancaForm/` lo usan las dos pantallas, por eso va al mismo nivel. |
 | II. Textos en español (AR) | ✅ Cumple | 44 claves nuevas en `loc/` ([contracts](./contracts/ui-contracts.md#4-textos-locmystringsdts-y-locen-usjs)). |
@@ -75,7 +75,8 @@ Revisados contra la spec y el plan de la 001. Decisión de la usuaria:
 
 1. Migas de pan en el detalle, que el prototipo no tiene (spec, P3-A), con `Breadcrumb` de Fluent UI v8 (C1).
 2. Encabezado de la grilla compuesto a mano (`div` flex con piezas del DS) en lugar del patrón `TableFilters` del DS.
-3. Cambio en `src/core/api/useDatasource.ts`, la plantilla compartida (C2), registrado en `docs/plantilla-cambios.md`.
+3. Indicador de carga (`Spinner` del DS), que el prototipo no tiene.
+4. Cambio en `src/core/api/useDatasource.ts`, la plantilla compartida (C2), registrado en `docs/plantilla-cambios.md`.
 
 **Re-check post-diseño**: sin cambios en la evaluación. C1–C4, T000 y el router están resueltos.
 
@@ -128,7 +129,7 @@ Fuentes consultadas: `docs/design-system-catalog.md` y las fuentes de `Table`, `
 | G4 acciones | `Button` + `Tooltip` | `iconOnly`, `variant="secondary"`, `size="small"`; `edit` con `aria-label` "Editar palanca PAL-n"; `arrowForward` con `aria-label` "Abrir palanca PAL-n" | `edit`, `arrowForward` | "Editar palanca" solo si `canManage`. |
 | G5 Estado vacío | `emptyText` de `Table` | texto de una línea | — | Sin ayuda adicional (criterio de diseño). |
 | G6, D aviso | `Toast` (`core/ui/patterns`) | `variant="success"`, `duration={7000}`, `open` controlado, `onClose` | — | Uno por pantalla. |
-| Carga | `Spinner` (`core/ui/patterns`) | sin texto | — | Mientras `isLoading` y todavía no hay datos. |
+| Carga | **Desvío registrado**: `Spinner` del DS (`core/ui/patterns`, componente de carga del Design System) | sin texto | — | Mientras `isLoading` y todavía no hay datos. El prototipo no tiene indicador de carga. Ver Complexity Tracking. |
 | Errores de carga | `MessageBar` (`core/ui/patterns`) | `type="error"`, `message` | — | "No se pudieron cargar las palancas.", "No se pudo cargar la palanca." o "No se encontró la palanca.". |
 | D0 Migas | **`Breadcrumb` de Fluent UI v8** (C1) | `items`: Inicio (`onClick` → home), Palancas (`onClick` → grilla), nombre (`isCurrentItem`); `ariaLabel={strings.BreadcrumbAriaLabel}`; `onRenderDivider` con "›"; `styles` con tokens (`typography.size[12]`, `colors.neutral.textMuted`, `colors.brand.primary`) | — | Excepción aprobada. |
 | D1 Chip | `Chip` (`core/ui/patterns`) | `size="small"`, `clickable={false}`, `color="success"` (Activa) o `"neutral"` (Inactiva) | — | Aproximación A3. |
@@ -194,7 +195,7 @@ Ver [contracts](./contracts/ui-contracts.md#2-props-de-las-piezas). Los errores 
 ## Dónde vive
 
 - **Webpart**: `objetivosVp`, el único del repo.
-- **Rutas**: en `ObjetivosVp.tsx` (`HashRouter`, del merge de `Router`) se cambian solo las rutas de palancas. `PALANCAS_PATH` → `<Palancas canManage />` y `PALANCA_DETAIL_PATH` → `<PalancaDetalle canManage />`, que reemplazan las pantallas provisorias "Palanca: Bandeja" y "Palanca: Detalle" con sus comentarios `TODO`. Se quitan `/palanca/new` y `/palanca/edit/:id`. Las rutas provisorias de objetivo, iniciativa y tarea no se tocan.
+- **Rutas**: en `ObjetivosVp.tsx` (`HashRouter`, del merge de `Router`) se cambian solo las rutas de palancas. `PALANCAS_PATH` → `<Palancas canManage />` y `PALANCA_DETAIL_PATH` → `<PalancaDetalle canManage />`, que reemplazan las pantallas provisorias "Palanca: Bandeja" y "Palanca: Detalle" con sus comentarios `TODO`. Se quitan `/palanca/new` y `/palanca/edit/:id`. También se quitan completas las rutas provisorias de objetivo, iniciativa y tarea (`/objetivo`, `/iniciativa`, `/tarea` y sus `/new`, `/edit/:id` y `/:id`), con sus comentarios y textos fijos: desde la home solo navega "Palancas y objetivos", así que solo se alcanzaban escribiendo la URL. Cada feature agrega su ruta cuando la implemente. Quedan sin uso `pageStyle`, `titleStyle`, `goHome` y los imports de `Button`, `colors`, `spacing`, `typography` y `useNavigate`, y se eliminan. Las únicas rutas son `HOME_PATH`, `PALANCAS_PATH` y `PALANCA_DETAIL_PATH`.
 - **Home**: vuelve a los cinco accesos de la spec 001, con los títulos, íconos y colores aprobados en su plan. Solo "Palancas y objetivos" navega (`PALANCAS_PATH`). Los demás no reciben `onClick` y no tienen acción, como en la 001. El contenedor de página que trajo el merge se conserva.
 - **Textos**: 44 claves nuevas en `loc/mystrings.d.ts` y `loc/en-us.js`, sincronizadas y con valores en español (Argentina). Además se restaura `AccessLeversObjectives` y se quitan `AccessLevers` y `AccessObjectives`, que quedan sin uso. No se crea ningún idioma nuevo.
 
@@ -228,7 +229,7 @@ src/webparts/objetivosVp/
 │   └── mystrings.d.ts                # + 44 claves; restaura AccessLeversObjectives
 └── components/
     ├── ObjetivosVp/
-    │   ├── ObjetivosVp.tsx           # rutas de palancas: grilla y detalle; quita new y edit
+    │   ├── ObjetivosVp.tsx           # solo rutas de home y palancas (grilla y detalle); quita las provisorias
     │   └── routes.ts                 # nuevo: HOME_PATH, PALANCAS_PATH, PALANCA_DETAIL_PATH, getPalancaPath (D8)
     ├── Home/
     │   └── AccessList/
@@ -304,4 +305,5 @@ import { Breadcrumb } from '@fluentui/react'; // C1, excepción aprobada
 | `Breadcrumb` de Fluent UI v8 fuera del DS (principio II) | El DS no tiene breadcrumb ni link. Aprobado en C1; el catálogo permite Fluent UI v8 "solo con aprobación". | Botones del DS: se ven como botones, no como migas. Agregar el componente al DS: modifica `core/ui`. |
 | Encabezado de la grilla compuesto a mano (`PalancasHeader`: `div` flex con `Button`, `SearchBox`, `Tooltip` y el título con tokens) en lugar del patrón `TableFilters` del DS (principio II) | `TableFilters` siempre renderiza un botón "Filtrar" (fuera de alcance, FR-020) y un ícono de información con texto que no está en el diseño, y rotula "Recargar" en vez de "Actualizar". No se puede configurar sin modificar `core/ui`. Aprobado por la usuaria. | Usar `TableFilters` igual: muestra elementos excluidos. Modificar `TableFilters` en `core/ui`: cambia el Design System. |
 | Cambio en `src/core/api/useDatasource.ts`, código de la plantilla (principio IV) | Sin él, un fallo al editar se mostraría como éxito (FR-016) y el indicador de carga no se apagaría. Aprobado en C2. Registrado en `docs/plantilla-cambios.md`. | Hook propio de la pantalla: duplica la lógica del hook compartido. Observar `state.error`: es frágil. |
+| Indicador de carga (`Spinner` del DS) que el prototipo no tiene (principio II) | La carga desde SharePoint puede tardar y una pantalla vacía parece rota. Aprobado por la usuaria. Se usa el componente de carga del Design System, no el de Fluent. | Pantalla vacía mientras carga: parece una falla. |
 | Aproximaciones visuales A1–A5 | El DS no tiene botón de texto, variante terciaria, banda de sección ni los tamaños exactos del prototipo. | Valores propios: violan el principio II. |
