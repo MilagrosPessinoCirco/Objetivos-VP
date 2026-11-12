@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type { CSSProperties } from 'react';
 
 import { Button, Table, Tooltip } from '../../../../../../core/ui/components';
 import type { ITableColumn } from '../../../../../../core/ui/components';
@@ -8,6 +9,7 @@ import { Objetivo, Palanca } from '../../../../../../core/entities';
 import { Utils } from '../../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { formatObjetivoId, getEstadoChipColor } from '../../../Objetivo/objetivoUtils';
+import { ICON_BUTTON_STYLE } from '../../../shared/iconButtonStyle';
 import { formatPalancaId } from '../../formatPalancaId';
 import styles from './PalancasTable.module.scss';
 
@@ -31,6 +33,9 @@ type TableRow = {
 	palanca?: Palanca;
 	objetivo?: Objetivo;
 };
+
+const EXPAND_COLUMN_WIDTH = 44;
+const EXPAND_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 20, minWidth: 20, padding: 0 };
 
 const byId = (a: Objetivo, b: Objetivo): number => (a.Id ?? 0) - (b.Id ?? 0);
 
@@ -80,7 +85,8 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 				iconOnly
 				variant="secondary"
 				size="small"
-				iconLeft={<FigmaIcon name={isExpanded ? 'chevronDown' : 'chevronRight'} />}
+				style={EXPAND_BUTTON_STYLE}
+				iconLeft={<FigmaIcon name="chevronRightPrimary" size="sm" className={isExpanded ? styles.chevronOpen : styles.chevron} />}
 				aria-expanded={isExpanded}
 				aria-label={Utils.replaceAll(isExpanded ? strings.PalancaCollapseAriaLabel : strings.PalancaExpandAriaLabel, '{0}', row.id)}
 				onClick={() => toggle(palancaId)}
@@ -99,7 +105,8 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 							iconOnly
 							variant="secondary"
 							size="small"
-							iconLeft={<FigmaIcon name="arrowForward" />}
+							style={ICON_BUTTON_STYLE}
+							iconLeft={<FigmaIcon name="chevronCirclePrimary" />}
 							aria-label={Utils.replaceAll(strings.ObjetivoViewAriaLabel, '{0}', row.id)}
 							onClick={() => onViewObjetivo(objetivo.Id as number)}
 						/>
@@ -119,7 +126,8 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 							iconOnly
 							variant="secondary"
 							size="small"
-							iconLeft={<FigmaIcon name="edit" />}
+							style={ICON_BUTTON_STYLE}
+							iconLeft={<FigmaIcon name="editPrimary" />}
 							aria-label={Utils.replaceAll(strings.PalancaEditAriaLabel, '{0}', row.id)}
 							onClick={() => onEdit(palanca)}
 						/>
@@ -130,7 +138,8 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 						iconOnly
 						variant="secondary"
 						size="small"
-						iconLeft={<FigmaIcon name="arrowForward" />}
+						style={ICON_BUTTON_STYLE}
+						iconLeft={<FigmaIcon name="chevronCirclePrimary" />}
 						aria-label={Utils.replaceAll(strings.PalancaViewAriaLabel, '{0}', row.id)}
 						onClick={() => onView(palanca.Id as number)}
 					/>
@@ -140,7 +149,7 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 	};
 
 	const columns: ITableColumn<TableRow>[] = [
-		{ key: 'expandir', header: <span className={styles.srOnly}>{strings.PalancaColumnExpand}</span>, render: (_value, row) => renderExpand(row) },
+		{ key: 'expandir', header: '', width: EXPAND_COLUMN_WIDTH, render: (_value, row) => renderExpand(row) },
 		{ key: 'id', header: strings.PalancaColumnId },
 		{ key: 'nombre', header: strings.PalancaColumnName, render: (value, row) => (
 			<span style={row.kind === 'objetivo' ? { paddingLeft: spacing.lg } : undefined}>{String(value)}</span>

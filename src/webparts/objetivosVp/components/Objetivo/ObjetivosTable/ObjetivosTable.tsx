@@ -8,6 +8,7 @@ import { spacing } from '../../../../../core/ui/foundations';
 import { Objetivo } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { ICON_BUTTON_STYLE } from '../../shared/iconButtonStyle';
 import { formatObjetivoId, getEstadoChipColor } from '../objetivoUtils';
 import styles from './ObjetivosTable.module.scss';
 
@@ -54,7 +55,8 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 					iconOnly
 					variant="secondary"
 					size="small"
-					iconLeft={<FigmaIcon name="arrowForward" />}
+					style={ICON_BUTTON_STYLE}
+					iconLeft={<FigmaIcon name="chevronCirclePrimary" />}
 					aria-label={Utils.replaceAll(strings.ObjetivoViewAriaLabel, '{0}', row.id)}
 					onClick={() => onView(row.objetivo.Id as number)}
 				/>

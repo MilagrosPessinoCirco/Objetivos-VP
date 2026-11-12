@@ -121,7 +121,6 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoFormLoadError: string;
 	ObjetivoCreated: string;
 	ObjetivoUpdated: string;
-	PalancaColumnExpand: string;
 	PalancaExpandAriaLabel: string;
 	PalancaCollapseAriaLabel: string;
 }

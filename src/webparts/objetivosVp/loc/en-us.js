@@ -122,7 +122,6 @@ define([], function () {
 		"ObjetivoFormLoadError": "No se pudo cargar el formulario.",
 		"ObjetivoCreated": "El objetivo \"{0}\" se ha cargado correctamente.",
 		"ObjetivoUpdated": "El objetivo \"{0}\" se ha actualizado correctamente.",
-		"PalancaColumnExpand": "Expandir",
 		"PalancaExpandAriaLabel": "Expandir objetivos de {0}",
 		"PalancaCollapseAriaLabel": "Contraer objetivos de {0}"
 	}
