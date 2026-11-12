@@ -10,6 +10,8 @@ export const HomeCard: React.FC<IHomeCardProps> = ({
   details,
   actionLabel = 'Ver detalle',
   onAction,
+  backgroundColor,
+  textColor,
   className,
 }) => {
   if (type === 'bandeja') {
@@ -41,8 +43,29 @@ export const HomeCard: React.FC<IHomeCardProps> = ({
     );
   }
 
+  const simpleStyle: React.CSSProperties | undefined = backgroundColor || textColor
+    ? { backgroundColor, color: textColor, borderColor: backgroundColor }
+    : undefined;
+  const interactiveProps = onAction
+    ? {
+      role: 'button',
+      tabIndex: 0,
+      onClick: onAction,
+      onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onAction();
+        }
+      },
+    }
+    : {};
+
   return (
-    <div className={`${styles.card} ${styles.simple} ${className || ''}`}>
+    <div
+      className={`${styles.card} ${styles.simple} ${onAction ? styles.interactive : ''} ${className || ''}`}
+      style={simpleStyle}
+      {...interactiveProps}
+    >
       <div className={styles.simpleText}>
         <p className={styles.simpleTitle}>{title}</p>
         {value && <p className={styles.simpleValue}>{value}</p>}

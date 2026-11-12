@@ -17,11 +17,13 @@ interface IAccessItem {
 	route?: string;
 }
 
+const LIGHT_TEXT_COLOR = '#fcfcfc';
+
 const ACCESS_ITEMS: IAccessItem[] = [
 	{ title: strings.AccessMyTasks, iconName: 'checkmark', colorGroup: 'Primary', colorScale: '800' },
 	{ title: strings.AccessMyInitiatives, iconName: 'applications', colorGroup: 'Tertiary', colorScale: '800' },
-	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '500', route: PALANCAS_PATH },
-	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Primary', colorScale: '600' },
+	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '200', route: PALANCAS_PATH },
+	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Primary', colorScale: '300' },
 	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '700' }
 ];
 
@@ -40,7 +42,7 @@ const AccessList: React.FC = () => {
 						title={item.title}
 						iconName={item.iconName}
 						backgroundColor={step.value}
-						textColor={step.textColor}
+						textColor={LIGHT_TEXT_COLOR}
 						onClick={route ? () => navigate(route) : undefined}
 					/>
 				);
