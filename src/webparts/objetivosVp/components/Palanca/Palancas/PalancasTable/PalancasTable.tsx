@@ -4,7 +4,7 @@ import type { CSSProperties } from 'react';
 import { Button, Table, Tooltip } from '../../../../../../core/ui/components';
 import type { ITableColumn } from '../../../../../../core/ui/components';
 import { Chip } from '../../../../../../core/ui/patterns';
-import { FigmaIcon, spacing } from '../../../../../../core/ui/foundations';
+import { FigmaIcon, spacing, typography } from '../../../../../../core/ui/foundations';
 import { Objetivo, Palanca } from '../../../../../../core/entities';
 import { Utils } from '../../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
@@ -35,6 +35,9 @@ type TableRow = {
 };
 
 const EXPAND_COLUMN_WIDTH = 44;
+const ID_COLUMN_WIDTH = 64;
+const OBJECTIVES_COLUMN_WIDTH = 84;
+const ACTIONS_COLUMN_WIDTH = 160;
 const EXPAND_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 20, minWidth: 20, padding: 0 };
 
 const byId = (a: Objetivo, b: Objetivo): number => (a.Id ?? 0) - (b.Id ?? 0);
@@ -150,13 +153,13 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 
 	const columns: ITableColumn<TableRow>[] = [
 		{ key: 'expandir', header: '', width: EXPAND_COLUMN_WIDTH, render: (_value, row) => renderExpand(row) },
-		{ key: 'id', header: strings.PalancaColumnId },
+		{ key: 'id', header: strings.PalancaColumnId, width: ID_COLUMN_WIDTH },
 		{ key: 'nombre', header: strings.PalancaColumnName, render: (value, row) => (
-			<span style={row.kind === 'objetivo' ? { paddingLeft: spacing.lg } : undefined}>{String(value)}</span>
+			<span style={row.kind === 'objetivo' ? { paddingLeft: spacing.lg } : row.kind === 'palanca' ? { fontWeight: typography.weight.bold } : undefined}>{String(value)}</span>
 		) },
 		{ key: 'descripcion', header: strings.PalancaColumnDescription, render: (value) => <span className={styles.description}>{String(value)}</span> },
-		{ key: 'objetivos', header: strings.PalancaColumnObjectives },
-		{ key: 'acciones', header: strings.PalancaColumnActions, render: (_value, row) => renderActions(row) }
+		{ key: 'objetivos', header: strings.PalancaColumnObjectives, width: OBJECTIVES_COLUMN_WIDTH },
+		{ key: 'acciones', header: strings.PalancaColumnActions, width: ACTIONS_COLUMN_WIDTH, render: (_value, row) => renderActions(row) }
 	];
 
 	return <Table<TableRow> columns={columns} rows={rows} getRowKey={(row) => row.key} emptyText={emptyText} />;

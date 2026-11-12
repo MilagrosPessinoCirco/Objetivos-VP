@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { Button, Dropdown, Input, Multiline } from '../../../../../core/ui/components';
-import { MessageBar, Modal } from '../../../../../core/ui/patterns';
-import { spacing } from '../../../../../core/ui/foundations';
+import { MessageBar, Panel } from '../../../../../core/ui/patterns';
+import { spacing, typography } from '../../../../../core/ui/foundations';
 import { Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
@@ -60,25 +60,24 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 	};
 
 	return (
-		<Modal
+		<Panel
 			open
-			variant="oneSlot"
-			closeOnOverlayClick={false}
+			className={styles.panel}
 			title={title}
-			description={strings.PalancaFormNote}
 			onClose={onCancel}
 			primaryAction={
-				<Button variant="primary" disabled={isSaving} onClick={save}>
-					{strings.Save}
-				</Button>
-			}
-			secondaryAction={
 				<Button variant="secondary" onClick={onCancel}>
 					{strings.Cancel}
 				</Button>
 			}
+			secondaryAction={
+				<Button variant="primary" disabled={isSaving} onClick={save}>
+					{strings.Save}
+				</Button>
+			}
 		>
 			<div className={styles.fields} style={{ gap: spacing.lg }}>
+				<p className={styles.note} style={{ fontSize: typography.size[14], lineHeight: typography.lineHeight[14] }}>{strings.PalancaFormNote}</p>
 				{saveFailed && <MessageBar type="error" message={strings.PalancaSaveError} />}
 				<Input
 					label={strings.PalancaFormName}
@@ -105,7 +104,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 					onChange={onActivaChange}
 				/>
 			</div>
-		</Modal>
+		</Panel>
 	);
 };
 
