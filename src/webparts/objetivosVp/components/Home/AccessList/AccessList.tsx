@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { spacing } from '../../../../../core/ui/foundations';
 import type { FigmaIconName } from '../../../../../core/ui/foundations';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { getColorStep } from '../../getColorStep';
+import { getColorStep } from '../../shared/getColorStep';
 import { PALANCAS_PATH } from '../../ObjetivosVp/routes';
 import AccessButton from './AccessButton';
 import styles from './AccessList.module.scss';

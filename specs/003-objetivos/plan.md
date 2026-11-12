@@ -137,7 +137,7 @@ Fuentes: `docs/design-system-catalog.md` y el prototipo (`scr.form`, `scr.objeti
 
 **D1. Capa de datos.** Se usan `useObjetivoDataSource`, `useVicepresidenciaDataSource`, `useDepartamentoDataSource`, `useGerenciaDataSource` y `usePalancaDataSource`. A cada hook de objetivo, VP, departamento y gerencia se le pasa su mock como segundo argumento, igual que `usePalancaDataSource`. Los mocks viven junto a su datasource y guardan el estado a nivel de módulo, con datos del prototipo (`D.objs`). `useItem<Entidad>DataSource` no se toca.
 
-**D2. Identificación de la VP RRII.** Por `Nombre`, con la constante `VP_RRII_NOMBRE` en `Constants.ts` (transversal: la usan formulario, detalle, grilla y mocks). Motivo: el `Objetivo` ya trae `VP.Title`, así que las pantallas distinguen objetivos de la VP RRII sin cargar el maestro, y los Id de las listas difieren entre el sitio de desarrollo y el de producción, por lo que un `VP_RRII_ID` fijo sería un identificador de tenant en el código. Riesgo: si se renombra la VP, hay que actualizar la constante. Valor a confirmar (P2). `isVpRrii(nombre)` vive en `components/objetivoUtils.ts`.
+**D2. Identificación de la VP RRII.** Por `Nombre`, con la constante `VP_RRII_NOMBRE` en `Constants.ts` (transversal: la usan formulario, detalle, grilla y mocks). Motivo: el `Objetivo` ya trae `VP.Title`, así que las pantallas distinguen objetivos de la VP RRII sin cargar el maestro, y los Id de las listas difieren entre el sitio de desarrollo y el de producción, por lo que un `VP_RRII_ID` fijo sería un identificador de tenant en el código. Riesgo: si se renombra la VP, hay que actualizar la constante. Valor a confirmar (P2). `isVpRrii(nombre)` vive en `components/Objetivo/objetivoUtils.ts`.
 
 **D3. Filtro, conteo y listas.** Las pantallas llaman a `getItems()` de objetivos y calculan durante el render: objetivos con palanca = los de la VP RRII; "Objetivos del VP" = `EsDeVp === true`; cantidad por palanca = coincidencia por `Palanca.Id`; otras VP = los que no son de la VP RRII. Sin estado duplicado. Una sola consulta de objetivos por pantalla.
 
@@ -195,23 +195,27 @@ src/core/
 src/webparts/objetivosVp/
 ├── loc/{en-us.js, mystrings.d.ts}            # claves nuevas
 └── components/
-    ├── objetivoUtils.ts                      # nuevo: formatObjetivoId, isVpRrii
     ├── ObjetivosVp/{ObjetivosVp.tsx, routes.ts}   # rutas, selector y flags de permiso
-    ├── Palancas/                             # PalancasHeader (Cargar objetivo, selector), PalancasTable (columna), Palancas.tsx (bloque otras VP)
-    ├── PalancaDetalle/                       # PalancaBreadcrumb ampliado, sección de objetivos
-    ├── ObjetivoForm/
-    │   ├── ObjetivoForm.tsx
-    │   ├── ObjetivoForm.module.scss
-    │   └── NombreAyuda/NombreAyuda.tsx       # ícono de ayuda + Callout
-    ├── ObjetivosTable/                       # Table de objetivos compartida por el detalle de palanca y el bloque de otras VP
-    │   └── ObjetivosTable.tsx
-    └── ObjetivoDetalle/
-        ├── ObjetivoDetalle.tsx
-        ├── ObjetivoDetalle.module.scss
-        └── ObjetivoInfo/ObjetivoInfo.tsx     # información y planificación
+    ├── Palanca/
+    │   ├── Palancas/                         # PalancasHeader (Cargar objetivo, selector), PalancasTable (columna), Palancas.tsx (bloque otras VP)
+    │   ├── PalancaDetalle/                   # sección de objetivos
+    │   └── PalancaBreadcrumb/                # ampliado
+    ├── Objetivo/
+    │   ├── objetivoUtils.ts                  # nuevo: formatObjetivoId, isVpRrii
+    │   ├── ObjetivoForm/
+    │   │   ├── ObjetivoForm.tsx
+    │   │   ├── ObjetivoForm.module.scss
+    │   │   └── NombreAyuda/NombreAyuda.tsx   # ícono de ayuda + Callout
+    │   ├── ObjetivosTable/                   # Table de objetivos compartida por el detalle de palanca y el bloque de otras VP
+    │   │   └── ObjetivosTable.tsx
+    │   └── ObjetivoDetalle/
+    │       ├── ObjetivoDetalle.tsx
+    │       ├── ObjetivoDetalle.module.scss
+    │       └── ObjetivoInfo/ObjetivoInfo.tsx # información y planificación
+    └── shared/                               # getColorStep, pageTitleStyle, Field (usados por más de un dominio)
 ```
 
-**Structure Decision**: una carpeta por pantalla nueva (`ObjetivoForm/`, `ObjetivoDetalle/`). `ObjetivosTable/` se comparte entre el detalle de palanca y el bloque de otras VP, por lo que va al mismo nivel (principio DRY, sin una tabla distinta por pantalla; admite columnas Palanca/VP según el caso). `objetivoUtils.ts` queda junto a `getColorStep.ts`, a nivel de componentes, porque lo usan varias pantallas.
+**Structure Decision**: los componentes se agrupan por dominio (`Palanca/`, `Objetivo/`), con una carpeta por pantalla (`ObjetivoForm/`, `ObjetivoDetalle/`). `ObjetivosTable/` se comparte entre el detalle de palanca y el bloque de otras VP (principio DRY, sin una tabla distinta por pantalla; admite columnas Palanca/VP según el caso). `objetivoUtils.ts` queda en la raíz de `Objetivo/` porque lo usan varias pantallas; lo que comparten varios dominios va en `shared/`.
 
 ## Orden de implementación
 

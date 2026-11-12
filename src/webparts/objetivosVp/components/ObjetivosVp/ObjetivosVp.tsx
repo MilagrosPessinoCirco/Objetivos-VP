@@ -3,11 +3,11 @@ import { ThemeProvider } from '@fluentui/react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from '../Home/Home';
-import ObjetivoDetalle from '../ObjetivoDetalle/ObjetivoDetalle';
-import ObjetivoForm from '../ObjetivoForm/ObjetivoForm';
-import PalancaDetalle from '../PalancaDetalle/PalancaDetalle';
-import Palancas from '../Palancas/Palancas';
-import type { ObjetivosFiltro } from '../objetivoUtils';
+import ObjetivoDetalle from '../Objetivo/ObjetivoDetalle/ObjetivoDetalle';
+import ObjetivoForm from '../Objetivo/ObjetivoForm/ObjetivoForm';
+import PalancaDetalle from '../Palanca/PalancaDetalle/PalancaDetalle';
+import Palancas from '../Palanca/Palancas/Palancas';
+import type { ObjetivosFiltro } from '../Objetivo/objetivoUtils';
 import { HOME_PATH, OBJETIVO_DETAIL_PATH, OBJETIVO_EDIT_PATH, OBJETIVO_NEW_PATH, PALANCAS_PATH, PALANCA_DETAIL_PATH } from './routes';
 import styles from './ObjetivosVp.module.scss';
 

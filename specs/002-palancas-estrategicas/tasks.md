@@ -39,7 +39,7 @@ description: "Tareas de implementación de Palancas estratégicas (ABM y vista)"
 
 ## Path Conventions
 
-Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/` (grilla), `components/PalancaDetalle/` (detalle) y `components/PalancaForm/` (formulario compartido).
+Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palanca/Palancas/` (grilla), `components/Palanca/PalancaDetalle/` (detalle) y `components/Palanca/PalancaForm/` (formulario compartido).
 
 ---
 
@@ -83,7 +83,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
   - Conservar todas las demás claves. No crear idiomas.
   **Terminado**: claves sincronizadas en los dos archivos; build OK.
 - [X] T007 [P] Crear `src/webparts/objetivosVp/components/ObjetivosVp/routes.ts` con `export const HOME_PATH = '/';`, `export const PALANCAS_PATH = '/palanca';`, `export const PALANCA_DETAIL_PATH = \`${PALANCAS_PATH}/:id\`;` y `export const getPalancaPath = (id: number): string => \`${PALANCAS_PATH}/${id}\`;` (research D8). **Terminado**: build OK.
-- [X] T008 [P] Crear `src/webparts/objetivosVp/components/Palancas/formatPalancaId.ts`: `export const formatPalancaId = (id: number | undefined): string`, que devuelve `` `${PALANCA_ID_PREFIX}${id}` `` con `PALANCA_ID_PREFIX = 'PAL-'` (constante local), o cadena vacía si `id` es `undefined` (research D6). **Terminado**: build OK.
+- [X] T008 [P] Crear `src/webparts/objetivosVp/components/Palanca/formatPalancaId.ts`: `export const formatPalancaId = (id: number | undefined): string`, que devuelve `` `${PALANCA_ID_PREFIX}${id}` `` con `PALANCA_ID_PREFIX = 'PAL-'` (constante local), o cadena vacía si `id` es `undefined` (research D6). **Terminado**: build OK.
 - [X] T009 Pasar el mock en `src/core/api/Palanca/usePalancaDataSource.ts`: `useDatasource<Palanca>(new PalancaDataSource(), new PalancaMock())`. No tocar `useItemPalancaDataSource.ts`. Depende de T005. **Terminado**: el hook recibe el mock (se usa solo fuera de un entorno SharePoint, en pruebas sin conexión; el workbench hospedado usa la lista real); build OK.
 
 **Checkpoint**: datos, textos y rutas listos.
@@ -103,18 +103,18 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
   - No cambiar `rowGap`, `getColorStep` ni los estilos: la separación ya se restauró en el commit `1689f29` (plan, "Ajustes a la Home que vinieron con el merge del router").
   - Quitar `AccessLevers` y `AccessObjectives` de `src/webparts/objetivosVp/loc/mystrings.d.ts` y `src/webparts/objetivosVp/loc/en-us.js`, que quedan sin uso.
   **Referencia**: spec 001 FR-006 y su plan ("Mapa de componentes", R7–R11). **Terminado**: cinco accesos; solo "Palancas y objetivos" navega a `#/palanca`; los demás no hacen nada; build OK.
-- [X] T011 [P] [US1] Crear `src/webparts/objetivosVp/components/Palancas/PalancasHeader/PalancasHeader.tsx` y `PalancasHeader.module.scss` (región G1 + G2; desvío registrado: no usar `TableFilters`). Props: `searchText: string`, `onSearchChange: (value: string) => void`, `onBack: () => void`, `onRefresh: () => void`, `canManage: boolean`, `onNew?: () => void`.
+- [X] T011 [P] [US1] Crear `src/webparts/objetivosVp/components/Palanca/Palancas/PalancasHeader/PalancasHeader.tsx` y `PalancasHeader.module.scss` (región G1 + G2; desvío registrado: no usar `TableFilters`). Props: `searchText: string`, `onSearchChange: (value: string) => void`, `onBack: () => void`, `onRefresh: () => void`, `canManage: boolean`, `onNew?: () => void`.
   - Izquierda: `Button variant="secondary" size="small" iconLeft={<FigmaIcon name="arrowCircle" />}` con `strings.Back` y `onClick={onBack}`; `h1` con `strings.PalancasTitle`, estilado con `typography.family.base`, `typography.size[20]`, `typography.lineHeight[20]`, `typography.weight.regular` y el color Primary 800 de `colorScales`, `margin: 0`.
   - Derecha: `SearchBox` (`placeholder={strings.PalancasSearchPlaceholder}`, `value={searchText}`, `onValueChange={onSearchChange}`); `Tooltip content={strings.PalancasRefresh}` con un `Button iconOnly variant="secondary" iconLeft={<FigmaIcon name="reloadPrimary" />} aria-label={strings.PalancasRefresh} onClick={onRefresh}`; si `canManage && onNew`, `Button variant="primary" iconLeft={<FigmaIcon name="add" />}` con `strings.PalancaNew`.
   - SCSS: `.header` flex, `justify-content: space-between`, `align-items: center`, `flex-wrap: wrap`; `.left` y `.tools` flex con `align-items: center`. Los `gap` se aplican desde el TSX con `spacing.md`.
   **Referencia**: `.lHead`, `.lTitle`, `.lTitle h1`, `.volver`, `.lTools`, `.qSearch`, `.tRefresh`, `.tTer`. Aproximaciones A1, A2 y A5 del plan. **Terminado**: build OK.
-- [X] T012 [P] [US1] Crear `src/webparts/objetivosVp/components/Palancas/PalancasTable/PalancasTable.tsx` (región G4 + G5). Props: `palancas: Palanca[]` (ya filtradas y ordenadas), `emptyText: string`, `canManage: boolean`, `onView: (id: number) => void`, `onEdit?: (palanca: Palanca) => void`.
+- [X] T012 [P] [US1] Crear `src/webparts/objetivosVp/components/Palanca/Palancas/PalancasTable/PalancasTable.tsx` (región G4 + G5). Props: `palancas: Palanca[]` (ya filtradas y ordenadas), `emptyText: string`, `canManage: boolean`, `onView: (id: number) => void`, `onEdit?: (palanca: Palanca) => void`.
   - Filas: `type PalancaRow = { id: string; nombre: string; descripcion: string; palanca: Palanca }` (un alias `type`, no `interface`, para cumplir `Record<string, unknown>` de `Table`), con `id = formatPalancaId(p.Id)`.
   - `Table` con `getRowKey={(row) => row.id}`, `emptyText={emptyText}` y las columnas `id` (`strings.PalancaColumnId`), `nombre` (`strings.PalancaColumnName`), `descripcion` (`strings.PalancaColumnDescription`) y `acciones` (`strings.PalancaColumnActions`, con `render`).
   - `acciones`: si `canManage && onEdit`, `Tooltip content={strings.PalancaEditTooltip}` + `Button iconOnly variant="secondary" size="small" iconLeft={<FigmaIcon name="edit" />}` con `aria-label` = `PalancaEditAriaLabel` y `{0}` = id. Siempre, `Tooltip content={strings.PalancaViewTooltip}` + `Button iconOnly … iconLeft={<FigmaIcon name="arrowForward" />}` con `aria-label` = `PalancaViewAriaLabel` y `{0}` = id, `onClick={() => onView(row.palanca.Id as number)}`.
   - La descripción se muestra completa, sin truncar (edge case de descripciones largas).
   **Referencia**: `.lt`, `.lr`, `.lh`, `.c-gal`, `.icoBtn`, `.goBtn`, `.emptyT`. **Terminado**: build OK.
-- [X] T013 [US1] Crear `src/webparts/objetivosVp/components/Palancas/Palancas.tsx` y `Palancas.module.scss` (pantalla grilla). Props: `canManage: boolean`. Depende de T009, T011 y T012.
+- [X] T013 [US1] Crear `src/webparts/objetivosVp/components/Palanca/Palancas/Palancas.tsx` y `Palancas.module.scss` (pantalla grilla). Props: `canManage: boolean`. Depende de T009, T011 y T012.
   - `const [state, getItems] = usePalancaDataSource();` y `const navigate = useNavigate();`.
   - Estado local: `searchText` (string) y `lastOperation: 'load' | 'save'`, que se usa en US2 y US3.
   - `useEffect(() => { getItems(); }, [])`. "Actualizar" → `setLastOperation('load')` + `getItems()`, conservando `searchText`.
@@ -123,17 +123,17 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
   - Render: `PalancasHeader` (`onBack={() => navigate(HOME_PATH)}`; sin `onNew` en esta historia); si `state.isLoading && state.items.length === 0` → `Spinner`; si `state.error && lastOperation === 'load'` → `MessageBar type="error" message={strings.PalancasLoadError}`; si no → `PalancasTable` con `onView={(id) => navigate(getPalancaPath(id))}` (sin `onEdit` en esta historia).
   - SCSS: `.palancas` flex en columna; el `gap` y el padding de página se aplican desde el TSX con `spacing.lg`/`spacing.xl`.
   **Referencia**: bloque `scr.palancas`. **Terminado**: build OK.
-- [X] T014 [P] [US1] Crear `src/webparts/objetivosVp/components/PalancaDetalle/PalancaBreadcrumb/PalancaBreadcrumb.tsx` (región D0; excepción C1). Props: `palancaNombre?: string`. Usa `useNavigate`.
+- [X] T014 [P] [US1] Crear `src/webparts/objetivosVp/components/Palanca/PalancaBreadcrumb/PalancaBreadcrumb.tsx` (región D0; excepción C1). Props: `palancaNombre?: string`. Usa `useNavigate`.
   - `Breadcrumb` de `@fluentui/react` con `items`: `{ key: 'home', text: strings.BreadcrumbHome, onClick: () => navigate(HOME_PATH) }`, `{ key: 'palancas', text: strings.BreadcrumbPalancas, onClick: () => navigate(PALANCAS_PATH) }`, y, solo si `palancaNombre` no está vacío, `{ key: 'current', text: palancaNombre, isCurrentItem: true }` (sin nombre, por ejemplo con una palanca no encontrada, se omite la última miga); `ariaLabel={strings.BreadcrumbAriaLabel}`; `onRenderDivider` que devuelve `<span aria-hidden="true">›</span>`; `overflowIndex` no se usa.
   - `styles` con tokens: texto `typography.size[12]` y `colors.neutral.textMuted`; links (`itemLink`) `typography.weight.semibold`, `colors.brand.primary`, `textDecoration: 'underline'`; nivel actual en `typography.weight.bold` y el color Primary 800 de `colorScales`.
   - Los `onClick` reciben `(event?, item?)`: ignorar los parámetros.
   **Referencia**: `nav.crumb`, `.crumb`, `.crumb b`, `.linkBtn` (bloque `scr.objetivo`). **Terminado**: build OK.
-- [X] T015 [P] [US1] Crear `src/webparts/objetivosVp/components/PalancaDetalle/PalancaInfo/PalancaInfo.tsx` y `PalancaInfo.module.scss` (región D2). Props: `palanca: Palanca`.
+- [X] T015 [P] [US1] Crear `src/webparts/objetivosVp/components/Palanca/PalancaDetalle/PalancaInfo/PalancaInfo.tsx` y `PalancaInfo.module.scss` (región D2). Props: `palanca: Palanca`.
   - `Surface variant="outline" padding="comfortable" header={strings.PalancaGeneralInfo}` (aproximación A4).
   - Dentro, una fila de tres columnas con ID (`formatPalancaId`), Palanca (`Nombre`) y Activa (`strings.Yes`/`strings.No` según `Activa`). Debajo, a todo el ancho, Descripción. Cada dato es una etiqueta (`typography.size[12]`, `colors.neutral.textMuted`) y un valor (`typography.size[14]`, `typography.weight.semibold`, `colors.neutral.text`). Etiquetas: `strings.PalancaFieldId`, `PalancaFieldName`, `PalancaFieldActive` y `PalancaFieldDescription`.
   - SCSS: `.grid3` con `display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));` y `.field` flex en columna. Los `gap` se aplican desde el TSX con `spacing`.
   **Referencia**: `.fSec`, `.fBand`, `.fGrid`, `.g3`, `.g1`, `.ro span`, `.ro b`. **Terminado**: build OK.
-- [X] T016 [US1] Crear `src/webparts/objetivosVp/components/PalancaDetalle/PalancaDetalle.tsx` y `PalancaDetalle.module.scss` (pantalla detalle). Props: `canManage: boolean`. Depende de T009, T014 y T015.
+- [X] T016 [US1] Crear `src/webparts/objetivosVp/components/Palanca/PalancaDetalle/PalancaDetalle.tsx` y `PalancaDetalle.module.scss` (pantalla detalle). Props: `canManage: boolean`. Depende de T009, T014 y T015.
   - `const { id } = useParams<{ id: string }>();`, `const palancaId = Number(id);` y `const isValidId = Number.isInteger(palancaId) && palancaId > 0;`.
   - `const [state, , , , , getById] = usePalancaDataSource();`. Estado local `loadError: 'notFound' | 'error' | undefined`.
   - `useEffect` según `palancaId`: primero `setLoadError(undefined)`; después, si `!isValidId`, `setLoadError('notFound')`; si no, `getById(palancaId).catch((error: unknown) => setLoadError(isNotFoundError(error) ? 'notFound' : 'error'))`. `isNotFoundError` es una función local que estrecha `unknown` (`typeof error === 'object' && error !== null && 'status' in error`) y compara `status` con la constante local `NOT_FOUND_STATUS = 404`.
@@ -163,7 +163,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
 
 **Independent Test**: quickstart, pasos 7–11.
 
-- [X] T018 [US2] Crear `src/webparts/objetivosVp/components/PalancaForm/PalancaForm.tsx` y `PalancaForm.module.scss` (formulario compartido; contrato en `contracts/ui-contracts.md` sección 2). Props: `palanca?: Palanca`, `onSave: (palanca: Palanca) => Promise<void>`, `onCancel: () => void`.
+- [X] T018 [US2] Crear `src/webparts/objetivosVp/components/Palanca/PalancaForm/PalancaForm.tsx` y `PalancaForm.module.scss` (formulario compartido; contrato en `contracts/ui-contracts.md` sección 2). Props: `palanca?: Palanca`, `onSave: (palanca: Palanca) => Promise<void>`, `onCancel: () => void`.
   - Estado local: `nombre`, `descripcion` y `activa` (inicializados desde `palanca` o con `''`, `''`, `true`), más `submitted`, `isSaving` y `saveFailed`.
   - Validación (data-model, "Validaciones"): Nombre "obligatorio, no vacío ni solo espacios"; Descripción "obligatoria, no vacía ni solo espacios". El error es `strings.RequiredField` y se muestra solo si `submitted` y el valor recortado está vacío, así que se limpia solo al completar el campo.
   - Guardar: `setSubmitted(true)`; si hay errores, no hace nada más. Si no: `new Palanca()` con `Id` = `palanca?.Id` (solo en edición), `Nombre` = nombre recortado (el `Title` de la lista lo completa `toListItem`, T004), `Descripcion` = descripción recortada y `Activa`; `setIsSaving(true)`; `setSaveFailed(false)`; `await onSave(p)` dentro de `try/catch`. Si falla, `setSaveFailed(true)` y se conservan los datos. Siempre `setIsSaving(false)`.
@@ -171,7 +171,7 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
   - Contenido: si `saveFailed`, `MessageBar type="error" message={strings.PalancaSaveError}`; `Input label={strings.PalancaFormName} required value onChange errorMessage`; `Multiline label={strings.PalancaFormDescription} required value onChange errorMessage`; `Dropdown label={strings.PalancaFormActive} required options={[{ key: ACTIVE_KEY, text: strings.Yes }, { key: INACTIVE_KEY, text: strings.No }]} value onChange`, con `ACTIVE_KEY`/`INACTIVE_KEY` como constantes locales. El `onChange` del `Dropdown` recibe `string | string[]`: estrechar a `string`.
   - SCSS: `.fields` flex en columna (el `gap` con `spacing.lg` desde el TSX); Nombre y Descripción al 100 % de ancho.
   **Referencia**: `<sc-if value="{{m.is.palanca}}">` (`.mGrid`, `.wide`, `mPn`, `mPd`, `mPa`); botones "Cancelar"/"Guardar" (`var close`, `save`) y error "Este campo es obligatorio." (`R`). **Terminado**: build OK.
-- [X] T019 [US2] Alta desde la grilla en `src/webparts/objetivosVp/components/Palancas/Palancas.tsx`. Depende de T013 y T018.
+- [X] T019 [US2] Alta desde la grilla en `src/webparts/objetivosVp/components/Palanca/Palancas/Palancas.tsx`. Depende de T013 y T018.
   - Tomar `addItem` del hook (`const [state, getItems, addItem] = …`).
   - Estado local `form: { mode: 'new' } | { mode: 'edit'; palanca: Palanca } | undefined` y `successMessage: string | undefined`.
   - Pasar `onNew={() => setForm({ mode: 'new' })}` a `PalancasHeader`.
@@ -190,12 +190,12 @@ Raíz del webpart: `src/webparts/objetivosVp/`. Pantallas: `components/Palancas/
 
 **Independent Test**: quickstart, pasos 12 y 17 (solo la edición), y S2 contra SharePoint.
 
-- [X] T020 [US3] Edición desde la grilla en `src/webparts/objetivosVp/components/Palancas/Palancas.tsx`. Depende de T019.
+- [X] T020 [US3] Edición desde la grilla en `src/webparts/objetivosVp/components/Palanca/Palancas/Palancas.tsx`. Depende de T019.
   - Tomar `editItem` del hook (cuarto elemento).
   - Pasar `onEdit={(palanca) => setForm({ mode: 'edit', palanca })}` a `PalancasTable`.
   - En modo `edit`, `PalancaForm palanca={form.palanca}`. `onSave`: `setLastOperation('save')`; `await editItem(p)` (relanza si falla, T002); luego `setForm(undefined)` y `setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', p.Nombre ?? ''))`.
   **Terminado**: quickstart, paso 12; build OK.
-- [X] T021 [US3] Edición desde el detalle en `src/webparts/objetivosVp/components/PalancaDetalle/PalancaDetalle.tsx`. Depende de T016 y T018.
+- [X] T021 [US3] Edición desde el detalle en `src/webparts/objetivosVp/components/Palanca/PalancaDetalle/PalancaDetalle.tsx`. Depende de T016 y T018.
   - Tomar `editItem` del hook (`const [state, , , editItem, , getById] = …`).
   - Estado local `isFormOpen` y `successMessage`.
   - Pie: si `canManage` y hay palanca, agregar después de "Cancelar" `Button variant="primary"` con `strings.Edit` → `setIsFormOpen(true)`.

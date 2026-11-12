@@ -235,26 +235,28 @@ src/webparts/objetivosVp/
     │   └── AccessList/
     │       ├── AccessList.tsx        # cinco accesos de la 001; solo "Palancas y objetivos" navega
     │       └── AccessButton.tsx      # onClick vuelve a ser opcional
-    ├── Palancas/                     # pantalla: grilla
-    │   ├── Palancas.tsx              # carga, filtro, búsqueda, formulario y aviso
-    │   ├── Palancas.module.scss
+    ├── Palanca/
     │   ├── formatPalancaId.ts        # PAL-<Id> (D6)
-    │   ├── PalancasHeader/
-    │   │   ├── PalancasHeader.tsx    # Volver, título, búsqueda, Actualizar, Nueva palanca (G1, G2)
-    │   │   └── PalancasHeader.module.scss
-    │   └── PalancasTable/
-    │       └── PalancasTable.tsx     # Table con columnas y acciones (G4, G5)
-    ├── PalancaDetalle/               # pantalla: detalle
-    │   ├── PalancaDetalle.tsx        # carga por Id, encabezado, pie, formulario y aviso
-    │   ├── PalancaDetalle.module.scss
+    │   ├── Palancas/                 # pantalla: grilla
+    │   │   ├── Palancas.tsx          # carga, filtro, búsqueda, formulario y aviso
+    │   │   ├── Palancas.module.scss
+    │   │   ├── PalancasHeader/
+    │   │   │   ├── PalancasHeader.tsx    # Volver, título, búsqueda, Actualizar, Nueva palanca (G1, G2)
+    │   │   │   └── PalancasHeader.module.scss
+    │   │   └── PalancasTable/
+    │   │       └── PalancasTable.tsx     # Table con columnas y acciones (G4, G5)
+    │   ├── PalancaDetalle/           # pantalla: detalle
+    │   │   ├── PalancaDetalle.tsx    # carga por Id, encabezado, pie, formulario y aviso
+    │   │   ├── PalancaDetalle.module.scss
+    │   │   └── PalancaInfo/
+    │   │       ├── PalancaInfo.tsx   # Información general (D2)
+    │   │       └── PalancaInfo.module.scss
     │   ├── PalancaBreadcrumb/
     │   │   └── PalancaBreadcrumb.tsx # Breadcrumb Fluent v8 (D0)
-    │   └── PalancaInfo/
-    │       ├── PalancaInfo.tsx       # Información general (D2)
-    │       └── PalancaInfo.module.scss
-    └── PalancaForm/                  # formulario compartido por las dos pantallas
-        ├── PalancaForm.tsx
-        └── PalancaForm.module.scss
+    │   └── PalancaForm/              # formulario compartido por las dos pantallas
+    │       ├── PalancaForm.tsx
+    │       └── PalancaForm.module.scss
+    └── shared/                       # getColorStep, pageTitleStyle, Field
 ```
 
 **Structure Decision**: una carpeta por pantalla (`Palancas/`, `PalancaDetalle/`) con sus piezas en subcarpetas, más `PalancaForm/` al mismo nivel porque lo usan las dos. No se crean hooks, servicios ni constantes transversales nuevas. `routes.ts` concentra las rutas que comparten las pantallas, la home y el router, para no repetir textos de ruta (research D8). Vive junto al router, no en `core`, porque las rutas son del webpart. `formatPalancaId` es una función de presentación que usan las dos pantallas y el formulario, y vive junto a la grilla. Los `.module.scss.ts` son artefactos de compilación (`*.scss.ts` está en `.gitignore`).
