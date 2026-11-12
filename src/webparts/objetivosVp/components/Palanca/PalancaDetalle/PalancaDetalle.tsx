@@ -1,8 +1,9 @@
 import * as React from 'react';
+import type { CSSProperties } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button } from '../../../../../core/ui/components';
-import { Chip, MessageBar, Spinner, Surface, Toast } from '../../../../../core/ui/patterns';
+import { Button, Tooltip } from '../../../../../core/ui/components';
+import { Chip, MessageBar, Spinner, Toast } from '../../../../../core/ui/patterns';
 import { FigmaIcon, spacing } from '../../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
@@ -14,7 +15,10 @@ import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { ObjetivosFiltro, filterObjetivos, isNotFoundError } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import { formatPalancaId } from '../formatPalancaId';
-import { PAGE_TITLE_STYLE } from '../../shared/pageTitleStyle';
+import BackButton from '../../shared/BackButton/BackButton';
+import SectionBand from '../../shared/SectionBand/SectionBand';
+import { getColorStep } from '../../shared/getColorStep';
+import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaForm from '../PalancaForm/PalancaForm';
 import PalancaBreadcrumb from '../PalancaBreadcrumb/PalancaBreadcrumb';
 import PalancaInfo from './PalancaInfo/PalancaInfo';
@@ -29,6 +33,26 @@ export interface IPalancaDetalleProps {
 type LoadError = 'notFound' | 'error';
 
 const TOAST_DURATION_MS = 7000;
+
+const ACTIVE_CHIP_COLOR_STYLE: CSSProperties = { color: getColorStep('Green', '800').value };
+
+const ADD_BUTTON_STYLE: CSSProperties = {
+	width: 22,
+	minWidth: 22,
+	height: 22,
+	minHeight: 22,
+	padding: 0,
+	borderRadius: '50%',
+	backgroundColor: getColorStep('Primary', '500').value,
+	borderColor: getColorStep('Primary', '500').value
+};
+
+const LOCATION_BUTTON_STYLE = {
+	'--location-bg': getColorStep('Tertiary', '600').value,
+	'--location-bg-hover': getColorStep('Tertiary', '700').value
+} as CSSProperties;
+
+const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
 
 const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateObjetivo, filtro }) => {
 	const { id } = useParams<{ id: string }>();
@@ -62,6 +86,8 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 		setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', edited.Nombre ?? ''));
 	};
 
+	const palancaObjetivos = filterObjetivos(names.resolve(objetivoState.items), filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId);
+
 	const renderBody = (): React.ReactNode => {
 		if (loadError === 'notFound') {
 			return <MessageBar type="error" message={strings.PalancaNotFound} />;
@@ -75,40 +101,64 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 		return (
 			<>
 				<PalancaInfo palanca={palanca} />
-				<Surface variant="outline" padding="comfortable" header={strings.PalancaObjectivesSection}>
+				<SectionBand
+					title={`${strings.PalancaObjectivesSection} (${palancaObjetivos.length})`}
+					action={canCreateObjetivo && (
+						<Tooltip content={strings.ObjetivoNew}>
+							<Button
+								iconOnly
+								circular
+								variant="primary"
+								style={ADD_BUTTON_STYLE}
+								iconLeft={<FigmaIcon name="add" size="sm" className={styles.boldWhiteIcon} />}
+								aria-label={strings.ObjetivoNew}
+								onClick={() => navigate(getObjetivoNewPath(palancaId))}
+							/>
+						</Tooltip>
+					)}
+				>
 					{objetivoState.error || names.error ? (
 						<MessageBar type="error" message={strings.ObjetivosLoadError} />
 					) : (
 						<ObjetivosTable
-							objetivos={filterObjetivos(names.resolve(objetivoState.items), filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId)}
+							objetivos={palancaObjetivos}
 							variant="palanca"
 							emptyText={strings.PalancaObjectivesEmpty}
 							onView={(objetivoId) => navigate(getObjetivoPath(objetivoId))}
 						/>
 					)}
-				</Surface>
+				</SectionBand>
 			</>
 		);
 	};
 
 	return (
-		<div className={styles.detalle} style={{ gap: spacing.lg, padding: spacing.xl }}>
+		<div className={styles.detalle} style={{ gap: spacing.lg, padding: PAGE_PADDING }}>
 			<PalancaBreadcrumb palancaNombre={palanca?.Nombre} />
 			<div className={styles.header} style={{ gap: spacing.md }}>
-				<Button variant="secondary" size="small" iconLeft={<FigmaIcon name="arrowCircle" />} onClick={goPalancas}>
-					{strings.Back}
-				</Button>
+				<BackButton onClick={goPalancas} />
 				{palanca && (
 					<>
-						<h1 style={PAGE_TITLE_STYLE}>
+						<h1 style={HEADER_TITLE_STYLE}>
 							{Utils.replaceAll(Utils.replaceAll(strings.PalancaDetailTitle, '{0}', formatPalancaId(palanca.Id)), '{1}', palanca.Nombre ?? '')}
 						</h1>
-						<Chip
-							size="small"
-							clickable={false}
-							color={palanca.Activa ? 'success' : 'neutral'}
-							label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
-						/>
+						<span style={palanca.Activa ? ACTIVE_CHIP_COLOR_STYLE : undefined}>
+							<Chip
+								size="small"
+								className={styles.chip}
+								clickable={false}
+								color={palanca.Activa ? 'success' : 'neutral'}
+								label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
+							/>
+						</span>
+						<Button
+							variant="primary"
+							className={styles.location}
+							style={LOCATION_BUTTON_STYLE}
+							iconLeft={<FigmaIcon name="chevronDown" className={styles.whiteIcon} />}
+						>
+							{strings.PalancaLocationButton}
+						</Button>
 					</>
 				)}
 			</div>
@@ -117,11 +167,6 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 				<Button variant="secondary" onClick={goPalancas}>
 					{strings.Cancel}
 				</Button>
-				{canCreateObjetivo && palanca && (
-					<Button variant="primary" iconLeft={<FigmaIcon name="add" />} onClick={() => navigate(getObjetivoNewPath(palancaId))}>
-						{strings.ObjetivoNew}
-					</Button>
-				)}
 				{canManage && palanca && (
 					<Button variant="primary" onClick={() => setIsFormOpen(true)}>
 						{strings.Edit}

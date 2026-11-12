@@ -40,6 +40,7 @@ declare interface IObjetivosVpWebPartStrings {
 	BreadcrumbAriaLabel: string;
 	PalancaDetailTitle: string;
 	PalancaGeneralInfo: string;
+	PalancaLocationButton: string;
 	PalancaFieldId: string;
 	PalancaFieldName: string;
 	PalancaFieldActive: string;
@@ -69,6 +70,8 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoColumnManagement: string;
 	ObjetivoColumnWeight: string;
 	ObjetivoColumnStatus: string;
+	ObjetivoColumnProgress: string;
+	ObjetivoColumnView: string;
 	ObjetivoColumnActions: string;
 	ObjetivoViewTooltip: string;
 	ObjetivoViewAriaLabel: string;

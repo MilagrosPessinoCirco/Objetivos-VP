@@ -9,3 +9,45 @@
 	flex-wrap: wrap;
 	align-items: center;
 }
+
+.footer {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 12;
+	padding: 16px 24px;
+	border-top: 1px solid var(--ds-color-neutral-border);
+	background: var(--ds-color-neutral-white);
+	box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+:global(.ms-Button).location.location.location.location {
+	height: 32px;
+	min-height: 32px;
+	margin-left: auto;
+	border-color: var(--location-bg);
+	background-color: var(--location-bg);
+
+	&:hover:not(:disabled) {
+		border-color: var(--location-bg-hover);
+		background-color: var(--location-bg-hover);
+	}
+}
+
+.whiteIcon {
+	filter: brightness(0) invert(1);
+}
+
+.boldWhiteIcon {
+	filter: brightness(0) invert(1) drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 0.6px #fff);
+}
+
+.chip.chip.chip {
+	height: 22px;
+	padding: 0 10px;
+	color: inherit;
+	font-size: 11px;
+	line-height: 14px;
+	text-transform: uppercase;
+}

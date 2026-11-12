@@ -1,13 +1,15 @@
 import * as React from 'react';
+import type { CSSProperties } from 'react';
 
 import { Button, Table, Tooltip } from '../../../../../core/ui/components';
 import type { ITableColumn } from '../../../../../core/ui/components';
 import { Chip } from '../../../../../core/ui/patterns';
 import { FigmaIcon } from '../../../../../core/ui/foundations';
-import { spacing } from '../../../../../core/ui/foundations';
+import { spacing, typography } from '../../../../../core/ui/foundations';
 import { Objetivo } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { getColorStep } from '../../shared/getColorStep';
 import { ICON_BUTTON_STYLE } from '../../shared/iconButtonStyle';
 import { formatObjetivoId, getEstadoChipColor } from '../objetivoUtils';
 import styles from './ObjetivosTable.module.scss';
@@ -26,9 +28,21 @@ type ObjetivoRow = {
 	departamento: string;
 	gerencia: string;
 	peso: string;
+	avance: string;
 	estado: string;
 	objetivo: Objetivo;
 };
+
+const ID_WIDTH = 70;
+const DEPARTMENT_WIDTH = 130;
+const MANAGEMENT_WIDTH = 110;
+const WEIGHT_WIDTH = 60;
+const STATUS_WIDTH = 104;
+const PROGRESS_WIDTH = 90;
+const ACTIONS_WIDTH = 48;
+const DEFAULT_PROGRESS = 0;
+const PROGRESS_STYLE: CSSProperties = { fontWeight: typography.weight.bold, color: getColorStep('Red', '600').value };
+const ACTION_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 24, minWidth: 24, padding: 0 };
 
 const byId = (a: Objetivo, b: Objetivo): number => (a.Id ?? 0) - (b.Id ?? 0);
 
@@ -40,6 +54,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		departamento: objetivo.Departamento?.Title ?? '',
 		gerencia: objetivo.Gerencia?.Title ?? '',
 		peso: objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
+		avance: `${DEFAULT_PROGRESS}%`,
 		estado: objetivo.Estado ?? '',
 		objetivo
 	}));
@@ -55,7 +70,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 					iconOnly
 					variant="secondary"
 					size="small"
-					style={ICON_BUTTON_STYLE}
+					style={variant === 'palanca' ? ACTION_BUTTON_STYLE : ICON_BUTTON_STYLE}
 					iconLeft={<FigmaIcon name="chevronCirclePrimary" />}
 					aria-label={Utils.replaceAll(strings.ObjetivoViewAriaLabel, '{0}', row.id)}
 					onClick={() => onView(row.objetivo.Id as number)}
@@ -64,17 +79,20 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		</div>
 	);
 
-	const idColumn: ITableColumn<ObjetivoRow> = { key: 'id', header: strings.ObjetivoColumnId };
+	const palanca = variant === 'palanca';
+
+	const idColumn: ITableColumn<ObjetivoRow> = { key: 'id', header: strings.ObjetivoColumnId, width: palanca ? ID_WIDTH : undefined };
 	const nameColumn: ITableColumn<ObjetivoRow> = { key: 'nombre', header: strings.ObjetivoColumnName };
 	const vpColumn: ITableColumn<ObjetivoRow> = { key: 'vp', header: strings.ObjetivoColumnVp };
-	const departmentColumn: ITableColumn<ObjetivoRow> = { key: 'departamento', header: strings.ObjetivoColumnDepartment };
-	const managementColumn: ITableColumn<ObjetivoRow> = { key: 'gerencia', header: strings.ObjetivoColumnManagement };
-	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight };
-	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, render: (_value, row) => renderEstado(row) };
-	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: strings.ObjetivoColumnActions, render: (_value, row) => renderActions(row) };
+	const departmentColumn: ITableColumn<ObjetivoRow> = { key: 'departamento', header: strings.ObjetivoColumnDepartment, width: palanca ? DEPARTMENT_WIDTH : undefined };
+	const managementColumn: ITableColumn<ObjetivoRow> = { key: 'gerencia', header: strings.ObjetivoColumnManagement, width: palanca ? MANAGEMENT_WIDTH : undefined };
+	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: palanca ? WEIGHT_WIDTH : undefined };
+	const progressColumn: ITableColumn<ObjetivoRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (value) => <span style={PROGRESS_STYLE}>{String(value)}</span> };
+	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: palanca ? STATUS_WIDTH : undefined, render: (_value, row) => renderEstado(row) };
+	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: palanca ? strings.ObjetivoColumnView : strings.ObjetivoColumnActions, width: palanca ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
 
-	const columns: ITableColumn<ObjetivoRow>[] = variant === 'palanca'
-		? [idColumn, nameColumn, departmentColumn, managementColumn, weightColumn, statusColumn, actionsColumn]
+	const columns: ITableColumn<ObjetivoRow>[] = palanca
+		? [idColumn, nameColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
 		: [idColumn, nameColumn, vpColumn, departmentColumn, managementColumn, statusColumn, actionsColumn];
 
 	return <Table<ObjetivoRow> columns={columns} rows={rows} getRowKey={(row) => row.id} emptyText={emptyText} />;

@@ -11,3 +11,9 @@ export const PAGE_TITLE_STYLE: CSSProperties = {
 	color: getColorStep('Primary', '800').value,
 	margin: 0
 };
+
+export const HEADER_TITLE_STYLE: CSSProperties = {
+	...PAGE_TITLE_STYLE,
+	fontSize: typography.size[24],
+	lineHeight: typography.lineHeight[24]
+};

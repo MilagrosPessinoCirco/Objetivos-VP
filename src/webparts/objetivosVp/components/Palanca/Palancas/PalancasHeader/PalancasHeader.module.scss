@@ -30,29 +30,6 @@
 	min-height: 32px;
 }
 
-.backContent {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.backCircle {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 0 0 24px;
-	width: 24px;
-	height: 24px;
-	overflow: hidden;
-	border-radius: 50%;
-	background: var(--ds-color-brand-primary);
-}
-
-.backIcon {
-	transform: rotate(90deg) scale(1.35);
-	filter: brightness(0) invert(1);
-}
-
 .whiteIcon {
 	filter: brightness(0) invert(1);
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { colors, spacing, typography } from '../../../../../core/ui/foundations';
+import { getColorStep } from '../getColorStep';
 import styles from './Field.module.scss';
 
 export interface IFieldProps {
@@ -20,7 +21,7 @@ const VALUE_STYLE: React.CSSProperties = {
 	fontSize: typography.size[14],
 	lineHeight: typography.lineHeight[14],
 	fontWeight: typography.weight.semibold,
-	color: colors.neutral.text
+	color: getColorStep('Neutral', '600').value
 };
 
 const Field: React.FC<IFieldProps> = ({ label, value }) => (
