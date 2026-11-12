@@ -22,6 +22,7 @@ declare interface IObjetivosVpWebPartStrings {
 	PalancasTitle: string;
 	PalancasSearchPlaceholder: string;
 	PalancasRefresh: string;
+	PalancasFilters: string;
 	PalancaNew: string;
 	PalancaColumnId: string;
 	PalancaColumnName: string;

@@ -8,6 +8,69 @@
 .left,
 .tools {
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
+}
+
+.left {
+	flex: 0 0 auto;
+
+	h1 {
+		white-space: nowrap;
+	}
+}
+
+.tools {
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	margin-left: auto;
+}
+
+.control.control.control {
+	height: 32px;
+	min-height: 32px;
+}
+
+.backContent {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.backCircle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 24px;
+	width: 24px;
+	height: 24px;
+	overflow: hidden;
+	border-radius: 50%;
+	background: var(--ds-color-brand-primary);
+}
+
+.backIcon {
+	transform: rotate(90deg) scale(1.35);
+	filter: brightness(0) invert(1);
+}
+
+.whiteIcon {
+	filter: brightness(0) invert(1);
+}
+
+.search.search {
+	border-color: var(--ds-color-neutral-border);
+	height: 32px;
+	border-radius: 6px;
+
+	> img {
+		width: 14px;
+		height: 14px;
+		flex: 0 0 14px;
+		margin-right: 6px;
+		filter: brightness(0) invert(0.77);
+	}
+
+	&:focus-within {
+		border-color: var(--ds-color-brand-primary);
+	}
 }
