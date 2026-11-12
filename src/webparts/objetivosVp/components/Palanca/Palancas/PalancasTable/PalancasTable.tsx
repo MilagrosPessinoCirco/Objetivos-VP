@@ -3,12 +3,12 @@ import type { CSSProperties } from 'react';
 
 import { Button, Table, Tooltip } from '../../../../../../core/ui/components';
 import type { ITableColumn } from '../../../../../../core/ui/components';
-import { Chip } from '../../../../../../core/ui/patterns';
 import { FigmaIcon, spacing, typography } from '../../../../../../core/ui/foundations';
 import { Objetivo, Palanca } from '../../../../../../core/entities';
 import { Utils } from '../../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { formatObjetivoId, getEstadoChipColor } from '../../../Objetivo/objetivoUtils';
+import ObjetivosTable from '../../../Objetivo/ObjetivosTable/ObjetivosTable';
+import { getColorStep } from '../../../shared/getColorStep';
 import { ICON_BUTTON_STYLE } from '../../../shared/iconButtonStyle';
 import { formatPalancaId } from '../../formatPalancaId';
 import styles from './PalancasTable.module.scss';
@@ -25,13 +25,11 @@ export interface IPalancasTableProps {
 
 type TableRow = {
 	key: string;
-	kind: 'palanca' | 'objetivo' | 'vacio';
 	id: string;
 	nombre: string;
 	descripcion: string;
 	objetivos: string;
-	palanca?: Palanca;
-	objetivo?: Objetivo;
+	palanca: Palanca;
 };
 
 const EXPAND_COLUMN_WIDTH = 44;
@@ -40,7 +38,11 @@ const OBJECTIVES_COLUMN_WIDTH = 84;
 const ACTIONS_COLUMN_WIDTH = 160;
 const EXPAND_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 20, minWidth: 20, padding: 0 };
 
-const byId = (a: Objetivo, b: Objetivo): number => (a.Id ?? 0) - (b.Id ?? 0);
+const NESTED_STYLE: CSSProperties = {
+	marginLeft: EXPAND_COLUMN_WIDTH,
+	borderLeft: `3px solid ${getColorStep('Primary', '100').value}`,
+	['--nested-header-bg' as string]: getColorStep('Primary', '50').value
+};
 
 const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, canManage, objetivosByPalanca, onView, onViewObjetivo, onEdit }) => {
 	const [expanded, setExpanded] = React.useState<number[]>([]);
@@ -48,40 +50,23 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 	const toggle = (id: number): void =>
 		setExpanded(expanded.indexOf(id) >= 0 ? expanded.filter((item) => item !== id) : expanded.concat([id]));
 
-	const rows: TableRow[] = palancas.reduce<TableRow[]>((result, palanca) => {
-		const palancaId = palanca.Id as number;
-		const objetivos = objetivosByPalanca ? (objetivosByPalanca[palancaId] ?? []).slice().sort(byId) : undefined;
-		result.push({
-			key: `p-${palancaId}`,
-			kind: 'palanca',
+	const rowOf = (palanca: Palanca): TableRow => {
+		const objetivos = objetivosByPalanca ? objetivosByPalanca[palanca.Id as number] ?? [] : undefined;
+		return {
+			key: `p-${palanca.Id}`,
 			id: formatPalancaId(palanca.Id),
 			nombre: palanca.Nombre ?? '',
 			descripcion: palanca.Descripcion ?? '',
 			objetivos: objetivos ? String(objetivos.length) : '',
 			palanca
-		});
-		if (objetivos && expanded.indexOf(palancaId) >= 0) {
-			if (objetivos.length === 0) {
-				result.push({ key: `v-${palancaId}`, kind: 'vacio', id: '', nombre: strings.PalancaObjectivesEmpty, descripcion: '', objetivos: '' });
-			}
-			objetivos.forEach((objetivo) => result.push({
-				key: `o-${objetivo.Id}`,
-				kind: 'objetivo',
-				id: formatObjetivoId(objetivo.Id),
-				nombre: objetivo.Nombre ?? '',
-				descripcion: [objetivo.Departamento?.Title, objetivo.Gerencia?.Title].filter((part) => part).join(' / '),
-				objetivos: objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
-				objetivo
-			}));
-		}
-		return result;
-	}, []);
+		};
+	};
 
 	const renderExpand = (row: TableRow): React.ReactNode => {
-		if (row.kind !== 'palanca' || !objetivosByPalanca) {
+		if (!objetivosByPalanca) {
 			return null;
 		}
-		const palancaId = row.palanca?.Id as number;
+		const palancaId = row.palanca.Id as number;
 		const isExpanded = expanded.indexOf(palancaId) >= 0;
 		return (
 			<Button
@@ -98,28 +83,6 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 	};
 
 	const renderActions = (row: TableRow): React.ReactNode => {
-		if (row.kind === 'objetivo' && row.objetivo) {
-			const objetivo = row.objetivo;
-			return (
-				<div className={styles.actions} style={{ gap: spacing.xs }}>
-					<Chip size="small" clickable={false} color={getEstadoChipColor(objetivo.Estado)} label={objetivo.Estado ?? ''} />
-					<Tooltip content={strings.ObjetivoViewTooltip}>
-						<Button
-							iconOnly
-							variant="secondary"
-							size="small"
-							style={ICON_BUTTON_STYLE}
-							iconLeft={<FigmaIcon name="chevronCirclePrimary" />}
-							aria-label={Utils.replaceAll(strings.ObjetivoViewAriaLabel, '{0}', row.id)}
-							onClick={() => onViewObjetivo(objetivo.Id as number)}
-						/>
-					</Tooltip>
-				</div>
-			);
-		}
-		if (row.kind !== 'palanca' || !row.palanca) {
-			return null;
-		}
 		const palanca = row.palanca;
 		return (
 			<div className={styles.actions} style={{ gap: spacing.xs }}>
@@ -154,15 +117,34 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 	const columns: ITableColumn<TableRow>[] = [
 		{ key: 'expandir', header: '', width: EXPAND_COLUMN_WIDTH, render: (_value, row) => renderExpand(row) },
 		{ key: 'id', header: strings.PalancaColumnId, width: ID_COLUMN_WIDTH },
-		{ key: 'nombre', header: strings.PalancaColumnName, render: (value, row) => (
-			<span style={row.kind === 'objetivo' ? { paddingLeft: spacing.lg } : row.kind === 'palanca' ? { fontWeight: typography.weight.bold } : undefined}>{String(value)}</span>
-		) },
+		{ key: 'nombre', header: strings.PalancaColumnName, render: (value) => <span style={{ fontWeight: typography.weight.bold }}>{String(value)}</span> },
 		{ key: 'descripcion', header: strings.PalancaColumnDescription, render: (value) => <span className={styles.description}>{String(value)}</span> },
 		{ key: 'objetivos', header: strings.PalancaColumnObjectives, width: OBJECTIVES_COLUMN_WIDTH },
 		{ key: 'acciones', header: strings.PalancaColumnActions, width: ACTIONS_COLUMN_WIDTH, render: (_value, row) => renderActions(row) }
 	];
 
-	return <Table<TableRow> columns={columns} rows={rows} getRowKey={(row) => row.key} emptyText={emptyText} />;
+	if (palancas.length === 0) {
+		return <Table<TableRow> columns={columns} rows={[]} getRowKey={(row) => row.key} emptyText={emptyText} />;
+	}
+
+	return (
+		<div>
+			{palancas.map((palanca, index) => {
+				const row = rowOf(palanca);
+				const objetivos = objetivosByPalanca && expanded.indexOf(palanca.Id as number) >= 0 ? objetivosByPalanca[palanca.Id as number] ?? [] : undefined;
+				return (
+					<div key={row.key} className={index === 0 ? undefined : styles.withoutHeader}>
+						<Table<TableRow> columns={columns} rows={[row]} getRowKey={(item) => item.key} emptyText={emptyText} />
+						{objetivos && (
+							<div className={styles.nested} style={NESTED_STYLE}>
+								<ObjetivosTable objetivos={objetivos} variant="palanca" emptyText={strings.PalancaObjectivesEmpty} onView={onViewObjetivo} />
+							</div>
+						)}
+					</div>
+				);
+			})}
+		</div>
+	);
 };
 
 export default PalancasTable;

@@ -16,7 +16,7 @@ import styles from './ObjetivosTable.module.scss';
 
 export interface IObjetivosTableProps {
 	objetivos: Objetivo[];
-	variant: 'palanca' | 'otrasVp';
+	variant: 'palanca' | 'delVp' | 'otrasVp';
 	emptyText: string;
 	onView: (id: number) => void;
 }
@@ -25,6 +25,7 @@ type ObjetivoRow = {
 	id: string;
 	nombre: string;
 	vp: string;
+	palanca: string;
 	departamento: string;
 	gerencia: string;
 	peso: string;
@@ -34,6 +35,7 @@ type ObjetivoRow = {
 };
 
 const ID_WIDTH = 70;
+const LEVER_WIDTH = 150;
 const DEPARTMENT_WIDTH = 130;
 const MANAGEMENT_WIDTH = 110;
 const WEIGHT_WIDTH = 60;
@@ -51,6 +53,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		id: formatObjetivoId(objetivo.Id),
 		nombre: objetivo.Nombre ?? '',
 		vp: objetivo.VP?.Title ?? '',
+		palanca: objetivo.Palanca?.Title ?? '',
 		departamento: objetivo.Departamento?.Title ?? '',
 		gerencia: objetivo.Gerencia?.Title ?? '',
 		peso: objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
@@ -58,6 +61,8 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		estado: objetivo.Estado ?? '',
 		objetivo
 	}));
+
+	const fixedWidths = variant !== 'otrasVp';
 
 	const renderEstado = (row: ObjetivoRow): React.ReactNode => (
 		<Chip size="small" clickable={false} color={getEstadoChipColor(row.objetivo.Estado)} label={row.estado} />
@@ -70,7 +75,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 					iconOnly
 					variant="secondary"
 					size="small"
-					style={variant === 'palanca' ? ACTION_BUTTON_STYLE : ICON_BUTTON_STYLE}
+					style={fixedWidths ? ACTION_BUTTON_STYLE : ICON_BUTTON_STYLE}
 					iconLeft={<FigmaIcon name="chevronCirclePrimary" />}
 					aria-label={Utils.replaceAll(strings.ObjetivoViewAriaLabel, '{0}', row.id)}
 					onClick={() => onView(row.objetivo.Id as number)}
@@ -79,21 +84,23 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		</div>
 	);
 
-	const palanca = variant === 'palanca';
 
-	const idColumn: ITableColumn<ObjetivoRow> = { key: 'id', header: strings.ObjetivoColumnId, width: palanca ? ID_WIDTH : undefined };
+	const idColumn: ITableColumn<ObjetivoRow> = { key: 'id', header: strings.ObjetivoColumnId, width: fixedWidths ? ID_WIDTH : undefined };
 	const nameColumn: ITableColumn<ObjetivoRow> = { key: 'nombre', header: strings.ObjetivoColumnName };
 	const vpColumn: ITableColumn<ObjetivoRow> = { key: 'vp', header: strings.ObjetivoColumnVp };
-	const departmentColumn: ITableColumn<ObjetivoRow> = { key: 'departamento', header: strings.ObjetivoColumnDepartment, width: palanca ? DEPARTMENT_WIDTH : undefined };
-	const managementColumn: ITableColumn<ObjetivoRow> = { key: 'gerencia', header: strings.ObjetivoColumnManagement, width: palanca ? MANAGEMENT_WIDTH : undefined };
-	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: palanca ? WEIGHT_WIDTH : undefined };
+	const leverColumn: ITableColumn<ObjetivoRow> = { key: 'palanca', header: strings.PalancaColumnName, width: LEVER_WIDTH };
+	const departmentColumn: ITableColumn<ObjetivoRow> = { key: 'departamento', header: strings.ObjetivoColumnDepartment, width: fixedWidths ? DEPARTMENT_WIDTH : undefined };
+	const managementColumn: ITableColumn<ObjetivoRow> = { key: 'gerencia', header: strings.ObjetivoColumnManagement, width: fixedWidths ? MANAGEMENT_WIDTH : undefined };
+	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined };
 	const progressColumn: ITableColumn<ObjetivoRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (value) => <span style={PROGRESS_STYLE}>{String(value)}</span> };
-	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: palanca ? STATUS_WIDTH : undefined, render: (_value, row) => renderEstado(row) };
-	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: palanca ? strings.ObjetivoColumnView : strings.ObjetivoColumnActions, width: palanca ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
+	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: fixedWidths ? STATUS_WIDTH : undefined, render: (_value, row) => renderEstado(row) };
+	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: fixedWidths ? strings.ObjetivoColumnView : strings.ObjetivoColumnActions, width: fixedWidths ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
 
-	const columns: ITableColumn<ObjetivoRow>[] = palanca
+	const columns: ITableColumn<ObjetivoRow>[] = variant === 'palanca'
 		? [idColumn, nameColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
-		: [idColumn, nameColumn, vpColumn, departmentColumn, managementColumn, statusColumn, actionsColumn];
+		: variant === 'delVp'
+			? [idColumn, nameColumn, leverColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
+			: [idColumn, nameColumn, vpColumn, departmentColumn, managementColumn, statusColumn, actionsColumn];
 
 	return <Table<ObjetivoRow> columns={columns} rows={rows} getRowKey={(row) => row.id} emptyText={emptyText} />;
 };

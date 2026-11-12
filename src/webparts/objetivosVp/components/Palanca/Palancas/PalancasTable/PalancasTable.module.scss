@@ -16,3 +16,15 @@
 .chevronOpen {
 	transform: rotate(90deg);
 }
+
+.withoutHeader :global(.ms-DetailsHeader) {
+	display: none;
+}
+
+.withoutHeader :global(.ms-DetailsHeader) {
+	display: none;
+}
+
+.nested :global(.ms-DetailsHeader) {
+	background: var(--nested-header-bg);
+}

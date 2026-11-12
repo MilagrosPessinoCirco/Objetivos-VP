@@ -1,17 +1,19 @@
 import * as React from 'react';
+import type { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { MessageBar, Spinner, Surface, Tabs, Toast } from '../../../../../core/ui/patterns';
-import { spacing } from '../../../../../core/ui/foundations';
+import { MessageBar, Spinner, Tabs, Toast } from '../../../../../core/ui/patterns';
+import { spacing, typography } from '../../../../../core/ui/foundations';
 import { Objetivo, Palanca } from '../../../../../core/entities';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { HOME_PATH, getObjetivoNewPath, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
+import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { ObjetivosFiltro, filterObjetivos, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
+import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import PalancaForm from '../PalancaForm/PalancaForm';
 import { formatPalancaId } from '../formatPalancaId';
 import PalancasHeader from './PalancasHeader/PalancasHeader';
@@ -30,6 +32,9 @@ type Operation = 'load' | 'save';
 type FormState = { mode: 'new' } | { mode: 'edit'; palanca: Palanca };
 
 const TOAST_DURATION_MS = 7000;
+const DEFAULT_PROGRESS = 0;
+
+const SUMMARY_STYLE: CSSProperties = { margin: `0 0 0 ${spacing.md}`, fontSize: typography.size[12], lineHeight: typography.lineHeight[12], fontWeight: typography.weight.semibold };
 
 const byNombre = (a: Palanca, b: Palanca): number => (a.Nombre ?? '').localeCompare(b.Nombre ?? '', 'es');
 
@@ -45,6 +50,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const [searchText, setSearchText] = React.useState<string>('');
 	const [lastOperation, setLastOperation] = React.useState<Operation>('load');
 	const [form, setForm] = React.useState<FormState | undefined>(undefined);
+	const [isObjetivoFormOpen, setIsObjetivoFormOpen] = React.useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
 
 	React.useEffect(() => {
@@ -74,6 +80,12 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 		setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', palanca.Nombre ?? ''));
 	};
 
+	const onObjetivoCreated = (objetivo: Objetivo): void => {
+		setIsObjetivoFormOpen(false);
+		getObjetivos();
+		setSuccessMessage(Utils.replaceAll(strings.ObjetivoCreated, '{0}', objetivo.Nombre ?? ''));
+	};
+
 	const search = searchText.trim().toLowerCase();
 	const visiblePalancas = state.items
 		.filter((palanca) => palanca.Activa === true)
@@ -94,6 +106,13 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 		}, {})
 		: undefined;
 	const otrasVpObjetivos = objetivos.filter((objetivo) => !isVpRrii(objetivo.VP?.Title));
+	const vpObjetivos = filterObjetivos(objetivos, 'delVp').filter((objetivo) => isVpRrii(objetivo.VP?.Title));
+	const activePalancasCount = state.items.filter((palanca) => palanca.Activa === true).length;
+	const summary = Utils.replaceAll(Utils.replaceAll(Utils.replaceAll(Utils.replaceAll(strings.PalancasSummary,
+		'{0}', String(activePalancasCount)),
+		'{1}', String(objetivos.length)),
+		'{2}', String(new Date().getFullYear())),
+		'{3}', `${DEFAULT_PROGRESS} %`);
 
 	const renderBody = (): React.ReactNode => {
 		if (state.isLoading && state.items.length === 0) {
@@ -101,6 +120,14 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 		}
 		if (state.error && lastOperation === 'load') {
 			return <MessageBar type="error" message={strings.PalancasLoadError} />;
+		}
+		if (filtro === 'delVp' || filtro === 'otrasVp') {
+			if (!objetivosReady) {
+				return objetivosError ? null : <Spinner />;
+			}
+			return filtro === 'delVp'
+				? <ObjetivosTable objetivos={vpObjetivos} variant="delVp" emptyText={strings.ObjetivosVpEmpty} onView={(id) => navigate(getObjetivoPath(id))} />
+				: <ObjetivosTable objetivos={otrasVpObjetivos} variant="otrasVp" emptyText={strings.OtherVpObjectivesEmpty} onView={(id) => navigate(getObjetivoPath(id))} />;
 		}
 		return (
 			<PalancasTable
@@ -125,33 +152,26 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 				canManage={canManage}
 				onNew={() => setForm({ mode: 'new' })}
 				canCreateObjetivo={canCreateObjetivo}
-				onNewObjetivo={() => navigate(getObjetivoNewPath())}
+				onNewObjetivo={() => setIsObjetivoFormOpen(true)}
 			/>
+			<p style={SUMMARY_STYLE}>{summary}</p>
 			<Tabs
-				variant="filled"
-				size="small"
+				className={styles.tabs}
+				variant="transparent"
 				ariaLabel={strings.ObjetivosFilterAriaLabel}
 				items={[
-					{ key: 'delVp', label: strings.ObjetivosFilterVp },
-					{ key: 'todos', label: strings.ObjetivosFilterAll }
+					{ key: 'todos', label: `${strings.ObjetivosFilterAll} (${activePalancasCount})` },
+					{ key: 'delVp', label: `${strings.ObjetivosFilterVp} (${vpObjetivos.length})` },
+					{ key: 'otrasVp', label: `${strings.OtherVpObjectivesSection} (${otrasVpObjetivos.length})` }
 				]}
 				value={filtro}
 				onChange={(key) => onFiltroChange(key as ObjetivosFiltro)}
 			/>
 			{objetivosError && <MessageBar type="error" message={strings.ObjetivosLoadError} />}
 			{renderBody()}
-			{filtro === 'todos' && objetivosReady && (
-				<Surface variant="outline" padding="comfortable" header={strings.OtherVpObjectivesSection}>
-					<ObjetivosTable
-						objetivos={otrasVpObjetivos}
-						variant="otrasVp"
-						emptyText={strings.OtherVpObjectivesEmpty}
-						onView={(id) => navigate(getObjetivoPath(id))}
-					/>
-				</Surface>
-			)}
 			{form?.mode === 'new' && <PalancaForm onSave={createPalanca} onCancel={() => setForm(undefined)} />}
 			{form?.mode === 'edit' && <PalancaForm palanca={form.palanca} onSave={updatePalanca} onCancel={() => setForm(undefined)} />}
+			{isObjetivoFormOpen && <ObjetivoFormPanel onCreated={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
 			<Toast
 				variant="success"
 				open={successMessage !== undefined}

@@ -7,10 +7,11 @@ import { Chip, MessageBar, Spinner, Toast } from '../../../../../core/ui/pattern
 import { FigmaIcon, spacing } from '../../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
-import { Palanca } from '../../../../../core/entities';
+import { Objetivo, Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { PALANCAS_PATH, getObjetivoNewPath, getObjetivoPath } from '../../ObjetivosVp/routes';
+import { PALANCAS_PATH, getObjetivoPath } from '../../ObjetivosVp/routes';
+import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { ObjetivosFiltro, filterObjetivos, isNotFoundError } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
@@ -64,6 +65,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	const names = useObjetivoNames();
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
+	const [isObjetivoFormOpen, setIsObjetivoFormOpen] = React.useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
 	const closeToast = React.useCallback((): void => setSuccessMessage(undefined), []);
 
@@ -84,6 +86,12 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 		await editItem(edited);
 		setIsFormOpen(false);
 		setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', edited.Nombre ?? ''));
+	};
+
+	const onObjetivoCreated = (objetivo: Objetivo): void => {
+		setIsObjetivoFormOpen(false);
+		getObjetivos();
+		setSuccessMessage(Utils.replaceAll(strings.ObjetivoCreated, '{0}', objetivo.Nombre ?? ''));
 	};
 
 	const palancaObjetivos = filterObjetivos(names.resolve(objetivoState.items), filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId);
@@ -112,7 +120,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 								style={ADD_BUTTON_STYLE}
 								iconLeft={<FigmaIcon name="add" size="sm" className={styles.boldWhiteIcon} />}
 								aria-label={strings.ObjetivoNew}
-								onClick={() => navigate(getObjetivoNewPath(palancaId))}
+								onClick={() => setIsObjetivoFormOpen(true)}
 							/>
 						</Tooltip>
 					)}
@@ -176,6 +184,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 			{isFormOpen && palanca && (
 				<PalancaForm palanca={palanca} onSave={updatePalanca} onCancel={() => setIsFormOpen(false)} />
 			)}
+			{isObjetivoFormOpen && <ObjetivoFormPanel initialPalancaId={palancaId} onCreated={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
 			<Toast
 				variant="success"
 				open={successMessage !== undefined}

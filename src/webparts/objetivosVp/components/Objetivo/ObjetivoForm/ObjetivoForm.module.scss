@@ -20,17 +20,64 @@
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.nameRow {
-	display: flex;
-	align-items: flex-end;
-}
-
-.grow {
-	flex: 1 1 auto;
-	min-width: 0;
-}
-
 .field {
 	display: flex;
 	flex-direction: column;
+}
+
+.panel.panel :global(.ms-Panel-main) {
+	width: 480px !important;
+}
+
+.panelContent {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.gridPanel {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.gridPair {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nameField {
+	display: flex;
+	flex-direction: column;
+}
+
+.nameLabel {
+	display: flex;
+	align-items: center;
+}
+
+.panelContent.panelContent .section > *,
+.panelContent.panelContent .gridPanel > *,
+.panelContent.panelContent .gridPair > *,
+.panelContent.panelContent .nameField > *,
+.panelContent.panelContent .field > * {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .nameLabel {
+	width: auto;
+}
+
+.panelContent.panelContent .multiline :global(.ms-TextField),
+.panelContent.panelContent .multiline :global(.ms-TextField-wrapper),
+.panelContent.panelContent .multiline :global(.ms-TextField-fieldGroup),
+.panelContent.panelContent .multiline textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .weight > div {
+	width: 100%;
+	box-sizing: border-box;
 }

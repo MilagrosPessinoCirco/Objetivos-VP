@@ -2,33 +2,32 @@ import * as React from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { Button, Dropdown, Input, Multiline, SpinButton, Switch } from '../../../../../core/ui/components';
-import { MessageBar, Picker, Spinner, Surface } from '../../../../../core/ui/patterns';
+import { MessageBar, Panel, Picker, Spinner, Surface } from '../../../../../core/ui/patterns';
 import { FigmaIcon, colors, spacing, typography } from '../../../../../core/ui/foundations';
-import useDepartamentoDataSource from '../../../../../core/api/Departamento/useDepartamentoDataSource';
-import useGerenciaDataSource from '../../../../../core/api/Gerencia/useGerenciaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
-import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
-import useVicepresidenciaDataSource from '../../../../../core/api/Vicepresidencia/useVicepresidenciaDataSource';
 import { Departamento, Gerencia, Objetivo, Palanca, Vicepresidencia } from '../../../../../core/entities';
 import { Duracion, Estado } from '../../../../../core/utils/Constants';
 import { ILookupValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { PALANCAS_PATH, PALANCA_QUERY_PARAM, getObjetivoPath } from '../../ObjetivosVp/routes';
+import SectionBand from '../../shared/SectionBand/SectionBand';
 import { PAGE_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import { formatObjetivoId, fromDateInput, isNotFoundError, isVpRrii, toDateInput } from '../objetivoUtils';
 import NombreAyuda from './NombreAyuda/NombreAyuda';
+import useObjetivoFormMasters from './useObjetivoFormMasters';
 import styles from './ObjetivoForm.module.scss';
 
 type LoadError = 'notFound' | 'error';
 
-interface IObjetivoFormBodyProps {
+export interface IObjetivoFormBodyProps {
 	vps: Vicepresidencia[];
 	departamentos: Departamento[];
 	gerencias: Gerencia[];
 	palancas: Palanca[];
 	initialPalancaId?: number;
 	objetivo?: Objetivo;
+	panel?: boolean;
 	onSave: (objetivo: Objetivo) => Promise<void>;
 	onCancel: () => void;
 }
@@ -41,6 +40,26 @@ interface INamed {
 const WEIGHT_MIN = 0;
 const WEIGHT_MAX = 100;
 const NAME_MAX_LENGTH = 255;
+const NAME_INPUT_ID = 'objetivo-nombre';
+
+const LABEL_STYLE: React.CSSProperties = {
+	fontFamily: typography.family.base,
+	fontSize: typography.size[14],
+	lineHeight: 1,
+	fontWeight: typography.weight.semibold,
+	color: colors.neutral.text
+};
+
+const SUBTITLE_STYLE: React.CSSProperties = {
+	display: 'block',
+	fontFamily: typography.family.base,
+	fontSize: typography.size[14],
+	lineHeight: typography.lineHeight[14],
+	fontWeight: typography.weight.regular,
+	color: colors.neutral.textMuted
+};
+
+const REQUIRED_STYLE: React.CSSProperties = { ...LABEL_STYLE, color: colors.semantic.error };
 
 const ERROR_STYLE: React.CSSProperties = {
 	fontFamily: typography.family.base,
@@ -66,7 +85,7 @@ const parseWeight = (value: string): number | undefined => {
 	return value.trim() === '' || !isFinite(weight) ? undefined : weight;
 };
 
-const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos, gerencias, palancas, initialPalancaId, objetivo, onSave, onCancel }) => {
+export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos, gerencias, palancas, initialPalancaId, objetivo, panel, onSave, onCancel }) => {
 	const isEdit = objetivo !== undefined;
 	const initialPalanca = objetivo?.Palanca?.Id ?? palancas.filter((palanca) => palanca.Id === initialPalancaId && palanca.Activa === true)[0]?.Id;
 
@@ -141,11 +160,11 @@ const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos
 		toSave.Departamento = findLookup(departamentos, departamentoId);
 		toSave.Gerencia = findLookup(gerencias, gerenciaId);
 		toSave.Estado = estado;
+		toSave.EsDeVp = esDeVp;
 		if (isRrii) {
 			toSave.Palanca = findLookup(palancas, palancaId);
 			toSave.Duracion = duracion === '' ? undefined : duracion;
 			toSave.Peso = pesoValue;
-			toSave.EsDeVp = esDeVp;
 			toSave.FechaInicio = fromDateInput(fechaInicio);
 			toSave.FechaCompromiso = fromDateInput(fechaCompromiso);
 		}
@@ -160,17 +179,19 @@ const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos
 		}
 	};
 
-	return (
-		<div className={styles.form} style={{ gap: spacing.lg }}>
-			<div className={styles.header} style={{ gap: spacing.md }}>
-				<Button variant="secondary" size="small" iconLeft={<FigmaIcon name="arrowCircle" />} onClick={onCancel}>
-					{strings.Back}
-				</Button>
-				<h1 style={PAGE_TITLE_STYLE}>{title}</h1>
-			</div>
-			<Surface variant="outline" padding="comfortable" header={strings.ObjetivoFormGeneralSection}>
+	const gridClass = panel ? styles.gridPanel : styles.grid;
+	const renderSection = (sectionTitle: string, children: React.ReactNode): React.ReactNode => panel
+		? <SectionBand title={sectionTitle}>{children}</SectionBand>
+		: <Surface variant="outline" padding="comfortable" header={sectionTitle}>{children}</Surface>;
+	const renderGeneral = (children: React.ReactNode): React.ReactNode => panel
+		? children
+		: <Surface variant="outline" padding="comfortable" header={strings.ObjetivoFormGeneralSection}>{children}</Surface>;
+
+	const content = (
+		<>
+			{renderGeneral((
 				<div className={styles.section} style={{ gap: spacing.lg }}>
-					<div className={styles.grid} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
+					<div className={gridClass} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
 						<Dropdown
 							label={strings.ObjetivoFormVp}
 							required
@@ -199,22 +220,32 @@ const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos
 							errorMessage={shown(issues.gerencia)}
 							onChange={(value) => setGerenciaId(toKey(value))}
 						/>
+						<Switch
+							label={strings.ObjetivoFormVpObjective}
+							labelPosition="top"
+							textOff
+							active={esDeVp}
+							onChange={setEsDeVp}
+						/>
 					</div>
-					<div className={styles.nameRow} style={{ gap: spacing.xs }}>
-						<div className={styles.grow}>
-							<Input
-								label={strings.ObjetivoFormName}
-								required
-								maxLength={NAME_MAX_LENGTH}
-								placeholder={strings.ObjetivoFormNamePlaceholder}
-								value={nombre}
-								errorMessage={shown(issues.nombre)}
-								onChange={(event) => setNombre(event.target.value)}
-							/>
+					<div className={styles.nameField} style={{ gap: spacing.xs }}>
+						<div className={styles.nameLabel} style={{ gap: spacing.xs }}>
+							<label htmlFor={NAME_INPUT_ID} style={LABEL_STYLE}>{strings.ObjetivoFormName}</label>
+							<span style={REQUIRED_STYLE}>*</span>
+							<NombreAyuda />
 						</div>
-						<NombreAyuda />
+						<Input
+							id={NAME_INPUT_ID}
+							required
+							maxLength={NAME_MAX_LENGTH}
+							placeholder={strings.ObjetivoFormNamePlaceholder}
+							value={nombre}
+							errorMessage={shown(issues.nombre)}
+							onChange={(event) => setNombre(event.target.value)}
+						/>
 					</div>
 					<Multiline
+						className={styles.multiline}
 						label={strings.ObjetivoFormDescription}
 						required
 						placeholder={strings.ObjetivoFormDescriptionPlaceholder}
@@ -222,7 +253,7 @@ const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos
 						errorMessage={shown(issues.descripcion)}
 						onChange={(event) => setDescripcion(event.target.value)}
 					/>
-					<div className={styles.grid} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
+					<div className={gridClass} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
 						<Dropdown
 							label={strings.ObjetivoFormStatus}
 							required
@@ -232,71 +263,101 @@ const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, departamentos
 						/>
 					</div>
 				</div>
-			</Surface>
-			{isRrii && (
-				<Surface variant="outline" padding="comfortable" header={strings.ObjetivoFormPlanningSection}>
-					<div className={styles.section} style={{ gap: spacing.lg }}>
-						<div className={styles.grid} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
-							<Dropdown
-								label={strings.ObjetivoFormLever}
+			))}
+			{isRrii && renderSection(strings.ObjetivoFormPlanningSection, (
+				<div className={styles.section} style={{ gap: spacing.lg }}>
+					<div className={gridClass} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
+						<Dropdown
+							label={strings.ObjetivoFormLever}
+							required
+							placeholder={strings.ObjetivoFormSelect}
+							options={palancaOptions}
+							value={palancaId}
+							errorMessage={shown(issues.palanca)}
+							onChange={(value) => setPalancaId(toKey(value))}
+						/>
+						<Dropdown
+							label={strings.ObjetivoFormDuration}
+							required
+							placeholder={strings.ObjetivoFormSelect}
+							options={duracionOptions}
+							value={duracion}
+							errorMessage={shown(issues.duracion)}
+							onChange={(value) => setDuracion(toEnumValue(Object.values(Duracion), toKey(value)) ?? '')}
+						/>
+						<SpinButton
+							className={styles.weight}
+							label={strings.ObjetivoFormWeight}
+							placeholder={strings.ObjetivoFormWeightPlaceholder}
+							required
+							min={WEIGHT_MIN}
+							max={WEIGHT_MAX}
+							value={peso}
+							errorMessage={shown(issues.peso)}
+							onChange={(event) => setPeso(event.target.value)}
+						/>
+					</div>
+					<div className={panel ? styles.gridPair : styles.grid} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
+						<div className={styles.field} style={{ gap: spacing.xs }}>
+							<Picker
+								mode="date"
+								label={strings.ObjetivoFormStartDate}
 								required
-								placeholder={strings.ObjetivoFormSelect}
-								options={palancaOptions}
-								value={palancaId}
-								errorMessage={shown(issues.palanca)}
-								onChange={(value) => setPalancaId(toKey(value))}
+								value={fechaInicio}
+								onChange={setFechaInicio}
 							/>
-							<Dropdown
-								label={strings.ObjetivoFormDuration}
-								required
-								placeholder={strings.ObjetivoFormSelect}
-								options={duracionOptions}
-								value={duracion}
-								errorMessage={shown(issues.duracion)}
-								onChange={(value) => setDuracion(toEnumValue(Object.values(Duracion), toKey(value)) ?? '')}
-							/>
-							<SpinButton
-								label={strings.ObjetivoFormWeight}
-								required
-								min={WEIGHT_MIN}
-								max={WEIGHT_MAX}
-								value={peso}
-								errorMessage={shown(issues.peso)}
-								onChange={(event) => setPeso(event.target.value)}
-							/>
+							{shown(issues.fechaInicio) && <span role="alert" style={ERROR_STYLE}>{issues.fechaInicio}</span>}
 						</div>
-						<div className={styles.grid} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
-							<Switch
-								label={strings.ObjetivoFormVpObjective}
-								labelPosition="top"
-								active={esDeVp}
-								onChange={setEsDeVp}
+						<div className={styles.field} style={{ gap: spacing.xs }}>
+							<Picker
+								mode="date"
+								label={strings.ObjetivoFormCommitmentDate}
+								required
+								value={fechaCompromiso}
+								onChange={setFechaCompromiso}
 							/>
-							<div className={styles.field} style={{ gap: spacing.xs }}>
-								<Picker
-									mode="date"
-									label={strings.ObjetivoFormStartDate}
-									required
-									value={fechaInicio}
-									onChange={setFechaInicio}
-								/>
-								{shown(issues.fechaInicio) && <span role="alert" style={ERROR_STYLE}>{issues.fechaInicio}</span>}
-							</div>
-							<div className={styles.field} style={{ gap: spacing.xs }}>
-								<Picker
-									mode="date"
-									label={strings.ObjetivoFormCommitmentDate}
-									required
-									value={fechaCompromiso}
-									onChange={setFechaCompromiso}
-								/>
-								{shown(issues.fechaCompromiso) && <span role="alert" style={ERROR_STYLE}>{issues.fechaCompromiso}</span>}
-							</div>
+							{shown(issues.fechaCompromiso) && <span role="alert" style={ERROR_STYLE}>{issues.fechaCompromiso}</span>}
 						</div>
 					</div>
-				</Surface>
-			)}
+				</div>
+			))}
 			{saveFailed && <MessageBar type="error" message={strings.ObjetivoSaveError} />}
+		</>
+	);
+
+	if (panel) {
+		// El Panel del Design System tipa title como string, pero Fluent renderiza cualquier nodo en el encabezado.
+		const newTitle = (
+			<>
+				{strings.ObjetivoNew}
+				<span style={SUBTITLE_STYLE}>{strings.ObjetivoFormSubtitle}</span>
+			</>
+		) as unknown as string;
+		return (
+			<Panel
+				open
+				className={styles.panel}
+				title={isEdit ? title : newTitle}
+				onClose={onCancel}
+				primaryAction={<Button variant="secondary" onClick={onCancel}>{strings.Cancel}</Button>}
+				secondaryAction={<Button variant="primary" disabled={isSaving} onClick={save}>{strings.Save}</Button>}
+			>
+				<div className={styles.panelContent} style={{ gap: spacing.lg, paddingRight: spacing.lg }}>
+					{content}
+				</div>
+			</Panel>
+		);
+	}
+
+	return (
+		<div className={styles.form} style={{ gap: spacing.lg }}>
+			<div className={styles.header} style={{ gap: spacing.md }}>
+				<Button variant="secondary" size="small" iconLeft={<FigmaIcon name="arrowCircle" />} onClick={onCancel}>
+					{strings.Back}
+				</Button>
+				<h1 style={PAGE_TITLE_STYLE}>{title}</h1>
+			</div>
+			{content}
 			<div className={styles.footer} style={{ gap: spacing.lg }}>
 				<Button variant="secondary" onClick={onCancel}>
 					{strings.Cancel}
@@ -316,17 +377,12 @@ const ObjetivoForm: React.FC = () => {
 	const isValidId = Number.isInteger(objetivoId) && objetivoId > 0;
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
-	const [vpState, getVps] = useVicepresidenciaDataSource();
-	const [departamentoState, getDepartamentos] = useDepartamentoDataSource();
-	const [gerenciaState, getGerencias] = useGerenciaDataSource();
-	const [palancaState, getPalancas] = usePalancaDataSource();
+	const masters = useObjetivoFormMasters();
 	const [objetivoState, , addItem, editItem, , getById] = useObjetivoDataSource();
-	const [mastersReady, setMastersReady] = React.useState<boolean>(false);
 	const [objetivoError, setObjetivoError] = React.useState<LoadError | undefined>(undefined);
 
 	React.useEffect(() => {
 		setObjetivoError(undefined);
-		Promise.all([getVps(), getDepartamentos(), getGerencias(), getPalancas()]).then(() => setMastersReady(true));
 		if (!isEdit) {
 			return;
 		}
@@ -351,7 +407,6 @@ const ObjetivoForm: React.FC = () => {
 	};
 
 	const objetivo = isEdit && objetivoState.item?.Id === objetivoId ? objetivoState.item : undefined;
-	const hasMastersError = vpState.error || departamentoState.error || gerenciaState.error || palancaState.error;
 
 	if (objetivoError === 'notFound') {
 		return <MessageBar type="error" message={strings.ObjetivoNotFound} />;
@@ -359,10 +414,10 @@ const ObjetivoForm: React.FC = () => {
 	if (objetivoError === 'error') {
 		return <MessageBar type="error" message={strings.ObjetivoLoadError} />;
 	}
-	if (hasMastersError) {
+	if (masters.error) {
 		return <MessageBar type="error" message={strings.ObjetivoFormLoadError} />;
 	}
-	if (!mastersReady || (isEdit && !objetivo)) {
+	if (!masters.ready || (isEdit && !objetivo)) {
 		return <Spinner />;
 	}
 
@@ -370,10 +425,10 @@ const ObjetivoForm: React.FC = () => {
 		<div style={{ padding: spacing.xl }}>
 			<ObjetivoFormBody
 				key={objetivoId}
-				vps={vpState.items}
-				departamentos={departamentoState.items}
-				gerencias={gerenciaState.items}
-				palancas={palancaState.items}
+				vps={masters.vps}
+				departamentos={masters.departamentos}
+				gerencias={masters.gerencias}
+				palancas={masters.palancas}
 				initialPalancaId={initialPalancaId > 0 ? initialPalancaId : undefined}
 				objetivo={objetivo}
 				onSave={save}

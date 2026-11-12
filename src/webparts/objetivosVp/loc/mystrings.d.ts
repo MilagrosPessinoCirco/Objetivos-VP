@@ -62,6 +62,8 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivosFilterAriaLabel: string;
 	ObjetivosFilterVp: string;
 	ObjetivosFilterAll: string;
+	ObjetivosVpEmpty: string;
+	PalancasSummary: string;
 	PalancaColumnObjectives: string;
 	ObjetivoColumnId: string;
 	ObjetivoColumnName: string;
@@ -109,8 +111,10 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoFormDescriptionPlaceholder: string;
 	ObjetivoFormLever: string;
 	ObjetivoFormDuration: string;
+	ObjetivoFormWeightPlaceholder: string;
 	ObjetivoFormWeight: string;
 	ObjetivoFormVpObjective: string;
+	ObjetivoFormSubtitle: string;
 	ObjetivoFormStartDate: string;
 	ObjetivoFormCommitmentDate: string;
 	ObjetivoFormStatus: string;
