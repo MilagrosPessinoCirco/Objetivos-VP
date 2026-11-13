@@ -35,7 +35,9 @@ type TableRow = {
 const EXPAND_COLUMN_WIDTH = 44;
 const ID_COLUMN_WIDTH = 64;
 const OBJECTIVES_COLUMN_WIDTH = 84;
-const ACTIONS_COLUMN_WIDTH = 160;
+const ACTIONS_COLUMN_WIDTH = 84;
+const NAME_COLUMN_MIN_WIDTH = 150;
+const NAME_COLUMN_SHARE = 3;
 const EXPAND_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 20, minWidth: 20, padding: 0 };
 
 const NESTED_STYLE: CSSProperties = {
@@ -46,6 +48,22 @@ const NESTED_STYLE: CSSProperties = {
 
 const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, canManage, objetivosByPalanca, onView, onViewObjetivo, onEdit }) => {
 	const [expanded, setExpanded] = React.useState<number[]>([]);
+	const containerRef = React.useRef<HTMLDivElement>(null);
+	const [containerWidth, setContainerWidth] = React.useState<number>(0);
+
+	React.useEffect(() => {
+		const container = containerRef.current;
+		if (!container) {
+			return undefined;
+		}
+		setContainerWidth(container.clientWidth);
+		if (typeof ResizeObserver === 'undefined') {
+			return undefined;
+		}
+		const observer = new ResizeObserver((entries) => setContainerWidth(entries[0].contentRect.width));
+		observer.observe(container);
+		return () => observer.disconnect();
+	}, []);
 
 	const toggle = (id: number): void =>
 		setExpanded(expanded.indexOf(id) >= 0 ? expanded.filter((item) => item !== id) : expanded.concat([id]));
@@ -114,26 +132,28 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 		);
 	};
 
+	// DetailsList recuerda el ancho calculado de cada columna: por eso las tablas se montan recién medido el ancho y se remontan si cambia (key).
+	// Palanca ocupa 1/3 del ancho libre y Descripción el resto (1fr / 2fr en el prototipo): el Table del DS no admite proporciones.
+	const freeWidth = containerWidth - EXPAND_COLUMN_WIDTH - ID_COLUMN_WIDTH - OBJECTIVES_COLUMN_WIDTH - ACTIONS_COLUMN_WIDTH;
+	const nameWidth = containerWidth > 0 ? Math.max(NAME_COLUMN_MIN_WIDTH, Math.floor(freeWidth / NAME_COLUMN_SHARE)) : undefined;
+
 	const columns: ITableColumn<TableRow>[] = [
 		{ key: 'expandir', header: '', width: EXPAND_COLUMN_WIDTH, render: (_value, row) => renderExpand(row) },
 		{ key: 'id', header: strings.PalancaColumnId, width: ID_COLUMN_WIDTH },
-		{ key: 'nombre', header: strings.PalancaColumnName, render: (value) => <span style={{ fontWeight: typography.weight.bold }}>{String(value)}</span> },
+		{ key: 'nombre', header: strings.PalancaColumnName, width: nameWidth, render: (value) => <span style={{ fontWeight: typography.weight.bold }}>{String(value)}</span> },
 		{ key: 'descripcion', header: strings.PalancaColumnDescription, render: (value) => <span className={styles.description}>{String(value)}</span> },
 		{ key: 'objetivos', header: strings.PalancaColumnObjectives, width: OBJECTIVES_COLUMN_WIDTH },
 		{ key: 'acciones', header: strings.PalancaColumnActions, width: ACTIONS_COLUMN_WIDTH, render: (_value, row) => renderActions(row) }
 	];
 
-	if (palancas.length === 0) {
-		return <Table<TableRow> columns={columns} rows={[]} getRowKey={(row) => row.key} emptyText={emptyText} />;
-	}
-
 	return (
-		<div>
-			{palancas.map((palanca, index) => {
+		<div ref={containerRef}>
+			{containerWidth > 0 && palancas.length === 0 && <Table<TableRow> columns={columns} rows={[]} getRowKey={(row) => row.key} emptyText={emptyText} />}
+			{containerWidth > 0 && palancas.map((palanca, index) => {
 				const row = rowOf(palanca);
 				const objetivos = objetivosByPalanca && expanded.indexOf(palanca.Id as number) >= 0 ? objetivosByPalanca[palanca.Id as number] ?? [] : undefined;
 				return (
-					<div key={row.key} className={index === 0 ? undefined : styles.withoutHeader}>
+					<div key={`${row.key}-${nameWidth}`} className={index === 0 ? undefined : styles.withoutHeader}>
 						<Table<TableRow> columns={columns} rows={[row]} getRowKey={(item) => item.key} emptyText={emptyText} />
 						{objetivos && (
 							<div className={styles.nested} style={NESTED_STYLE}>

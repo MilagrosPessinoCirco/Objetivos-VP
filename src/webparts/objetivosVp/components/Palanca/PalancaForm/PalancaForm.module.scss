@@ -14,6 +14,10 @@
 	box-sizing: border-box;
 }
 
-.note {
-	margin: 0;
+.fields.fields .description :global(.ms-TextField),
+.fields.fields .description :global(.ms-TextField-wrapper),
+.fields.fields .description :global(.ms-TextField-fieldGroup),
+.fields.fields .description textarea {
+	width: 100%;
+	box-sizing: border-box;
 }

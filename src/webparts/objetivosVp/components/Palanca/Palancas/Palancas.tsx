@@ -12,7 +12,7 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
 import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
-import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, isVpRrii } from '../../Objetivo/objetivoUtils';
+import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, formatObjetivoId, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
@@ -41,6 +41,10 @@ const byNombre = (a: Palanca, b: Palanca): number => (a.Nombre ?? '').localeComp
 const matchesSearch = (palanca: Palanca, search: string): boolean =>
 	formatPalancaId(palanca.Id).toLowerCase().indexOf(search) >= 0 ||
 	(palanca.Nombre ?? '').toLowerCase().indexOf(search) >= 0;
+
+const matchesObjetivo = (objetivo: Objetivo, search: string): boolean =>
+	formatObjetivoId(objetivo.Id).toLowerCase().indexOf(search) >= 0 ||
+	(objetivo.Nombre ?? '').toLowerCase().indexOf(search) >= 0;
 
 const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filtro, onFiltroChange }) => {
 	const [state, getItems, addItem, editItem] = usePalancaDataSource();
@@ -87,21 +91,31 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	};
 
 	const search = searchText.trim().toLowerCase();
-	const visiblePalancas = state.items
-		.filter((palanca) => palanca.Activa === true)
-		.filter((palanca) => search === '' || matchesSearch(palanca, search))
-		.sort(byNombre);
 	const emptyText = search === '' ? strings.PalancasEmpty : strings.PalancasEmptySearch;
+	const objetivosEmptyText = (defaultText: string): string => search === '' ? defaultText : strings.ObjetivosEmptySearch;
+	const bySearch = (items: Objetivo[]): Objetivo[] => search === '' ? items : items.filter((objetivo) => matchesObjetivo(objetivo, search));
 
 	const objetivosError = objetivoState.error || names.error;
 	const objetivosReady = !objetivosError && !objetivoState.isLoading && names.ready;
 	const objetivos = objetivosReady ? names.resolve(objetivoState.items) : [];
+	const objetivosOfPalanca = (palancaId: number | undefined): Objetivo[] =>
+		filterObjetivos(objetivos, filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId);
+
+	// Como en el prototipo: una palanca se muestra si coincide ella (con todos sus objetivos, salvo que alguno coincida) o alguno de sus objetivos (solo los que coinciden).
+	const palancaRows = state.items
+		.filter((palanca) => palanca.Activa === true)
+		.map((palanca) => {
+			const own = objetivosReady ? objetivosOfPalanca(palanca.Id) : undefined;
+			const matching = own ? bySearch(own) : [];
+			const visibleObjetivos = own && search !== '' && matchesSearch(palanca, search) && matching.length === 0 ? own : matching;
+			return { palanca, visibleObjetivos: own ? (search === '' ? own : visibleObjetivos) : undefined };
+		})
+		.filter(({ palanca, visibleObjetivos }) => search === '' || matchesSearch(palanca, search) || (visibleObjetivos?.length ?? 0) > 0)
+		.sort((a, b) => byNombre(a.palanca, b.palanca));
+	const visiblePalancas = palancaRows.map((row) => row.palanca);
 	const objetivosByPalanca = objetivosReady
-		? filterObjetivos(objetivos, filtro).reduce<Record<number, Objetivo[]>>((byPalanca, objetivo) => {
-			const palancaId = objetivo.Palanca?.Id;
-			if (palancaId !== undefined) {
-				byPalanca[palancaId] = (byPalanca[palancaId] ?? []).concat([objetivo]);
-			}
+		? palancaRows.reduce<Record<number, Objetivo[]>>((byPalanca, row) => {
+			byPalanca[row.palanca.Id as number] = row.visibleObjetivos ?? [];
 			return byPalanca;
 		}, {})
 		: undefined;
@@ -126,8 +140,8 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 				return objetivosError ? null : <Spinner />;
 			}
 			return filtro === 'delVp'
-				? <ObjetivosTable objetivos={vpObjetivos} variant="delVp" emptyText={strings.ObjetivosVpEmpty} onView={(id) => navigate(getObjetivoPath(id))} />
-				: <ObjetivosTable objetivos={otrasVpObjetivos} variant="otrasVp" emptyText={strings.OtherVpObjectivesEmpty} onView={(id) => navigate(getObjetivoPath(id))} />;
+				? <ObjetivosTable objetivos={bySearch(vpObjetivos)} variant="delVp" emptyText={objetivosEmptyText(strings.ObjetivosVpEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />
+				: <ObjetivosTable objetivos={bySearch(otrasVpObjetivos)} variant="otrasVp" emptyText={objetivosEmptyText(strings.OtherVpObjectivesEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />;
 		}
 		return (
 			<PalancasTable

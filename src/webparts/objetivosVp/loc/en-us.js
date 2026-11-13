@@ -66,6 +66,7 @@ define([], function () {
 		"ObjetivosFilterAriaLabel": "Objetivos a mostrar",
 		"ObjetivosFilterVp": "Objetivos del VP",
 		"ObjetivosFilterAll": "Todas las palancas",
+		"ObjetivosEmptySearch": "No hay objetivos con esta búsqueda.",
 		"ObjetivosVpEmpty": "No hay objetivos del VP cargados.",
 		"PalancasSummary": "{0} palancas activas · {1} objetivos · Avance de la VP {2}: {3}",
 		"PalancaColumnObjectives": "Objetivos",

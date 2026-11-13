@@ -65,6 +65,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivosFilterAriaLabel: string;
 	ObjetivosFilterVp: string;
 	ObjetivosFilterAll: string;
+	ObjetivosEmptySearch: string;
 	ObjetivosVpEmpty: string;
 	PalancasSummary: string;
 	PalancaColumnObjectives: string;

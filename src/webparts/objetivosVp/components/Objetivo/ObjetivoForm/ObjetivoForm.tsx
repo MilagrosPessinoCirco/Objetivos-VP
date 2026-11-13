@@ -8,7 +8,7 @@ import { Duracion, Estado } from '../../../../../core/utils/Constants';
 import { ILookupValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { getColorStep } from '../../shared/getColorStep';
+import { buildPanelTitle } from '../../shared/panelTitle';
 import SectionBand from '../../shared/SectionBand/SectionBand';
 import { formatObjetivoId, fromDateInput, isVpRrii, toDateInput } from '../objetivoUtils';
 import NombreAyuda from './NombreAyuda/NombreAyuda';
@@ -41,15 +41,6 @@ const LABEL_STYLE: React.CSSProperties = {
 	lineHeight: 1,
 	fontWeight: typography.weight.semibold,
 	color: colors.neutral.text
-};
-
-const SUBTITLE_STYLE: React.CSSProperties = {
-	display: 'block',
-	fontFamily: typography.family.base,
-	fontSize: typography.size[12],
-	lineHeight: typography.lineHeight[12],
-	fontWeight: typography.weight.regular,
-	color: getColorStep('Neutral', '600').value
 };
 
 const REQUIRED_STYLE: React.CSSProperties = { ...LABEL_STYLE, color: colors.semantic.error };
@@ -131,13 +122,10 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 	const hasIssues = Object.values(issues).some((issue) => issue !== undefined);
 	const shown = (issue: string | undefined): string | undefined => (submitted ? issue : undefined);
 
-	// El Panel del Design System tipa title como string, pero Fluent renderiza cualquier nodo en el encabezado.
-	const title = (
-		<>
-			{isEdit ? Utils.replaceAll(strings.ObjetivoFormEditTitle, '{0}', formatObjetivoId(objetivo?.Id)) : strings.ObjetivoNew}
-			<span style={SUBTITLE_STYLE}>{isEdit ? objetivo?.Nombre : strings.ObjetivoFormSubtitle}</span>
-		</>
-	) as unknown as string;
+	const title = buildPanelTitle(
+		isEdit ? Utils.replaceAll(strings.ObjetivoFormEditTitle, '{0}', formatObjetivoId(objetivo?.Id)) : strings.ObjetivoNew,
+		isEdit ? objetivo?.Nombre : strings.ObjetivoFormSubtitle
+	);
 
 	const onDepartamentoChange = (value: string | string[]): void => {
 		setDepartamentoId(toKey(value));

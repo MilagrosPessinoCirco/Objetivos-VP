@@ -2,10 +2,11 @@ import * as React from 'react';
 
 import { Button, Dropdown, Input, Multiline } from '../../../../../core/ui/components';
 import { MessageBar, Panel } from '../../../../../core/ui/patterns';
-import { spacing, typography } from '../../../../../core/ui/foundations';
+import { spacing } from '../../../../../core/ui/foundations';
 import { Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { buildPanelTitle } from '../../shared/panelTitle';
 import { formatPalancaId } from '../formatPalancaId';
 import styles from './PalancaForm.module.scss';
 
@@ -29,9 +30,10 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 	const nombreError = submitted && nombre.trim() === '' ? strings.RequiredField : undefined;
 	const descripcionError = submitted && descripcion.trim() === '' ? strings.RequiredField : undefined;
 
-	const title = palanca
-		? Utils.replaceAll(strings.PalancaFormEditTitle, '{0}', formatPalancaId(palanca.Id))
-		: strings.PalancaFormNewTitle;
+	const title = buildPanelTitle(
+		palanca ? Utils.replaceAll(strings.PalancaFormEditTitle, '{0}', formatPalancaId(palanca.Id)) : strings.PalancaFormNewTitle,
+		strings.PalancaFormNote
+	);
 
 	const save = async (): Promise<void> => {
 		setSubmitted(true);
@@ -77,7 +79,6 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 			}
 		>
 			<div className={styles.fields} style={{ gap: spacing.lg }}>
-				<p className={styles.note} style={{ fontSize: typography.size[14], lineHeight: typography.lineHeight[14] }}>{strings.PalancaFormNote}</p>
 				{saveFailed && <MessageBar type="error" message={strings.PalancaSaveError} />}
 				<Input
 					label={strings.PalancaFormName}
@@ -87,6 +88,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 					errorMessage={nombreError}
 				/>
 				<Multiline
+					className={styles.description}
 					label={strings.PalancaFormDescription}
 					required
 					value={descripcion}
