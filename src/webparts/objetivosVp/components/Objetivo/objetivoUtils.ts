@@ -2,6 +2,8 @@ import type { ChipColor } from '../../../../core/ui/patterns';
 import { Objetivo } from '../../../../core/entities';
 import { Estado, VP_RRII_NOMBRE } from '../../../../core/utils/Constants';
 
+export const DEFAULT_PROGRESS = 0;
+
 const OBJETIVO_ID_PREFIX = 'OBJ-';
 const ID_MIN_DIGITS = 2;
 const NOT_FOUND_STATUS = 404;

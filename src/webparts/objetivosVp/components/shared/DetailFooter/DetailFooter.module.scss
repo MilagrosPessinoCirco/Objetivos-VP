@@ -1,0 +1,14 @@
+.footer {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 12;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 16px 24px;
+	border-top: 1px solid var(--ds-color-neutral-border);
+	background: var(--ds-color-neutral-white);
+	box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}

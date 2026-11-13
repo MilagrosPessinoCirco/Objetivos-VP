@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Tooltip } from '../../../../../core/ui/components';
-import { Chip, MessageBar, Spinner, Toast } from '../../../../../core/ui/patterns';
+import { MessageBar, Spinner, Toast } from '../../../../../core/ui/patterns';
 import { FigmaIcon, spacing } from '../../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
@@ -17,6 +17,9 @@ import { ObjetivosFiltro, filterObjetivos, isNotFoundError } from '../../Objetiv
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import { formatPalancaId } from '../formatPalancaId';
 import BackButton from '../../shared/BackButton/BackButton';
+import DetailFooter from '../../shared/DetailFooter/DetailFooter';
+import HeaderChip from '../../shared/HeaderChip/HeaderChip';
+import LocationButton from '../../shared/LocationButton/LocationButton';
 import SectionBand from '../../shared/SectionBand/SectionBand';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
@@ -35,7 +38,7 @@ type LoadError = 'notFound' | 'error';
 
 const TOAST_DURATION_MS = 7000;
 
-const ACTIVE_CHIP_COLOR_STYLE: CSSProperties = { color: getColorStep('Green', '800').value };
+const ACTIVE_CHIP_TEXT_COLOR = getColorStep('Green', '800').value;
 
 const ADD_BUTTON_STYLE: CSSProperties = {
 	width: 22,
@@ -47,11 +50,6 @@ const ADD_BUTTON_STYLE: CSSProperties = {
 	backgroundColor: getColorStep('Primary', '500').value,
 	borderColor: getColorStep('Primary', '500').value
 };
-
-const LOCATION_BUTTON_STYLE = {
-	'--location-bg': getColorStep('Tertiary', '600').value,
-	'--location-bg-hover': getColorStep('Tertiary', '700').value
-} as CSSProperties;
 
 const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
 
@@ -150,28 +148,17 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 						<h1 style={HEADER_TITLE_STYLE}>
 							{Utils.replaceAll(Utils.replaceAll(strings.PalancaDetailTitle, '{0}', formatPalancaId(palanca.Id)), '{1}', palanca.Nombre ?? '')}
 						</h1>
-						<span style={palanca.Activa ? ACTIVE_CHIP_COLOR_STYLE : undefined}>
-							<Chip
-								size="small"
-								className={styles.chip}
-								clickable={false}
-								color={palanca.Activa ? 'success' : 'neutral'}
-								label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
-							/>
-						</span>
-						<Button
-							variant="primary"
-							className={styles.location}
-							style={LOCATION_BUTTON_STYLE}
-							iconLeft={<FigmaIcon name="chevronDown" className={styles.whiteIcon} />}
-						>
-							{strings.PalancaLocationButton}
-						</Button>
+						<HeaderChip
+							color={palanca.Activa ? 'success' : 'neutral'}
+							textColor={palanca.Activa ? ACTIVE_CHIP_TEXT_COLOR : undefined}
+							label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
+						/>
+						<LocationButton />
 					</>
 				)}
 			</div>
 			{renderBody()}
-			<div className={styles.footer} style={{ gap: spacing.lg }}>
+			<DetailFooter>
 				<Button variant="secondary" onClick={goPalancas}>
 					{strings.Cancel}
 				</Button>
@@ -180,7 +167,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 						{strings.Edit}
 					</Button>
 				)}
-			</div>
+			</DetailFooter>
 			{isFormOpen && palanca && (
 				<PalancaForm palanca={palanca} onSave={updatePalanca} onCancel={() => setIsFormOpen(false)} />
 			)}

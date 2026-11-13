@@ -11,7 +11,7 @@ import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
 import { ICON_BUTTON_STYLE } from '../../shared/iconButtonStyle';
-import { formatObjetivoId, getEstadoChipColor } from '../objetivoUtils';
+import { DEFAULT_PROGRESS, formatObjetivoId, getEstadoChipColor } from '../objetivoUtils';
 import styles from './ObjetivosTable.module.scss';
 
 export interface IObjetivosTableProps {
@@ -42,7 +42,6 @@ const WEIGHT_WIDTH = 60;
 const STATUS_WIDTH = 104;
 const PROGRESS_WIDTH = 90;
 const ACTIONS_WIDTH = 48;
-const DEFAULT_PROGRESS = 0;
 const PROGRESS_STYLE: CSSProperties = { fontWeight: typography.weight.bold, color: getColorStep('Red', '600').value };
 const ACTION_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 24, minWidth: 24, padding: 0 };
 

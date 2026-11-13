@@ -1,16 +1,22 @@
 import * as React from 'react';
+import type { CSSProperties } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../../../core/ui/components';
-import { Chip, MessageBar, Spinner } from '../../../../../core/ui/patterns';
-import { FigmaIcon, spacing } from '../../../../../core/ui/foundations';
+import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
+import { spacing, typography } from '../../../../../core/ui/foundations';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { PALANCAS_PATH, getObjetivoEditPath } from '../../ObjetivosVp/routes';
-import { PAGE_TITLE_STYLE } from '../../shared/pageTitleStyle';
+import BackButton from '../../shared/BackButton/BackButton';
+import DetailFooter from '../../shared/DetailFooter/DetailFooter';
+import HeaderChip from '../../shared/HeaderChip/HeaderChip';
+import LocationButton from '../../shared/LocationButton/LocationButton';
+import { getColorStep } from '../../shared/getColorStep';
+import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
-import { formatObjetivoId, getEstadoChipColor, isNotFoundError } from '../objetivoUtils';
+import { DEFAULT_PROGRESS, formatObjetivoId, getEstadoChipColor, isNotFoundError, isVpRrii } from '../objetivoUtils';
 import useObjetivoNames from '../useObjetivoNames';
 import ObjetivoInfo from './ObjetivoInfo/ObjetivoInfo';
 import styles from './ObjetivoDetalle.module.scss';
@@ -25,7 +31,15 @@ interface IObjetivoLocationState {
 	toast?: string;
 }
 
+const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
 const NOTICE_DURATION_MS = 7000;
+
+const PROGRESS_LABEL_STYLE: CSSProperties = {
+	fontFamily: typography.family.base,
+	fontSize: typography.size[14],
+	lineHeight: typography.lineHeight[14]
+};
+const PROGRESS_VALUE_STYLE: CSSProperties = { fontWeight: typography.weight.bold, color: getColorStep('Red', '600').value };
 
 const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) => {
 	const { id } = useParams<{ id: string }>();
@@ -70,7 +84,7 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 		if (!objetivo) {
 			return state.isLoading ? <Spinner /> : null;
 		}
-		return <ObjetivoInfo objetivo={objetivo} />;
+		return <ObjetivoInfo objetivo={objetivo} onEdit={canEditObjetivo ? () => navigate(getObjetivoEditPath(objetivoId)) : undefined} />;
 	};
 
 	return (
@@ -80,36 +94,42 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 					<MessageBar className={styles.noticeBar} type="success" darkMode={false} message={noticeMessage} dismissible onClose={closeNotice} />
 				</div>
 			)}
-			<div className={styles.detalle} style={{ gap: spacing.lg, padding: spacing.xl }}>
+			<div className={styles.detalle} style={{ gap: spacing.lg, padding: PAGE_PADDING }}>
 				<PalancaBreadcrumb
 					palancaNombre={objetivo?.Palanca?.Title}
 					palancaId={objetivo?.Palanca?.Id}
 					objetivoNombre={objetivo?.Nombre}
 				/>
 				<div className={styles.header} style={{ gap: spacing.md }}>
-					<Button variant="secondary" size="small" iconLeft={<FigmaIcon name="arrowCircle" />} onClick={goPalancas}>
-						{strings.Back}
-					</Button>
+					<BackButton onClick={goPalancas} />
 					{objetivo && (
 						<>
-							<h1 style={PAGE_TITLE_STYLE}>
+							<h1 style={HEADER_TITLE_STYLE}>
 								{Utils.replaceAll(Utils.replaceAll(strings.ObjetivoDetailTitle, '{0}', formatObjetivoId(objetivo.Id)), '{1}', objetivo.Nombre ?? '')}
 							</h1>
-							<Chip size="small" clickable={false} color={getEstadoChipColor(objetivo.Estado)} label={objetivo.Estado ?? ''} />
+							<HeaderChip color={getEstadoChipColor(objetivo.Estado)} label={objetivo.Estado ?? ''} />
+							<div className={styles.headerEnd} style={{ gap: spacing.md }}>
+								{isVpRrii(objetivo.VP?.Title) && (
+									<span style={PROGRESS_LABEL_STYLE}>
+										{strings.ObjetivoDetailProgress} <b style={PROGRESS_VALUE_STYLE}>{`${DEFAULT_PROGRESS}%`}</b>
+									</span>
+								)}
+								<LocationButton />
+							</div>
 						</>
 					)}
 				</div>
 				{renderBody()}
-				<div className={styles.footer} style={{ gap: spacing.lg }}>
+				<DetailFooter>
 					<Button variant="secondary" onClick={goPalancas}>
-						{strings.Back}
+						{strings.Cancel}
 					</Button>
 					{canEditObjetivo && objetivo && (
 						<Button variant="primary" onClick={() => navigate(getObjetivoEditPath(objetivoId))}>
 							{strings.Edit}
 						</Button>
 					)}
-				</div>
+				</DetailFooter>
 			</div>
 		</>
 	);

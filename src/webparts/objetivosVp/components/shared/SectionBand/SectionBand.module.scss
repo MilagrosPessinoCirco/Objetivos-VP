@@ -4,3 +4,21 @@
 	justify-content: space-between;
 	min-height: 34px;
 }
+
+.controls {
+	display: flex;
+	align-items: center;
+}
+
+.chevronOpen,
+.chevronClosed {
+	transition: transform 0.15s;
+}
+
+.chevronOpen {
+	transform: rotate(-90deg);
+}
+
+.chevronClosed {
+	transform: rotate(90deg);
+}

@@ -3,11 +3,16 @@
 	flex-direction: column;
 }
 
-.header,
-.footer {
+.header {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+}
+
+.headerEnd {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
 }
 
 $notice-z-index: 1000;

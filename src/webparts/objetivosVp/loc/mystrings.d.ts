@@ -16,6 +16,8 @@ declare interface IObjetivosVpWebPartStrings {
 	Cancel: string;
 	Save: string;
 	Edit: string;
+	SectionCollapse: string;
+	SectionExpand: string;
 	Yes: string;
 	No: string;
 	RequiredField: string;
@@ -82,6 +84,7 @@ declare interface IObjetivosVpWebPartStrings {
 	OtherVpObjectivesSection: string;
 	OtherVpObjectivesEmpty: string;
 	ObjetivosLoadError: string;
+	ObjetivoDetailProgress: string;
 	ObjetivoDetailTitle: string;
 	ObjetivoInfoSection: string;
 	ObjetivoPlanningSection: string;

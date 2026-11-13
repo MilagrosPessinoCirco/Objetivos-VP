@@ -1,0 +1,16 @@
+:global(.ms-Button).location.location.location.location {
+	height: 32px;
+	min-height: 32px;
+	margin-left: auto;
+	border-color: var(--location-bg);
+	background-color: var(--location-bg);
+
+	&:hover:not(:disabled) {
+		border-color: var(--location-bg-hover);
+		background-color: var(--location-bg-hover);
+	}
+}
+
+.whiteIcon {
+	filter: brightness(0) invert(1);
+}

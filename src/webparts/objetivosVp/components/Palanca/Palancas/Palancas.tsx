@@ -11,7 +11,7 @@ import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
-import { ObjetivosFiltro, filterObjetivos, isVpRrii } from '../../Objetivo/objetivoUtils';
+import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import PalancaForm from '../PalancaForm/PalancaForm';
@@ -32,7 +32,6 @@ type Operation = 'load' | 'save';
 type FormState = { mode: 'new' } | { mode: 'edit'; palanca: Palanca };
 
 const TOAST_DURATION_MS = 7000;
-const DEFAULT_PROGRESS = 0;
 
 const SUMMARY_STYLE: CSSProperties = { margin: `0 0 0 ${spacing.md}`, fontSize: typography.size[12], lineHeight: typography.lineHeight[12], fontWeight: typography.weight.semibold };
 

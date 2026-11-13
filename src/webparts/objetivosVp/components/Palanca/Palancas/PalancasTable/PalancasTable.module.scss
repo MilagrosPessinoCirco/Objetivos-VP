@@ -17,11 +17,7 @@
 	transform: rotate(90deg);
 }
 
-.withoutHeader :global(.ms-DetailsHeader) {
-	display: none;
-}
-
-.withoutHeader :global(.ms-DetailsHeader) {
+.withoutHeader > :first-child :global(.ms-DetailsHeader) {
 	display: none;
 }
 
