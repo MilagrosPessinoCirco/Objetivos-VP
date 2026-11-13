@@ -11,17 +11,23 @@ import styles from './ObjetivoForm.module.scss';
 
 export interface IObjetivoFormPanelProps {
 	initialPalancaId?: number;
-	onCreated: (objetivo: Objetivo) => void;
+	objetivo?: Objetivo;
+	onSaved: (objetivo: Objetivo) => void;
 	onCancel: () => void;
 }
 
-const ObjetivoFormPanel: React.FC<IObjetivoFormPanelProps> = ({ initialPalancaId, onCreated, onCancel }) => {
+const ObjetivoFormPanel: React.FC<IObjetivoFormPanelProps> = ({ initialPalancaId, objetivo, onSaved, onCancel }) => {
 	const masters = useObjetivoFormMasters();
-	const [, , addItem] = useObjetivoDataSource();
+	const [, , addItem, editItem] = useObjetivoDataSource();
 
 	const save = async (toSave: Objetivo): Promise<void> => {
-		const created = await addItem(toSave);
-		onCreated(created);
+		if (objetivo) {
+			await editItem(toSave);
+		}
+		else {
+			await addItem(toSave);
+		}
+		onSaved(toSave);
 	};
 
 	if (masters.error || !masters.ready) {
@@ -29,7 +35,7 @@ const ObjetivoFormPanel: React.FC<IObjetivoFormPanelProps> = ({ initialPalancaId
 			<Panel
 				open
 				className={styles.panel}
-				title={strings.ObjetivoFormNewTitle}
+				title={objetivo ? strings.ObjetivoFormEditTitle : strings.ObjetivoNew}
 				onClose={onCancel}
 				primaryAction={<Button variant="secondary" onClick={onCancel}>{strings.Cancel}</Button>}
 			>
@@ -40,12 +46,12 @@ const ObjetivoFormPanel: React.FC<IObjetivoFormPanelProps> = ({ initialPalancaId
 
 	return (
 		<ObjetivoFormBody
-			panel
 			vps={masters.vps}
 			departamentos={masters.departamentos}
 			gerencias={masters.gerencias}
 			palancas={masters.palancas}
 			initialPalancaId={initialPalancaId}
+			objetivo={objetivo}
 			onSave={save}
 			onCancel={onCancel}
 		/>

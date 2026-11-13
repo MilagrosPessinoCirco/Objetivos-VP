@@ -6,9 +6,10 @@ import { Button } from '../../../../../core/ui/components';
 import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
 import { spacing, typography } from '../../../../../core/ui/foundations';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import { Objetivo } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { PALANCAS_PATH, getObjetivoEditPath } from '../../ObjetivosVp/routes';
+import { PALANCAS_PATH } from '../../ObjetivosVp/routes';
 import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
@@ -18,6 +19,7 @@ import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
 import { DEFAULT_PROGRESS, formatObjetivoId, getEstadoChipColor, isNotFoundError, isVpRrii } from '../objetivoUtils';
 import useObjetivoNames from '../useObjetivoNames';
+import ObjetivoFormPanel from '../ObjetivoForm/ObjetivoFormPanel';
 import ObjetivoInfo from './ObjetivoInfo/ObjetivoInfo';
 import styles from './ObjetivoDetalle.module.scss';
 
@@ -51,6 +53,7 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 	const names = useObjetivoNames();
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
 	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>((location.state as IObjetivoLocationState | null)?.toast);
+	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const closeNotice = React.useCallback((): void => setNoticeMessage(undefined), []);
 
 	React.useEffect(() => {
@@ -74,6 +77,12 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 	const objetivo = loaded ? names.resolve([loaded])[0] : undefined;
 	const goPalancas = (): void => navigate(PALANCAS_PATH);
 
+	const onSaved = (saved: Objetivo): void => {
+		setIsFormOpen(false);
+		setNoticeMessage(Utils.replaceAll(strings.ObjetivoUpdated, '{0}', saved.Nombre ?? ''));
+		getById(objetivoId).catch((error: unknown) => setLoadError(isNotFoundError(error) ? 'notFound' : 'error'));
+	};
+
 	const renderBody = (): React.ReactNode => {
 		if (loadError === 'notFound') {
 			return <MessageBar type="error" message={strings.ObjetivoNotFound} />;
@@ -84,7 +93,7 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 		if (!objetivo) {
 			return state.isLoading ? <Spinner /> : null;
 		}
-		return <ObjetivoInfo objetivo={objetivo} onEdit={canEditObjetivo ? () => navigate(getObjetivoEditPath(objetivoId)) : undefined} />;
+		return <ObjetivoInfo objetivo={objetivo} onEdit={canEditObjetivo ? () => setIsFormOpen(true) : undefined} />;
 	};
 
 	return (
@@ -111,7 +120,7 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 							<div className={styles.headerEnd} style={{ gap: spacing.md }}>
 								{isVpRrii(objetivo.VP?.Title) && (
 									<span style={PROGRESS_LABEL_STYLE}>
-										{strings.ObjetivoDetailProgress} <b style={PROGRESS_VALUE_STYLE}>{`${DEFAULT_PROGRESS}%`}</b>
+										{strings.ObjetivoDetailProgress} <b style={PROGRESS_VALUE_STYLE}>{`${DEFAULT_PROGRESS} %`}</b>
 									</span>
 								)}
 								<LocationButton />
@@ -125,11 +134,12 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 						{strings.Cancel}
 					</Button>
 					{canEditObjetivo && objetivo && (
-						<Button variant="primary" onClick={() => navigate(getObjetivoEditPath(objetivoId))}>
+						<Button variant="primary" onClick={() => setIsFormOpen(true)}>
 							{strings.Edit}
 						</Button>
 					)}
 				</DetailFooter>
+				{isFormOpen && objetivo && <ObjetivoFormPanel objetivo={loaded} onSaved={onSaved} onCancel={() => setIsFormOpen(false)} />}
 			</div>
 		</>
 	);

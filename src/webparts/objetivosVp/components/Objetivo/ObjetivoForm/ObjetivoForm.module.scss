@@ -1,23 +1,6 @@
-.form {
-	display: flex;
-	flex-direction: column;
-}
-
-.header,
-.footer {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-}
-
 .section {
 	display: flex;
 	flex-direction: column;
-}
-
-.grid {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .field {

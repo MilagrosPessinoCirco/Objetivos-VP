@@ -9,6 +9,7 @@ import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaData
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { getColorStep } from '../../shared/getColorStep';
 import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, isVpRrii } from '../../Objetivo/objetivoUtils';
@@ -33,7 +34,7 @@ type FormState = { mode: 'new' } | { mode: 'edit'; palanca: Palanca };
 
 const TOAST_DURATION_MS = 7000;
 
-const SUMMARY_STYLE: CSSProperties = { margin: `0 0 0 ${spacing.md}`, fontSize: typography.size[12], lineHeight: typography.lineHeight[12], fontWeight: typography.weight.semibold };
+const SUMMARY_STYLE: CSSProperties = { margin: `0 0 0 ${spacing.md}`, fontSize: typography.size[12], lineHeight: typography.lineHeight[12], fontWeight: typography.weight.semibold, color: getColorStep('Primary', '600').value };
 
 const byNombre = (a: Palanca, b: Palanca): number => (a.Nombre ?? '').localeCompare(b.Nombre ?? '', 'es');
 
@@ -170,7 +171,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 			{renderBody()}
 			{form?.mode === 'new' && <PalancaForm onSave={createPalanca} onCancel={() => setForm(undefined)} />}
 			{form?.mode === 'edit' && <PalancaForm palanca={form.palanca} onSave={updatePalanca} onCancel={() => setForm(undefined)} />}
-			{isObjetivoFormOpen && <ObjetivoFormPanel onCreated={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
+			{isObjetivoFormOpen && <ObjetivoFormPanel onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
 			<Toast
 				variant="success"
 				open={successMessage !== undefined}

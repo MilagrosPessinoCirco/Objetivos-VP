@@ -4,11 +4,10 @@ import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from '../Home/Home';
 import ObjetivoDetalle from '../Objetivo/ObjetivoDetalle/ObjetivoDetalle';
-import ObjetivoForm from '../Objetivo/ObjetivoForm/ObjetivoForm';
 import PalancaDetalle from '../Palanca/PalancaDetalle/PalancaDetalle';
 import Palancas from '../Palanca/Palancas/Palancas';
 import type { ObjetivosFiltro } from '../Objetivo/objetivoUtils';
-import { HOME_PATH, OBJETIVO_DETAIL_PATH, OBJETIVO_EDIT_PATH, OBJETIVO_NEW_PATH, PALANCAS_PATH, PALANCA_DETAIL_PATH } from './routes';
+import { HOME_PATH, OBJETIVO_DETAIL_PATH, PALANCAS_PATH, PALANCA_DETAIL_PATH } from './routes';
 import styles from './ObjetivosVp.module.scss';
 
 export interface IObjetivosVpProps {
@@ -28,8 +27,6 @@ const ObjetivosVpRoutes: React.FC = () => {
 			<Route path={HOME_PATH} element={<Home />} />
 			<Route path={PALANCAS_PATH} element={<Palancas canManage={CAN_MANAGE_PALANCAS} canCreateObjetivo={CAN_CREATE_OBJETIVO} filtro={filtro} onFiltroChange={setFiltro} />} />
 			<Route path={PALANCA_DETAIL_PATH} element={<PalancaDetalle canManage={CAN_MANAGE_PALANCAS} canCreateObjetivo={CAN_CREATE_OBJETIVO} filtro={filtro} />} />
-			<Route path={OBJETIVO_NEW_PATH} element={<ObjetivoForm />} />
-			<Route path={OBJETIVO_EDIT_PATH} element={<ObjetivoForm />} />
 			<Route path={OBJETIVO_DETAIL_PATH} element={<ObjetivoDetalle canEditObjetivo={CAN_EDIT_OBJETIVO} />} />
 		</Routes>
 	);

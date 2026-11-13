@@ -93,7 +93,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined };
 	const progressColumn: ITableColumn<ObjetivoRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (value) => <span style={PROGRESS_STYLE}>{String(value)}</span> };
 	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: fixedWidths ? STATUS_WIDTH : undefined, render: (_value, row) => renderEstado(row) };
-	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: fixedWidths ? strings.ObjetivoColumnView : strings.ObjetivoColumnActions, width: fixedWidths ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
+	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: strings.ObjetivoColumnView, width: fixedWidths ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
 
 	const columns: ITableColumn<ObjetivoRow>[] = variant === 'palanca'
 		? [idColumn, nameColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]

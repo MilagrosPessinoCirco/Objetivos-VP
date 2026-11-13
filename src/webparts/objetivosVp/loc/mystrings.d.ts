@@ -15,6 +15,7 @@ declare interface IObjetivosVpWebPartStrings {
 	Back: string;
 	Cancel: string;
 	Save: string;
+	SaveChanges: string;
 	Edit: string;
 	SectionCollapse: string;
 	SectionExpand: string;
@@ -76,7 +77,6 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoColumnStatus: string;
 	ObjetivoColumnProgress: string;
 	ObjetivoColumnView: string;
-	ObjetivoColumnActions: string;
 	ObjetivoViewTooltip: string;
 	ObjetivoViewAriaLabel: string;
 	PalancaObjectivesSection: string;
@@ -101,9 +101,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoFieldCommitmentDate: string;
 	ObjetivoNotFound: string;
 	ObjetivoLoadError: string;
-	ObjetivoFormNewTitle: string;
 	ObjetivoFormEditTitle: string;
-	ObjetivoFormGeneralSection: string;
 	ObjetivoFormPlanningSection: string;
 	ObjetivoFormVp: string;
 	ObjetivoFormDepartment: string;

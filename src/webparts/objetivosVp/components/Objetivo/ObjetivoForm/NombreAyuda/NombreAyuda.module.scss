@@ -1,18 +1,17 @@
 .help :global(.ms-Button) {
-	width: 20px;
-	height: 20px;
-	min-width: 20px;
+	width: 24px;
+	height: 24px;
+	min-width: 24px;
 	padding: 0;
-	border: 1px solid var(--ds-color-brand-primary);
+	border: none;
 	border-radius: 50%;
-	background: transparent;
-	color: var(--ds-color-brand-primary);
-	font-size: 12px;
-	font-weight: 600;
-	line-height: 1;
+	background: var(--help-icon) center / 16px 16px no-repeat transparent;
 }
 
 .help :global(.ms-Button-label) {
-	margin: 0;
-	line-height: 1;
+	display: none;
+}
+
+.guide.guide {
+	width: 320px;
 }

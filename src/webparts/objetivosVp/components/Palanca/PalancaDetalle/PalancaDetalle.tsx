@@ -171,7 +171,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 			{isFormOpen && palanca && (
 				<PalancaForm palanca={palanca} onSave={updatePalanca} onCancel={() => setIsFormOpen(false)} />
 			)}
-			{isObjetivoFormOpen && <ObjetivoFormPanel initialPalancaId={palancaId} onCreated={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
+			{isObjetivoFormOpen && <ObjetivoFormPanel initialPalancaId={palancaId} onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
 			<Toast
 				variant="success"
 				open={successMessage !== undefined}
