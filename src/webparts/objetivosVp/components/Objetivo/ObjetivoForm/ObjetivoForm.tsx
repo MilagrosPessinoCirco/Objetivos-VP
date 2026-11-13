@@ -9,6 +9,7 @@ import { ILookupValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
+import { getColorStep } from '../../shared/getColorStep';
 import SectionBand from '../../shared/SectionBand/SectionBand';
 import { formatObjetivoId, fromDateInput, isVpRrii, toDateInput } from '../objetivoUtils';
 import NombreAyuda from './NombreAyuda/NombreAyuda';
@@ -43,13 +44,15 @@ const LABEL_STYLE: React.CSSProperties = {
 	color: colors.neutral.text
 };
 
-const REQUIRED_STYLE: React.CSSProperties = { ...LABEL_STYLE, color: colors.semantic.error };
+const ERROR_COLOR = getColorStep('Red', '600').value;
+
+const REQUIRED_STYLE: React.CSSProperties = { ...LABEL_STYLE, color: ERROR_COLOR };
 
 const ERROR_STYLE: React.CSSProperties = {
 	fontFamily: typography.family.base,
 	fontSize: typography.size[12],
 	lineHeight: typography.lineHeight[12],
-	color: colors.semantic.error
+	color: ERROR_COLOR
 };
 
 const toOptions = (items: INamed[]): Array<{ key: string; text: string }> =>
@@ -121,6 +124,8 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 	};
 	const hasIssues = Object.values(issues).some((issue) => issue !== undefined);
 	const shown = (issue: string | undefined): string | undefined => (submitted ? issue : undefined);
+	const invalid = (issue: string | undefined, extra?: string): string | undefined =>
+		[shown(issue) ? styles.invalid : undefined, extra].filter(Boolean).join(' ') || undefined;
 
 	const title = buildPanelTitle(
 		isEdit ? Utils.replaceAll(strings.ObjetivoFormEditTitle, '{0}', formatObjetivoId(objetivo?.Id)) : strings.ObjetivoNew,
@@ -180,7 +185,8 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							options={vpOptions}
 							value={vpId}
 							disabled={isEdit}
-							errorMessage={shown(issues.vp)}
+							className={invalid(issues.vp)}
+								errorMessage={shown(issues.vp)}
 							onChange={(value) => setVpId(toKey(value))}
 						/>
 						<Dropdown
@@ -189,7 +195,8 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							placeholder={strings.ObjetivoFormSelect}
 							options={departamentoOptions}
 							value={departamentoId}
-							errorMessage={shown(issues.departamento)}
+							className={invalid(issues.departamento)}
+								errorMessage={shown(issues.departamento)}
 							onChange={onDepartamentoChange}
 						/>
 						<Dropdown
@@ -198,7 +205,8 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							placeholder={strings.ObjetivoFormSelect}
 							options={gerenciaOptions}
 							value={gerenciaId}
-							errorMessage={shown(issues.gerencia)}
+							className={invalid(issues.gerencia)}
+								errorMessage={shown(issues.gerencia)}
 							onChange={(value) => setGerenciaId(toKey(value))}
 						/>
 						<Switch
@@ -218,6 +226,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 						<Input
 							id={NAME_INPUT_ID}
 							required
+							className={invalid(issues.nombre)}
 							maxLength={NAME_MAX_LENGTH}
 							placeholder={strings.ObjetivoFormNamePlaceholder}
 							value={nombre}
@@ -226,7 +235,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 						/>
 					</div>
 					<Multiline
-						className={styles.multiline}
+						className={invalid(issues.descripcion, styles.multiline)}
 						label={strings.ObjetivoFormDescription}
 						required
 						placeholder={strings.ObjetivoFormDescriptionPlaceholder}
@@ -254,7 +263,8 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							placeholder={strings.ObjetivoFormSelect}
 							options={palancaOptions}
 							value={palancaId}
-							errorMessage={shown(issues.palanca)}
+							className={invalid(issues.palanca)}
+								errorMessage={shown(issues.palanca)}
 							onChange={(value) => setPalancaId(toKey(value))}
 						/>
 						<Dropdown
@@ -263,11 +273,12 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							placeholder={strings.ObjetivoFormSelect}
 							options={duracionOptions}
 							value={duracion}
-							errorMessage={shown(issues.duracion)}
+							className={invalid(issues.duracion)}
+								errorMessage={shown(issues.duracion)}
 							onChange={(value) => setDuracion(toEnumValue(Object.values(Duracion), toKey(value)) ?? '')}
 						/>
 						<SpinButton
-							className={styles.weight}
+							className={invalid(issues.peso, styles.weight)}
 							label={strings.ObjetivoFormWeight}
 							placeholder={strings.ObjetivoFormWeightPlaceholder}
 							required
@@ -279,7 +290,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 						/>
 					</div>
 					<div className={styles.gridPair} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
-						<div className={styles.field} style={{ gap: spacing.xs }}>
+						<div className={invalid(issues.fechaInicio, styles.field)} style={{ gap: spacing.xs }}>
 							<Picker
 								mode="date"
 								label={strings.ObjetivoFormStartDate}
@@ -289,7 +300,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							/>
 							{shown(issues.fechaInicio) && <span role="alert" style={ERROR_STYLE}>{issues.fechaInicio}</span>}
 						</div>
-						<div className={styles.field} style={{ gap: spacing.xs }}>
+						<div className={invalid(issues.fechaCompromiso, styles.field)} style={{ gap: spacing.xs }}>
 							<Picker
 								mode="date"
 								label={strings.ObjetivoFormCommitmentDate}
@@ -315,7 +326,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 			primaryAction={<Button variant="secondary" onClick={onCancel}>{strings.Cancel}</Button>}
 			secondaryAction={<Button variant="primary" disabled={isSaving} onClick={save}>{isEdit ? strings.SaveChanges : strings.Save}</Button>}
 		>
-			<div className={styles.panelContent} style={{ gap: spacing.lg, paddingRight: spacing.lg }}>
+			<div className={styles.panelContent} style={{ gap: spacing.lg, paddingRight: spacing.lg, '--field-error': ERROR_COLOR } as React.CSSProperties}>
 				{content}
 			</div>
 		</Panel>

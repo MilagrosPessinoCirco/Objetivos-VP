@@ -64,3 +64,30 @@
 	width: 100%;
 	box-sizing: border-box;
 }
+
+.panelContent.panelContent .invalid [class*='control_'],
+.panelContent.panelContent .invalid textarea,
+.panelContent.panelContent .invalid :global(.ms-Dropdown-title),
+.panelContent.panelContent .invalid :global(.ms-SpinButton-spinButtonWrapper),
+.panelContent.panelContent .field.invalid :global(.ms-TextField-fieldGroup) {
+	border-color: var(--field-error);
+	box-shadow: inset 0 0 0 1px var(--field-error);
+}
+
+.panelContent.panelContent .invalid [class*='errorMessage_'] {
+	width: 100%;
+	color: var(--field-error);
+	font-size: 12px;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 16px;
+}
+
+.panelContent.panelContent .weight.invalid > div > div {
+	outline: 2px solid var(--field-error);
+	outline-offset: -2px;
+}
+
+.panelContent.panelContent .weight.invalid > div > div::after {
+	border-color: var(--field-error);
+}
