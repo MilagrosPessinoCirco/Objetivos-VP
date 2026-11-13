@@ -132,6 +132,16 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		isEdit ? objetivo?.Nombre : strings.ObjetivoFormSubtitle
 	);
 
+	const stepWeight = (current: string, delta: number): string => {
+		const next = String(Math.min(WEIGHT_MAX, Math.max(WEIGHT_MIN, (parseWeight(current) ?? 0) + delta)));
+		setPeso(next);
+		return next;
+	};
+	const weightSteppers = {
+		onIncrement: (current: string): string => stepWeight(current, 1),
+		onDecrement: (current: string): string => stepWeight(current, -1)
+	};
+
 	const onDepartamentoChange = (value: string | string[]): void => {
 		setDepartamentoId(toKey(value));
 		setGerenciaId('');
@@ -286,7 +296,12 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							max={WEIGHT_MAX}
 							value={peso}
 							errorMessage={shown(issues.peso)}
-							onChange={(event) => setPeso(event.target.value)}
+							{...weightSteppers}
+							onChange={(event) => {
+								if (event.target instanceof HTMLInputElement) {
+									setPeso(event.target.value);
+								}
+							}}
 						/>
 					</div>
 					<div className={styles.gridPair} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
@@ -324,7 +339,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 			title={title}
 			onClose={onCancel}
 			primaryAction={<Button variant="secondary" onClick={onCancel}>{strings.Cancel}</Button>}
-			secondaryAction={<Button variant="primary" disabled={isSaving} onClick={save}>{isEdit ? strings.SaveChanges : strings.Save}</Button>}
+			secondaryAction={<Button variant="primary" disabled={isSaving} onClick={save}>{strings.Save}</Button>}
 		>
 			<div className={styles.panelContent} style={{ gap: spacing.lg, paddingRight: spacing.lg, '--field-error': ERROR_COLOR } as React.CSSProperties}>
 				{content}

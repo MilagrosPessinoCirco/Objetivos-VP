@@ -15,7 +15,6 @@ declare interface IObjetivosVpWebPartStrings {
 	Back: string;
 	Cancel: string;
 	Save: string;
-	SaveChanges: string;
 	Edit: string;
 	SectionCollapse: string;
 	SectionExpand: string;

@@ -16,7 +16,6 @@ define([], function () {
 		"Back": "Volver",
 		"Cancel": "Cancelar",
 		"Save": "Guardar",
-		"SaveChanges": "Guardar cambios",
 		"Edit": "Editar",
 		"SectionCollapse": "Contraer sección",
 		"SectionExpand": "Expandir sección",
