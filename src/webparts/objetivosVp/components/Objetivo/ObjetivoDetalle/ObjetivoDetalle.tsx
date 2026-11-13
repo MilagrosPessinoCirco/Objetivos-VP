@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { CSSProperties } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../../../core/ui/components';
 import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
@@ -14,6 +14,7 @@ import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import LocationButton from '../../shared/LocationButton/LocationButton';
+import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
@@ -29,12 +30,7 @@ export interface IObjetivoDetalleProps {
 
 type LoadError = 'notFound' | 'error';
 
-interface IObjetivoLocationState {
-	toast?: string;
-}
-
 const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
-const NOTICE_DURATION_MS = 7000;
 
 const PROGRESS_LABEL_STYLE: CSSProperties = {
 	fontFamily: typography.family.base,
@@ -48,21 +44,12 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 	const objetivoId = Number(id);
 	const isValidId = Number.isInteger(objetivoId) && objetivoId > 0;
 	const navigate = useNavigate();
-	const location = useLocation();
 	const [state, , , , , getById] = useObjetivoDataSource();
 	const names = useObjetivoNames();
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
-	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>((location.state as IObjetivoLocationState | null)?.toast);
+	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>(undefined);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const closeNotice = React.useCallback((): void => setNoticeMessage(undefined), []);
-
-	React.useEffect(() => {
-		if (noticeMessage === undefined) {
-			return undefined;
-		}
-		const timer = window.setTimeout(closeNotice, NOTICE_DURATION_MS);
-		return () => window.clearTimeout(timer);
-	}, [noticeMessage]);
 
 	React.useEffect(() => {
 		setLoadError(undefined);
@@ -98,11 +85,7 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 
 	return (
 		<>
-			{noticeMessage !== undefined && (
-				<div className={styles.notice}>
-					<MessageBar className={styles.noticeBar} type="success" darkMode={false} message={noticeMessage} dismissible onClose={closeNotice} />
-				</div>
-			)}
+			<SuccessNotice message={noticeMessage} onClose={closeNotice} />
 			<div className={styles.detalle} style={{ gap: spacing.lg, padding: PAGE_PADDING }}>
 				<PalancaBreadcrumb
 					palancaNombre={objetivo?.Palanca?.Title}

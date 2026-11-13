@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Tooltip } from '../../../../../core/ui/components';
-import { MessageBar, Spinner, Toast } from '../../../../../core/ui/patterns';
+import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
 import { FigmaIcon, spacing } from '../../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
@@ -23,6 +23,7 @@ import LocationButton from '../../shared/LocationButton/LocationButton';
 import SectionBand from '../../shared/SectionBand/SectionBand';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
+import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
 import PalancaForm from '../PalancaForm/PalancaForm';
 import PalancaBreadcrumb from '../PalancaBreadcrumb/PalancaBreadcrumb';
 import PalancaInfo from './PalancaInfo/PalancaInfo';
@@ -36,7 +37,6 @@ export interface IPalancaDetalleProps {
 
 type LoadError = 'notFound' | 'error';
 
-const TOAST_DURATION_MS = 7000;
 
 const ACTIVE_CHIP_TEXT_COLOR = getColorStep('Green', '800').value;
 
@@ -65,7 +65,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const [isObjetivoFormOpen, setIsObjetivoFormOpen] = React.useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
-	const closeToast = React.useCallback((): void => setSuccessMessage(undefined), []);
+	const closeNotice = React.useCallback((): void => setSuccessMessage(undefined), []);
 
 	React.useEffect(() => {
 		setLoadError(undefined);
@@ -139,47 +139,43 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	};
 
 	return (
-		<div className={styles.detalle} style={{ gap: spacing.lg, padding: PAGE_PADDING }}>
-			<PalancaBreadcrumb palancaNombre={palanca?.Nombre} />
-			<div className={styles.header} style={{ gap: spacing.md }}>
-				<BackButton onClick={goPalancas} />
-				{palanca && (
-					<>
-						<h1 style={HEADER_TITLE_STYLE}>
-							{Utils.replaceAll(Utils.replaceAll(strings.PalancaDetailTitle, '{0}', formatPalancaId(palanca.Id)), '{1}', palanca.Nombre ?? '')}
-						</h1>
-						<HeaderChip
-							color={palanca.Activa ? 'success' : 'neutral'}
-							textColor={palanca.Activa ? ACTIVE_CHIP_TEXT_COLOR : undefined}
-							label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
-						/>
-						<LocationButton />
-					</>
-				)}
-			</div>
-			{renderBody()}
-			<DetailFooter>
-				<Button variant="secondary" onClick={goPalancas}>
-					{strings.Cancel}
-				</Button>
-				{canManage && palanca && (
-					<Button variant="primary" onClick={() => setIsFormOpen(true)}>
-						{strings.Edit}
+		<>
+			<SuccessNotice message={successMessage} onClose={closeNotice} />
+			<div className={styles.detalle} style={{ gap: spacing.lg, padding: PAGE_PADDING }}>
+				<PalancaBreadcrumb palancaNombre={palanca?.Nombre} />
+				<div className={styles.header} style={{ gap: spacing.md }}>
+					<BackButton onClick={goPalancas} />
+					{palanca && (
+						<>
+							<h1 style={HEADER_TITLE_STYLE}>
+								{Utils.replaceAll(Utils.replaceAll(strings.PalancaDetailTitle, '{0}', formatPalancaId(palanca.Id)), '{1}', palanca.Nombre ?? '')}
+							</h1>
+							<HeaderChip
+								color={palanca.Activa ? 'success' : 'neutral'}
+								textColor={palanca.Activa ? ACTIVE_CHIP_TEXT_COLOR : undefined}
+								label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
+							/>
+							<LocationButton />
+						</>
+					)}
+				</div>
+				{renderBody()}
+				<DetailFooter>
+					<Button variant="secondary" onClick={goPalancas}>
+						{strings.Cancel}
 					</Button>
+					{canManage && palanca && (
+						<Button variant="primary" onClick={() => setIsFormOpen(true)}>
+							{strings.Edit}
+						</Button>
+					)}
+				</DetailFooter>
+				{isFormOpen && palanca && (
+					<PalancaForm palanca={palanca} onSave={updatePalanca} onCancel={() => setIsFormOpen(false)} />
 				)}
-			</DetailFooter>
-			{isFormOpen && palanca && (
-				<PalancaForm palanca={palanca} onSave={updatePalanca} onCancel={() => setIsFormOpen(false)} />
-			)}
-			{isObjetivoFormOpen && <ObjetivoFormPanel initialPalancaId={palancaId} onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
-			<Toast
-				variant="success"
-				open={successMessage !== undefined}
-				message={successMessage ?? ''}
-				duration={TOAST_DURATION_MS}
-				onClose={closeToast}
-			/>
-		</div>
+				{isObjetivoFormOpen && <ObjetivoFormPanel initialPalancaId={palancaId} onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
+			</div>
+		</>
 	);
 };
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { MessageBar, Spinner, Tabs, Toast } from '../../../../../core/ui/patterns';
+import { MessageBar, Spinner, Tabs } from '../../../../../core/ui/patterns';
 import { spacing, typography } from '../../../../../core/ui/foundations';
 import { Objetivo, Palanca } from '../../../../../core/entities';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
@@ -15,6 +15,7 @@ import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
+import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
 import PalancaForm from '../PalancaForm/PalancaForm';
 import { formatPalancaId } from '../formatPalancaId';
 import PalancasHeader from './PalancasHeader/PalancasHeader';
@@ -32,7 +33,6 @@ type Operation = 'load' | 'save';
 
 type FormState = { mode: 'new' } | { mode: 'edit'; palanca: Palanca };
 
-const TOAST_DURATION_MS = 7000;
 
 const SUMMARY_STYLE: CSSProperties = { margin: `0 0 0 ${spacing.md}`, fontSize: typography.size[12], lineHeight: typography.lineHeight[12], fontWeight: typography.weight.semibold, color: getColorStep('Primary', '600').value };
 
@@ -64,7 +64,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 		getObjetivos();
 	};
 
-	const closeToast = React.useCallback((): void => setSuccessMessage(undefined), []);
+	const closeNotice = React.useCallback((): void => setSuccessMessage(undefined), []);
 
 	const createPalanca = async (palanca: Palanca): Promise<void> => {
 		setLastOperation('save');
@@ -143,43 +143,39 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	};
 
 	return (
-		<div className={styles.palancas} style={{ gap: spacing.lg, padding: spacing.xl }}>
-			<PalancasHeader
-				searchText={searchText}
-				onSearchChange={setSearchText}
-				onBack={() => navigate(HOME_PATH)}
-				onRefresh={refresh}
-				canManage={canManage}
-				onNew={() => setForm({ mode: 'new' })}
-				canCreateObjetivo={canCreateObjetivo}
-				onNewObjetivo={() => setIsObjetivoFormOpen(true)}
-			/>
-			<p style={SUMMARY_STYLE}>{summary}</p>
-			<Tabs
-				className={styles.tabs}
-				variant="transparent"
-				ariaLabel={strings.ObjetivosFilterAriaLabel}
-				items={[
-					{ key: 'todos', label: `${strings.ObjetivosFilterAll} (${activePalancasCount})` },
-					{ key: 'delVp', label: `${strings.ObjetivosFilterVp} (${vpObjetivos.length})` },
-					{ key: 'otrasVp', label: `${strings.OtherVpObjectivesSection} (${otrasVpObjetivos.length})` }
-				]}
-				value={filtro}
-				onChange={(key) => onFiltroChange(key as ObjetivosFiltro)}
-			/>
-			{objetivosError && <MessageBar type="error" message={strings.ObjetivosLoadError} />}
-			{renderBody()}
-			{form?.mode === 'new' && <PalancaForm onSave={createPalanca} onCancel={() => setForm(undefined)} />}
-			{form?.mode === 'edit' && <PalancaForm palanca={form.palanca} onSave={updatePalanca} onCancel={() => setForm(undefined)} />}
-			{isObjetivoFormOpen && <ObjetivoFormPanel onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
-			<Toast
-				variant="success"
-				open={successMessage !== undefined}
-				message={successMessage ?? ''}
-				duration={TOAST_DURATION_MS}
-				onClose={closeToast}
-			/>
-		</div>
+		<>
+			<SuccessNotice message={successMessage} onClose={closeNotice} />
+			<div className={styles.palancas} style={{ gap: spacing.lg, padding: spacing.xl }}>
+				<PalancasHeader
+					searchText={searchText}
+					onSearchChange={setSearchText}
+					onBack={() => navigate(HOME_PATH)}
+					onRefresh={refresh}
+					canManage={canManage}
+					onNew={() => setForm({ mode: 'new' })}
+					canCreateObjetivo={canCreateObjetivo}
+					onNewObjetivo={() => setIsObjetivoFormOpen(true)}
+				/>
+				<p style={SUMMARY_STYLE}>{summary}</p>
+				<Tabs
+					className={styles.tabs}
+					variant="transparent"
+					ariaLabel={strings.ObjetivosFilterAriaLabel}
+					items={[
+						{ key: 'todos', label: `${strings.ObjetivosFilterAll} (${activePalancasCount})` },
+						{ key: 'delVp', label: `${strings.ObjetivosFilterVp} (${vpObjetivos.length})` },
+						{ key: 'otrasVp', label: `${strings.OtherVpObjectivesSection} (${otrasVpObjetivos.length})` }
+					]}
+					value={filtro}
+					onChange={(key) => onFiltroChange(key as ObjetivosFiltro)}
+				/>
+				{objetivosError && <MessageBar type="error" message={strings.ObjetivosLoadError} />}
+				{renderBody()}
+				{form?.mode === 'new' && <PalancaForm onSave={createPalanca} onCancel={() => setForm(undefined)} />}
+				{form?.mode === 'edit' && <PalancaForm palanca={form.palanca} onSave={updatePalanca} onCancel={() => setForm(undefined)} />}
+				{isObjetivoFormOpen && <ObjetivoFormPanel onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}
+			</div>
+		</>
 	);
 };
 
