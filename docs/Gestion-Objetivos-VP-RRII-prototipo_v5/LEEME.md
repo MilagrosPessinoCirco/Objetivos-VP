@@ -1,4 +1,4 @@
-# Gestión de Objetivos VP RRII · Prototipo navegable · v5
+# Gestión de Objetivos VP RRII · Prototipo navegable · v9
 
 Prototipo interactivo de la app SharePoint (SPFx) de la VP RRII, alineado a la Especificación Funcional v1.7 y al DS SharePoint / Fluent UI v8.
 
@@ -8,7 +8,11 @@ Prototipo interactivo de la app SharePoint (SPFx) de la VP RRII, alineado a la E
 | v2 | 29/10/2026 | Gestion-Objetivos-VP-RRII-prototipo_v2.zip |
 | v3 | 29/10/2026 | Gestion-Objetivos-VP-RRII-prototipo_v3.zip |
 | v4 | 29/10/2026 | Gestion-Objetivos-VP-RRII-prototipo_v4.zip |
-| v5 | 03/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v5.zip (esta) |
+| v5 | 03/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v5.zip |
+| v6 | 05/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v6.zip |
+| v7 | 11/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v7.zip |
+| v8 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v8.zip |
+| v9 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v9.zip (esta) |
 
 ## Cómo abrirlo
 El prototipo necesita un servidor local (no funciona con doble clic en index.html por restricciones del navegador sobre file://).
@@ -23,6 +27,63 @@ Requiere Python 3 o Node.js instalado.
 - Cambiá de rol desde el menú del usuario (arriba a la derecha): Visualizador (VP), Usuario responsable de iniciativas, Usuario responsable de tareas, CargadorObjetivo y Administrador.
 - Los datos son de ejemplo y viven en memoria: al recargar la página se reinician.
 - La fecha de referencia para alertas y vencimientos es 26/10/2026.
+- Desde la v7 los datos son los reales del documento «Carga de Objetivo en Maqueta» (1 objetivo, 1 iniciativa, 5 tareas). Para ver Mis iniciativas / Mis tareas usá los roles «Usuario · resp. de iniciativas» (Bárbara Adán) y «Usuario · resp. de tareas» (María Martha Grotz).
+
+## Cambios en v9
+- Cargar / Editar tarea y Cargar / Editar iniciativa pasan a panel lateral (igual que Cargar objetivo), desde cualquier punto de entrada:
+  - Tarea: desde Mis tareas (iniciativa a elegir), desde el detalle de la iniciativa (iniciativa fija) y al editar.
+  - Iniciativa: desde la bandeja de Iniciativas, desde el «+» del detalle de objetivo y al editar / completar carga.
+  - Una sola columna, sin el título «Información general». Fecha de inicio y Fecha de compromiso lado a lado (50 % / 50 %). Los campos scrollean dentro del panel y el pie (Cancelar · Cargar / Guardar cambios) queda fijo.
+  - Al guardar se queda en la pantalla de origen y muestra el mensaje de éxito.
+- Panel de iniciativa:
+  - Resultados clave: banda con el título y el «+» al extremo derecho; la leyenda «Al menos uno · los pesos suman 100 % · Mínimo ≤ Meta ≤ Máximo» va debajo de la banda, en texto pequeño.
+  - Cada resultado clave en bloque: nombre a todo el ancho, Tipo | Unidad, Mínimo | Meta | Máximo, Peso.
+  - Desplegable de Objetivo: «Seleccionar (primero los de tu departamento)».
+
+## Cambios en v8
+- Galería de palancas estratégicas con 3 solapas, para todos los roles:
+  1. Todas las palancas: galería con los objetivos de cada palanca (ya no incluye la fila «Otras VP»).
+  2. Objetivos del VP: grilla con los objetivos marcados «¿Es objetivo del VP?» (ID, Objetivo, Palanca, Departamento, Peso VP, Avance, Estado, Ver).
+  3. Objetivos de otras VP: grilla con los objetivos de otras vicepresidencias a los que aporta la VP RRII (ID, Objetivo, VP, Departamento que colabora, Gerencia, Estado, Ver). Al cargar un objetivo de otra VP la galería pasa a esta solapa.
+  - Nota: OBJ-01 aparece también en «Objetivos de otras VP» solo como ejemplo de la grilla (flag demoOtras en los datos). En la app real esa solapa lista únicamente objetivos de otras VP.
+- Objetivo: se quitó el campo Área (formulario, grillas y detalle). Quedan VP › Departamento › Gerencia, obligatorios.
+- Tarea:
+  - Se quitó el «Peso en la iniciativa» (formulario, detalle, grilla de tareas de la iniciativa y validación de suma).
+  - Nueva sección «Comentario ejecutivo» en el detalle (fecha, autor y texto), con lápiz y chevron. Se carga/actualiza desde «Registrar avance» (campo «Comentario ejecutivo», precargado con el último). TAR-05 trae el comentario del documento de las usuarias.
+  - «Presupuesto ejecutado» en USD en Registrar avance.
+
+## Cambios en v7
+- Datos reales (doc «Carga de Objetivo en Maqueta»), reemplazan a los de ejemplo:
+  - Palanca PAL-3 renombrada «Innovación y Nuevos Negocios».
+  - OBJ-01 «Innovación en Retail» (VP RRII › Marketing › B2C, anual 2026, peso en el departamento 10 %, no es objetivo del VP).
+  - INI-01 «Portfolio Management | Implementar la estrategia BLACK/FULL» (líderes Bárbara Adán y Matías Repetto; KR «Implementar la estrategia BLACK/FULL en 12 EESS», mín. 8 / meta 10 / máx. 12).
+  - TAR-01 a TAR-05 con responsable, descripción, ¿qué habilita?, áreas, prioridad, fechas, peso (10/20/25/20/25 %), CECO, presupuesto en USD, estado y avance.
+  - Usuarios reales en el ABM. El área «Retail» de B2C (ABM, usuarios) es provisoria hasta recibir las áreas reales.
+  - Pendiente del usuario: la 2.ª iniciativa del objetivo, el valor actual del KR (hoy avance 0 %) y el presupuesto ejecutado.
+- Objetivo:
+  - Gerencia y Área obligatorias (en v8 se quitó el Área del objetivo).
+  - «Peso en la VP» pasa a «Peso del objetivo en el Departamento».
+  - Con «¿Es objetivo del VP?» activo se pide «Peso del objetivo para el VP» (obligatorio); «Mis objetivos» muestra ese peso.
+  - Al cargar un objetivo se refleja en la tabla de su palanca: fechas por defecto del año en vista, la palanca queda desplegada y, si el objetivo es de otro año, la galería cambia a ese año.
+- Iniciativa: «Responsables» pasa a «Líderes». El resultado clave ya no tiene Responsable. El detalle muestra «Peso en el departamento» (peso en el objetivo × peso del objetivo). Áreas involucradas con la lista: Marketing B2C, Imagen, Growth Marketing, IEC, Conexiones, Ingeniería, Compras, Comercial Retail, Operaciones, RRII, Otras.
+- Tarea:
+  - Áreas involucradas con selección múltiple (chips), misma lista que la iniciativa.
+  - «¿Qué habilita?» como campo separado de la Descripción.
+  - Peso en la iniciativa cargado a mano (en v8 se quitó: las tareas no tienen peso).
+- Montos en USD.
+
+## Cambios en v6
+- Estructura organizacional: la jerarquía pasa a ser VP › Departamento › Gerencia › Área. Departamento contiene lo que antes era "Dirección" (Marketing, Medios y Prensa, Fidelización…); Gerencia: B2C, B2B, Growth… El ABM se reordenó igual (solapas, columnas, dependencias y cascadas). En toda la app "Dirección" pasa a llamarse "Departamento".
+- Cargar / Editar objetivo (panel lateral, sin el título "Información general"):
+  - Desplegables en cascada VP → Departamento → Gerencia → Área, tomados del ABM. VP y Departamento obligatorios; Gerencia y Área opcionales. Si la VP no es RRII, el departamento es "Departamento que colabora" (de la VP RRII).
+  - Se eliminó el campo Responsable.
+  - Toggle "¿Es objetivo del VP?".
+  - Peso en la VP: viene definido de antemano, sin obligatoriedad ni validación de suma. Se quitó el indicador "Pesos VP RRII: X % de 100 %" de la galería.
+- Detalle y grillas de objetivos: se muestran Departamento, Gerencia, Área y "¿Es objetivo del VP?"; la columna Responsable pasó a ser Gerencia.
+- Pesos automáticos (promedio simple):
+  - Iniciativas: peso = 100 % ÷ cantidad de iniciativas no canceladas del objetivo. Avance del objetivo = promedio simple del avance de sus iniciativas. Se quitaron "Editar pesos" y el campo de peso del formulario de iniciativa.
+  - Tareas: peso repartido en partes iguales (en v7 pasa a cargarse a mano). Es informativo: el avance de la iniciativa sigue saliendo de los resultados clave.
+- Galería de palancas para el rol Visualizador (VP): solapas "Todas las palancas" (galería) y "Mis objetivos" (grilla con los objetivos marcados como del VP: ID, Objetivo, Palanca, Departamento, Peso, Avance, Estado, Ver).
 
 ## Cambios en v5
 - Nuevo ABM (solo Administrador): botón "ABM" en la home, debajo de Tablero VP (ícono de ABM de FARO), y entrada "ABM" en el menú lateral.
@@ -71,7 +132,7 @@ Requiere Python 3 o Node.js instalado.
 - Botones con border-radius 4 px. Estados vacíos con ícono "i" gris.
 
 ## Convenciones de UX a respetar
-- Cargas y actualizaciones (registrar avance, seguimiento de resultado clave, riesgos, pesos, cambiar estado, cargar objetivo/palanca, cargar tarea desde la iniciativa) van en panel lateral con pie fijo; los botones siempre visibles.
+- Cargas y actualizaciones (registrar avance, seguimiento de resultado clave, riesgos, cambiar estado, cargar/editar objetivo, iniciativa, tarea y palanca, ABM) van en panel lateral con pie fijo; los botones siempre visibles.
 - Los modales centrales son solo para confirmaciones: cambios de estado, cierres, cancelaciones y, en el ABM, agregar / editar / eliminar. Siempre Cancelar / Aceptar, título y Aceptar en azul.
 - Colores de botones: primario azul (#0451DD), secundario azul oscuro (#02225D), terciario (#015F7F), Ubicación en la estrategia violeta (#5B00AB). Radio 4 px.
 - Pie de detalle: Cancelar · Editar (primario) · acciones secundarias/terciarias. Fijo al pie de la pantalla.

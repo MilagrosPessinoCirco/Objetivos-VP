@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Gestión de Objetivos VP RRII – Prototipo SharePoint · v5</title>
+<title>Gestión de Objetivos VP RRII – Prototipo SharePoint · v9</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./assets/dc-runtime.js"></script>
 </head>
@@ -77,6 +77,11 @@ a{color:#0451DD}a:hover{color:#03399C}
 .tgl i{position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:#605E5C;transition:left .15s}
 .tgl.on{background:#0451DD;border-color:#0451DD}.tgl.on i{left:23px;background:#fff}
 .tgl:focus-visible{outline:2px solid #0451DD;outline-offset:2px}
+.c-vpo{grid-template-columns:86px minmax(220px,2fr) minmax(150px,1fr) minmax(130px,1fr) 80px 90px 110px 56px}
+.lt.fit .c-vpo>span{padding:10px;min-width:0}
+.c-ovp{grid-template-columns:86px minmax(220px,2fr) 130px minmax(160px,1fr) minmax(130px,1fr) 110px 56px}
+.lt.fit .c-ovp>span{padding:10px;min-width:0}
+.palTabs{margin:4px 0 16px}
 .abmNote{font-size:12px;color:#5b5b5b;margin:-6px 0 0}
 
 
@@ -359,13 +364,13 @@ a{color:#0451DD}a:hover{color:#03399C}
 .c-rk{grid-template-columns:70px minmax(110px,1.3fr) 78px minmax(110px,1.3fr) 92px 92px 64px}
 .lt.fit{min-width:0}
 .c-rk>span{padding:8px 10px}
-.c-kr2{grid-template-columns:minmax(220px,2fr) 100px 96px 84px 84px 84px 70px 84px 84px 92px 104px 120px}
+.c-kr2{grid-template-columns:minmax(220px,2fr) 96px 84px 84px 84px 70px 84px 84px 92px 104px 120px}
 .c-kr2>span{white-space:nowrap}.c-kr2>span:first-child{white-space:normal}
 .fb.sm{white-space:nowrap}
 .lt.wide{min-width:1360px}
 .c-pl{grid-template-columns:86px 220px minmax(240px,2fr) 100px 72px}
 .c-usr{grid-template-columns:150px 180px 140px 170px 100px 72px}
-.rowKr2{grid-template-columns:minmax(200px,2fr) 150px 130px 110px 80px 80px 80px 80px 40px}
+.rowKr2{grid-template-columns:minmax(220px,2fr) 140px 120px 80px 80px 80px 80px 40px}
 @media (max-width:900px){.rowKr2{grid-template-columns:minmax(0,1fr)}.mstGrid{grid-template-columns:minmax(0,1fr)}}
 .r-sh{fill:#E7EFFF}.r-bg{fill:#F5F8FF}.r-roof{fill:#A1C2FD}.r-col{fill:#CBDCFE}
 .r-net{fill:none;stroke:#B866FF;stroke-width:2;stroke-dasharray:4 4}.r-n1{fill:#0451DD}.r-n2{fill:#8902FF}
@@ -375,6 +380,19 @@ a{color:#0451DD}a:hover{color:#03399C}
 .r-sk{fill:#F2C9A8}.r-hair{fill:#3D3D3D}.r-hair2{fill:#552B00}.r-col2{fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
 .wImg{display:block;width:360px;max-width:100%;height:auto;mix-blend-mode:multiply}
 .drawer.side{width:480px}
+.sideIni .fGrid.g3{grid-template-columns:minmax(0,1fr)}
+.sideIni .rowKr2{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;padding:12px 0 14px}
+.sideIni .rowKr2>:nth-child(1){grid-column:1/-1}.sideIni .rowKr2>:nth-child(2),.sideIni .rowKr2>:nth-child(3){grid-column:span 3}
+.sideIni .rowKr2>:nth-child(4),.sideIni .rowKr2>:nth-child(5),.sideIni .rowKr2>:nth-child(6){grid-column:span 2}
+.sideIni .rowKr2>:nth-child(7){grid-column:span 3}.sideIni .rowKr2>:nth-child(n+8){grid-column:span 3;justify-self:end;align-self:end}
+.sideIni .rowKr2 .trashBtn{margin-top:0}
+.sideIni .bandSub{margin:-4px 0 0;font-size:11px;color:#5b5b5b}
+
+.drawer.side.wideP{width:min(780px,100vw)}
+.drawer.side.wideP .dBody{gap:14px;padding-top:0}.drawer.side.wideP .fGrid{gap:12px 18px}.drawer.side.wideP .fSec{gap:10px}
+.drawer.side.wideP .fGrid.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.drawer.side.wideP .fGrid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.drawer.side.wideP .ff textarea{height:56px}
+@media (max-width:700px){.drawer.side.wideP .fGrid.g2,.drawer.side.wideP .fGrid.g3{grid-template-columns:minmax(0,1fr)}}
 .drawer.side .dHead{align-items:flex-start;gap:12px}
 .dTit{display:flex;flex-direction:column;gap:4px;min-width:0}
 .dTit .mSub{margin:0;font-size:12px;color:#5C5C5C}
@@ -586,7 +604,6 @@ a{color:#0451DD}a:hover{color:#03399C}
 <sc-if value="{{scr.palancas}}" hint-placeholder-val="{{ false }}">
 <div class="lHead"><div class="lTitle"><button class="volver" onClick="{{back}}"><span class="vCirc"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></span>Volver</button><h1>Galería de palancas estratégicas</h1></div>
 <div class="lTools">
-<span class="{{peso.cls}}">Pesos VP RRII {{anio}}: {{peso.total}} % de 100 %</span>
 <label class="qSearch"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg><input aria-label="Búsqueda rápida" placeholder="Buscar palanca u objetivo" value="{{q}}" onChange="{{onQ}}"></label>
 <button class="tBtn tRefresh" aria-label="Actualizar" data-tip="Actualizar" onClick="{{refresh}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2 6"></path><path d="M20 4v7h-7"></path></svg></button>
 <button class="tBtn tFilter" onClick="{{openFilters}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"></path></svg>Filtros</button>
@@ -594,15 +611,17 @@ a{color:#0451DD}a:hover{color:#03399C}
 <sc-if value="{{can.createObj}}" hint-placeholder-val="{{ false }}"><button class="tBtn tCargar" onClick="{{newObj}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="15" height="15" rx="3"></rect><path d="M7 8h7M7 12h3"></path><circle cx="18" cy="18" r="4"></circle><path d="M18 16v4M16 18h4"></path></svg>Cargar objetivo</button></sc-if>
 </div></div>
 <p class="lCount">{{palInfo}}</p>
+<sc-if value="{{vpo.isTabs}}" hint-placeholder-val="{{ false }}"><div class="uTabs palTabs" role="tablist" aria-label="Vista"><sc-for list="{{vpo.tabs}}" as="t" hint-placeholder-count="2"><button class="uTab {{t.cls}}" role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}">{{t.label}} <i>{{t.count}}</i></button></sc-for></div></sc-if>
+<sc-if value="{{vpo.showGal}}" hint-placeholder-val="{{ true }}">
 <div class="lTable"><div class="lt fit">
 <div class="lr lh c-gal"><span><span class="srOnly">Expandir</span></span><span>ID</span><span>Palanca</span><span>Descripción</span><span>Objetivos</span><span class="ra">Acciones</span></div>
 <sc-for list="{{gal}}" as="p" hint-placeholder-count="4">
 <div class="lr c-gal galRow"><span><button class="expBtn {{p.expCls}}" aria-expanded="{{p.exp}}" aria-label="{{p.expLbl}}" data-tip="{{p.expLbl}}" onClick="{{p.toggle}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></span><span>{{p.id}}</span><span><b>{{p.nombre}}</b></span><span class="dTxt">{{p.desc}}</span><span>{{p.n}}</span><span class="ra acts"><sc-if value="{{p.canEdit}}" hint-placeholder-val="{{ false }}"><button class="icoBtn" aria-label="Editar palanca {{p.id}}" data-tip="Editar palanca" onClick="{{p.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button></sc-if><sc-if value="{{p.hasDet}}" hint-placeholder-val="{{ true }}"><button class="goBtn" data-tip="Ver palanca" aria-label="Abrir palanca {{p.id}}" onClick="{{p.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></sc-if></span></div>
 <sc-if value="{{p.exp}}" hint-placeholder-val="{{ false }}">
 <div class="nest">
-<div class="lr lh c-gno"><span>ID</span><span>Objetivo</span><span>Dirección</span><span>Responsable</span><span>Peso</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-gno"><span>ID</span><span>Objetivo</span><span>Departamento</span><span>Gerencia</span><span>Peso</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{p.objs}}" as="o" hint-placeholder-count="2">
-<div class="lr c-gno"><span>{{o.id}}</span><span>{{o.nombre}}</span><span>{{o.dir}}</span><span>{{o.resp}}</span><span>{{o.peso}}</span><span><sc-if value="{{o.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{o.col}}">{{o.avT}}</b></sc-if><sc-if value="{{o.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
+<div class="lr c-gno"><span>{{o.id}}</span><span>{{o.nombre}}</span><span>{{o.dir}}</span><span>{{o.ger}}</span><span>{{o.peso}}</span><span><sc-if value="{{o.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{o.col}}">{{o.avT}}</b></sc-if><sc-if value="{{o.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
 <sc-if value="{{p.noObjs}}" hint-placeholder-val="{{ false }}"><div class="grpEmpty">{{p.emptyTxt}}</div></sc-if>
 </div>
@@ -611,6 +630,23 @@ a{color:#0451DD}a:hover{color:#03399C}
 </div>
 <sc-if value="{{noGal}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>No hay palancas ni objetivos con estos filtros.</b><span>Probá cambiar o limpiar los filtros.</span></div></sc-if>
 </div>
+</sc-if>
+<sc-if value="{{vpo.showOth}}" hint-placeholder-val="{{ false }}">
+<div class="lTable"><div class="lt fit">
+<div class="lr lh c-ovp"><span>ID</span><span>Objetivo</span><span>VP</span><span>Departamento que colabora</span><span>Gerencia</span><span>Estado</span><span class="ra">Ver</span></div>
+<sc-for list="{{vpo.rows}}" as="o" hint-placeholder-count="2"><div class="lr c-ovp"><span>{{o.id}}</span><span><b>{{o.nombre}}</b></span><span>{{o.vp}}</span><span>{{o.dir}}</span><span>{{o.ger}}</span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div></sc-for>
+</div>
+<sc-if value="{{vpo.emptyOth}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>No hay objetivos de otras VP.</b><span>Aparecen acá los objetivos de otras vicepresidencias a los que aporta la VP RRII.</span></div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{vpo.showMine}}" hint-placeholder-val="{{ false }}">
+<div class="lTable"><div class="lt fit">
+<div class="lr lh c-vpo"><span>ID</span><span>Objetivo</span><span>Palanca</span><span>Departamento</span><span>Peso VP</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<sc-for list="{{vpo.rows}}" as="o" hint-placeholder-count="3"><div class="lr c-vpo"><span>{{o.id}}</span><span><b>{{o.nombre}}</b></span><span>{{o.pal}}</span><span>{{o.dir}}</span><span>{{o.peso}}</span><span><b class="pctC {{o.col}}">{{o.avT}}</b></span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div></sc-for>
+</div>
+<sc-if value="{{vpo.empty}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>No hay objetivos del VP.</b><span>Los objetivos aparecen acá cuando se cargan con «¿Es objetivo del VP?» activado.</span></div></sc-if>
+</div>
+</sc-if>
 </sc-if>
 
 <sc-if value="{{scr.palanca}}" hint-placeholder-val="{{ false }}">
@@ -628,9 +664,9 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fSec">
 <div class="fBand"><b>Objetivos de la palanca ({{pd.n}})</b><span class="bandL"><sc-if value="{{can.createObj}}" hint-placeholder-val="{{ false }}"><button class="bandAdd" aria-label="Agregar objetivo" data-tip="Agregar objetivo" onClick="{{pd.newObj}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></sc-if></span></div>
 <div class="lTable"><div class="lt fit">
-<div class="lr lh c-gno"><span>ID</span><span>Objetivo</span><span>Dirección</span><span>Responsable</span><span>Peso</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-gno"><span>ID</span><span>Objetivo</span><span>Departamento</span><span>Gerencia</span><span>Peso</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{pd.objs}}" as="o" hint-placeholder-count="2">
-<div class="lr c-gno"><span>{{o.id}}</span><span>{{o.nombre}}</span><span>{{o.dir}}</span><span>{{o.resp}}</span><span>{{o.peso}}</span><span><sc-if value="{{o.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{o.col}}">{{o.avT}}</b></sc-if><sc-if value="{{o.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
+<div class="lr c-gno"><span>{{o.id}}</span><span>{{o.nombre}}</span><span>{{o.dir}}</span><span>{{o.ger}}</span><span>{{o.peso}}</span><span><sc-if value="{{o.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{o.col}}">{{o.avT}}</b></sc-if><sc-if value="{{o.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
 </div>
 <sc-if value="{{pd.noObjs}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>Esta palanca todavía no tiene objetivos cargados para {{anio}}.</b><span>Cuando se carguen, van a aparecer acá.</span></div></sc-if>
@@ -690,7 +726,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <p class="lCount">{{bi.countTxt}}</p>
 <div class="uTabs" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="2"><button class="uTab {{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}} <i>{{t.count}}</i></button></sc-for></div>
 <div class="lTable"><div class="lt">
-<div class="lr lh c-ib"><span>ID</span><span>Iniciativa</span><span>{{bi.objHdr}}</span><span>Responsables</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-ib"><span>ID</span><span>Iniciativa</span><span>{{bi.objHdr}}</span><span>Líderes</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{rows}}" as="it" hint-placeholder-count="6">
 <div class="lr c-ib"><span>{{it.id}}</span><span>{{it.nombre}}</span><span>{{it.objTxt}}</span><span>{{it.resp}}</span><span><sc-if value="{{it.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{it.col}}">{{it.avT}}</b></sc-if><sc-if value="{{it.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{it.estCls}}">{{it.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver detalle" aria-label="Abrir {{it.id}}" onClick="{{it.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
@@ -726,8 +762,9 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Información del objetivo</b><span class="secR"><span class="lockTxt"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Sólo el Administrador lo modifica, con el visto bueno del VP</span><span class="secCtl"><sc-if value="{{sec.o_info.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.o_info.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.o_info.tgL}}" aria-expanded="{{sec.o_info.open}}" data-tip="{{sec.o_info.tgL}}" onClick="{{sec.o_info.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="fGrid g4">
 <div class="ro"><span>VP</span><b>{{od.vp}}</b></div>
-<div class="ro"><span>Dirección</span><b>{{od.dir}}</b></div>
-<div class="ro"><span>Responsable</span><b>{{od.resp}}</b></div>
+<div class="ro"><span>Departamento</span><b>{{od.dir}}</b></div>
+<div class="ro"><span>Gerencia</span><b>{{od.ger}}</b></div>
+<div class="ro"><span>¿Es objetivo del VP?</span><b>{{od.esVpTxt}}</b></div>
 <div class="ro"><span>Palanca estratégica</span><b>{{od.pal}}</b></div>
 </div>
 <div class="fGrid g1"><div class="ro"><span>Descripción</span><b>{{od.desc}}</b></div></div>
@@ -737,7 +774,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Planificación</b><span class="secR"><span class="secCtl"><sc-if value="{{sec.o_plan.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.o_plan.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.o_plan.tgL}}" aria-expanded="{{sec.o_plan.open}}" data-tip="{{sec.o_plan.tgL}}" onClick="{{sec.o_plan.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="fGrid g4">
 <div class="ro"><span>Duración</span><b>{{od.dur}}</b></div>
-<div class="ro"><span>Peso en la VP</span><b>{{od.peso}}</b></div>
+<div class="ro"><span>Peso en el departamento</span><b>{{od.peso}}</b></div>
 <div class="ro"><span>Fecha de inicio</span><b>{{od.fini}}</b></div>
 <div class="ro"><span>Fecha de compromiso</span><b>{{od.fcomp}}</b></div>
 </div>
@@ -747,13 +784,13 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Iniciativas ({{od.nIni}})</b><span class="secR"><span class="bandL"><span class="bandNote">{{od.iniNote}}</span><sc-if value="{{od.canIni}}" hint-placeholder-val="{{ false }}"><button class="bandAdd" aria-label="Agregar iniciativa" data-tip="Agregar iniciativa" onClick="{{od.newIni}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></sc-if></span><span class="secCtl"><sc-if value="{{sec.o_inis.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.o_inis.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.o_inis.tgL}}" aria-expanded="{{sec.o_inis.open}}" data-tip="{{sec.o_inis.tgL}}" onClick="{{sec.o_inis.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="lTable"><div class="lt fit">
 <sc-if value="{{od.showW}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-oiP"><span>ID</span><span>Iniciativa</span><span>Responsables</span><span>Avance</span><span>Peso</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-oiP"><span>ID</span><span>Iniciativa</span><span>Líderes</span><span>Avance</span><span>Peso</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{od.inis}}" as="it" hint-placeholder-count="2">
 <div class="lr c-oiP"><span>{{it.id}}</span><span>{{it.nombre}}</span><span>{{it.resp}}</span><span><b class="pctC {{it.col}}">{{it.avT}}</b></span><span><b>{{it.peso}}</b></span><span><span class="{{it.estCls}}">{{it.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver detalle" aria-label="Abrir {{it.id}}" onClick="{{it.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
 </sc-if>
 <sc-if value="{{od.noW}}" hint-placeholder-val="{{ true }}">
-<div class="lr lh c-oi"><span>ID</span><span>Iniciativa</span><span>Responsables</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-oi"><span>ID</span><span>Iniciativa</span><span>Líderes</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{od.inis}}" as="it" hint-placeholder-count="2">
 <div class="lr c-oi"><span>{{it.id}}</span><span>{{it.nombre}}</span><span>{{it.resp}}</span><span><sc-if value="{{it.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{it.col}}">{{it.avT}}</b></sc-if><sc-if value="{{it.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{it.estCls}}">{{it.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver detalle" aria-label="Abrir {{it.id}}" onClick="{{it.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
@@ -784,12 +821,12 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Información de la iniciativa</b><span class="secR"><span class="secCtl"><sc-if value="{{sec.i_info.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.i_info.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.i_info.tgL}}" aria-expanded="{{sec.i_info.open}}" data-tip="{{sec.i_info.tgL}}" onClick="{{sec.i_info.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="fGrid g4">
 <div class="ro"><span>Objetivo</span><b>{{idt.objTxt}}</b></div>
-<div class="ro"><span>Responsables</span><b>{{idt.resp}}</b></div>
+<div class="ro"><span>Líderes</span><b>{{idt.resp}}</b></div>
 <div class="ro"><span>Áreas involucradas</span><b>{{idt.areas}}</b></div>
 <div class="ro"><span>Estado</span><b>{{idt.est}}</b></div>
 <div class="ro"><span>Fecha de inicio</span><b>{{idt.fini}}</b></div>
 <div class="ro"><span>Fecha de compromiso</span><b>{{idt.fcomp}}</b></div>
-<sc-if value="{{idt.showW}}" hint-placeholder-val="{{ false }}"><div class="ro"><span>Peso en el objetivo</span><b>{{idt.peso}}</b></div></sc-if>
+<sc-if value="{{idt.showW}}" hint-placeholder-val="{{ false }}"><div class="ro"><span>Peso en el objetivo</span><b>{{idt.peso}}</b></div><div class="ro"><span>Peso en el departamento</span><b>{{idt.pesoDep}}</b></div></sc-if>
 </div>
 <div class="fGrid g1"><div class="ro"><span>Descripción / impacto esperado</span><b>{{idt.desc}}</b></div></div>
 </div>
@@ -802,9 +839,9 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{sec.i_kr.cls}}">
 <div class="fBand"><b>Resultados clave ({{idt.nKr}})</b><span class="secR"><span class="bandNote">Avance = Σ (peso × mín(cumplimiento, 100 %)) ÷ Σ pesos · cumplimiento = valor ÷ máximo</span><span class="secCtl"><sc-if value="{{sec.i_kr.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.i_kr.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.i_kr.tgL}}" aria-expanded="{{sec.i_kr.open}}" data-tip="{{sec.i_kr.tgL}}" onClick="{{sec.i_kr.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="lTable"><div class="lt wide">
-<div class="lr lh c-kr2"><span>Resultado clave</span><span>Responsable</span><span>Tipo</span><span>Mín.</span><span>Meta</span><span>Máx.</span><span>Peso</span><span>Actual</span><span>Proyect.</span><span>Cumplim.</span><span>Estado</span><span class="ra">Acción</span></div>
+<div class="lr lh c-kr2"><span>Resultado clave</span><span>Tipo</span><span>Mín.</span><span>Meta</span><span>Máx.</span><span>Peso</span><span>Actual</span><span>Proyect.</span><span>Cumplim.</span><span>Estado</span><span class="ra">Acción</span></div>
 <sc-for list="{{idt.krs}}" as="k" hint-placeholder-count="2">
-<div class="lr c-kr2"><span>{{k.nombre}}<small class="sub">{{k.unidad}}{{k.fuenteTxt}}</small></span><span>{{k.resp}}</span><span>{{k.tipo}}</span><span>{{k.min}}</span><span>{{k.meta}}</span><span>{{k.max}}</span><span>{{k.peso}}</span><span><b>{{k.actual}}</b></span><span>{{k.proy}}</span><span>{{k.cump}}</span><span><span class="{{k.estCls}}">{{k.est}}</span></span><span class="ra"><sc-if value="{{k.can}}" hint-placeholder-val="{{ false }}"><button class="icoBtn" aria-label="Registrar seguimiento" data-tip="Registrar seguimiento" onClick="{{k.upd}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l6-6 4 4 6-8"></path><path d="M15 8h5v5"></path></svg></button></sc-if><sc-if value="{{k.cant}}" hint-placeholder-val="{{ true }}"><span class="muted">—</span></sc-if></span></div>
+<div class="lr c-kr2"><span>{{k.nombre}}<small class="sub">{{k.unidad}}{{k.fuenteTxt}}</small></span><span>{{k.tipo}}</span><span>{{k.min}}</span><span>{{k.meta}}</span><span>{{k.max}}</span><span>{{k.peso}}</span><span><b>{{k.actual}}</b></span><span>{{k.proy}}</span><span>{{k.cump}}</span><span><span class="{{k.estCls}}">{{k.est}}</span></span><span class="ra"><sc-if value="{{k.can}}" hint-placeholder-val="{{ false }}"><button class="icoBtn" aria-label="Registrar seguimiento" data-tip="Registrar seguimiento" onClick="{{k.upd}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l6-6 4 4 6-8"></path><path d="M15 8h5v5"></path></svg></button></sc-if><sc-if value="{{k.cant}}" hint-placeholder-val="{{ true }}"><span class="muted">—</span></sc-if></span></div>
 </sc-for>
 </div></div>
 </div>
@@ -866,13 +903,18 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="ro"><span>Iniciativa</span><b>{{td.iniTxt}}</b></div>
 <div class="ro"><span>Objetivo</span><b>{{td.objTxt}}</b></div>
 <div class="ro"><span>Responsable</span><b>{{td.resp}}</b></div>
-<div class="ro"><span>Área</span><b>{{td.area}}</b></div>
+<div class="ro"><span>Áreas involucradas</span><b>{{td.areas}}</b></div>
 <div class="ro"><span>Prioridad</span><b>{{td.prio}}</b></div>
 <div class="ro"><span>Fecha de inicio</span><b>{{td.fini}}</b></div>
 <div class="ro"><span>Fecha de compromiso</span><b>{{td.fcomp}}</b></div>
 <div class="ro"><span>Fecha de finalización</span><b>{{td.ffin}}</b></div>
 </div>
-<div class="fGrid g1"><div class="ro"><span>Descripción / qué habilita</span><b>{{td.desc}}</b></div></div>
+<div class="fGrid g1"><div class="ro"><span>Descripción</span><b>{{td.desc}}</b></div><div class="ro"><span>¿Qué habilita?</span><b>{{td.habil}}</b></div></div>
+</div>
+<div class="{{sec.t_com.cls}}">
+<div class="fBand"><b>Comentario ejecutivo</b><span class="secR"><span class="secCtl"><sc-if value="{{sec.t_com.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.t_com.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.t_com.tgL}}" aria-expanded="{{sec.t_com.open}}" data-tip="{{sec.t_com.tgL}}" onClick="{{sec.t_com.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
+<sc-if value="{{td.hasCom}}" hint-placeholder-val="{{ true }}"><div class="coms"><div class="hItem"><div class="top"><span>{{td.com.f}}</span><b>{{td.com.a}}</b></div><span>{{td.com.c}}</span></div></div></sc-if>
+<sc-if value="{{td.noCom}}" hint-placeholder-val="{{ false }}"><p class="muted" style="padding: 0 4px">Todavía no hay comentario ejecutivo.</p></sc-if>
 </div>
 <div class="{{sec.t_bud.cls}}">
 <div class="fBand"><b>Presupuesto</b><span class="secR"><span class="secCtl"><sc-if value="{{sec.t_bud.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.t_bud.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.t_bud.tgL}}" aria-expanded="{{sec.t_bud.open}}" data-tip="{{sec.t_bud.tgL}}" onClick="{{sec.t_bud.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
@@ -909,8 +951,10 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Información general</b></div>
 <div class="fGrid g3">
 <div class="{{fc.vp}}"><label for="oVp">VP <em>*</em></label><select id="oVp" value="{{fv.vp}}" onChange="{{fh.vp}}"><option value="">Seleccionar</option><sc-for list="{{opt.vp}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.vp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.vp}}</span></sc-if></div>
-<div class="{{fc.dir}}"><label for="oDir">{{fm.dirLbl}} <em>*</em></label><select id="oDir" value="{{fv.dir}}" onChange="{{fh.dir}}"><option value="">Seleccionar</option><sc-for list="{{opt.dir}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dir}}</span></sc-if></div>
-<div class="{{fc.resp}}"><label for="oResp">Responsable <em>*</em></label><select id="oResp" value="{{fv.resp}}" onChange="{{fh.resp}}"><option value="">{{fm.respPh}}</option><sc-for list="{{opt.respDir}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.dir}}"><label for="oDir">{{fm.dirLbl}} <em>*</em></label><select id="oDir" value="{{fv.dir}}" onChange="{{fh.dir}}" disabled="{{fm.dirDis}}"><option value="">{{fm.dirPh}}</option><sc-for list="{{opt.dir}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dir}}</span></sc-if></div>
+<div class="{{fc.ger}}"><label for="oGer">Gerencia <em>*</em></label><select id="oGer" value="{{fv.ger}}" onChange="{{fh.ger}}" disabled="{{fm.gerDis}}"><option value="">{{fm.gerPh}}</option><sc-for list="{{opt.gerO}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.ger}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ger}}</span></sc-if></div>
+<div class="tglF"><span class="tglL" id="oEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="oEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
+<sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="oPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="oPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g1">
 <div class="{{fc.nombre}}"><div class="lblRow"><label for="oNom">Nombre del objetivo <em>*</em></label><button type="button" class="helpIc" aria-label="Ver guía de redacción" aria-expanded="{{fm.showGuide}}" onClick="{{fm.toggleGuide}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4v.3M12 17h.01"></path></svg></button></div>
@@ -929,7 +973,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.pal}}"><label for="oPal">Palanca <em>*</em></label><select id="oPal" value="{{fv.pal}}" onChange="{{fh.pal}}"><option value="">Seleccionar</option><sc-for list="{{opt.pal}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.pal}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pal}}</span></sc-if></div>
 <div class="{{fc.dur}}"><label for="oDur">Duración <em>*</em></label><select id="oDur" value="{{fv.dur}}" onChange="{{fh.dur}}"><option value="">Seleccionar</option><option value="Anual">Anual</option><option value="Plurianual">Plurianual</option><option value="Permanente">Permanente</option></select><sc-if value="{{fe.dur}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dur}}</span></sc-if></div>
 <sc-if value="{{fm.isPluri}}" hint-placeholder-val="{{ false }}"><div class="{{fc.anios}}"><label for="oAn">Cantidad de años <em>*</em></label><select id="oAn" value="{{fv.anios}}" onChange="{{fh.anios}}"><option value="">Seleccionar</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><sc-if value="{{fe.anios}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.anios}}</span></sc-if></div></sc-if>
-<div class="{{fc.peso}}"><label for="oPeso">Peso en la VP (%) <em>*</em></label><input id="oPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Asignado en {{anio}} sin este objetivo: {{fm.pesoOtros}} % de 100 %</span></div>
+<div class="{{fc.peso}}"><label for="oPeso">Peso del objetivo en el Departamento (%)</label><input id="oPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Definido de antemano</span></div>
 </div>
 <div class="fGrid g4">
 <div class="{{fc.fini}}"><label for="oIni">Fecha de inicio <em>*</em></label><input id="oIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -943,12 +987,12 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fSec">
 <div class="fBand"><b>Información general</b></div>
 <div class="fGrid g3 top">
-<div class="{{fc.obj}}"><label for="iObj">Objetivo <em>*</em></label><select id="iObj" value="{{fv.obj}}" onChange="{{fh.obj}}" disabled="{{fm.isEdit}}"><option value="">Seleccionar (primero los de tu dirección)</option><sc-for list="{{opt.objs}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.obj}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.obj}}</span></sc-if></div>
+<div class="{{fc.obj}}"><label for="iObj">Objetivo <em>*</em></label><select id="iObj" value="{{fv.obj}}" onChange="{{fh.obj}}" disabled="{{fm.isEdit}}"><option value="">Seleccionar (primero los de tu departamento)</option><sc-for list="{{opt.objs}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.obj}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.obj}}</span></sc-if></div>
 <div class="{{fc.nombre}}"><label for="iNom">Nombre de la iniciativa <em>*</em></label><input id="iNom" placeholder="Ej. Promo vaso coleccionable" value="{{fv.nombre}}" onChange="{{fh.nombre}}"><sc-if value="{{fe.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.nombre}}</span></sc-if></div>
 <div class="{{fc.desc}}"><label for="iDesc">Descripción / impacto esperado <em>*</em></label><textarea id="iDesc" placeholder="Qué se va a hacer y qué se espera lograr" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
 <div class="fGrid g3 top">
-<div class="{{fc.resp}}"><label for="iResp">Responsables <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar responsable</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.resp}}"><label for="iResp">Líderes <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
 <div class="ff"><label for="iAreas">Áreas involucradas</label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="0"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
 <div class="dates2">
 <div class="{{fc.fini}}"><label for="iIni">Fecha de inicio <em>*</em></label><input id="iIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -970,7 +1014,6 @@ a{color:#0451DD}a:hover{color:#03399C}
 <sc-for list="{{krs}}" as="k" hint-placeholder-count="1">
 <div class="rowLine rowKr2">
 <div class="{{k.c.nombre}}"><label for="kN{{$index}}">Resultado clave {{k.n}} <em>*</em></label><input id="kN{{$index}}" placeholder="Ej. Implementar YPF Store en 40 EESS" value="{{k.v.nombre}}" onChange="{{k.h.nombre}}"><sc-if value="{{k.e.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.nombre}}</span></sc-if></div>
-<div class="{{k.c.resp}}"><label for="kR{{$index}}">Responsable <em>*</em></label><select id="kR{{$index}}" value="{{k.v.resp}}" onChange="{{k.h.resp}}"><option value="">Seleccionar</option><sc-for list="{{opt.people}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{k.e.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.resp}}</span></sc-if></div>
 <div class="{{k.c.tipo}}"><label for="kT{{$index}}">Tipo de medición <em>*</em></label><select id="kT{{$index}}" value="{{k.v.tipo}}" onChange="{{k.h.tipo}}"><option value="">Seleccionar</option><option value="Cantidad">Cantidad</option><option value="Porcentaje">Porcentaje</option><option value="Moneda">Moneda</option><option value="Indicador">Indicador</option></select><sc-if value="{{k.e.tipo}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.tipo}}</span></sc-if></div>
 <div class="{{k.c.unidad}}"><label for="kU{{$index}}">Unidad <em>*</em></label><input id="kU{{$index}}" placeholder="Ej. estaciones" value="{{k.v.unidad}}" onChange="{{k.h.unidad}}"><sc-if value="{{k.e.unidad}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.unidad}}</span></sc-if></div>
 <div class="{{k.c.min}}"><label for="kMi{{$index}}">Mínimo <em>*</em></label><input id="kMi{{$index}}" type="number" value="{{k.v.min}}" onChange="{{k.h.min}}"><sc-if value="{{k.e.min}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.min}}</span></sc-if></div>
@@ -996,10 +1039,11 @@ a{color:#0451DD}a:hover{color:#03399C}
 </div>
 <div class="fGrid g1">
 <div class="{{fc.nombre}}"><label for="tNom">Nombre de la tarea <em>*</em></label><input id="tNom" placeholder="Ej. Firma de contrato" value="{{fv.nombre}}" onChange="{{fh.nombre}}"><sc-if value="{{fe.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.nombre}}</span></sc-if></div>
-<div class="{{fc.desc}}"><label for="tDesc">Descripción / qué habilita <em>*</em></label><textarea id="tDesc" placeholder="Qué se hace y qué destraba" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
+<div class="{{fc.desc}}"><label for="tDesc">Descripción <em>*</em></label><textarea id="tDesc" placeholder="Qué se hace en esta tarea" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
+<div class="{{fc.habil}}"><label for="tHab">¿Qué habilita? <em>*</em></label><textarea id="tHab" placeholder="Qué destraba o permite esta tarea" value="{{fv.habil}}" onChange="{{fh.habil}}"></textarea><sc-if value="{{fe.habil}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.habil}}</span></sc-if></div>
 </div>
 <div class="fGrid g4">
-<div class="{{fc.area}}"><label for="tArea">Área <em>*</em></label><select id="tArea" value="{{fv.area}}" onChange="{{fh.area}}"><option value="">Seleccionar</option><sc-for list="{{opt.areas}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.area}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.area}}</span></sc-if></div>
+<div class="{{fc.areas}}"><label for="tAreas">Áreas involucradas <em>*</em></label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="tAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.areas}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.areas}}</span></sc-if></div>
 <div class="ff"><label for="tPrio">Prioridad</label><select id="tPrio" value="{{fv.prio}}" onChange="{{fh.prio}}"><option value="">Sin prioridad</option><option value="Alta">Alta</option><option value="Media">Media</option><option value="Baja">Baja</option></select></div>
 <div class="{{fc.fini}}"><label for="tFi">Fecha de inicio <em>*</em></label><input id="tFi" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
 <div class="{{fc.fcomp}}"><label for="tFc">Fecha de compromiso <em>*</em></label><input id="tFc" type="date" value="{{fv.fcomp}}" onChange="{{fh.fcomp}}"><sc-if value="{{fe.fcomp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fcomp}}</span></sc-if></div>
@@ -1010,7 +1054,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fGrid g3">
 <div class="{{fc.inv}}"><label for="tInv">Requiere inversión <em>*</em></label><select id="tInv" value="{{fv.inv}}" onChange="{{fh.inv}}"><option value="No">No</option><option value="Sí">Sí</option></select></div>
 <sc-if value="{{fm.invSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.ceco}}"><label for="tCeco">CECO <em>*</em></label><input id="tCeco" placeholder="Ej. 4100123" value="{{fv.ceco}}" onChange="{{fh.ceco}}"><sc-if value="{{fe.ceco}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ceco}}</span></sc-if></div></sc-if>
-<sc-if value="{{fm.invSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.ap}}"><label for="tAp">Presupuesto aprobado ($) <em>*</em></label><input id="tAp" type="number" min="0" value="{{fv.ap}}" onChange="{{fh.ap}}"><sc-if value="{{fe.ap}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ap}}</span></sc-if></div></sc-if>
+<sc-if value="{{fm.invSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.ap}}"><label for="tAp">Presupuesto aprobado (USD) <em>*</em></label><input id="tAp" type="number" min="0" value="{{fv.ap}}" onChange="{{fh.ap}}"><sc-if value="{{fe.ap}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ap}}</span></sc-if></div></sc-if>
 </div>
 </div>
 </sc-if>
@@ -1033,24 +1077,24 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="uTabs" role="tablist" aria-label="Qué administrar"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button class="uTab {{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}} <i>{{t.count}}</i></button></sc-for></div>
 <div class="lTable"><div class="lt fit">
 <sc-if value="{{abm.is.vp}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-aVp"><span>ID</span><span>Vicepresidencia</span><span>Sigla</span><span>Gerencias</span><span>Estado</span><span class="ra">Acciones</span></div>
+<div class="lr lh c-aVp"><span>ID</span><span>Vicepresidencia</span><span>Sigla</span><span>Departamentos</span><span>Estado</span><span class="ra">Acciones</span></div>
 <sc-for list="{{abm.rows}}" as="it" hint-placeholder-count="5"><div class="lr c-aVp"><span>{{it.id}}</span><span><b>{{it.nombre}}</b></span><span>{{it.sigla}}</span><span>{{it.n}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><span class="rowActs"><button class="icoBtn" aria-label="Editar {{it.lbl}}" data-tip="Editar" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button><sc-if value="{{it.canDel}}" hint-placeholder-val="{{ true }}"><button class="icoBtn del" aria-label="Eliminar {{it.lbl}}" data-tip="Eliminar" onClick="{{it.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{it.noDel}}" hint-placeholder-val="{{ false }}"><button class="icoBtn off" aria-disabled="true" aria-label="No se puede eliminar {{it.lbl}}" data-tip="{{it.delTip}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></span></span></div></sc-for>
 </sc-if>
-<sc-if value="{{abm.is.ger}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-aGer"><span>ID</span><span>Gerencia</span><span>Vicepresidencia</span><span>Departamentos</span><span>Estado</span><span class="ra">Acciones</span></div>
+<sc-if value="{{abm.is.dep}}" hint-placeholder-val="{{ false }}">
+<div class="lr lh c-aGer"><span>ID</span><span>Departamento</span><span>Vicepresidencia</span><span>Gerencias</span><span>Estado</span><span class="ra">Acciones</span></div>
 <sc-for list="{{abm.rows}}" as="it" hint-placeholder-count="6"><div class="lr c-aGer"><span>{{it.id}}</span><span><b>{{it.nombre}}</b></span><span>{{it.p1}}</span><span>{{it.n}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><span class="rowActs"><button class="icoBtn" aria-label="Editar {{it.lbl}}" data-tip="Editar" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button><sc-if value="{{it.canDel}}" hint-placeholder-val="{{ true }}"><button class="icoBtn del" aria-label="Eliminar {{it.lbl}}" data-tip="Eliminar" onClick="{{it.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{it.noDel}}" hint-placeholder-val="{{ false }}"><button class="icoBtn off" aria-disabled="true" aria-label="No se puede eliminar {{it.lbl}}" data-tip="{{it.delTip}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></span></span></div></sc-for>
 </sc-if>
-<sc-if value="{{abm.is.dep}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-aDep"><span>ID</span><span>Departamento</span><span>Gerencia</span><span>Vicepresidencia</span><span>Áreas</span><span>Estado</span><span class="ra">Acciones</span></div>
+<sc-if value="{{abm.is.ger}}" hint-placeholder-val="{{ false }}">
+<div class="lr lh c-aDep"><span>ID</span><span>Gerencia</span><span>Departamento</span><span>Vicepresidencia</span><span>Áreas</span><span>Estado</span><span class="ra">Acciones</span></div>
 <sc-for list="{{abm.rows}}" as="it" hint-placeholder-count="6"><div class="lr c-aDep"><span>{{it.id}}</span><span><b>{{it.nombre}}</b></span><span>{{it.p1}}</span><span>{{it.p2}}</span><span>{{it.n}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><span class="rowActs"><button class="icoBtn" aria-label="Editar {{it.lbl}}" data-tip="Editar" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button><sc-if value="{{it.canDel}}" hint-placeholder-val="{{ true }}"><button class="icoBtn del" aria-label="Eliminar {{it.lbl}}" data-tip="Eliminar" onClick="{{it.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{it.noDel}}" hint-placeholder-val="{{ false }}"><button class="icoBtn off" aria-disabled="true" aria-label="No se puede eliminar {{it.lbl}}" data-tip="{{it.delTip}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></span></span></div></sc-for>
 </sc-if>
 <sc-if value="{{abm.is.area}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-aAr"><span>ID</span><span>Área</span><span>Departamento</span><span>Gerencia</span><span>Usuarios</span><span>Estado</span><span class="ra">Acciones</span></div>
+<div class="lr lh c-aAr"><span>ID</span><span>Área</span><span>Gerencia</span><span>Departamento</span><span>Usuarios</span><span>Estado</span><span class="ra">Acciones</span></div>
 <sc-for list="{{abm.rows}}" as="it" hint-placeholder-count="6"><div class="lr c-aAr"><span>{{it.id}}</span><span><b>{{it.nombre}}</b></span><span>{{it.p1}}</span><span>{{it.p2}}</span><span>{{it.n}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><span class="rowActs"><button class="icoBtn" aria-label="Editar {{it.lbl}}" data-tip="Editar" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button><sc-if value="{{it.canDel}}" hint-placeholder-val="{{ true }}"><button class="icoBtn del" aria-label="Eliminar {{it.lbl}}" data-tip="Eliminar" onClick="{{it.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{it.noDel}}" hint-placeholder-val="{{ false }}"><button class="icoBtn off" aria-disabled="true" aria-label="No se puede eliminar {{it.lbl}}" data-tip="{{it.delTip}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></span></span></div></sc-for>
 </sc-if>
 <sc-if value="{{abm.is.us}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-aUs"><span>Nombre del usuario</span><span>Correo</span><span>Gerencia</span><span>Departamento</span><span>Área</span><span>Rol</span><span>Estado</span><span class="ra">Acciones</span></div>
-<sc-for list="{{abm.rows}}" as="it" hint-placeholder-count="6"><div class="lr c-aUs"><span><b>{{it.nombre}}</b></span><span>{{it.mail}}</span><span>{{it.ger}}</span><span>{{it.dep}}</span><span>{{it.area}}</span><span>{{it.rol}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><span class="rowActs"><button class="icoBtn" aria-label="Editar {{it.lbl}}" data-tip="Editar" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button><sc-if value="{{it.canDel}}" hint-placeholder-val="{{ true }}"><button class="icoBtn del" aria-label="Eliminar {{it.lbl}}" data-tip="Eliminar" onClick="{{it.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{it.noDel}}" hint-placeholder-val="{{ false }}"><button class="icoBtn off" aria-disabled="true" aria-label="No se puede eliminar {{it.lbl}}" data-tip="{{it.delTip}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></span></span></div></sc-for>
+<div class="lr lh c-aUs"><span>Nombre del usuario</span><span>Correo</span><span>Departamento</span><span>Gerencia</span><span>Área</span><span>Rol</span><span>Estado</span><span class="ra">Acciones</span></div>
+<sc-for list="{{abm.rows}}" as="it" hint-placeholder-count="6"><div class="lr c-aUs"><span><b>{{it.nombre}}</b></span><span>{{it.mail}}</span><span>{{it.dep}}</span><span>{{it.ger}}</span><span>{{it.area}}</span><span>{{it.rol}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><span class="rowActs"><button class="icoBtn" aria-label="Editar {{it.lbl}}" data-tip="Editar" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button><sc-if value="{{it.canDel}}" hint-placeholder-val="{{ true }}"><button class="icoBtn del" aria-label="Eliminar {{it.lbl}}" data-tip="Eliminar" onClick="{{it.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{it.noDel}}" hint-placeholder-val="{{ false }}"><button class="icoBtn off" aria-disabled="true" aria-label="No se puede eliminar {{it.lbl}}" data-tip="{{it.delTip}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></span></span></div></sc-for>
 </sc-if>
 </div>
 <sc-if value="{{abm.empty}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>{{abm.emptyT}}</b><span>Probá cambiar o limpiar los filtros.</span></div></sc-if>
@@ -1083,7 +1127,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fSec">
 <div class="fBand"><b>Usuarios de la VP y roles</b><span class="bandNote">Las personas se toman del directorio corporativo · cada persona tiene un único rol</span></div>
 <div class="lTable"><div class="lt narrow">
-<div class="lr lh c-usr"><span>Persona</span><span>Dirección</span><span>Gerencia / área</span><span>Rol</span><span>Estado</span><span class="ra">Acción</span></div>
+<div class="lr lh c-usr"><span>Persona</span><span>Departamento</span><span>Gerencia</span><span>Rol</span><span>Estado</span><span class="ra">Acción</span></div>
 <sc-for list="{{cfg.users}}" as="it" hint-placeholder-count="6">
 <div class="lr c-usr"><span><b>{{it.p}}</b></span><span>{{it.dir}}</span><span>{{it.ger}}</span><span>{{it.rol}}</span><span><span class="{{it.cls}}">{{it.st}}</span></span><span class="ra"><button class="icoBtn" aria-label="Editar usuario {{it.p}}" data-tip="Editar usuario" onClick="{{it.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg></button></span></div>
 </sc-for>
@@ -1130,7 +1174,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="ff"><label for="dAe">Estado</label><select id="dAe" value="{{fd.aEst}}" onChange="{{fdh.aEst}}"><option value="">Todos</option><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div>
 </sc-if>
 <sc-if value="{{notAbm}}" hint-placeholder-val="{{ true }}">
-<div class="ff"><label for="dDir">Dirección</label><select id="dDir" value="{{fd.dir}}" onChange="{{fdh.dir}}"><option value="">Todas</option><sc-for list="{{opt.dirAll}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
+<div class="ff"><label for="dDir">Departamento</label><select id="dDir" value="{{fd.dir}}" onChange="{{fdh.dir}}"><option value="">Todas</option><sc-for list="{{opt.dirAll}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
 <sc-if value="{{notPal}}" hint-placeholder-val="{{ true }}"><div class="ff"><label for="dObj">Objetivo</label><select id="dObj" value="{{fd.obj}}" onChange="{{fdh.obj}}"><option value="">Todos</option><sc-for list="{{opt.objsAll}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></sc-if>
 <sc-if value="{{scr.tareas}}" hint-placeholder-val="{{ false }}"><div class="ff"><label for="dIni">Iniciativa</label><select id="dIni" value="{{fd.ini}}" onChange="{{fdh.ini}}"><option value="">Todas</option><sc-for list="{{opt.inisAll}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></sc-if>
 <div class="ff"><label for="dResp">Responsable</label><select id="dResp" value="{{fd.resp}}" onChange="{{fdh.resp}}"><option value="">Todos</option><sc-for list="{{opt.people}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
@@ -1190,11 +1234,12 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="dHead"><div class="dTit"><h3 id="soTitle">{{fm.title}}</h3><p class="mSub">{{fm.objSub}}</p></div><button class="dClose" aria-label="Cerrar" onClick="{{back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
 <div class="dBody">
 <div class="fSec">
-<div class="fBand"><b>Información general</b></div>
 <div class="fGrid g1">
 <div class="{{fc.vp}}"><label for="soVp">VP <em>*</em></label><select id="soVp" value="{{fv.vp}}" onChange="{{fh.vp}}"><option value="">Seleccionar</option><sc-for list="{{opt.vp}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.vp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.vp}}</span></sc-if></div>
-<div class="{{fc.dir}}"><label for="soDir">{{fm.dirLbl}} <em>*</em></label><select id="soDir" value="{{fv.dir}}" onChange="{{fh.dir}}"><option value="">Seleccionar</option><sc-for list="{{opt.dir}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dir}}</span></sc-if></div>
-<div class="{{fc.resp}}"><label for="soResp">Responsable <em>*</em></label><select id="soResp" value="{{fv.resp}}" onChange="{{fh.resp}}"><option value="">{{fm.respPh}}</option><sc-for list="{{opt.respDir}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.dir}}"><label for="soDir">{{fm.dirLbl}} <em>*</em></label><select id="soDir" value="{{fv.dir}}" onChange="{{fh.dir}}" disabled="{{fm.dirDis}}"><option value="">{{fm.dirPh}}</option><sc-for list="{{opt.dir}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dir}}</span></sc-if></div>
+<div class="{{fc.ger}}"><label for="soGer">Gerencia <em>*</em></label><select id="soGer" value="{{fv.ger}}" onChange="{{fh.ger}}" disabled="{{fm.gerDis}}"><option value="">{{fm.gerPh}}</option><sc-for list="{{opt.gerO}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.ger}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ger}}</span></sc-if></div>
+<div class="tglF"><span class="tglL" id="soEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="soEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
+<sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="soPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="soPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g1">
 <div class="{{fc.nombre}}"><div class="lblRow"><label for="soNom">Nombre del objetivo <em>*</em></label><button type="button" class="helpIc" aria-label="Ver guía de redacción" aria-expanded="{{fm.showGuide}}" onClick="{{fm.toggleGuide}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4v.3M12 17h.01"></path></svg></button></div>
@@ -1213,7 +1258,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.pal}}"><label for="soPal">Palanca <em>*</em></label><select id="soPal" value="{{fv.pal}}" onChange="{{fh.pal}}"><option value="">Seleccionar</option><sc-for list="{{opt.pal}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.pal}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pal}}</span></sc-if></div>
 <div class="{{fc.dur}}"><label for="soDur">Duración <em>*</em></label><select id="soDur" value="{{fv.dur}}" onChange="{{fh.dur}}"><option value="">Seleccionar</option><option value="Anual">Anual</option><option value="Plurianual">Plurianual</option><option value="Permanente">Permanente</option></select><sc-if value="{{fe.dur}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dur}}</span></sc-if></div>
 <sc-if value="{{fm.isPluri}}" hint-placeholder-val="{{ false }}"><div class="{{fc.anios}}"><label for="soAn">Cantidad de años <em>*</em></label><select id="soAn" value="{{fv.anios}}" onChange="{{fh.anios}}"><option value="">Seleccionar</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><sc-if value="{{fe.anios}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.anios}}</span></sc-if></div></sc-if>
-<div class="{{fc.peso}}"><label for="soPeso">Peso en la VP (%) <em>*</em></label><input id="soPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Asignado en {{anio}} sin este objetivo: {{fm.pesoOtros}} % de 100 %</span></div>
+<div class="{{fc.peso}}"><label for="soPeso">Peso del objetivo en el Departamento (%)</label><input id="soPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Definido de antemano</span></div>
 </div>
 <div class="fGrid g2">
 <div class="{{fc.fini}}"><label for="soIni">Fecha de inicio <em>*</em></label><input id="soIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -1227,6 +1272,61 @@ a{color:#0451DD}a:hover{color:#03399C}
 </div>
 </sc-if>
 
+<sc-if value="{{sideIni}}" hint-placeholder-val="{{ false }}">
+<div class="dOverlay">
+<button class="dScrim" aria-label="Cerrar" onClick="{{back}}"></button>
+<aside class="drawer side sideIni" role="dialog" aria-modal="true" aria-labelledby="siTitle">
+<div class="dHead"><div class="dTit"><h3 id="siTitle">{{fm.title}}</h3><p class="mSub">{{fm.iniSub}}</p></div><button class="dClose" aria-label="Cerrar" onClick="{{back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+<div class="dBody">
+<div class="fSec">
+<div class="fGrid g3 top">
+<div class="{{fc.obj}}"><label for="iObj">Objetivo <em>*</em></label><select id="iObj" value="{{fv.obj}}" onChange="{{fh.obj}}" disabled="{{fm.isEdit}}"><option value="">Seleccionar (primero los de tu departamento)</option><sc-for list="{{opt.objs}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.obj}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.obj}}</span></sc-if></div>
+<div class="{{fc.nombre}}"><label for="iNom">Nombre de la iniciativa <em>*</em></label><input id="iNom" placeholder="Ej. Promo vaso coleccionable" value="{{fv.nombre}}" onChange="{{fh.nombre}}"><sc-if value="{{fe.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.nombre}}</span></sc-if></div>
+<div class="{{fc.desc}}"><label for="iDesc">Descripción / impacto esperado <em>*</em></label><textarea id="iDesc" placeholder="Qué se va a hacer y qué se espera lograr" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
+</div>
+<div class="fGrid g3 top">
+<div class="{{fc.resp}}"><label for="iResp">Líderes <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="ff"><label for="iAreas">Áreas involucradas</label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="0"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
+<div class="dates2">
+<div class="{{fc.fini}}"><label for="iIni">Fecha de inicio <em>*</em></label><input id="iIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
+<div class="{{fc.fcomp}}"><label for="iComp">Fecha de compromiso <em>*</em></label><input id="iComp" type="date" value="{{fv.fcomp}}" onChange="{{fh.fcomp}}"><sc-if value="{{fe.fcomp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fcomp}}</span></sc-if></div>
+</div>
+</div>
+<sc-if value="{{fm.isEdit}}" hint-placeholder-val="{{ false }}"><div class="fGrid g3"><div class="ff"><label for="iEst">Estado <em>*</em></label><select id="iEst" value="{{fv.estado}}" onChange="{{fh.estado}}"><sc-for list="{{opt.estIni}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></div></sc-if>
+</div>
+<sc-if value="{{fm.showW}}" hint-placeholder-val="{{ false }}">
+<div class="fSec">
+<div class="fBand"><b>Peso en el objetivo</b><span class="bandNote">Solo lo carga el Administrador</span></div>
+<div class="wList"><sc-for list="{{fm.wList}}" as="w" hint-placeholder-count="2"><div class="wRow"><span>{{w.id}} · {{w.nombre}}</span><b>{{w.peso}}</b></div></sc-for><sc-if value="{{fm.wEmpty}}" hint-placeholder-val="{{ false }}"><p class="muted">Es la primera iniciativa del objetivo.</p></sc-if></div>
+<div class="fGrid g3"><div class="{{fc.peso}}"><label for="iPeso">Peso de esta iniciativa (%) <em>*</em></label><input id="iPeso" type="number" min="0" max="100" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Para balancear al 100 % usá «Editar pesos» en el objetivo</span></div></div>
+</div>
+</sc-if>
+<sc-if value="{{fm.objRrii}}" hint-placeholder-val="{{ true }}">
+<div class="fSec">
+<div class="fBand"><b>Resultados clave</b><button class="bandAdd" aria-label="Agregar resultado clave" title="Agregar resultado clave" onClick="{{fm.addKr}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></div>
+<p class="bandSub">Al menos uno · los pesos suman 100 % · Mínimo ≤ Meta ≤ Máximo</p>
+<sc-for list="{{krs}}" as="k" hint-placeholder-count="1">
+<div class="rowLine rowKr2">
+<div class="{{k.c.nombre}}"><label for="kN{{$index}}">Resultado clave {{k.n}} <em>*</em></label><input id="kN{{$index}}" placeholder="Ej. Implementar YPF Store en 40 EESS" value="{{k.v.nombre}}" onChange="{{k.h.nombre}}"><sc-if value="{{k.e.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.nombre}}</span></sc-if></div>
+<div class="{{k.c.tipo}}"><label for="kT{{$index}}">Tipo de medición <em>*</em></label><select id="kT{{$index}}" value="{{k.v.tipo}}" onChange="{{k.h.tipo}}"><option value="">Seleccionar</option><option value="Cantidad">Cantidad</option><option value="Porcentaje">Porcentaje</option><option value="Moneda">Moneda</option><option value="Indicador">Indicador</option></select><sc-if value="{{k.e.tipo}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.tipo}}</span></sc-if></div>
+<div class="{{k.c.unidad}}"><label for="kU{{$index}}">Unidad <em>*</em></label><input id="kU{{$index}}" placeholder="Ej. estaciones" value="{{k.v.unidad}}" onChange="{{k.h.unidad}}"><sc-if value="{{k.e.unidad}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.unidad}}</span></sc-if></div>
+<div class="{{k.c.min}}"><label for="kMi{{$index}}">Mínimo <em>*</em></label><input id="kMi{{$index}}" type="number" value="{{k.v.min}}" onChange="{{k.h.min}}"><sc-if value="{{k.e.min}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.min}}</span></sc-if></div>
+<div class="{{k.c.meta}}"><label for="kMe{{$index}}">Meta <em>*</em></label><input id="kMe{{$index}}" type="number" value="{{k.v.meta}}" onChange="{{k.h.meta}}"><sc-if value="{{k.e.meta}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.meta}}</span></sc-if></div>
+<div class="{{k.c.max}}"><label for="kMa{{$index}}">Máximo <em>*</em></label><input id="kMa{{$index}}" type="number" value="{{k.v.max}}" onChange="{{k.h.max}}"><sc-if value="{{k.e.max}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.max}}</span></sc-if></div>
+<div class="{{k.c.peso}}"><label for="kP{{$index}}">Peso (%) <em>*</em></label><input id="kP{{$index}}" type="number" min="0" max="100" value="{{k.v.peso}}" onChange="{{k.h.peso}}"><sc-if value="{{k.e.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{k.x.peso}}</span></sc-if></div>
+<sc-if value="{{k.canDel}}" hint-placeholder-val="{{ false }}"><button class="trashBtn" aria-label="Eliminar resultado clave {{k.n}}" title="Eliminar" onClick="{{k.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if><sc-if value="{{k.first}}" hint-placeholder-val="{{ true }}"><span></span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{fe.krs}}" hint-placeholder-val="{{ false }}"><span class="errTxt" style="padding: 0 4px">{{fx.krs}}</span></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{fm.objOther}}" hint-placeholder-val="{{ false }}"><p class="muted">El objetivo es de otra VP: la iniciativa se registra sin peso, resultados clave, tareas ni presupuesto.</p></sc-if>
+</div>
+<div class="dFoot"><button class="fb fbOut" onClick="{{back}}">Cancelar</button><button class="fb fbSolid" onClick="{{fm.submit}}">{{fm.submitLbl}}</button></div>
+</aside>
+</div>
+</sc-if>
+
 <sc-if value="{{sideTar}}" hint-placeholder-val="{{ false }}">
 <div class="dOverlay">
 <button class="dScrim" aria-label="Cerrar" onClick="{{back}}"></button>
@@ -1234,19 +1334,17 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="dHead"><div class="dTit"><h3 id="sTitle">{{fm.title}}</h3><p class="mSub">{{fm.objTxt}}</p></div><button class="dClose" aria-label="Cerrar" onClick="{{back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
 <div class="dBody">
 <div class="fSec">
-<div class="fBand"><b>Información general</b></div>
 <div class="fGrid g1">
 <div class="{{fc.ini}}"><label for="sIni">Iniciativa <em>*</em></label><select id="sIni" value="{{fv.ini}}" onChange="{{fh.ini}}" disabled="{{fm.lockIni}}"><option value="">Buscar iniciativa</option><sc-for list="{{opt.inisT}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.ini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ini}}</span></sc-if></div>
 <div class="ff"><label for="sObj">Objetivo</label><input id="sObj" readonly="" value="{{fm.objTxt}}"></div>
-<div class="{{fc.resp}}"><label for="sResp">Responsable <em>*</em></label><select id="sResp" value="{{fv.resp}}" onChange="{{fh.resp}}"><option value="">Buscar en el directorio</option><sc-for list="{{opt.people}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
-</div>
-<div class="fGrid g1">
 <div class="{{fc.nombre}}"><label for="sNom">Nombre de la tarea <em>*</em></label><input id="sNom" placeholder="Ej. Firma de contrato" value="{{fv.nombre}}" onChange="{{fh.nombre}}"><sc-if value="{{fe.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.nombre}}</span></sc-if></div>
-<div class="{{fc.desc}}"><label for="sDesc">Descripción / qué habilita <em>*</em></label><textarea id="sDesc" placeholder="Qué se hace y qué destraba" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
-</div>
-<div class="fGrid g1">
-<div class="{{fc.area}}"><label for="sArea">Área <em>*</em></label><select id="sArea" value="{{fv.area}}" onChange="{{fh.area}}"><option value="">Seleccionar</option><sc-for list="{{opt.areas}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.area}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.area}}</span></sc-if></div>
+<div class="{{fc.resp}}"><label for="sResp">Responsable <em>*</em></label><select id="sResp" value="{{fv.resp}}" onChange="{{fh.resp}}"><option value="">Buscar en el directorio</option><sc-for list="{{opt.people}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.desc}}"><label for="sDesc">Descripción <em>*</em></label><textarea id="sDesc" placeholder="Qué se hace en esta tarea" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
+<div class="{{fc.habil}}"><label for="sHab">¿Qué habilita? <em>*</em></label><textarea id="sHab" placeholder="Qué destraba o permite esta tarea" value="{{fv.habil}}" onChange="{{fh.habil}}"></textarea><sc-if value="{{fe.habil}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.habil}}</span></sc-if></div>
+<div class="{{fc.areas}}"><label for="sAreas">Áreas involucradas <em>*</em></label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="sAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.areas}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.areas}}</span></sc-if></div>
 <div class="ff"><label for="sPrio">Prioridad</label><select id="sPrio" value="{{fv.prio}}" onChange="{{fh.prio}}"><option value="">Sin prioridad</option><option value="Alta">Alta</option><option value="Media">Media</option><option value="Baja">Baja</option></select></div>
+</div>
+<div class="fGrid g2">
 <div class="{{fc.fini}}"><label for="sFi">Fecha de inicio <em>*</em></label><input id="sFi" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
 <div class="{{fc.fcomp}}"><label for="sFc">Fecha de compromiso <em>*</em></label><input id="sFc" type="date" value="{{fv.fcomp}}" onChange="{{fh.fcomp}}"><sc-if value="{{fe.fcomp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fcomp}}</span></sc-if></div>
 </div>
@@ -1256,7 +1354,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fGrid g1">
 <div class="{{fc.inv}}"><label for="sInv">Requiere inversión <em>*</em></label><select id="sInv" value="{{fv.inv}}" onChange="{{fh.inv}}"><option value="No">No</option><option value="Sí">Sí</option></select></div>
 <sc-if value="{{fm.invSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.ceco}}"><label for="sCeco">CECO <em>*</em></label><input id="sCeco" placeholder="Ej. 4100123" value="{{fv.ceco}}" onChange="{{fh.ceco}}"><sc-if value="{{fe.ceco}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ceco}}</span></sc-if></div></sc-if>
-<sc-if value="{{fm.invSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.ap}}"><label for="sAp">Presupuesto aprobado ($) <em>*</em></label><input id="sAp" type="number" min="0" value="{{fv.ap}}" onChange="{{fh.ap}}"><sc-if value="{{fe.ap}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ap}}</span></sc-if></div></sc-if>
+<sc-if value="{{fm.invSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.ap}}"><label for="sAp">Presupuesto aprobado (USD) <em>*</em></label><input id="sAp" type="number" min="0" value="{{fv.ap}}" onChange="{{fh.ap}}"><sc-if value="{{fe.ap}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ap}}</span></sc-if></div></sc-if>
 </div>
 </div>
 </div>
@@ -1277,8 +1375,8 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{mcl.estado}}"><label for="mEst">Estado <em>*</em></label><select id="mEst" value="{{mv.estado}}" onChange="{{mh.estado}}"><sc-for list="{{opt.estIni}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.estado}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.estado}}</span></sc-if></div>
 <div class="{{mcl.avance}}"><label for="mAv">Avance (%) <em>*</em></label><input id="mAv" type="number" min="0" max="100" value="{{mv.avance}}" onChange="{{mh.avance}}" disabled="{{m.isFin}}"><sc-if value="{{mer.avance}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.avance}}</span></sc-if></div>
 <sc-if value="{{m.isFin}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.ffin}}"><label for="mFf">Fecha de finalización <em>*</em></label><input id="mFf" type="date" value="{{mv.ffin}}" onChange="{{mh.ffin}}"><sc-if value="{{mer.ffin}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.ffin}}</span></sc-if></div></sc-if>
-<sc-if value="{{m.hasInv}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.ej}}"><label for="mEj">Presupuesto ejecutado ($)</label><input id="mEj" type="number" min="0" value="{{mv.ej}}" onChange="{{mh.ej}}"></div></sc-if>
-<div class="wide"><div class="{{mcl.com}}"><label for="mCom">Comentario</label><textarea id="mCom" placeholder="Ej.: el barco llega en 45 días" value="{{mv.com}}" onChange="{{mh.com}}"></textarea></div></div>
+<sc-if value="{{m.hasInv}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.ej}}"><label for="mEj">Presupuesto ejecutado (USD)</label><input id="mEj" type="number" min="0" value="{{mv.ej}}" onChange="{{mh.ej}}"></div></sc-if>
+<div class="wide"><div class="{{mcl.com}}"><label for="mCom">Comentario ejecutivo</label><textarea id="mCom" placeholder="Situación de la tarea en tus palabras" value="{{mv.com}}" onChange="{{mh.com}}"></textarea></div></div>
 </div>
 </sc-if>
 
@@ -1339,8 +1437,8 @@ a{color:#0451DD}a:hover{color:#03399C}
 </sc-if>
 <sc-if value="{{m.aVp}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.sigla}}"><label for="mAs">Sigla <em>*</em></label><input id="mAs" placeholder="Ej.: VP RRII" value="{{mv.sigla}}" onChange="{{mh.sigla}}"><sc-if value="{{mer.sigla}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.sigla}}</span></sc-if></div></sc-if>
 <sc-if value="{{m.aShowVp}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.vp}}"><label for="mAv">Vicepresidencia <em>*</em></label><select id="mAv" value="{{mv.vp}}" onChange="{{mh.vp}}"><option value="">Seleccionar</option><sc-for list="{{m.oVp}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.vp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.vp}}</span></sc-if></div></sc-if>
-<sc-if value="{{m.aShowGer}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.ger}}"><label for="mAg">Gerencia <em>*</em></label><select id="mAg" value="{{mv.ger}}" onChange="{{mh.ger}}"><option value="">Seleccionar</option><sc-for list="{{m.oGer}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.ger}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.ger}}</span></sc-if></div></sc-if>
 <sc-if value="{{m.aShowDep}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.dep}}"><label for="mAd">Departamento <em>*</em></label><select id="mAd" value="{{mv.dep}}" onChange="{{mh.dep}}" disabled="{{m.depDis}}"><option value="">{{m.depPh}}</option><sc-for list="{{m.oDep}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.dep}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.dep}}</span></sc-if></div></sc-if>
+<sc-if value="{{m.aShowGer}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.ger}}"><label for="mAg">Gerencia <em>*</em></label><select id="mAg" value="{{mv.ger}}" onChange="{{mh.ger}}" disabled="{{m.gerDis}}"><option value="">{{m.gerPh}}</option><sc-for list="{{m.oGer}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.ger}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.ger}}</span></sc-if></div></sc-if>
 <sc-if value="{{m.aShowArea}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.area}}"><label for="mAa">Área <em>*</em></label><select id="mAa" value="{{mv.area}}" onChange="{{mh.area}}" disabled="{{m.areaDis}}"><option value="">{{m.areaPh}}</option><sc-for list="{{m.oArea}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.area}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.area}}</span></sc-if></div></sc-if>
 <sc-if value="{{m.aUs}}" hint-placeholder-val="{{ false }}"><div class="{{mcl.rol}}"><label for="mAr">Rol <em>*</em></label><select id="mAr" value="{{mv.rol}}" onChange="{{mh.rol}}"><option value="">Seleccionar</option><option value="Visualizador">Visualizador</option><option value="Usuario">Usuario</option><option value="CargadorObjetivo">CargadorObjetivo</option><option value="Administrador">Administrador</option></select><sc-if value="{{mer.rol}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.rol}}</span></sc-if></div></sc-if>
 <div class="tglF"><span class="tglL" id="mAtL">Activo</span><button class="tgl {{m.actCls}}" role="switch" aria-checked="{{m.actOn}}" aria-labelledby="mAtL" onClick="{{m.toggleAct}}"><i></i></button></div>
@@ -1350,7 +1448,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 
 <sc-if value="{{m.is.usuario}}" hint-placeholder-val="{{ false }}">
 <div class="mGrid">
-<div class="{{mcl.dir}}"><label for="mUd">Dirección <em>*</em></label><select id="mUd" value="{{mv.dir}}" onChange="{{mh.dir}}"><option value="">Seleccionar</option><sc-for list="{{opt.dirAll}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.dir}}</span></sc-if></div>
+<div class="{{mcl.dir}}"><label for="mUd">Departamento <em>*</em></label><select id="mUd" value="{{mv.dir}}" onChange="{{mh.dir}}"><option value="">Seleccionar</option><sc-for list="{{opt.dirAll}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{mer.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{mxx.dir}}</span></sc-if></div>
 <sc-if value="{{m.isMkt}}" hint-placeholder-val="{{ false }}"><div class="ff"><label for="mUg">Gerencia</label><select id="mUg" value="{{mv.ger}}" onChange="{{mh.ger}}"><option value="">Sin gerencia</option><sc-for list="{{opt.gerMkt}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></sc-if>
 <div class="{{mcl.rol}}"><label for="mUr">Rol <em>*</em></label><select id="mUr" value="{{mv.rol}}" onChange="{{mh.rol}}"><option value="Visualizador">Visualizador</option><option value="Usuario">Usuario</option><option value="CargadorObjetivo">CargadorObjetivo</option><option value="Administrador">Administrador</option></select></div>
 <div class="ff"><label for="mUa">Activo</label><select id="mUa" value="{{mv.act}}" onChange="{{mh.act}}"><option value="Sí">Sí</option><option value="No">No</option></select></div>
@@ -1379,7 +1477,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
 var REF = '2026-10-26';
-var P = { vp: 'R. Alonso', coord: 'L. Medina', carg: 'C. Ibarra', ini: 'P. Sosa', tar: 'F. Vidal', h: 'D. Herrera', n: 'L. Navarro', q: 'S. Quiroga', r: 'G. Ruiz' };
+var P = { vp: 'R. Alonso', coord: 'L. Medina', carg: 'C. Ibarra', ini: 'Bárbara Adán', tar: 'María Martha Grotz', h: 'Matías Repetto', n: 'Agustín López Fidanza', q: 'Victoria Martí', r: 'Natalia Vega', k: 'Matías Kyska' };
 var SIM = {
   VIS: { user: P.vp }, USRI: { user: P.ini }, USRT: { user: P.tar }, CARG: { user: P.carg }, ADM: { user: P.coord }
 };
@@ -1400,11 +1498,12 @@ function pad(n) { return (n < 10 ? '0' : '') + n; }
 function days(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 864e5); }
 function fd(d) { return d ? d.split('-').reverse().join('/') : '—'; }
 function nf(n) { return n == null || n === '' ? '—' : Number(n).toLocaleString('es-AR', { maximumFractionDigits: 1 }); }
-function money(n) { return '$ ' + Number(n || 0).toLocaleString('es-AR'); }
+function money(n) { return 'USD ' + Number(n || 0).toLocaleString('es-AR'); }
 function pct(v) { return v == null ? '—' : Math.round(v) + ' %'; }
 function initials(n) { var p = String(n || '').split(/[ .]+/).filter(Boolean); return ((p[0] || '')[0] || '') + ((p[1] || '')[0] || ''); }
 function empty(v) { return v === '' || v == null || (Array.isArray(v) && !v.length); }
 function isNum(v) { return v !== '' && v != null && isFinite(Number(v)); }
+var AREAS_INV = ['Marketing B2C', 'Imagen', 'Growth Marketing', 'IEC', 'Conexiones', 'Ingeniería', 'Compras', 'Comercial Retail', 'Operaciones', 'RRII', 'Otras'];
 function H(f, av, est, c, a) { return { f: f, av: av, est: est, c: c, a: a }; }
 function T(o) { o.hist = o.hist || [H(o.act, o.avance, o.estado, 'Tarea cargada.', o.resp)]; o.ffin = o.estado === 'Finalizada' ? o.act : null; return o; }
 function KR(id, nombre, resp, tipo, unidad, min, meta, max, peso, actual, proy, fuente) { return { id: id, nombre: nombre, resp: resp, tipo: tipo, unidad: unidad, min: min, meta: meta, max: max, peso: peso, actual: actual, proy: proy, fuente: fuente || '', evid: '', com: null }; }
@@ -1413,104 +1512,44 @@ function seed() {
   var pals = [
     { id: 'PAL-1', nombre: 'Excelencia comercial', desc: 'Crecer en clientes y ventas con una propuesta comercial competitiva en todos los canales.', act: true },
     { id: 'PAL-2', nombre: 'Experiencia de cliente', desc: 'Que cada contacto del cliente con YPF sea simple, ágil y consistente.', act: true },
-    { id: 'PAL-3', nombre: 'Nuevos negocios', desc: 'Abrir nuevas fuentes de ingreso y usar los datos como ventaja competitiva.', act: true },
+    { id: 'PAL-3', nombre: 'Innovación y Nuevos Negocios', desc: 'Abrir nuevas fuentes de ingreso y usar los datos como ventaja competitiva.', act: true },
     { id: 'PAL-4', nombre: 'Marca y portfolio', desc: 'Fortalecer la marca YPF y ordenar el portfolio de productos y servicios.', act: true },
     { id: 'PAL-5', nombre: 'Eficiencia en el canal', desc: 'Palanca del período anterior.', act: false }
   ];
   var objs = [
-    { id: 'OBJ-01', vp: 'VP RRII', dir: 'Marketing', resp: P.carg, nombre: 'Convertir datos e insights en ventaja competitiva', desc: 'Que las decisiones del negocio se apoyen en estudios, modelos predictivos y casos de uso sobre nuestros activos de información.', pal: 'PAL-3', dur: 'Anual', anios: '', peso: 15, fini: '2026-01-01', fcomp: '2026-12-31', estado: 'En curso' },
-    { id: 'OBJ-02', vp: 'VP RRII', dir: 'Marketing', resp: P.carg, nombre: 'Nuevo motor de crecimiento a través de YPF Store', desc: 'Llevar YPF Store a las estaciones de servicio y al canal online.', pal: 'PAL-3', dur: 'Plurianual', anios: '3', peso: 15, fini: '2026-01-01', fcomp: '2028-12-31', estado: 'En curso' },
-    { id: 'OBJ-03', vp: 'VP RRII', dir: 'Marketing', resp: P.carg, nombre: 'Duplicar la cantidad de clientes YPF', desc: 'Duplicar los clientes activos con campañas, promociones y nuevos desarrollos en la App YPF.', pal: 'PAL-1', dur: 'Anual', anios: '', peso: 20, fini: '2026-01-01', fcomp: '2026-12-31', estado: 'En curso' },
-    { id: 'OBJ-04', vp: 'VP RRII', dir: 'Medios y Prensa', resp: P.n, nombre: 'Aumentar la recordación de la marca YPF', desc: 'Fortalecer la presencia de la marca en estaciones y medios.', pal: 'PAL-4', dur: 'Permanente', anios: '', peso: 10, fini: '2026-03-01', fcomp: '2026-12-31', estado: 'En curso' },
-    { id: 'OBJ-05', vp: 'VP RRII', dir: 'Fidelización', resp: P.q, nombre: 'Simplificar la gestión de reclamos de clientes', desc: 'Que un cliente pueda hacer y seguir un reclamo de forma simple.', pal: 'PAL-2', dur: 'Anual', anios: '', peso: 10, fini: '2026-04-01', fcomp: '2026-12-31', estado: 'En curso' },
-    { id: 'OBJ-06', vp: 'VP Upstream', dir: 'Apoyo a la Operación', resp: P.r, nombre: 'Relevamiento de procesos de VP Upstream', desc: 'Objetivo de otra VP con el que la VP RRII colabora como área de servicio.', pal: '', dur: '', anios: '', peso: null, fini: '', fcomp: '', estado: 'En curso' }
+    { id: 'OBJ-01', demoOtras: true, vp: 'VP RRII', dir: 'Marketing', ger: 'B2C', oArea: '', esVp: false, pesoVp: null, resp: '', nombre: 'Innovación en Retail', desc: 'Impulsar la evolución de la red de EESS mediante formatos diferenciales de estaciones y experiencias de valor agregado que permitan aumentar la relevancia de YPF, generar nuevas fuentes de crecimiento y fortalecer la propuesta comercial.', pal: 'PAL-3', dur: 'Anual', anios: '', peso: 10, fini: '2026-01-01', fcomp: '2026-12-31', estado: 'En curso' }
   ];
-  var C1 = function (c, f, a) { return { c: c, f: f, a: a }; };
   var inis = [
-    { id: 'INI-01', obj: 'OBJ-03', nombre: 'Campaña Vuelta al cole', desc: 'Promoción en estaciones para la vuelta a clases, orientada a sumar clientes nuevos.', resp: [P.ini], areas: ['B2C', 'Publicidad'], peso: 20, fini: '2026-01-05', fcomp: '2026-03-15', estado: 'Finalizada', com: C1('Cerrada: superó la meta de altas.', '2026-03-10', P.ini),
-      krs: [KR('KR-01', 'Altas de clientes nuevos en la campaña', P.ini, 'Cantidad', 'clientes', 40000, 50000, 60000, 100, 62000, 62000, 'CRM')] },
-    { id: 'INI-02', obj: 'OBJ-03', nombre: 'Nuevo desarrollo en App YPF para accionistas', desc: 'Beneficios exclusivos para accionistas dentro de la App YPF.', resp: [P.ini, P.q], areas: ['Growth'], peso: 30, fini: '2026-05-01', fcomp: '2026-11-30', estado: 'En curso', com: C1('Desarrollo en pruebas; el lanzamiento queda para fin de noviembre.', '2026-10-20', P.ini),
-      krs: [KR('KR-02', 'Accionistas activos en la App', P.ini, 'Cantidad', 'usuarios', 8000, 10000, 12000, 60, 4000, 9500, 'Analytics App'), KR('KR-03', 'Funcionalidades publicadas', P.q, 'Cantidad', 'funcionalidades', 2, 3, 4, 40, 1, 3, 'Tecnología')] },
-    { id: 'INI-03', obj: 'OBJ-03', nombre: 'Promo vaso coleccionable', desc: 'Promoción con vaso coleccionable importado para atraer clientes nuevos a las tiendas.', resp: [P.ini], areas: ['B2C', 'Compras'], peso: 25, fini: '2026-06-01', fcomp: '2026-11-30', estado: 'En curso', com: C1('Si el cargamento no se libera esta semana, la promo se posterga.', '2026-10-21', P.ini),
-      krs: [KR('KR-04', 'Vasos entregados en estaciones', P.ini, 'Cantidad', 'unidades', 80000, 100000, 120000, 100, null, 60000, '')] },
-    { id: 'INI-04', obj: 'OBJ-03', nombre: 'Embajadora de marca: captación de clientes', desc: 'Campaña con una figura pública para sumar clientes nuevos.', resp: [P.ini], areas: ['B2C', 'Legales'], peso: 25, fini: '2026-07-01', fcomp: '2026-12-15', estado: 'En curso', com: C1('Negociación de honorarios abierta; depende de la contraoferta.', '2026-10-12', P.ini),
-      krs: [KR('KR-05', 'Clientes nuevos atribuidos a la campaña', P.ini, 'Cantidad', 'clientes', 20000, 30000, 40000, 100, null, 25000, '')] },
-    { id: 'INI-05', obj: 'OBJ-01', nombre: 'Ask Now / Killer Insights: estudios estratégicos', desc: 'Estudios de mercado y clientes que alimentan decisiones del negocio.', resp: [P.h], areas: ['IEC'], peso: 40, fini: '2026-01-15', fcomp: '2026-12-15', estado: 'En curso', com: null,
-      krs: [KR('KR-06', 'Estudios estratégicos entregados', P.h, 'Cantidad', 'estudios', 10, 12, 14, 100, 11, 14, 'Repositorio de estudios')] },
-    { id: 'INI-06', obj: 'OBJ-01', nombre: 'Campañas con modelos predictivos', desc: 'Campañas segmentadas con modelos de propensión.', resp: [P.ini], areas: ['Growth'], peso: 30, fini: '2026-02-01', fcomp: '2026-08-31', estado: 'Finalizada', com: null,
-      krs: [KR('KR-07', 'Campañas ejecutadas con modelos predictivos', P.ini, 'Cantidad', 'campañas', 2, 3, 3, 100, 3, 3, 'CRM')] },
-    { id: 'INI-07', obj: 'OBJ-01', nombre: 'Proyecto Atlas: casos de uso sobre CRM', desc: 'Casos de uso sobre bases de datos y activos de información.', resp: [P.q], areas: ['IEC'], peso: 30, fini: '2026-03-01', fcomp: '2026-12-31', estado: 'En curso', com: null,
-      krs: [KR('KR-08', 'Casos de uso implementados', P.q, 'Cantidad', 'casos de uso', 1, 2, 3, 100, 1, 2, '')] },
-    { id: 'INI-08', obj: 'OBJ-02', nombre: 'Despliegue de YPF Store en estaciones de servicio', desc: 'Apertura de YPF Store en al menos 40 estaciones.', resp: [P.h], areas: ['Servicios', 'Compras'], peso: 60, fini: '2026-03-01', fcomp: '2026-12-15', estado: 'Frenada', com: C1('Sin equipamiento adjudicado no se pueden abrir las tiendas.', '2026-10-05', P.h),
-      krs: [KR('KR-09', 'Estaciones con YPF Store', P.h, 'Cantidad', 'EESS', 30, 40, 50, 60, 2, 25, 'Operaciones'), KR('KR-10', 'Facturación anual', P.h, 'Moneda', 'KUSD', 435, 493, 580, 40, 120, 400, 'SAP')] },
-    { id: 'INI-09', obj: 'OBJ-02', nombre: 'Tienda oficial YPF Store en Mercado Libre', desc: 'Lanzar la tienda oficial en Mercado Libre.', resp: [P.ini], areas: ['Growth'], peso: 40, fini: '2026-10-01', fcomp: '2026-12-20', estado: 'No iniciada', com: null,
-      krs: [KR('KR-11', 'Tienda publicada', P.ini, 'Indicador', 'lanzamiento', 1, 1, 1, 100, null, 1, '')] },
-    { id: 'INI-10', obj: 'OBJ-04', nombre: 'Rediseño de piezas de marca para estaciones', desc: 'Actualizar las piezas de comunicación en estaciones.', resp: [P.n], areas: ['Imagen'], peso: 40, fini: '2026-06-01', fcomp: '2026-11-30', estado: 'En curso', com: null,
-      krs: [KR('KR-12', 'Piezas renovadas en estaciones', P.n, 'Porcentaje', '%', 60, 80, 100, 100, 50, 90, 'Imagen')] },
-    { id: 'INI-11', obj: 'OBJ-04', nombre: 'Embajadora de marca: recordación', desc: 'La misma campaña, cargada también para el objetivo de marca.', resp: [P.n, P.ini], areas: ['Publicidad', 'Legales'], peso: 60, fini: '2026-07-01', fcomp: '2026-12-15', estado: 'En curso', com: null,
-      krs: [KR('KR-13', 'Recordación de marca espontánea', P.n, 'Porcentaje', '%', 60, 70, 80, 100, 63, 72, 'Encuesta de marca')] },
-    { id: 'INI-12', obj: 'OBJ-05', nombre: 'Mejora del recorrido de reclamos', desc: 'Simplificar cómo un cliente hace y sigue un reclamo.', resp: [P.q], areas: ['Servicios'], peso: 100, fini: '2026-08-01', fcomp: '2026-12-31', estado: 'En curso', com: null,
-      krs: [KR('KR-14', 'Satisfacción con la resolución de reclamos', P.q, 'Indicador', 'puntos', 40, 45, 50, 100, 46, 48, 'Encuesta post reclamo')] },
-    { id: 'INI-13', obj: 'OBJ-06', nombre: 'Soporte al relevamiento de VP Upstream', desc: 'Trabajo como área de servicio para un objetivo de otra VP.', resp: [P.ini], areas: ['Servicios'], peso: null, fini: '2026-09-15', fcomp: '2026-11-15', estado: 'En curso', com: null, krs: [] }
+    { id: 'INI-01', obj: 'OBJ-01', nombre: 'Portfolio Management | Implementar la estrategia BLACK/FULL', desc: 'Diseñar, implementar y escalar el formato BLACK/FULL como propuesta diferencial de retail dentro de la red YPF, mejorando la experiencia del cliente y fortaleciendo el posicionamiento premium de las estaciones.', resp: [P.ini, P.h], areas: ['Marketing B2C', 'Imagen', 'Growth Marketing', 'IEC', 'Conexiones', 'Ingeniería', 'Compras', 'Comercial Retail', 'Otras'], peso: null, fini: '2026-01-01', fcomp: '2026-10-12', estado: 'En curso', com: null,
+      krs: [KR('KR-01', 'Implementar la estrategia BLACK/FULL en 12 estaciones de servicio', '', 'Cantidad', 'EESS', 8, 10, 12, 100, null, 10, '')] }
   ];
   var tars = [
-    T({ id: 'TAR-01', ini: 'INI-01', nombre: 'Definir mecánica de la promo', desc: 'Define premios y condiciones.', resp: P.ini, area: 'B2C', prio: 'Media', fini: '2026-01-05', fcomp: '2026-01-20', avance: 100, estado: 'Finalizada', act: '2026-01-19', inv: null }),
-    T({ id: 'TAR-02', ini: 'INI-01', nombre: 'Lanzamiento en estaciones', desc: 'Habilita la promo en todas las estaciones.', resp: P.tar, area: 'Publicidad', prio: 'Alta', fini: '2026-01-21', fcomp: '2026-03-15', avance: 100, estado: 'Finalizada', act: '2026-03-10', inv: { ceco: '4100100', ap: 25000000, ej: 23800000 }, hist: [H('2026-03-10', 100, 'Finalizada', 'Campaña cerrada, superó la meta de altas.', P.tar), H('2026-02-02', 50, 'En curso', 'Promo activa en todas las estaciones.', P.tar)] }),
-    T({ id: 'TAR-03', ini: 'INI-02', nombre: 'Definir alcance funcional con Tecnología', desc: 'Habilita el desarrollo.', resp: P.q, area: 'Growth', prio: 'Media', fini: '2026-05-01', fcomp: '2026-06-15', avance: 100, estado: 'Finalizada', act: '2026-06-14', inv: null }),
-    T({ id: 'TAR-04', ini: 'INI-02', nombre: 'Desarrollo y pruebas', desc: 'Construcción de la funcionalidad en la App.', resp: P.tar, area: 'Growth', prio: 'Alta', fini: '2026-06-16', fcomp: '2026-10-31', avance: 60, estado: 'En curso', act: '2026-10-20', inv: null, hist: [H('2026-10-20', 60, 'En curso', 'Faltan los ajustes de la última iteración.', P.tar), H('2026-09-01', 30, 'En curso', 'Primer entregable de Tecnología.', P.tar)] }),
-    T({ id: 'TAR-05', ini: 'INI-02', nombre: 'Lanzamiento a accionistas', desc: 'Comunicación y apertura de la funcionalidad.', resp: P.ini, area: 'B2C', prio: 'Media', fini: '2026-11-15', fcomp: '2026-11-30', avance: 0, estado: 'No iniciada', act: '2026-10-20', inv: null }),
-    T({ id: 'TAR-06', ini: 'INI-03', nombre: 'Diseño y producción del vaso', desc: 'Producción en el exterior.', resp: P.h, area: 'Compras', prio: 'Media', fini: '2026-06-01', fcomp: '2026-07-31', avance: 100, estado: 'Finalizada', act: '2026-07-30', inv: { ceco: '4100123', ap: 18000000, ej: 17200000 } }),
-    T({ id: 'TAR-07', ini: 'INI-03', nombre: 'Destrabar cargamento en aduana', desc: 'Habilita la distribución de los vasos.', resp: P.tar, area: 'Compras', prio: 'Alta', fini: '2026-08-15', fcomp: '2026-10-20', avance: 50, estado: 'Frenada', act: '2026-10-21', inv: { ceco: '4100124', ap: 2000000, ej: 900000 }, hist: [H('2026-10-21', 50, 'Frenada', 'El cargamento sigue retenido. Si no se libera esta semana, los vasos no llegan a la promo.', P.tar), H('2026-09-22', 40, 'En curso', 'Reunión con aduana: falta documentación del proveedor.', P.tar), H('2026-09-01', 20, 'En curso', 'El barco llega en 45 días.', P.tar)] }),
-    T({ id: 'TAR-08', ini: 'INI-03', nombre: 'Distribución a estaciones', desc: 'Llega el producto a las tiendas.', resp: P.ini, area: 'B2C', prio: 'Media', fini: '2026-11-16', fcomp: '2026-11-30', avance: 0, estado: 'No iniciada', act: '2026-10-21', inv: null }),
-    T({ id: 'TAR-09', ini: 'INI-04', nombre: 'Negociación comercial', desc: 'Acuerdo de condiciones con la representación.', resp: P.n, area: 'Legales', prio: 'Media', fini: '2026-07-01', fcomp: '2026-08-31', avance: 100, estado: 'Finalizada', act: '2026-08-30', inv: null }),
-    T({ id: 'TAR-10', ini: 'INI-04', nombre: 'Firma de contrato', desc: 'Habilita la producción de la campaña.', resp: P.tar, area: 'Legales', prio: 'Alta', fini: '2026-09-01', fcomp: '2026-10-31', avance: 20, estado: 'Frenada', act: '2026-10-12', inv: { ceco: '4100456', ap: 120000000, ej: 0 }, hist: [H('2026-10-12', 20, 'Frenada', 'La representación pide un 15 % más de honorarios.', P.tar)] }),
-    T({ id: 'TAR-11', ini: 'INI-04', nombre: 'Producción de la campaña', desc: 'Piezas para medios y estaciones.', resp: P.q, area: 'Publicidad', prio: 'Media', fini: '2026-11-15', fcomp: '2026-12-15', avance: 0, estado: 'No iniciada', act: '2026-10-12', inv: null }),
-    T({ id: 'TAR-12', ini: 'INI-05', nombre: 'Estudios del primer semestre', desc: 'Entregas de enero a junio.', resp: P.h, area: 'IEC', prio: 'Media', fini: '2026-01-15', fcomp: '2026-06-30', avance: 100, estado: 'Finalizada', act: '2026-06-29', inv: null }),
-    T({ id: 'TAR-13', ini: 'INI-05', nombre: 'Estudios del segundo semestre', desc: 'Entregas de julio a diciembre.', resp: P.tar, area: 'IEC', prio: 'Media', fini: '2026-07-01', fcomp: '2026-12-15', avance: 80, estado: 'En curso', act: '2026-10-22', inv: null, hist: [H('2026-10-22', 80, 'En curso', 'Entregados 4 de los 5 estudios previstos.', P.tar)] }),
-    T({ id: 'TAR-14', ini: 'INI-06', nombre: 'Entrenar modelo de propensión', desc: 'Base para las campañas.', resp: P.ini, area: 'Growth', prio: 'Media', fini: '2026-02-01', fcomp: '2026-04-30', avance: 100, estado: 'Finalizada', act: '2026-04-28', inv: null }),
-    T({ id: 'TAR-15', ini: 'INI-07', nombre: 'Caso de uso 1: segmentación', desc: 'Primer caso sobre el CRM.', resp: P.q, area: 'IEC', prio: 'Media', fini: '2026-03-01', fcomp: '2026-07-31', avance: 100, estado: 'Finalizada', act: '2026-07-30', inv: null }),
-    T({ id: 'TAR-16', ini: 'INI-07', nombre: 'Caso de uso 2: próxima mejor oferta', desc: 'Segundo caso sobre el CRM.', resp: P.tar, area: 'IEC', prio: 'Media', fini: '2026-08-01', fcomp: '2026-12-15', avance: 40, estado: 'En curso', act: '2026-09-30', inv: null, hist: [H('2026-09-30', 40, 'En curso', 'Modelo en validación con el equipo de CRM.', P.tar)] }),
-    T({ id: 'TAR-17', ini: 'INI-08', nombre: 'Compra de equipamiento', desc: 'Habilita la apertura de tiendas.', resp: P.h, area: 'Compras', prio: 'Alta', fini: '2026-03-01', fcomp: '2026-09-30', avance: 30, estado: 'Frenada', act: '2026-10-05', inv: { ceco: '4100789', ap: 250000000, ej: 30000000 }, hist: [H('2026-10-05', 30, 'Frenada', 'Compras no adjudicó el equipamiento. Escalado a la dirección.', P.h)] }),
-    T({ id: 'TAR-18', ini: 'INI-08', nombre: 'Apertura en 40 estaciones', desc: 'Puesta en marcha de las tiendas.', resp: P.tar, area: 'Servicios', prio: 'Alta', fini: '2026-06-01', fcomp: '2026-12-15', avance: 5, estado: 'En curso', act: '2026-10-21', inv: null }),
-    T({ id: 'TAR-19', ini: 'INI-09', nombre: 'Alta de cuenta y catálogo', desc: 'Habilita la publicación.', resp: P.tar, area: 'Growth', prio: 'Media', fini: '2026-10-15', fcomp: '2026-10-30', avance: 0, estado: 'No iniciada', act: '2026-10-01', inv: null }),
-    T({ id: 'TAR-20', ini: 'INI-10', nombre: 'Aprobación de piezas', desc: 'Revisión con la agencia.', resp: P.tar, area: 'Imagen', prio: 'Media', fini: '2026-07-16', fcomp: '2026-11-30', avance: 50, estado: 'En curso', act: '2026-10-02', inv: null }),
-    T({ id: 'TAR-21', ini: 'INI-12', nombre: 'Relevamiento de reclamos actuales', desc: 'Mapa del recorrido actual.', resp: P.q, area: 'Servicios', prio: 'Media', fini: '2026-08-01', fcomp: '2026-12-31', avance: 30, estado: 'En curso', act: '2026-10-19', inv: null }),
-    T({ id: 'TAR-22', ini: 'INI-12', nombre: 'Rediseño del formulario de reclamos', desc: 'Simplifica la carga del reclamo en la App.', resp: P.q, area: 'Servicios', prio: 'Alta', fini: '2026-09-01', fcomp: '2026-12-15', avance: 45, estado: 'En curso', act: '2026-10-22', inv: null }),
-    T({ id: 'TAR-23', ini: 'INI-12', nombre: 'Tablero de seguimiento de reclamos', desc: 'Permite ver el estado de cada reclamo.', resp: P.r, area: 'Servicios', prio: 'Media', fini: '2026-09-15', fcomp: '2026-12-20', avance: 25, estado: 'En curso', act: '2026-10-20', inv: null }),
-    T({ id: 'TAR-24', ini: 'INI-07', nombre: 'Limpieza de la base de clientes', desc: 'Mejora la calidad de datos del CRM.', resp: P.h, area: 'IEC', prio: 'Alta', fini: '2026-09-01', fcomp: '2026-11-30', avance: 35, estado: 'En curso', act: '2026-10-19', inv: null }),
-    T({ id: 'TAR-25', ini: 'INI-05', nombre: 'Estudio de satisfacción en tiendas', desc: 'Insumo para el plan comercial 2027.', resp: P.h, area: 'IEC', prio: 'Media', fini: '2026-10-01', fcomp: '2026-12-10', avance: 15, estado: 'En curso', act: '2026-10-21', inv: null }),
-    T({ id: 'TAR-26', ini: 'INI-12', nombre: 'Capacitación al equipo de atención', desc: 'Prepara al equipo para el nuevo recorrido.', resp: P.q, area: 'Servicios', prio: 'Media', fini: '2026-10-05', fcomp: '2026-12-20', avance: 10, estado: 'En curso', act: '2026-10-23', inv: null }),
-    T({ id: 'TAR-27', ini: 'INI-10', nombre: 'Instalación de piezas en estaciones piloto', desc: 'Valida las piezas antes del despliegue.', resp: P.n, area: 'Imagen', prio: 'Media', fini: '2026-10-01', fcomp: '2026-11-28', avance: 30, estado: 'En curso', act: '2026-10-22', inv: null }),
-    T({ id: 'TAR-28', ini: 'INI-03', nombre: 'Acción en redes con influencers', desc: 'Se descartó: la promo se comunica solo en estaciones.', resp: P.tar, area: 'Publicidad', prio: 'Baja', fini: '2026-09-01', fcomp: '2026-10-31', avance: 10, estado: 'Cancelada', act: '2026-09-20', inv: null, hist: [H('2026-09-20', 10, 'Cancelada', 'Se decidió comunicar la promo solo en estaciones.', P.tar), H('2026-09-05', 10, 'En curso', 'Primer contacto con agencias.', P.tar)] })
+    T({ id: 'TAR-01', ini: 'INI-01', nombre: 'Estrategia Portfolio Management', desc: 'Diseñar la estrategia integral de Portfolio Management para el formato BLACK/FULL, definiendo visión, posicionamiento, alcance y criterios de priorización.', habil: 'Establecer el marco estratégico sobre el cual se desarrollarán la experiencia, la propuesta de valor y la implementación del formato BLACK/FULL en la red.', resp: P.tar, areas: ['Growth Marketing'], prio: 'Alta', fini: '2026-01-01', fcomp: '2026-02-02', avance: 100, estado: 'Finalizada', act: '2026-02-02', inv: { ceco: '180002', ap: 10000, ej: 0 } }),
+    T({ id: 'TAR-02', ini: 'INI-01', nombre: 'Diseño de Prototipo de Imagen y Experiencia BLACK/FULL - Nordelta', desc: 'Desarrollar el prototipo integral de imagen, experiencia y lineamientos de implementación para la estación Nordelta, incluyendo identidad visual, mobiliario, layout, señalización y experiencia de cliente.', habil: 'Validar el modelo BLACK/FULL en una estación piloto antes de escalarlo al resto de la red.', resp: P.h, areas: ['Imagen', 'Marketing B2C', 'Comercial Retail', 'Ingeniería'], prio: 'Alta', fini: '2026-01-01', fcomp: '2026-05-04', avance: 100, estado: 'Finalizada', act: '2026-05-04', inv: { ceco: '180200', ap: 100000, ej: 0 } }),
+    T({ id: 'TAR-03', ini: 'INI-01', nombre: 'Diseño de la Propuesta de Valor BLACK en Playa, FULL y BOXES', desc: 'Definir la propuesta de valor diferencial para los tres espacios de interacción del formato BLACK: Playa, FULL y BOXES, estableciendo atributos, beneficios, servicios y estándares de experiencia.', habil: 'Contar con una propuesta de valor consistente y diferenciadora que guíe la experiencia del cliente y la implementación comercial del formato.', resp: P.n, areas: ['Marketing B2C', 'IEC', 'Growth Marketing', 'Comercial Retail'], prio: 'Alta', fini: '2026-01-01', fcomp: '2026-05-04', avance: 100, estado: 'Finalizada', act: '2026-05-04', inv: { ceco: '180200', ap: 10000, ej: 0 } }),
+    T({ id: 'TAR-04', ini: 'INI-01', nombre: 'Plan de Comunicación e Inauguración BLACK Nordelta', desc: 'Diseñar y ejecutar el plan de lanzamiento de BLACK Nordelta incluyendo evento inaugural, convocatoria de stakeholders, prensa, contenidos, activaciones y difusión.', habil: 'Dar visibilidad al nuevo formato BLACK/FULL, generar posicionamiento y validar la propuesta frente a clientes y referentes del negocio.', resp: P.q + ', ' + P.r + ', ' + P.k, areas: ['Marketing B2C', 'Conexiones', 'Imagen', 'Comercial Retail', 'RRII'], prio: 'Alta', fini: '2026-01-03', fcomp: '2026-08-05', avance: 100, estado: 'Finalizada', act: '2026-08-05', inv: { ceco: '180200', ap: 100000, ej: 0 } }),
+    T({ id: 'TAR-05', ini: 'INI-01', nombre: 'Adecuación y Desarrollo de Prototipo BLACK para Despliegue 2026', desc: 'Adaptar los aprendizajes obtenidos en Nordelta y desarrollar el prototipo operativo final para su implementación en nuevas estaciones durante 2026.', habil: 'Escalar el formato BLACK/FULL a la red, asegurando consistencia operativa, comercial y de experiencia.', resp: P.ini, areas: ['Ingeniería', 'Imagen', 'Comercial Retail', 'Marketing B2C', 'Operaciones'], prio: 'Alta', fini: '2026-05-01', fcomp: '2026-09-30', avance: 75, estado: 'En curso', act: '2026-10-20', inv: { ceco: '180200', ap: 500000, ej: 0 }, com: { c: 'Finalizada la adecuación del modelo Nordelta. En ejecución el proceso de adaptación para el despliegue 2026 y la selección de nuevas estaciones objetivo.', f: '2026-10-20', a: P.ini },
+      hist: [H('2026-10-20', 75, 'En curso', 'Finalizada la adecuación del modelo Nordelta. En ejecución el proceso de adaptación para el despliegue 2026 y la selección de nuevas estaciones objetivo.', P.ini), H('2026-05-01', 0, 'No iniciada', 'Tarea cargada.', P.ini)] })
   ];
-  var rsk = [
-    { id: 'RSK-01', tar: 'TAR-07', desc: 'Aduana retiene el cargamento por documentación incompleta del proveedor', estado: 'Escalado', reqDec: true, dec: 'Autorizar flete aéreo alternativo — Dirección de Marketing', flim: '2026-10-30', fres: '' },
-    { id: 'RSK-02', tar: 'TAR-07', desc: 'Los vasos no llegan a tiempo para el inicio de la promo', estado: 'Activo', reqDec: false, dec: '', flim: '', fres: '' },
-    { id: 'RSK-03', tar: 'TAR-10', desc: 'La representación pide un 15 % más de honorarios', estado: 'Activo', reqDec: true, dec: 'Aprobar la contraoferta de honorarios — Gerencia B2C', flim: '2026-10-30', fres: '' },
-    { id: 'RSK-04', tar: 'TAR-17', desc: 'Compras no adjudica el equipamiento para las estaciones', estado: 'Escalado', reqDec: true, dec: 'Habilitar la compra por proceso de excepción — Compras', flim: '2026-10-22', fres: '' },
-    { id: 'RSK-05', tar: 'TAR-04', desc: 'Falta de disponibilidad del equipo de Tecnología', estado: 'Resuelto', reqDec: true, dec: 'Sumar un desarrollador externo — Gerencia Growth', flim: '2026-09-15', fres: '2026-09-14' },
-    { id: 'RSK-06', tar: 'TAR-16', desc: 'Calidad de datos insuficiente en el CRM', estado: 'Escalado', reqDec: false, dec: '', flim: '', fres: '' }
-  ];
+  var rsk = [];
   return { pals: pals, objs: objs, inis: inis, tars: tars, rsk: rsk };
 }
 function seedUsers() {
-  var U = function (p, dir, ger, rol) { return { p: p, dir: dir, ger: ger, rol: rol, act: true }; };
-  var L = { };
-  L[P.vp] = ['GER-06', 'DEP-09', 'ARE-10']; L[P.coord] = ['GER-06', 'DEP-09', 'ARE-10']; L[P.carg] = ['GER-01', 'DEP-01', 'ARE-01']; L[P.ini] = ['GER-01', 'DEP-03', 'ARE-04']; L[P.tar] = ['GER-01', 'DEP-01', 'ARE-02']; L[P.h] = ['GER-01', 'DEP-04', 'ARE-06']; L[P.n] = ['GER-02', 'DEP-06', 'ARE-07']; L[P.q] = ['GER-03', 'DEP-08', 'ARE-09']; L[P.r] = ['GER-05', 'DEP-10', 'ARE-11'];
-  L['M. Torres'] = ['GER-02', 'DEP-07', 'ARE-08']; L['J. Acosta'] = ['GER-01', 'DEP-02', 'ARE-03']; L['R. Benítez'] = ['GER-04', 'DEP-11', 'ARE-12'];
-  var us = [U(P.vp, 'VP', '', 'Visualizador'), U(P.coord, 'Coordinación', '', 'Administrador'), U(P.carg, 'Marketing', 'B2C', 'CargadorObjetivo'), U(P.ini, 'Marketing', 'Growth', 'Usuario'), U(P.tar, 'Marketing', 'B2C', 'Usuario'), U(P.h, 'Marketing', 'Servicios', 'Usuario'), U(P.n, 'Medios y Prensa', '', 'CargadorObjetivo'), U(P.q, 'Fidelización', '', 'Usuario'), U(P.r, 'Apoyo a la Operación', '', 'Usuario'), U('M. Torres', 'Medios y Prensa', '', 'Usuario'), U('J. Acosta', 'Marketing', 'B2B', 'Usuario'), U('R. Benítez', 'Alianzas', '', 'Visualizador')];
-  us[10].act = false;
-  return us.map(function (u) { var l = L[u.p] || ['', '', '']; return Object.assign(u, { mail: mailOf(u.p), gerId: l[0], depId: l[1], areaId: l[2] }); });
+  var U = function (p, rol, l) { return { p: p, dir: '', ger: '', rol: rol, act: true, l: l }; };
+  var COORD = ['DEP-06', 'GER-09', 'ARE-10'], RET = ['DEP-01', 'GER-01', 'ARE-13'];
+  var us = [U(P.vp, 'Visualizador', COORD), U(P.coord, 'Administrador', COORD), U(P.carg, 'CargadorObjetivo', RET), U(P.ini, 'Usuario', RET), U(P.tar, 'Usuario', RET), U(P.h, 'Usuario', RET), U(P.n, 'Usuario', RET), U(P.q, 'Usuario', RET), U(P.r, 'Usuario', RET), U(P.k, 'Usuario', RET)];
+  var DN = { 'DEP-06': 'Coordinación', 'DEP-01': 'Marketing' }, GN = { 'GER-09': 'Gestión de la VP', 'GER-01': 'B2C' };
+  return us.map(function (u) { var l = u.l; delete u.l; return Object.assign(u, { mail: mailOf(u.p), depId: l[0], gerId: l[1], areaId: l[2], dir: DN[l[0]], ger: GN[l[1]] }); });
 }
 function seedAbm() {
   var V = function (id, nombre, sigla, act) { return { id: id, nombre: nombre, sigla: sigla, act: act !== false }; };
   var N = function (id, nombre, par, act) { return { id: id, nombre: nombre, par: par, act: act !== false }; };
   return {
-    vps: [V('VP-01', 'Vicepresidencia de Relaciones Institucionales', 'VP RRII'), V('VP-02', 'Vicepresidencia de Upstream', 'VP UPS'), V('VP-03', 'Vicepresidencia de Downstream', 'VP DWS'), V('VP-04', 'Vicepresidencia de Gas y Energía', 'VP GyE'), V('VP-05', 'Vicepresidencia de Finanzas', 'VP FIN', false)],
-    gers: [N('GER-01', 'Marketing', 'VP-01'), N('GER-02', 'Medios y Prensa', 'VP-01'), N('GER-03', 'Fidelización', 'VP-01'), N('GER-04', 'Alianzas', 'VP-01'), N('GER-05', 'Apoyo a la Operación', 'VP-01'), N('GER-06', 'Coordinación', 'VP-01'), N('GER-07', 'Perforación', 'VP-02'), N('GER-08', 'Refinación', 'VP-03'), N('GER-09', 'Tesorería', 'VP-05', false)],
-    deps: [N('DEP-01', 'B2C', 'GER-01'), N('DEP-02', 'B2B', 'GER-01'), N('DEP-03', 'Growth', 'GER-01'), N('DEP-04', 'Servicios', 'GER-01'), N('DEP-05', 'IEC', 'GER-01', false), N('DEP-06', 'Prensa', 'GER-02'), N('DEP-07', 'Contenidos', 'GER-02'), N('DEP-08', 'Programa de lealtad', 'GER-03'), N('DEP-09', 'Gestión de la VP', 'GER-06'), N('DEP-10', 'Operaciones comerciales', 'GER-05'), N('DEP-11', 'Socios estratégicos', 'GER-04')],
-    areas: [N('ARE-01', 'Promociones', 'DEP-01'), N('ARE-02', 'Canales digitales', 'DEP-01'), N('ARE-03', 'Grandes clientes', 'DEP-02'), N('ARE-04', 'Analítica', 'DEP-03'), N('ARE-05', 'Experimentación', 'DEP-03'), N('ARE-06', 'Atención al cliente', 'DEP-04'), N('ARE-07', 'Vocería', 'DEP-06'), N('ARE-08', 'Redes sociales', 'DEP-07'), N('ARE-09', 'Serviclub', 'DEP-08'), N('ARE-10', 'Planeamiento', 'DEP-09'), N('ARE-11', 'Soporte a estaciones', 'DEP-10'), N('ARE-12', 'Convenios', 'DEP-11', false)],
-    seq: { 'VP': 6, 'GER': 10, 'DEP': 12, 'ARE': 13 }
+    vps: [V('VP-01', 'Vicepresidencia de Relaciones Institucionales', 'VP RRII'), V('VP-02', 'Vicepresidencia de Upstream', 'VP Upstream'), V('VP-03', 'Vicepresidencia de Downstream', 'VP Downstream'), V('VP-04', 'Vicepresidencia de Gas y Energía', 'VP Gas y Energía'), V('VP-05', 'Vicepresidencia de Finanzas', 'VP Finanzas', false)],
+    deps: [N('DEP-01', 'Marketing', 'VP-01'), N('DEP-02', 'Medios y Prensa', 'VP-01'), N('DEP-03', 'Fidelización', 'VP-01'), N('DEP-04', 'Alianzas', 'VP-01'), N('DEP-05', 'Apoyo a la Operación', 'VP-01'), N('DEP-06', 'Coordinación', 'VP-01'), N('DEP-07', 'Perforación', 'VP-02'), N('DEP-08', 'Refinación', 'VP-03'), N('DEP-09', 'Tesorería', 'VP-05', false)],
+    gers: [N('GER-01', 'B2C', 'DEP-01'), N('GER-02', 'B2B', 'DEP-01'), N('GER-03', 'Growth', 'DEP-01'), N('GER-04', 'Servicios', 'DEP-01'), N('GER-05', 'IEC', 'DEP-01', false), N('GER-06', 'Prensa', 'DEP-02'), N('GER-07', 'Contenidos', 'DEP-02'), N('GER-08', 'Programa de lealtad', 'DEP-03'), N('GER-09', 'Gestión de la VP', 'DEP-06'), N('GER-10', 'Operaciones comerciales', 'DEP-05'), N('GER-11', 'Socios estratégicos', 'DEP-04')],
+    areas: [N('ARE-01', 'Promociones', 'GER-01'), N('ARE-02', 'Canales digitales', 'GER-01'), N('ARE-03', 'Grandes clientes', 'GER-02'), N('ARE-04', 'Analítica', 'GER-03'), N('ARE-05', 'Experimentación', 'GER-03'), N('ARE-06', 'Atención al cliente', 'GER-04'), N('ARE-07', 'Vocería', 'GER-06'), N('ARE-08', 'Redes sociales', 'GER-07'), N('ARE-09', 'Serviclub', 'GER-08'), N('ARE-10', 'Planeamiento', 'GER-09'), N('ARE-11', 'Soporte a estaciones', 'GER-10'), N('ARE-12', 'Convenios', 'GER-11', false), N('ARE-13', 'Retail', 'GER-01')],
+    seq: { 'VP': 6, 'DEP': 10, 'GER': 12, 'ARE': 14 }
   };
 }
 function mailOf(p) { return p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') + '@ypf.com'; }
@@ -1524,6 +1563,7 @@ function seedMasters() {
 }
 var GER_MKT = ['B2B', 'B2C', 'Dirección', 'Growth', 'IEC', 'Servicios'];
 
+function fmtW(v) { if (v == null) return '—'; return String(Math.round(v * 10) / 10).replace('.', ',') + ' %'; }
 function calc(D, prm) {
   var C = {}, u1 = Number(prm.u1) || 60, u2 = Number(prm.u2) || 80, pSin = Number(prm.sin) || 15, pProx = Number(prm.prox) || 7;
   C.obj = function (id) { return D.objs.find(function (o) { return o.id === id; }); };
@@ -1536,6 +1576,8 @@ function calc(D, prm) {
   C.inisOf = function (oid) { return D.inis.filter(function (i) { return i.obj === oid; }); };
   C.tarsOf = function (iid) { return D.tars.filter(function (t) { return t.ini === iid; }); };
   C.activeTars = function (iid) { return C.tarsOf(iid).filter(function (t) { return t.estado !== 'Cancelada'; }); };
+  C.pesoI = function (i) { if (!i || i.estado === 'Cancelada') return null; var n = C.inisOf(i.obj).filter(function (x) { return x.estado !== 'Cancelada'; }).length; return n ? 100 / n : null; };
+  C.pesoT = function (t) { if (!t || t.estado === 'Cancelada' || t.peso == null) return null; return Number(t.peso); };
   C.dirOfIni = function (i) { var o = C.obj(i.obj); return o ? o.dir : ''; };
   C.dirOfTar = function (t) { var i = C.ini(t.ini); return i ? C.dirOfIni(i) : ''; };
   C.inYear = function (o, y) {
@@ -1558,9 +1600,7 @@ function calc(D, prm) {
     if (!C.rrii(o)) return null;
     var is = C.inisOf(o.id).filter(function (i) { return i.estado !== 'Cancelada'; });
     if (!is.length) return 0;
-    var sp = is.reduce(function (a, i) { return a + Number(i.peso || 0); }, 0);
-    if (!sp) return is.reduce(function (a, i) { return a + C.avIni(i, w); }, 0) / is.length;
-    return is.reduce(function (a, i) { return a + Number(i.peso || 0) * C.avIni(i, w); }, 0) / sp;
+    return is.reduce(function (a, i) { return a + C.avIni(i, w); }, 0) / is.length;
   };
   C.avVP = function (y, w) {
     var os = D.objs.filter(function (o) { return C.rrii(o) && C.inYear(o, y); });
@@ -1610,7 +1650,7 @@ class Component extends DCLogic {
       showFilters: false, fl: {}, fd: {}, D: seed(), users: seedUsers(), masters: seedMasters(), abm: seedAbm(),
       params: { sin: '15', prox: '7', max: '10', u1: '60', u2: '80' },
       f: null, m: null, confirm: null, toast: null, showGuide: false,
-      seq: { OBJ: 7, INI: 14, TAR: 29, RSK: 7, KR: 15, PAL: 6 }
+      seq: { OBJ: 2, INI: 2, TAR: 6, RSK: 1, KR: 2, PAL: 6 }
     };
   }
 
@@ -1635,8 +1675,8 @@ class Component extends DCLogic {
   openForm(tipo, ctx, rec) {
     var me = this.me(), U = this.meU(), C = calc(this.state.D, this.state.params), f = { tipo: tipo, mode: rec ? 'edit' : 'new', id: rec ? rec.id : null, tried: false, krs: [] }, v;
     if (tipo === 'obj') {
-      v = rec ? { vp: rec.vp, dir: rec.dir, resp: rec.resp, nombre: rec.nombre, desc: rec.desc, pal: rec.pal, dur: rec.dur, anios: rec.anios || '', peso: rec.peso != null ? String(rec.peso) : '', fini: rec.fini, fcomp: rec.fcomp, estado: rec.estado }
-        : { vp: ctx && ctx.pal ? 'VP RRII' : '', dir: '', resp: '', nombre: '', desc: '', pal: (ctx && ctx.pal) || '', dur: '', anios: '', peso: '', fini: '2027-01-01', fcomp: '2027-12-31', estado: 'No iniciada' };
+      v = rec ? { vp: rec.vp, dir: rec.dir, ger: rec.ger || '', area: rec.oArea || '', esVp: rec.esVp ? 'Sí' : 'No', pesoVp: rec.pesoVp != null ? String(rec.pesoVp) : '', resp: rec.resp, nombre: rec.nombre, desc: rec.desc, pal: rec.pal, dur: rec.dur, anios: rec.anios || '', peso: rec.peso != null ? String(rec.peso) : '', fini: rec.fini, fcomp: rec.fcomp, estado: rec.estado }
+        : { vp: ctx && ctx.pal ? 'VP RRII' : '', dir: '', ger: '', area: '', esVp: 'No', pesoVp: '', resp: '', nombre: '', desc: '', pal: (ctx && ctx.pal) || '', dur: '', anios: '', peso: '', fini: (this.state.anio || '2026') + '-01-01', fcomp: (this.state.anio || '2026') + '-12-31', estado: 'No iniciada' };
     }
     if (tipo === 'ini') {
       var oid = rec ? rec.obj : (ctx && ctx.obj) || '';
@@ -1647,11 +1687,11 @@ class Component extends DCLogic {
         : [{ nombre: '', resp: '', tipo: '', unidad: '', min: '', meta: '', max: '', peso: '100' }];
     }
     if (tipo === 'tar') {
-      v = rec ? { ini: rec.ini, nombre: rec.nombre, desc: rec.desc, resp: rec.resp, area: rec.area, prio: rec.prio || '', fini: rec.fini, fcomp: rec.fcomp, inv: rec.inv ? 'Sí' : 'No', ceco: rec.inv ? rec.inv.ceco : '', ap: rec.inv ? String(rec.inv.ap) : '' }
-        : { ini: (ctx && ctx.ini) || '', nombre: '', desc: '', resp: '', area: '', prio: '', fini: '', fcomp: '', inv: 'No', ceco: '', ap: '' };
+      v = rec ? { ini: rec.ini, nombre: rec.nombre, desc: rec.desc, habil: rec.habil || '', resp: rec.resp, areas: (rec.areas || []).slice(), prio: rec.prio || '', fini: rec.fini, fcomp: rec.fcomp, inv: rec.inv ? 'Sí' : 'No', ceco: rec.inv ? rec.inv.ceco : '', ap: rec.inv ? String(rec.inv.ap) : '' }
+        : { ini: (ctx && ctx.ini) || '', nombre: '', desc: '', habil: '', resp: '', areas: [], prio: '', fini: '', fcomp: '', inv: 'No', ceco: '', ap: '' };
     }
     f.vals = v;
-    if (tipo === 'obj' || (tipo === 'tar' && !rec && ctx && ctx.ini && this.state.screen === 'iniciativa')) { f.side = true; this.setState({ f: f, menuOpen: false, showGuide: false }); return; }
+    if (tipo === 'obj' || tipo === 'tar' || tipo === 'ini') { f.side = true; f.fromIni = !!(tipo === 'tar' && !rec && ctx && ctx.ini); this.setState({ f: f, menuOpen: false, showGuide: false }); return; }
     this.go('form', null, { f: f });
   }
   fieldMsgs(f) {
@@ -1660,19 +1700,19 @@ class Component extends DCLogic {
     var req = function (k) { if (empty(v[k])) m[k] = R; };
     var order = function () { if (v.fini && v.fcomp && v.fcomp < v.fini) m.fcomp = 'La fecha de compromiso no puede ser anterior a la de inicio.'; };
     if (f.tipo === 'obj') {
-      ['vp', 'dir', 'resp', 'nombre', 'desc'].forEach(req);
-      if (v.vp === 'VP RRII') { ['pal', 'dur', 'peso', 'fini', 'fcomp'].forEach(req); if (v.dur === 'Plurianual') req('anios'); order(); if (isNum(v.peso) && (Number(v.peso) < 0 || Number(v.peso) > 100)) m.peso = 'Ingresá un valor entre 0 y 100.'; }
+      ['vp', 'dir', 'ger', 'nombre', 'desc'].forEach(req);
+      if (v.esVp === 'Sí') { req('pesoVp'); if (isNum(v.pesoVp) && (Number(v.pesoVp) <= 0 || Number(v.pesoVp) > 100)) m.pesoVp = 'Ingresá un valor entre 1 y 100.'; }
+      if (v.vp === 'VP RRII') { ['pal', 'dur', 'fini', 'fcomp'].forEach(req); if (v.dur === 'Plurianual') req('anios'); order(); }
     }
     if (f.tipo === 'ini') {
       ['obj', 'nombre', 'desc', 'resp', 'fini', 'fcomp'].forEach(req); order();
       var o = C.obj(v.obj);
       if (o && o.fini && o.fcomp && v.fini && v.fcomp && (v.fini < o.fini || v.fcomp > o.fcomp)) m.fini = 'Las fechas deben quedar dentro de las del objetivo (' + fd(o.fini) + ' a ' + fd(o.fcomp) + ').';
       if (o && C.rrii(o)) {
-        if (U.rol === 'Administrador') req('peso');
         if (!f.krs.length) m.krs = 'Cargá al menos un resultado clave.';
         var sum = 0;
         f.krs.forEach(function (k, ix) {
-          ['nombre', 'resp', 'tipo', 'unidad', 'min', 'meta', 'max', 'peso'].forEach(function (key) { if (empty(k[key])) m['kr' + ix + key] = R; });
+          ['nombre', 'tipo', 'unidad', 'min', 'meta', 'max', 'peso'].forEach(function (key) { if (empty(k[key])) m['kr' + ix + key] = R; });
           if (isNum(k.min) && isNum(k.meta) && isNum(k.max) && !(Number(k.min) <= Number(k.meta) && Number(k.meta) <= Number(k.max))) m['kr' + ix + 'meta'] = 'Debe cumplirse Mínimo ≤ Meta ≤ Máximo.';
           if (isNum(k.max) && Number(k.max) <= 0) m['kr' + ix + 'max'] = 'Debe ser mayor que 0.';
           sum += Number(k.peso) || 0;
@@ -1681,7 +1721,8 @@ class Component extends DCLogic {
       }
     }
     if (f.tipo === 'tar') {
-      ['ini', 'nombre', 'desc', 'resp', 'area', 'fini', 'fcomp', 'inv'].forEach(req); order();
+      ['ini', 'nombre', 'desc', 'habil', 'resp', 'fini', 'fcomp', 'inv'].forEach(req); order();
+      if (!v.areas || !v.areas.length) m.areas = R;
       if (v.inv === 'Sí') { req('ceco'); req('ap'); }
       var i = C.ini(v.ini);
       if (i && v.fini && v.fcomp && (v.fini < i.fini || v.fcomp > i.fcomp)) m.fini = 'Las fechas deben quedar dentro de las de la iniciativa (' + fd(i.fini) + ' a ' + fd(i.fcomp) + ').';
@@ -1694,7 +1735,7 @@ class Component extends DCLogic {
     var self = this;
     return function (e) {
       var val = e.target.value, f = self.state.f, nv = Object.assign({}, f.vals); nv[k] = val;
-      if (f.tipo === 'obj' && k === 'dir') { var ok = self.state.users.some(function (u) { return u.p === nv.resp && u.dir === val; }); if (!ok) nv.resp = ''; }
+      if (f.tipo === 'obj') { if (k === 'vp') { nv.dir = ''; nv.ger = ''; nv.area = ''; } if (k === 'dir') { nv.ger = ''; nv.area = ''; } if (k === 'ger') nv.area = ''; }
       if (f.tipo === 'ini' && k === 'obj') { var C = calc(self.state.D, self.state.params); nv.peso = C.inisOf(val).length ? '0' : '100'; }
       self.setState({ f: Object.assign({}, f, { vals: nv }) });
     };
@@ -1713,7 +1754,7 @@ class Component extends DCLogic {
   commitPartial() {
     var s = this.state, f = s.f, v = f.vals, D = s.D, U = this.meU(), C = calc(D, s.params), nd = Object.assign({}, D), seq = s.seq, id = f.id;
     var power = U.rol === 'Administrador' || U.rol === 'CargadorObjetivo', o = C.obj(v.obj), rrI = C.rrii(o);
-    var full = function (k) { return ['nombre', 'resp', 'tipo', 'unidad', 'min', 'meta', 'max', 'peso'].every(function (x) { return !empty(k[x]); }) && Number(k.min) <= Number(k.meta) && Number(k.meta) <= Number(k.max) && Number(k.max) > 0; };
+    var full = function (k) { return ['nombre', 'tipo', 'unidad', 'min', 'meta', 'max', 'peso'].every(function (x) { return !empty(k[x]); }) && Number(k.min) <= Number(k.meta) && Number(k.meta) <= Number(k.max) && Number(k.max) > 0; };
     var old = f.mode === 'edit' ? C.ini(id).krs : [], krs = [];
     if (rrI) f.krs.filter(full).forEach(function (k) { var prev = k.id ? old.find(function (x) { return x.id === k.id; }) : null, kid = k.id; if (!kid) { kid = 'KR-' + pad(seq.KR); seq = Object.assign({}, seq, { KR: seq.KR + 1 }); k.id = kid; } krs.push({ id: kid, nombre: k.nombre, resp: k.resp, tipo: k.tipo, unidad: k.unidad, min: Number(k.min), meta: Number(k.meta), max: Number(k.max), peso: Number(k.peso), actual: prev ? prev.actual : null, proy: prev ? prev.proy : Number(k.meta), fuente: prev ? prev.fuente : '', evid: prev ? prev.evid : '', com: prev ? prev.com : null }); });
     var peso = !rrI ? null : U.rol === 'Administrador' && isNum(v.peso) ? Number(v.peso) : (f.mode === 'edit' ? C.ini(id).peso : (C.inisOf(v.obj).length ? 0 : 100));
@@ -1740,7 +1781,7 @@ class Component extends DCLogic {
     var power = U.rol === 'Administrador' || U.rol === 'CargadorObjetivo';
     if (f.tipo === 'obj') {
       var rr = v.vp === 'VP RRII';
-      var data = { vp: v.vp, dir: v.dir, resp: v.resp, nombre: v.nombre, desc: v.desc, pal: rr ? v.pal : '', dur: rr ? v.dur : '', anios: rr && v.dur === 'Plurianual' ? v.anios : '', peso: rr ? Number(v.peso) : null, fini: rr ? v.fini : '', fcomp: rr ? v.fcomp : '', estado: v.estado || 'No iniciada' };
+      var data = { vp: v.vp, dir: v.dir, ger: v.ger || '', oArea: v.area || '', esVp: v.esVp === 'Sí', pesoVp: v.esVp === 'Sí' && isNum(v.pesoVp) ? Number(v.pesoVp) : null, resp: v.resp || '', nombre: v.nombre, desc: v.desc, pal: rr ? v.pal : '', dur: rr ? v.dur : '', anios: rr && v.dur === 'Plurianual' ? v.anios : '', peso: rr && isNum(v.peso) ? Number(v.peso) : null, fini: rr ? v.fini : '', fcomp: rr ? v.fcomp : '', estado: v.estado || 'No iniciada' };
       if (f.mode === 'new') { var r = this.newId('OBJ', seq); id = r.id; seq = r.seq; nd.objs = D.objs.concat([Object.assign({ id: id }, data)]); msg = 'El objetivo "' + v.nombre + '" se ha cargado correctamente.'; }
       else { nd.objs = D.objs.map(function (o) { return o.id === id ? Object.assign({}, o, data) : o; }); msg = 'El objetivo "' + v.nombre + '" se ha actualizado correctamente.'; }
       scr = 'objetivo';
@@ -1762,7 +1803,7 @@ class Component extends DCLogic {
       scr = 'iniciativa';
     }
     if (f.tipo === 'tar') {
-      var tdata = { ini: v.ini, nombre: v.nombre, desc: v.desc, resp: v.resp, area: v.area, prio: v.prio, fini: v.fini, fcomp: v.fcomp };
+      var tdata = { ini: v.ini, nombre: v.nombre, desc: v.desc, habil: v.habil, resp: v.resp, areas: (v.areas || []).slice(), prio: v.prio, fini: v.fini, fcomp: v.fcomp };
       if (f.mode === 'new') {
         var rt = this.newId('TAR', seq); id = rt.id; seq = rt.seq;
         nd.tars = D.tars.concat([Object.assign({ id: id, avance: 0, estado: 'No iniciada', act: REF, ffin: null, inv: v.inv === 'Sí' ? { ceco: v.ceco, ap: Number(v.ap), ej: 0 } : null, hist: [H(REF, 0, 'No iniciada', 'Tarea cargada.', me)] }, tdata)]);
@@ -1773,7 +1814,11 @@ class Component extends DCLogic {
       }
       scr = 'tarea';
     }
-    if (f.side) { this.setState({ D: nd, seq: seq, f: null, confirm: null }); this.notify(msg); return; }
+    if (f.side) {
+      var stS = { D: nd, seq: seq, f: null, confirm: null };
+      if (f.tipo === 'obj') { var exS = Object.assign({}, s.expanded || {}), oS = nd.objs.find(function (x) { return x.id === id; }); if (oS) { exS[oS.vp === 'VP RRII' && oS.pal ? oS.pal : 'otras'] = true; stS.expanded = exS; if (s.screen === 'palancas') stS.tab = oS.vp === 'VP RRII' ? 'todas' : 'otras'; var yS = Number((oS.fini || '').slice(0, 4)); if (oS.vp === 'VP RRII' && yS && String(yS) !== String(s.anio)) stS.anio = String(yS); } }
+      this.setState(stS); this.notify(msg); return;
+    }
     var h = s.hist; if (f.mode === 'edit' && h.length) h = h.slice(0, -1);
     this.setState({ D: nd, seq: seq, screen: scr, selId: id, f: null, confirm: null, hist: h });
     this.notify(msg);
@@ -1781,7 +1826,7 @@ class Component extends DCLogic {
 
   // ---------- modales
   openModal(type, ctx, vals) { this.setState({ m: { type: type, ctx: ctx || {}, vals: vals || {}, tried: false }, menuOpen: false }); }
-  mset(k) { var self = this; return function (e) { var val = e.target.value, m = self.state.m, nv = Object.assign({}, m.vals); nv[k] = val; if (m.type === 'tarUpd' && k === 'estado' && val === 'Finalizada') { nv.avance = '100'; if (!nv.ffin) nv.ffin = REF; } if (m.type === 'abm') { if (k === 'vp') { nv.ger = ''; nv.dep = ''; } if (k === 'ger') { nv.dep = ''; nv.area = ''; } if (k === 'dep') nv.area = ''; } self.setState({ m: Object.assign({}, m, { vals: nv }) }); }; }
+  mset(k) { var self = this; return function (e) { var val = e.target.value, m = self.state.m, nv = Object.assign({}, m.vals); nv[k] = val; if (m.type === 'tarUpd' && k === 'estado' && val === 'Finalizada') { nv.avance = '100'; if (!nv.ffin) nv.ffin = REF; } if (m.type === 'abm') { if (k === 'vp') { nv.dep = ''; nv.ger = ''; nv.area = ''; } if (k === 'dep') { nv.ger = ''; nv.area = ''; } if (k === 'ger') nv.area = ''; } self.setState({ m: Object.assign({}, m, { vals: nv }) }); }; }
   modalMsgs(m) {
     var v = m.vals, out = {}, R = 'Este campo es obligatorio.';
     var req = function (k) { if (empty(v[k])) out[k] = R; };
@@ -1795,12 +1840,12 @@ class Component extends DCLogic {
     if (m.type === 'abm') {
       var kd = m.ctx.kind; req('nombre');
       if (kd === 'vp') req('sigla');
-      if (kd === 'ger') req('vp');
-      if (kd === 'dep') { req('vp'); req('ger'); }
-      if (kd === 'area') { req('ger'); req('dep'); }
-      if (kd === 'us') { req('mail'); req('ger'); req('dep'); req('area'); req('rol'); if (!empty(v.mail) && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.mail)) out.mail = 'Ingresá un correo válido.'; }
+      if (kd === 'dep') req('vp');
+      if (kd === 'ger') { req('vp'); req('dep'); }
+      if (kd === 'area') { req('dep'); req('ger'); }
+      if (kd === 'us') { req('mail'); req('dep'); req('ger'); req('area'); req('rol'); if (!empty(v.mail) && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.mail)) out.mail = 'Ingresá un correo válido.'; }
       var A0 = this.state.abm, coll = { vp: A0.vps, ger: A0.gers, dep: A0.deps, area: A0.areas }[kd];
-      if (coll && !empty(v.nombre) && coll.some(function (x) { return x.id !== m.ctx.id && x.nombre.trim().toLowerCase() === v.nombre.trim().toLowerCase() && (kd === 'vp' || x.par === (kd === 'ger' ? v.vp : kd === 'dep' ? v.ger : v.dep)); })) out.nombre = 'Ya existe un registro con ese nombre.';
+      if (coll && !empty(v.nombre) && coll.some(function (x) { return x.id !== m.ctx.id && x.nombre.trim().toLowerCase() === v.nombre.trim().toLowerCase() && (kd === 'vp' || x.par === (kd === 'dep' ? v.vp : kd === 'ger' ? v.dep : v.ger)); })) out.nombre = 'Ya existe un registro con ese nombre.';
       if (kd === 'us' && !empty(v.mail) && this.state.users.some(function (u) { return u.p !== m.ctx.id && (u.mail || '').toLowerCase() === v.mail.trim().toLowerCase(); })) out.mail = 'Ya existe un usuario con ese correo.';
     }
     return out;
@@ -1824,7 +1869,7 @@ class Component extends DCLogic {
     }
     if (m.type === 'tarUpd') {
       var t = C.tar(m.ctx.id), fin = v.estado === 'Finalizada', av = fin ? 100 : Number(v.avance);
-      nd.tars = D.tars.map(function (x) { return x.id !== t.id ? x : Object.assign({}, x, { estado: v.estado, avance: av, act: REF, ffin: fin ? v.ffin : null, inv: x.inv ? Object.assign({}, x.inv, { ej: isNum(v.ej) ? Number(v.ej) : x.inv.ej }) : null, hist: [H(REF, av, v.estado, v.com || '—', me)].concat(x.hist) }); });
+      nd.tars = D.tars.map(function (x) { return x.id !== t.id ? x : Object.assign({}, x, { com: v.com ? { c: v.com, f: REF, a: me } : x.com, estado: v.estado, avance: av, act: REF, ffin: fin ? v.ffin : null, inv: x.inv ? Object.assign({}, x.inv, { ej: isNum(v.ej) ? Number(v.ej) : x.inv.ej }) : null, hist: [H(REF, av, v.estado, v.com || '—', me)].concat(x.hist) }); });
       this.setState({ D: nd, m: null }); this.notify('El avance de la tarea "' + t.nombre + '" se ha actualizado correctamente.'); return;
     }
     if (m.type === 'iniUpd') {
@@ -1873,9 +1918,9 @@ class Component extends DCLogic {
   openAbm(kind, rec) {
     var A = this.state.abm, v = { nombre: '', act: 'Sí' };
     if (kind === 'vp') v.sigla = rec ? rec.sigla : '';
-    if (kind === 'ger') v.vp = rec ? rec.par : '';
-    if (kind === 'dep') { var g = rec ? A.gers.find(function (x) { return x.id === rec.par; }) : null; v.ger = rec ? rec.par : ''; v.vp = g ? g.par : ''; }
-    if (kind === 'area') { var d = rec ? A.deps.find(function (x) { return x.id === rec.par; }) : null; v.dep = rec ? rec.par : ''; v.ger = d ? d.par : ''; }
+    if (kind === 'dep') v.vp = rec ? rec.par : '';
+    if (kind === 'ger') { var d = rec ? A.deps.find(function (x) { return x.id === rec.par; }) : null; v.dep = rec ? rec.par : ''; v.vp = d ? d.par : ''; }
+    if (kind === 'area') { var g = rec ? A.gers.find(function (x) { return x.id === rec.par; }) : null; v.ger = rec ? rec.par : ''; v.dep = g ? g.par : ''; }
     if (kind === 'us') { v.mail = rec ? rec.mail || '' : ''; v.ger = rec ? rec.gerId || '' : ''; v.dep = rec ? rec.depId || '' : ''; v.area = rec ? rec.areaId || '' : ''; v.rol = rec ? rec.rol : ''; }
     if (rec) { v.nombre = kind === 'us' ? rec.p : rec.nombre; v.act = rec.act ? 'Sí' : 'No'; }
     this.openModal('abm', { kind: kind, id: rec ? (kind === 'us' ? rec.p : rec.id) : null }, v);
@@ -1884,14 +1929,14 @@ class Component extends DCLogic {
     var s = this.state, v = m.vals, kd = m.ctx.kind, A = Object.assign({}, s.abm), act = v.act === 'Sí', nom = v.nombre.trim(), noun = this.abmNoun(kd), isNew = !m.ctx.id;
     if (kd === 'us') {
       var gN = (A.gers.find(function (x) { return x.id === v.ger; }) || {}).nombre || '', dN = (A.deps.find(function (x) { return x.id === v.dep; }) || {}).nombre || '';
-      var data = { mail: v.mail.trim(), gerId: v.ger, depId: v.dep, areaId: v.area, rol: v.rol, act: act, dir: gN, ger: dN };
+      var data = { mail: v.mail.trim(), gerId: v.ger, depId: v.dep, areaId: v.area, rol: v.rol, act: act, dir: dN, ger: gN };
       var users = isNew ? s.users.concat([Object.assign({ p: nom }, data)]) : s.users.map(function (u) { return u.p === m.ctx.id ? Object.assign({}, u, data, { p: nom }) : u; });
       this.setState({ users: users, m: null });
       this.notify('El usuario "' + nom + '" se ha ' + (isNew ? 'cargado' : 'actualizado') + ' correctamente.'); return;
     }
     var key = { vp: 'vps', ger: 'gers', dep: 'deps', area: 'areas' }[kd], pref = { vp: 'VP', ger: 'GER', dep: 'DEP', area: 'ARE' }[kd];
     var rec = { nombre: nom, act: act };
-    if (kd === 'vp') rec.sigla = v.sigla.trim(); else rec.par = kd === 'ger' ? v.vp : kd === 'dep' ? v.ger : v.dep;
+    if (kd === 'vp') rec.sigla = v.sigla.trim(); else rec.par = kd === 'dep' ? v.vp : kd === 'ger' ? v.dep : v.ger;
     if (isNew) { var sq = Object.assign({}, A.seq), n = sq[pref]; sq[pref] = n + 1; A.seq = sq; A[key] = A[key].concat([Object.assign({ id: pref + '-' + pad(n) }, rec)]); }
     else A[key] = A[key].map(function (x) { return x.id === m.ctx.id ? Object.assign({}, x, rec) : x; });
     this.setState({ abm: A, m: null });
@@ -1930,7 +1975,7 @@ class Component extends DCLogic {
     var pesoTot = rrY.reduce(function (a, o) { return a + Number(o.peso || 0); }, 0);
     var vpR = C.avVP(anio, 'r'), vpP = C.avVP(anio, 'p');
 
-    var objRow = function (o) { var a = C.avObj(o, 'r'), p = C.avObj(o, 'p'); return Object.assign({ id: o.id, nombre: o.nombre, dir: o.dir, resp: o.resp, peso: o.peso != null ? o.peso + ' %' : '—', pT: pct(p), pcol: C.col(p), est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }, avs(a)); };
+    var objRow = function (o) { var a = C.avObj(o, 'r'), p = C.avObj(o, 'p'); return Object.assign({ id: o.id, nombre: o.nombre, dir: o.dir, ger: o.ger || '—', oArea: o.oArea || '—', resp: o.resp, peso: o.peso != null ? o.peso + ' %' : '—', pT: pct(p), pcol: C.col(p), est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }, avs(a)); };
 
     // ---- palancas
     var pals = D.pals.filter(function (p) { return p.act; }).map(function (p) {
@@ -1997,7 +2042,7 @@ class Component extends DCLogic {
       var myOpen = mineAll.filter(C.open), myR = D.rsk.filter(function (r) { var t = C.tar(r.tar); return t && t.resp === me; });
       var hiV = myOpen.filter(C.venc).length, hiP = myOpen.filter(C.prox).length, hiR = myR.filter(function (r) { return r.estado !== 'Resuelto'; }).length, hiD = myR.filter(C.decPend).length;
       bt = Object.assign(bt, { title: curT === 'mias' ? 'Mis tareas' : 'Todas las tareas', isMine: curT === 'mias',
-        countTxt: listT.length + ' tareas en esta vista' + (curFl.dir ? ' · Dirección: ' + curFl.dir : ''),
+        countTxt: listT.length + ' tareas en esta vista' + (curFl.dir ? ' · Departamento: ' + curFl.dir : ''),
         hi: [{ v: hiV, l: 'Vencidas', cls: hiV ? 'kpi bad' : 'kpi' }, { v: hiP, l: 'Próximas a vencer (' + s.params.prox + ' días)', cls: hiP ? 'kpi warn' : 'kpi' }, { v: hiR, l: 'Riesgos activos', cls: hiR ? 'kpi warn' : 'kpi' }, { v: hiD, l: 'Decisiones pendientes', cls: hiD ? 'kpi warn' : 'kpi' }] });
     }
     if (s.screen === 'iniciativas') {
@@ -2020,26 +2065,26 @@ class Component extends DCLogic {
         var o = C.obj(i.obj);
         var tc = ts.filter(function (t) { return t.estado !== 'Cancelada'; }).map(C.tcol), sem = !ts.length ? 'gris' : tc.indexOf('rojo') >= 0 ? 'rojo' : tc.indexOf('naranja') >= 0 ? 'naranja' : tc.indexOf('verde') >= 0 ? 'verde' : 'blanco';
         var SEML = { rojo: 'Crítico: tareas vencidas, frenadas o con riesgo escalado', naranja: 'Atención: tareas por vencer, sin actualizar o con decisión pendiente', verde: 'En término', blanco: 'Sin iniciar', gris: 'Sin tareas' };
-        return Object.assign({ id: i.id, nombre: i.nombre, objTxt: o ? o.id + ' · ' + o.nombre + (power && i.peso != null ? ' (' + i.peso + ' %)' : '') : i.obj, resp: i.resp.join(', '), est: i.estado, estCls: ESTCLS[i.estado], hasAv: a != null, noAv: a == null, sem: sem, semLbl: SEML[sem], open: goF('iniciativa', i.id) }, avs(a));
+        return Object.assign({ id: i.id, nombre: i.nombre, objTxt: o ? o.id + ' · ' + o.nombre + (power && C.pesoI(i) != null ? ' (' + fmtW(C.pesoI(i)) + ')' : '') : i.obj, resp: i.resp.join(', '), est: i.estado, estCls: ESTCLS[i.estado], hasAv: a != null, noAv: a == null, sem: sem, semLbl: SEML[sem], open: goF('iniciativa', i.id) }, avs(a));
       });
-      bi = { objHdr: power ? 'Objetivo (peso)' : 'Objetivo', title: curI === 'mias' ? 'Mis iniciativas' : 'Todas las iniciativas', countTxt: listI.length + ' iniciativas en esta vista' + (curFl.dir ? ' · Dirección: ' + curFl.dir : '') };
+      bi = { objHdr: power ? 'Objetivo (peso)' : 'Objetivo', title: curI === 'mias' ? 'Mis iniciativas' : 'Todas las iniciativas', countTxt: listI.length + ' iniciativas en esta vista' + (curFl.dir ? ' · Departamento: ' + curFl.dir : '') };
     }
     var palRows = [], palInfo = '', gal = [];
     var abm = { is: {}, rows: [], title: '', countTxt: '', add: function () {}, addLbl: '', ph: '', empty: false, emptyT: '', hasParFl: false, parLbl: '', parOpts: [] };
     if (s.screen === 'abm') {
-      var AB = s.abm, curA = ['vp', 'ger', 'dep', 'area', 'us'].indexOf(s.tab) >= 0 ? s.tab : 'vp'; curFl = fl;
+      var AB = s.abm, curA = ['vp', 'dep', 'ger', 'area', 'us'].indexOf(s.tab) >= 0 ? s.tab : 'vp'; curFl = fl;
       var byId = function (arr, id) { return arr.find(function (x) { return x.id === id; }) || null; };
       var nm = function (arr, id) { var x = byId(arr, id); return x ? x.nombre : '—'; };
       var chipA = function (a) { return { st: a ? 'Activo' : 'Inactivo', cls: a ? 'chip c-ok' : 'chip c-none' }; };
       var nUs = function (k, id) { return s.users.filter(function (u) { return u[k] === id; }).length; };
       var DEF = {
         vp: { l: 'Vicepresidencias', t: 'ABM de vicepresidencias', a: 'Agregar vicepresidencia', ph: 'Buscar ID o vicepresidencia', list: AB.vps },
-        ger: { l: 'Gerencias', t: 'ABM de gerencias', a: 'Agregar gerencia', ph: 'Buscar ID o gerencia', list: AB.gers, pl: 'Vicepresidencia', po: AB.vps.map(function (x) { return { v: x.id, l: x.sigla }; }) },
-        dep: { l: 'Departamentos', t: 'ABM de departamentos', a: 'Agregar departamento', ph: 'Buscar ID o departamento', list: AB.deps, pl: 'Gerencia', po: AB.gers.map(function (x) { return { v: x.id, l: x.nombre }; }) },
-        area: { l: 'Áreas', t: 'ABM de áreas', a: 'Agregar área', ph: 'Buscar ID o área', list: AB.areas, pl: 'Departamento', po: AB.deps.map(function (x) { return { v: x.id, l: x.nombre }; }) },
-        us: { l: 'Usuarios', t: 'ABM de usuarios y roles', a: 'Agregar usuario', ph: 'Buscar nombre o correo', list: s.users, pl: 'Gerencia', po: AB.gers.map(function (x) { return { v: x.id, l: x.nombre }; }) }
+        dep: { l: 'Departamentos', t: 'ABM de departamentos', a: 'Agregar departamento', ph: 'Buscar ID o departamento', list: AB.deps, pl: 'Vicepresidencia', po: AB.vps.map(function (x) { return { v: x.id, l: x.sigla }; }) },
+        ger: { l: 'Gerencias', t: 'ABM de gerencias', a: 'Agregar gerencia', ph: 'Buscar ID o gerencia', list: AB.gers, pl: 'Departamento', po: AB.deps.map(function (x) { return { v: x.id, l: x.nombre }; }) },
+        area: { l: 'Áreas', t: 'ABM de áreas', a: 'Agregar área', ph: 'Buscar ID o área', list: AB.areas, pl: 'Gerencia', po: AB.gers.map(function (x) { return { v: x.id, l: x.nombre }; }) },
+        us: { l: 'Usuarios', t: 'ABM de usuarios y roles', a: 'Agregar usuario', ph: 'Buscar nombre o correo', list: s.users, pl: 'Departamento', po: AB.deps.map(function (x) { return { v: x.id, l: x.nombre }; }) }
       };
-      tabs = ['vp', 'ger', 'dep', 'area', 'us'].map(function (k) { return { label: DEF[k].l, count: DEF[k].list.length, cls: curA === k ? 'on' : '', pick: function () { self.setState({ tab: k, fl: {}, page: 1, q: '' }); } }; });
+      tabs = ['vp', 'dep', 'ger', 'area', 'us'].map(function (k) { return { label: DEF[k].l, count: DEF[k].list.length, cls: curA === k ? 'on' : '', pick: function () { self.setState({ tab: k, fl: {}, page: 1, q: '' }); } }; });
       var dA = DEF[curA];
       abm.is[curA] = true; abm.title = dA.t; abm.addLbl = dA.a; abm.ph = dA.ph; abm.add = function () { self.openAbm(curA, null); };
       abm.hasParFl = !!dA.pl; abm.parLbl = dA.pl || ''; abm.parOpts = dA.po || [];
@@ -2047,19 +2092,19 @@ class Component extends DCLogic {
         var nmx = curA === 'us' ? x.p + ' ' + (x.mail || '') : (x.id + ' ' + x.nombre + ' ' + (x.sigla || ''));
         if (qq && nmx.toLowerCase().indexOf(qq) < 0) return false;
         if (fl.aEst && (fl.aEst === 'Activo') !== !!x.act) return false;
-        if (fl.aPar && (curA === 'us' ? x.gerId : x.par) !== fl.aPar) return false;
+        if (fl.aPar && (curA === 'us' ? x.depId : x.par) !== fl.aPar) return false;
         if (curA === 'us' && fl.aRol && x.rol !== fl.aRol) return false;
         return true;
       };
       var all = dA.list.filter(passA);
       var depsOf = function (kind, x) {
-        if (kind === 'vp') return AB.gers.filter(function (g) { return g.par === x.id; }).length;
-        if (kind === 'ger') return AB.deps.filter(function (d) { return d.par === x.id; }).length + nUs('gerId', x.id);
-        if (kind === 'dep') return AB.areas.filter(function (a) { return a.par === x.id; }).length + nUs('depId', x.id);
+        if (kind === 'vp') return AB.deps.filter(function (d) { return d.par === x.id; }).length;
+        if (kind === 'dep') return AB.gers.filter(function (g) { return g.par === x.id; }).length + nUs('depId', x.id);
+        if (kind === 'ger') return AB.areas.filter(function (a) { return a.par === x.id; }).length + nUs('gerId', x.id);
         if (kind === 'area') return nUs('areaId', x.id);
         return 0;
       };
-      var why = { vp: 'gerencias', ger: 'departamentos o usuarios', dep: 'áreas o usuarios', area: 'usuarios' };
+      var why = { vp: 'departamentos', dep: 'gerencias o usuarios', ger: 'áreas o usuarios', area: 'usuarios' };
       var mkRow = function (x) {
         var r = Object.assign({}, chipA(x.act));
         if (curA === 'us') {
@@ -2069,9 +2114,9 @@ class Component extends DCLogic {
           var nd0 = depsOf(curA, x);
           Object.assign(r, { id: x.id, nombre: x.nombre, lbl: x.id + ' ' + x.nombre, sigla: x.sigla || '' });
           if (curA === 'vp') r.n = nd0;
-          if (curA === 'ger') { r.p1 = (byId(AB.vps, x.par) || {}).sigla || '—'; r.n = AB.deps.filter(function (d) { return d.par === x.id; }).length; }
-          if (curA === 'dep') { var g0 = byId(AB.gers, x.par); r.p1 = g0 ? g0.nombre : '—'; r.p2 = g0 ? ((byId(AB.vps, g0.par) || {}).sigla || '—') : '—'; r.n = AB.areas.filter(function (a) { return a.par === x.id; }).length; }
-          if (curA === 'area') { var d0 = byId(AB.deps, x.par), g1 = d0 ? byId(AB.gers, d0.par) : null; r.p1 = d0 ? d0.nombre : '—'; r.p2 = g1 ? g1.nombre : '—'; r.n = nUs('areaId', x.id); }
+          if (curA === 'dep') { r.p1 = (byId(AB.vps, x.par) || {}).sigla || '—'; r.n = AB.gers.filter(function (g) { return g.par === x.id; }).length; }
+          if (curA === 'ger') { var d0 = byId(AB.deps, x.par); r.p1 = d0 ? d0.nombre : '—'; r.p2 = d0 ? ((byId(AB.vps, d0.par) || {}).sigla || '—') : '—'; r.n = AB.areas.filter(function (a) { return a.par === x.id; }).length; }
+          if (curA === 'area') { var g1 = byId(AB.gers, x.par), d1 = g1 ? byId(AB.deps, g1.par) : null; r.p1 = g1 ? g1.nombre : '—'; r.p2 = d1 ? d1.nombre : '—'; r.n = nUs('areaId', x.id); }
           r.canDel = nd0 === 0; r.noDel = nd0 > 0; r.delTip = 'Tiene ' + why[curA] + ' asociados: desactivalo';
         }
         r.edit = function () { self.openAbm(curA, x); }; r.del = function () { self.delAbm(curA, x); };
@@ -2086,6 +2131,7 @@ class Component extends DCLogic {
       abm.countTxt = dA.list.length + ' ' + dA.l.toLowerCase() + ' · ' + actN + ' activ' + (curA === 'dep' || curA === 'us' ? 'os' : 'as') + (all.length !== dA.list.length ? ' · ' + all.length + ' con estos filtros' : '');
       abm.empty = !all.length; abm.emptyT = 'No hay ' + dA.l.toLowerCase() + ' con estos filtros.';
     }
+    var vpo = { isTabs: false, showGal: true, showMine: false, empty: false, tabs: [], rows: [] };
     if (s.screen === 'palancas') {
       curFl = Object.assign({}, fl);
       var Y = curFl.anio || anio;
@@ -2105,7 +2151,7 @@ class Component extends DCLogic {
         if (ov.length) {
           nObjs += ov.length;
           palRows.push({ isGroup: true, isEmpty: false, isRow: false, label: 'Otras VP', nTxt: ov.length + (ov.length === 1 ? ' objetivo' : ' objetivos'), desc: 'Objetivos de otras vicepresidencias a los que aporta la VP RRII. No llevan palanca, peso ni avance.' });
-          ov.forEach(function (o) { palRows.push({ isRow: true, isGroup: false, isEmpty: false, hasAv: false, noAv: true, id: o.id, nombre: o.nombre, dir: o.dir, resp: o.resp, peso: '—', est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }); });
+          ov.forEach(function (o) { palRows.push({ isRow: true, isGroup: false, isEmpty: false, hasAv: false, noAv: true, id: o.id, nombre: o.nombre, dir: o.dir, ger: o.ger || '—', oArea: o.oArea || '—', resp: o.resp, peso: '—', est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }); });
         }
       }
       palInfo = D.pals.filter(function (p) { return p.act; }).length + ' palancas activas · ' + nObjs + ' objetivos · Avance de la VP ' + Y + ': ' + pct(C.avVP(Y, 'r'));
@@ -2124,14 +2170,21 @@ class Component extends DCLogic {
           exp: isExp, expCls: isExp ? 'open' : '', expLbl: isExp ? 'Contraer objetivos' : 'Ver objetivos', toggle: function () { var e2 = Object.assign({}, self.state.expanded || {}); e2[p.id] = !isExp; self.setState({ expanded: e2 }); },
           objs: os.map(oRow), noObjs: !os.length, emptyTxt: 'Esta palanca todavía no tiene objetivos cargados para ' + Y + '.' });
       });
-      if (!curFl.pal || curFl.pal === 'otras') {
+      if (false) {
         var ovg = D.objs.filter(function (o) { return !C.rrii(o) && passO(o); });
         if (ovg.length) { var isE = exp.otras !== undefined ? exp.otras : autoExp;
           gal.push({ id: '—', nombre: 'Otras VP', desc: 'Objetivos de otras vicepresidencias a los que aporta la VP RRII. No llevan palanca, peso ni avance.', n: ovg.length, hasAv: false, noAv: true, hasEst: false, canEdit: false, hasDet: false,
             exp: isE, expCls: isE ? 'open' : '', expLbl: isE ? 'Contraer objetivos' : 'Ver objetivos', toggle: function () { var e2 = Object.assign({}, self.state.expanded || {}); e2.otras = !isE; self.setState({ expanded: e2 }); },
-            objs: ovg.map(function (o) { return { id: o.id, nombre: o.nombre, dir: o.dir, resp: o.resp, peso: '—', hasAv: false, noAv: true, pT: '—', pcol: 'gris', est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }; }), noObjs: false, emptyTxt: '' }); }
+            objs: ovg.map(function (o) { return { id: o.id, nombre: o.nombre, dir: o.dir, ger: o.ger || '—', oArea: o.oArea || '—', resp: o.resp, peso: '—', hasAv: false, noAv: true, pT: '—', pcol: 'gris', est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }; }), noObjs: false, emptyTxt: '' }); }
       }
       if (!curFl.anio) curFl.anio = anio;
+      var mineO = D.objs.filter(function (o) { return o.esVp && C.inYear(o, Y); });
+      var othO = D.objs.filter(function (o) { return !C.rrii(o) || o.demoOtras; });
+      var curV = s.tab === 'vp' || s.tab === 'otras' ? s.tab : 'todas';
+      var rowsV = (curV === 'otras' ? othO : mineO).filter(passO);
+      vpo = { isTabs: true, showGal: curV === 'todas', showMine: curV === 'vp', showOth: curV === 'otras', empty: curV === 'vp' && !rowsV.length, emptyOth: curV === 'otras' && !rowsV.length,
+        tabs: [{ k: 'todas', l: 'Todas las palancas', n: D.pals.filter(function (p) { return p.act; }).length }, { k: 'vp', l: 'Objetivos del VP', n: mineO.length }, { k: 'otras', l: 'Objetivos de otras VP', n: othO.length }].map(function (d) { return { label: d.l, count: d.n, cls: curV === d.k ? 'on' : '', sel: curV === d.k ? 'true' : 'false', pick: function () { self.setState({ tab: d.k }); } }; }),
+        rows: rowsV.map(function (o) { var a = C.avObj(o, 'r'), rr2 = C.rrii(o); return { id: o.id, nombre: o.nombre, vp: o.vp, pal: rr2 ? C.palName(o.pal) : 'Otra VP', dir: o.dir, ger: o.ger || '—', peso: o.pesoVp != null ? o.pesoVp + ' %' : '—', avT: rr2 ? pct(a) : '—', col: rr2 ? C.col(a) : 'gris', est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }; }) };
     }
     var flCount = Object.keys(curFl).filter(function (k) { return curFl[k]; }).length;
 
@@ -2144,14 +2197,13 @@ class Component extends DCLogic {
       var o = C.obj(s.selId);
       if (o) {
         var rr = C.rrii(o), isO = C.inisOf(o.id), showW = rr && power;
-        od = Object.assign(palL(o), { id: o.id, nombre: o.nombre, desc: o.desc, vp: o.vp, dir: o.dir, resp: o.resp, pal: rr ? C.palName(o.pal) : 'No aplica', palTxt: palTxt(o), isRrii: rr,
+        od = Object.assign(palL(o), { id: o.id, nombre: o.nombre, desc: o.desc, vp: o.vp, dir: o.dir, ger: o.ger || '—', oArea: o.oArea || '—', esVpTxt: o.esVp ? 'Sí · peso para el VP: ' + (o.pesoVp != null ? o.pesoVp + ' %' : '—') : 'No', resp: o.resp, pal: rr ? C.palName(o.pal) : 'No aplica', palTxt: palTxt(o), isRrii: rr,
           dur: o.dur === 'Plurianual' ? 'Plurianual · ' + o.anios + ' años' : o.dur, peso: o.peso != null ? o.peso + ' %' : '—', fini: fd(o.fini), fcomp: fd(o.fcomp), est: o.estado, estCls: ESTCLS[o.estado],
           pT: pct(C.avObj(o, 'p')), pcol: C.col(C.avObj(o, 'p')), showW: showW, noW: !showW, nIni: isO.length, noIni: !isO.length,
-          iniNote: rr ? 'Avance = Σ (peso × avance de cada iniciativa) ÷ Σ pesos · no cuentan las canceladas' : 'Iniciativas con las que la VP RRII colabora · sin avance ni pesos',
-          inis: isO.map(function (i) { var a = C.avIni(i, 'r'), p = C.avIni(i, 'p'); return Object.assign({ id: i.id, nombre: i.nombre, resp: i.resp.join(', '), est: i.estado, estCls: ESTCLS[i.estado], pT: p == null ? '—' : pct(p), pcol: C.col(p), peso: i.peso != null ? i.peso + ' %' : '—', hasAv: a != null, noAv: a == null, open: goF('iniciativa', i.id) }, avs(a)); }) }, avs(C.avObj(o, 'r')));
+          iniNote: rr ? 'El peso se reparte en partes iguales · Avance = promedio simple de las iniciativas · no cuentan las canceladas' : 'Iniciativas con las que la VP RRII colabora · sin avance ni pesos',
+          inis: isO.map(function (i) { var a = C.avIni(i, 'r'), p = C.avIni(i, 'p'); return Object.assign({ id: i.id, nombre: i.nombre, resp: i.resp.join(', '), est: i.estado, estCls: ESTCLS[i.estado], pT: p == null ? '—' : pct(p), pcol: C.col(p), peso: fmtW(C.pesoI(i)), hasAv: a != null, noAv: a == null, open: goF('iniciativa', i.id) }, avs(a)); }) }, avs(C.avObj(o, 'r')));
         if (isAdm) A('Editar', function () { self.openForm('obj', null, o); });
         if (isAdm) { secEd.o_info = secEd.o_plan = function () { self.openForm('obj', null, o); }; }
-        if (isAdm && rr && isO.length) A('Editar pesos', function () { var vals = {}; isO.forEach(function (i) { vals[i.id] = String(i.peso || 0); }); self.openModal('pesos', { obj: o.id }, vals); }, false, true);
         od.canIni = !isVis; od.newIni = function () { self.openForm('ini', { obj: o.id }); };
       }
     }
@@ -2162,7 +2214,7 @@ class Component extends DCLogic {
         var cnt = function (e) { return ts.filter(function (t) { return t.estado === e; }).length; };
         var st = function (n, l, bad) { return { n: n, l: l, cls: 'stat' + (bad && n ? ' bad' : '') }; };
         idt = Object.assign(palL(oi), { id: i.id, parcial: !!i.parcial, nombre: i.nombre, desc: i.desc, objId: i.obj, objTxt: oi ? oi.id + ' · ' + oi.nombre : i.obj, openObj: goF('objetivo', i.obj), palTxt: palTxt(oi), isRrii: rrI,
-          resp: i.resp.length ? i.resp.join(', ') : '—', areas: i.areas.length ? i.areas.join(', ') : '—', est: i.estado, estCls: ESTCLS[i.estado], fini: fd(i.fini), fcomp: fd(i.fcomp), showW: rrI && power, peso: i.peso != null ? i.peso + ' %' : '—',
+          resp: i.resp.length ? i.resp.join(', ') : '—', areas: i.areas.length ? i.areas.join(', ') : '—', est: i.estado, estCls: ESTCLS[i.estado], fini: fd(i.fini), fcomp: fd(i.fcomp), showW: rrI && power, peso: fmtW(C.pesoI(i)), pesoDep: oi && oi.peso != null && C.pesoI(i) != null ? fmtW(C.pesoI(i) * oi.peso / 100) : '—',
           pT: pct(C.avIni(i, 'p')), pcol: C.col(C.avIni(i, 'p')), hasCom: !!i.com, noCom: !i.com, com: i.com ? { c: i.com.c, f: fd(i.com.f), a: i.com.a } : {},
           nKr: i.krs.length, krs: i.krs.map(function (k) { var est = C.estKR(k, 'r'), ck = canKR(i, k); return { nombre: k.nombre, unidad: k.unidad, fuenteTxt: k.fuente ? ' · Fuente: ' + k.fuente : '', resp: k.resp, tipo: k.tipo, min: nf(k.min), meta: nf(k.meta), max: nf(k.max), peso: k.peso + ' %', actual: nf(k.actual), proy: nf(k.proy), cump: k.actual == null ? '—' : Math.round(C.cump(k, 'r')) + ' %', est: est, estCls: KRCLS[est], can: ck, cant: !ck,
             upd: function () { self.openModal('krUpd', { ini: i.id, kr: k.id }, { actual: k.actual == null ? '' : String(k.actual), proy: String(k.proy), fuente: k.fuente || '', evid: k.evid || '', com: '' }); } }; }),
@@ -2179,12 +2231,12 @@ class Component extends DCLogic {
       if (t) {
         var ti = C.ini(t.ini), to = ti ? C.obj(ti.obj) : null, rT = C.rskT(t.id), ct = canTar(t);
         td = Object.assign(palL(to), { openObj: to ? goF('objetivo', to.id) : function () {} }, { id: t.id, nombre: t.nombre, desc: t.desc, iniId: t.ini, iniTxt: ti ? ti.id + ' · ' + ti.nombre : t.ini, openIni: goF('iniciativa', t.ini), objId: to ? to.id : '', objTxt: to ? to.id + ' · ' + to.nombre : '—', palTxt: palTxt(to),
-          resp: t.resp, area: t.area, prio: t.prio || '—', fini: fd(t.fini), fcomp: fd(t.fcomp), ffin: t.estado === 'Finalizada' ? fd(t.ffin) : '—', act: fd(t.act), av: t.avance, avCol: C.col(t.avance), est: t.estado, estCls: ESTCLS[t.estado], tags: C.tags(t),
+          hasCom: !!t.com, noCom: !t.com, com: t.com ? { c: t.com.c, f: fd(t.com.f), a: t.com.a } : {}, resp: t.resp, areas: (t.areas || []).join(', ') || '—', habil: t.habil || '—', prio: t.prio || '—', fini: fd(t.fini), fcomp: fd(t.fcomp), ffin: t.estado === 'Finalizada' ? fd(t.ffin) : '—', act: fd(t.act), av: t.avance, avCol: C.col(t.avance), est: t.estado, estCls: ESTCLS[t.estado], tags: C.tags(t),
           inv: t.inv ? 'Sí' : 'No', hasInv: !!t.inv, ceco: t.inv ? t.inv.ceco : '', ap: t.inv ? money(t.inv.ap) : '', ej: t.inv ? money(t.inv.ej) : '', saldo: t.inv ? money(t.inv.ap - t.inv.ej) : '',
           nRsks: rT.length, noRsks: !rT.length, rsks: rT.map(function (r) { return { id: r.id, desc: r.desc, estado: r.estado, estCls: RCLS[r.estado], req: r.reqDec ? 'Sí' : 'No', dec: r.reqDec ? r.dec : '—', flim: r.reqDec ? fd(r.flim) : '—', can: ct, cant: !ct, edit: function () { self.openModal('riesgo', { tar: t.id, id: r.id }, { desc: r.desc, estado: r.estado, reqDec: r.reqDec ? 'Sí' : 'No', dec: r.dec, flim: r.flim }); } }; }),
           hist: t.hist.map(function (h) { return { f: fd(h.f), av: h.av, est: h.est, c: h.c, a: h.a, ini: initials(h.a) }; }) });
         if (ct) A('Editar', function () { self.openForm('tar', null, t); });
-        if (ct) { secEd.t_info = secEd.t_bud = function () { self.openForm('tar', null, t); }; }
+        if (ct) { secEd.t_info = secEd.t_bud = function () { self.openForm('tar', null, t); }; secEd.t_com = function () { self.openModal('tarUpd', { id: t.id }, { estado: t.estado, avance: String(t.avance), ffin: t.ffin || '', ej: t.inv ? String(t.inv.ej) : '', com: t.com ? t.com.c : '' }); }; }
         if (ct) {
           A('Registrar avance', function () { self.openModal('tarUpd', { id: t.id }, { estado: t.estado, avance: String(t.avance), ffin: t.ffin || '', ej: t.inv ? String(t.inv.ej) : '', com: '' }); }, false, 'ter');
           A('Cargar riesgo', function () { self.openModal('riesgo', { tar: t.id }, { desc: '', estado: 'Activo', reqDec: 'No', dec: '', flim: '' }); }, false, 'ter70');
@@ -2194,7 +2246,7 @@ class Component extends DCLogic {
 
     var closedS = (s.closedSid === s.selId && s.closedS) || {}, sec = {};
     var DEF_CL = { i_info: 1, i_com: 1, i_kr: 1, i_bud: 1, i_rsk: 1 };
-    ['o_info', 'o_plan', 'o_inis', 'i_info', 'i_com', 'i_kr', 'i_ind', 'i_bud', 'i_tar', 'i_rsk', 't_info', 't_bud', 't_rsk'].forEach(function (k) {
+    ['o_info', 'o_plan', 'o_inis', 'i_info', 'i_com', 'i_kr', 'i_ind', 'i_bud', 'i_tar', 'i_rsk', 't_info', 't_com', 't_bud', 't_rsk'].forEach(function (k) {
       var cl = k in closedS ? !!closedS[k] : !!DEF_CL[k];
       sec[k] = { cls: 'fSec' + (cl ? ' closed' : ''), open: cl ? 'false' : 'true', tgL: cl ? 'Expandir sección' : 'Contraer sección', ed: !!secEd[k], edit: secEd[k] || function () {},
         tg: function () { var n = Object.assign({}, closedS); n[k] = !cl; self.setState({ closedS: n, closedSid: self.state.selId }); } };
@@ -2239,41 +2291,47 @@ class Component extends DCLogic {
     if (s.f && (s.screen === 'form' || s.f.side)) {
       var f = s.f, miss = f.tried ? this.fieldMsgs(f) : {}; if (f.tried === 'partial') { var pm = {}; ['obj', 'nombre'].forEach(function (k) { if (miss[k]) pm[k] = miss[k]; }); miss = pm; }
       fv = f.vals;
-      ['vp', 'dir', 'resp', 'nombre', 'desc', 'pal', 'dur', 'anios', 'peso', 'fini', 'fcomp', 'estado', 'obj', 'ini', 'area', 'inv', 'ceco', 'ap', 'krs'].forEach(function (k) { fc[k] = miss[k] ? 'ff has-error' : 'ff'; fe[k] = !!miss[k]; fx[k] = miss[k] || ''; fh[k] = self.fset(k); });
+      ['vp', 'dir', 'resp', 'nombre', 'desc', 'pal', 'dur', 'anios', 'peso', 'fini', 'fcomp', 'estado', 'obj', 'ini', 'area', 'inv', 'ceco', 'ap', 'krs', 'ger', 'areas', 'habil', 'pesoVp'].forEach(function (k) { fc[k] = miss[k] ? 'ff has-error' : 'ff'; fe[k] = !!miss[k]; fx[k] = miss[k] || ''; fh[k] = self.fset(k); });
       var oSel = f.tipo === 'ini' ? C.obj(fv.obj) : null, iSel = f.tipo === 'tar' ? C.ini(fv.ini) : null;
       var others = f.tipo === 'obj' ? D.objs.filter(function (o) { return C.rrii(o) && C.inYear(o, anio) && o.id !== f.id; }).reduce(function (a, o) { return a + Number(o.peso || 0); }, 0) : 0;
       var isNew = f.mode === 'new';
       var title = { obj: isNew ? 'Cargar objetivo' : 'Editar objetivo ' + f.id, ini: isNew ? 'Cargar iniciativa' : 'Editar iniciativa ' + f.id, tar: isNew ? 'Cargar tarea' : 'Editar tarea ' + f.id }[f.tipo];
       fm = { title: title, isObj: f.tipo === 'obj', isIni: f.tipo === 'ini', isTar: f.tipo === 'tar', isNew: isNew, isEdit: !isNew,
         submitLbl: isNew ? title : 'Guardar cambios',
-        dirLbl: fv.vp && fv.vp !== 'VP RRII' ? 'Dirección que colabora' : 'Dirección',
-        respPh: fv.dir ? 'Personas de ' + fv.dir : 'Elegí primero la dirección',
+        dirLbl: fv.vp && fv.vp !== 'VP RRII' ? 'Departamento que colabora' : 'Departamento',
+        dirDis: f.tipo === 'obj' && !fv.vp, dirPh: f.tipo === 'obj' && !fv.vp ? 'Primero elegí la VP' : 'Seleccionar',
+        gerDis: !fv.dir, gerPh: fv.dir ? 'Seleccionar' : 'Primero elegí el departamento',
+        areaDis: !fv.ger, areaPh: fv.ger ? 'Seleccionar' : 'Primero elegí la gerencia',
+        esVpSi: fv.esVp === 'Sí', esVpOn: fv.esVp === 'Sí' ? 'true' : 'false', esVpCls: fv.esVp === 'Sí' ? 'on' : '',
+        toggleEsVp: function () { var f2 = self.state.f, nv2 = Object.assign({}, f2.vals); nv2.esVp = nv2.esVp === 'Sí' ? 'No' : 'Sí'; self.setState({ f: Object.assign({}, f2, { vals: nv2 }) }); },
         isRrii: fv.vp === 'VP RRII', isPluri: fv.dur === 'Plurianual', pesoOtros: others,
         showGuide: s.showGuide, toggleGuide: function () { self.setState({ showGuide: !self.state.showGuide }); },
         respList: (Array.isArray(fv.resp) ? fv.resp : []).map(function (p) { return { v: p, del: function () { self.multiDel('resp', p); } }; }),
         respOpts: users.filter(function (u) { return !Array.isArray(fv.resp) || fv.resp.indexOf(u.p) < 0; }).map(function (u) { return { v: u.p, l: u.p + ' · ' + u.dir }; }),
         addResp: this.multiAdd('resp'),
         areaList: (Array.isArray(fv.areas) ? fv.areas : []).map(function (a) { return { v: a, del: function () { self.multiDel('areas', a); } }; }),
-        areaOpts: s.masters.ger.filter(function (g) { return g.act && (!Array.isArray(fv.areas) || fv.areas.indexOf(g.v) < 0); }).map(function (g) { return { v: g.v, l: g.v }; }),
+        areaOpts: AREAS_INV.filter(function (g) { return !Array.isArray(fv.areas) || fv.areas.indexOf(g) < 0; }).map(function (g) { return { v: g, l: g }; }),
         addArea: this.multiAdd('areas'),
         objRrii: f.tipo === 'ini' && (!oSel || C.rrii(oSel)), objOther: f.tipo === 'ini' && !!oSel && !C.rrii(oSel),
-        showW: f.tipo === 'ini' && isAdm && !!oSel && C.rrii(oSel),
+        showW: false,
         wList: oSel ? C.inisOf(oSel.id).filter(function (x) { return x.id !== f.id; }).map(function (x) { return { id: x.id, nombre: x.nombre, peso: (x.peso || 0) + ' %' }; }) : [],
         objTxt: iSel ? (function () { var oo = C.obj(iSel.obj); return oo ? oo.id + ' · ' + oo.nombre : ''; })() : 'Se completa con la iniciativa',
         invSi: fv.inv === 'Sí',
         draft: function () { if (f.tipo === 'ini') self.partialIni(); else self.notify('El borrador se ha guardado correctamente.'); }, submit: function () { self.submitForm(); }, addKr: function () { self.krAdd(); } };
-      fm.wEmpty = !fm.wList.length; fm.objSub = f.tipo === 'obj' ? (isNew ? 'Objetivo aprobado en el comité de la VP' : f.vals.nombre) : ''; fm.lockIni = !isNew || !!f.side; fm.showDraft = false;
+      fm.wEmpty = !fm.wList.length; fm.objSub = f.tipo === 'obj' ? (isNew ? 'Objetivo aprobado en el comité de la VP' : f.vals.nombre) : ''; fm.lockIni = !isNew || !!f.fromIni; fm.iniSub = isNew ? 'Completá los datos y sus resultados clave' : f.vals.nombre; fm.showDraft = false;
       krs = f.krs.map(function (k, ix) {
         var o = { n: ix + 1, v: k, h: {}, c: {}, e: {}, x: {}, canDel: ix > 0, first: ix === 0, del: function () { self.krDel(ix); } };
-        ['nombre', 'resp', 'tipo', 'unidad', 'min', 'meta', 'max', 'peso'].forEach(function (key) { var mk = miss['kr' + ix + key]; o.h[key] = self.krSet(ix, key); o.c[key] = mk ? 'ff has-error' : 'ff'; o.e[key] = !!mk; o.x[key] = mk || ''; });
+        ['nombre', 'tipo', 'unidad', 'min', 'meta', 'max', 'peso'].forEach(function (key) { var mk = miss['kr' + ix + key]; o.h[key] = self.krSet(ix, key); o.c[key] = mk ? 'ff has-error' : 'ff'; o.e[key] = !!mk; o.x[key] = mk || ''; });
         return o;
       });
     }
     var U2 = this.meU();
     var objsOrd = D.objs.slice().sort(function (a, b) { return (b.dir === U2.dir) - (a.dir === U2.dir); });
     var opt = {
-      vp: s.masters.vp.filter(function (x) { return x.act; }).map(function (x) { return { v: x.v, l: x.v }; }),
-      dir: s.masters.dir.filter(function (x) { return x.act && (s.f && s.f.vals && s.f.vals.vp === 'VP RRII' ? x.v !== 'VP' : true); }).map(function (x) { return { v: x.v, l: x.v }; }),
+      vp: s.abm.vps.filter(function (x) { return x.act || (fv && fv.vp === x.sigla); }).map(function (x) { return { v: x.sigla, l: x.sigla }; }),
+      dir: (function () { var vpS = fv && fv.vp ? (fv.vp === 'VP RRII' || !s.abm.vps.some(function (x) { return x.sigla === fv.vp; }) ? 'VP RRII' : fv.vp) : ''; if (fv && fv.vp && fv.vp !== 'VP RRII') vpS = 'VP RRII'; var vpo = s.abm.vps.find(function (x) { return x.sigla === vpS; }); return vpo ? s.abm.deps.filter(function (d) { return d.par === vpo.id && (d.act || d.nombre === fv.dir); }).map(function (d) { return { v: d.nombre, l: d.nombre }; }) : []; })(),
+      gerO: (function () { var dO = fv && fv.dir ? s.abm.deps.find(function (d) { return d.nombre === fv.dir; }) : null; return dO ? s.abm.gers.filter(function (g) { return g.par === dO.id && (g.act || g.nombre === fv.ger); }).map(function (g) { return { v: g.nombre, l: g.nombre }; }) : []; })(),
+      areaO: (function () { var dO = fv && fv.dir ? s.abm.deps.find(function (d) { return d.nombre === fv.dir; }) : null, gO = dO && fv.ger ? s.abm.gers.find(function (g) { return g.nombre === fv.ger && g.par === dO.id; }) : null; return gO ? s.abm.areas.filter(function (a) { return a.par === gO.id && (a.act || a.nombre === fv.area); }).map(function (a) { return { v: a.nombre, l: a.nombre }; }) : []; })(),
       dirAll: s.masters.dir.map(function (x) { return { v: x.v, l: x.v }; }),
       gerMkt: GER_MKT.map(function (x) { return { v: x, l: x }; }),
       respDir: users.filter(function (u) { return !fv.dir || u.dir === fv.dir; }).map(function (u) { return { v: u.p, l: u.p + (u.ger ? ' · ' + u.ger : '') }; }),
@@ -2314,13 +2372,12 @@ class Component extends DCLogic {
         mm.title = TT[isN ? 0 : 1]; mm.sub = isN ? 'Completá los datos y elegí si queda activo.' : (AK === 'us' ? m.ctx.id : m.ctx.id + ' · ' + mv.nombre);
         mm.btns = [close, save(isN ? 'Agregar' : 'Guardar cambios')];
         mm.aUs = AK === 'us'; mm.aNoUs = !mm.aUs; mm.aVp = AK === 'vp';
-        mm.aShowVp = AK === 'ger' || AK === 'dep'; mm.aShowGer = AK === 'dep' || AK === 'area' || AK === 'us'; mm.aShowDep = AK === 'area' || AK === 'us'; mm.aShowArea = AK === 'us';
+        mm.aShowVp = AK === 'dep' || AK === 'ger'; mm.aShowDep = AK === 'ger' || AK === 'area' || AK === 'us'; mm.aShowGer = AK === 'area' || AK === 'us'; mm.aShowArea = AK === 'us';
         var lst = function (arr, par, keep) { return arr.filter(function (x) { return (x.act || x.id === keep) && (par === null || x.par === par); }).map(function (x) { return { v: x.id, l: x.nombre }; }); };
         mm.oVp = AB.vps.filter(function (x) { return x.act || x.id === mv.vp; }).map(function (x) { return { v: x.id, l: x.sigla + ' · ' + x.nombre }; });
-        mm.oGer = AK === 'dep' ? lst(AB.gers, mv.vp || '#', mv.ger) : lst(AB.gers, null, mv.ger);
-        mm.oDep = lst(AB.deps, mv.ger || '#', mv.dep); mm.depDis = AK !== 'area' && !mv.ger; mm.depPh = AK !== 'area' && !mv.ger ? 'Primero elegí la gerencia' : 'Seleccionar';
-        mm.oArea = lst(AB.areas, mv.dep || '#', mv.area); mm.areaDis = !mv.dep; mm.areaPh = mv.dep ? 'Seleccionar' : 'Primero elegí el departamento';
-        if (AK === 'area') { mm.oDep = lst(AB.deps, mv.ger || '#', mv.dep); mm.depDis = !mv.ger; mm.depPh = mv.ger ? 'Seleccionar' : 'Primero elegí la gerencia'; }
+        mm.oDep = AK === 'ger' ? lst(AB.deps, mv.vp || '#', mv.dep) : lst(AB.deps, null, mv.dep); mm.depDis = AK === 'ger' && !mv.vp; mm.depPh = AK === 'ger' && !mv.vp ? 'Primero elegí la vicepresidencia' : 'Seleccionar';
+        mm.oGer = lst(AB.gers, mv.dep || '#', mv.ger); mm.gerDis = !mv.dep; mm.gerPh = mv.dep ? 'Seleccionar' : 'Primero elegí el departamento';
+        mm.oArea = lst(AB.areas, mv.ger || '#', mv.area); mm.areaDis = !mv.ger; mm.areaPh = mv.ger ? 'Seleccionar' : 'Primero elegí la gerencia';
         mm.actOn = mv.act === 'Sí' ? 'true' : 'false'; mm.actCls = mv.act === 'Sí' ? 'on' : '';
         mm.toggleAct = function () { var mx = self.state.m, nv2 = Object.assign({}, mx.vals); nv2.act = nv2.act === 'Sí' ? 'No' : 'Sí'; self.setState({ m: Object.assign({}, mx, { vals: nv2 }) }); };
         mm.rolDesc = ROL_DESC[mv.rol] || '';
@@ -2348,7 +2405,7 @@ class Component extends DCLogic {
     return {
       sim: s.sim, rol: rol, initials: initials(me), userUpper: me.toUpperCase(),
       onSim: function (e) { var v = e.target.value, st = self.state; var reset = st.screen === 'form' || st.screen === 'config' || st.screen === 'abm'; self.setState(Object.assign({ sim: v, m: null, confirm: null, menuOpen: false, fl: {} }, reset ? { screen: 'home', hist: [], f: null } : {})); },
-      scr: scrMap, notHome: s.screen !== 'home', isAdm: isAdm, abm: abm, notAbm: s.screen !== 'abm', homeRightCls: isAdm ? 'homeRight five' : 'homeRight',
+      scr: scrMap, notHome: s.screen !== 'home', isAdm: isAdm, abm: abm, vpo: vpo, notAbm: s.screen !== 'abm', homeRightCls: isAdm ? 'homeRight five' : 'homeRight',
       hasToast: !!s.toast, toast: s.toast || { t: '' }, closeToast: function () { self.setState({ toast: null }); },
       menuOpen: s.menuOpen, toggleMenu: function () { self.setState({ menuOpen: !self.state.menuOpen }); }, nav: nav, go: goN,
       cnt: { myT: myT.length, myI: myI.length },
@@ -2371,7 +2428,7 @@ class Component extends DCLogic {
       od: od, idt: idt, td: td, acts: acts, sec: sec,
       fm: fm, fv: fv, fc: fc, fe: fe, fx: fx, fh: fh, krs: krs, opt: opt,
       cfg: cfg, params: s.params, onParam: onParam, saveParams: function () { self.notify('Los parámetros se han guardado correctamente.'); },
-      sideTar: !!(s.f && s.f.side && s.f.tipo === 'tar'), sideObj: !!(s.f && s.f.side && s.f.tipo === 'obj'), pd: pd, ubi: ubi, ubiOpen: !!s.ubiOpen, openUbi: function () { self.setState({ ubiOpen: true }); }, closeUbi: function () { self.setState({ ubiOpen: false }); }, histOpen: !!s.histOpen && s.screen === 'tarea', openHist: function () { self.setState({ histOpen: true }); }, closeHist: function () { self.setState({ histOpen: false }); }, hasModal: !!m, closeModal: function () { self.setState({ m: null }); }, m: mm, mv: mv, mcl: mcl, mer: mer, mxx: mxx, mh: mh, mW: mW,
+      sideTar: !!(s.f && s.f.side && s.f.tipo === 'tar'), sideObj: !!(s.f && s.f.side && s.f.tipo === 'obj'), sideIni: !!(s.f && s.f.side && s.f.tipo === 'ini'), pd: pd, ubi: ubi, ubiOpen: !!s.ubiOpen, openUbi: function () { self.setState({ ubiOpen: true }); }, closeUbi: function () { self.setState({ ubiOpen: false }); }, histOpen: !!s.histOpen && s.screen === 'tarea', openHist: function () { self.setState({ histOpen: true }); }, closeHist: function () { self.setState({ histOpen: false }); }, hasModal: !!m, closeModal: function () { self.setState({ m: null }); }, m: mm, mv: mv, mcl: mcl, mer: mer, mxx: mxx, mh: mh, mW: mW,
       hasConfirm: !!s.confirm, confirm: s.confirm || { title: '', text: '' },
       confirmOk: function () { var c = self.state.confirm; if (c && c.fn) c.fn(); },
       confirmCancel: function () { self.setState({ confirm: null }); }
