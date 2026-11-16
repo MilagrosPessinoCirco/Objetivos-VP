@@ -1,4 +1,4 @@
-# Gestión de Objetivos VP RRII · Prototipo navegable · v9
+# Gestión de Objetivos VP RRII · Prototipo navegable · v10
 
 Prototipo interactivo de la app SharePoint (SPFx) de la VP RRII, alineado a la Especificación Funcional v1.7 y al DS SharePoint / Fluent UI v8.
 
@@ -12,7 +12,8 @@ Prototipo interactivo de la app SharePoint (SPFx) de la VP RRII, alineado a la E
 | v6 | 05/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v6.zip |
 | v7 | 11/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v7.zip |
 | v8 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v8.zip |
-| v9 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v9.zip (esta) |
+| v9 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v9.zip |
+| v10 | 16/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v10.zip (esta) |
 
 ## Cómo abrirlo
 El prototipo necesita un servidor local (no funciona con doble clic en index.html por restricciones del navegador sobre file://).
@@ -28,6 +29,14 @@ Requiere Python 3 o Node.js instalado.
 - Los datos son de ejemplo y viven en memoria: al recargar la página se reinician.
 - La fecha de referencia para alertas y vencimientos es 26/10/2026.
 - Desde la v7 los datos son los reales del documento «Carga de Objetivo en Maqueta» (1 objetivo, 1 iniciativa, 5 tareas). Para ver Mis iniciativas / Mis tareas usá los roles «Usuario · resp. de iniciativas» (Bárbara Adán) y «Usuario · resp. de tareas» (María Martha Grotz).
+
+## Cambios en v10
+- Cargar objetivo:
+  - «¿Es objetivo del VP?» pasa a la sección «Planificación (VP RRII)» y solo se muestra cuando la VP elegida es VP RRII; al activarlo aparece «Peso del objetivo para el VP (%)» (obligatorio). Con otras VP no se muestran.
+  - Nuevo campo Estado (obligatorio, visible también al cargar; por defecto «No iniciado»): No iniciado · En curso · Finalizado cumplido · Finalizado incumplido. La palanca considera finalizado cualquier «Finalizado…».
+  - El objetivo no tiene campo Área.
+- Iniciativas: el campo y la columna «Líderes» pasan a llamarse «Accountable» (formulario, detalle y tablas).
+- Galería de palancas: la solapa «Objetivos del VP» pasa a llamarse «Objetivos de la VP RRII».
 
 ## Cambios en v9
 - Cargar / Editar tarea y Cargar / Editar iniciativa pasan a panel lateral (igual que Cargar objetivo), desde cualquier punto de entrada:
