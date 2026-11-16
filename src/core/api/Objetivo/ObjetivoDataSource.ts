@@ -20,7 +20,7 @@ export default class ObjetivoDataSource implements IObjetivoDataSource {
 		'FechaInicio',
 		'FechaCompromiso',
 		'Estado',
-		'EsDeVp',
+		'EsDelVp',
 		'VP/Id', 'VP/Title',
 		'Departamento/Id', 'Departamento/Title',
 		'Gerencia/Id', 'Gerencia/Title',

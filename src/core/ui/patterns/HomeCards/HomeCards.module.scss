@@ -16,13 +16,17 @@
   padding: 19px;
   border: 1px solid #0451dd;
   background: #e7efff;
+  color: #0451dd;
+}
+
+.interactive {
+  cursor: pointer;
 }
 
 .simpleText {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: #0451dd;
 }
 
 .simpleTitle {

@@ -1,0 +1,11 @@
+.detalle {
+	display: flex;
+	flex-direction: column;
+}
+
+.header,
+.footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}

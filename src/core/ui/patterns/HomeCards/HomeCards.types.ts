@@ -10,5 +10,7 @@ export interface IHomeCardProps {
   details?: ReactNode;
   actionLabel?: string;
   onAction?: () => void;
+  backgroundColor?: string;
+  textColor?: string;
   className?: string;
 }

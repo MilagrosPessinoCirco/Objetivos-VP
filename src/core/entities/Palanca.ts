@@ -20,6 +20,7 @@ export default class Palanca extends BaseEntity {
 	public toListItem(): any {
 		return {
 			...super.toListItem(),
+			Title: this.Nombre,
 			Nombre: this.Nombre,
 			Descripcion: this.Descripcion,
 			Activa: this.Activa,

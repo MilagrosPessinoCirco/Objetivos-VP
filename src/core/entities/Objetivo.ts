@@ -18,7 +18,7 @@ export default class Objetivo extends BaseEntity {
 		this.FechaInicio = toDateValue(item.FechaInicio);
 		this.FechaCompromiso = toDateValue(item.FechaCompromiso);
 		this.Estado = toChoiceValue(Estado, item.Estado, 'Estado');
-		this.EsDeVp = item.EsDeVp ?? undefined;
+		this.EsDeVp = item.EsDelVp ?? undefined;
 		this.VP = toLookupValue(item.VP);
 		this.Departamento = toLookupValue(item.Departamento);
 		this.Gerencia = toLookupValue(item.Gerencia);
@@ -31,16 +31,17 @@ export default class Objetivo extends BaseEntity {
 	public toListItem(): any {
 		return {
 			...super.toListItem(),
+			Title: this.Nombre,
 			Nombre: this.Nombre,
 			Descripcion: this.Descripcion,
 			PalancaId: this.Palanca?.Id,
-			Duracion: assertChoiceValue(Duracion, this.Duracion, 'Duracion'),
+			Duracion: this.Duracion === undefined ? undefined : assertChoiceValue(Duracion, this.Duracion, 'Duracion'),
 			CantidadAnios: this.CantidadAnios,
 			Peso: this.Peso,
 			FechaInicio: this.FechaInicio,
 			FechaCompromiso: this.FechaCompromiso,
 			Estado: assertChoiceValue(Estado, this.Estado, 'Estado'),
-			EsDeVp: this.EsDeVp,
+			EsDelVp: this.EsDeVp,
 			VPId: this.VP?.Id,
 			DepartamentoId: this.Departamento?.Id,
 			GerenciaId: this.Gerencia?.Id,
