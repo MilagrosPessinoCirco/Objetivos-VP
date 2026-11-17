@@ -9,6 +9,8 @@ const VP_RRII = { Id: 1, Title: VP_RRII_NOMBRE };
 const MARKETING = { Id: 1, Title: 'Marketing' };
 const ALIANZAS = { Id: 2, Title: 'Alianzas' };
 const FIDELIZACION = { Id: 3, Title: 'Fidelización' };
+const PESO_VP_EJEMPLO = 15;
+const ANIOS_EJEMPLO = 2;
 
 const createRrii = (
 	id: number,
@@ -22,7 +24,9 @@ const createRrii = (
 	esDeVp: boolean,
 	fechaInicio: string,
 	fechaCompromiso: string,
-	estado: Estado
+	estado: Estado,
+	pesoVp: number | undefined,
+	cantidadAnios: number | undefined
 ): Objetivo =>
 	new Objetivo({
 		Id: id,
@@ -35,6 +39,8 @@ const createRrii = (
 		Palanca: palanca,
 		Duracion: duracion,
 		Peso: peso,
+		PesoVP: pesoVp,
+		CantidadAnios: cantidadAnios,
 		EsDelVp: esDeVp,
 		FechaInicio: fechaInicio,
 		FechaCompromiso: fechaCompromiso,
@@ -58,14 +64,15 @@ const createOtraVp = (
 		VP: vp,
 		Departamento: departamento,
 		Gerencia: gerencia,
+		EsDelVp: false,
 		Estado: estado
 	});
 
 let objetivos: Objetivo[] = [
-	createRrii(1, 'Convertir datos e insights en ventaja competitiva', 'Que las decisiones del negocio se apoyen en estudios y datos.', MARKETING, { Id: 1, Title: 'B2B' }, { Id: 1, Title: 'Excelencia comercial' }, Duracion.Anual, 20, true, '2026-01-01', '2026-12-31', Estado.EnCurso),
-	createRrii(2, 'Nuevo motor de crecimiento a través de YPF Store', 'Llevar YPF Store a las estaciones de servicio y al canal online.', MARKETING, { Id: 2, Title: 'B2C' }, { Id: 2, Title: 'Experiencia de cliente' }, Duracion.Plurianual, 30, false, '2026-01-01', '2027-12-31', Estado.EnCurso),
-	createRrii(3, 'Duplicar la cantidad de clientes YPF', 'Duplicar los clientes activos con campañas y promociones.', MARKETING, { Id: 3, Title: 'Growth' }, { Id: 2, Title: 'Experiencia de cliente' }, Duracion.Anual, 25, true, '2026-03-01', '2026-12-31', Estado.NoIniciada),
-	createRrii(4, 'Consolidar alianzas estratégicas', 'Sostener las alianzas vigentes con socios clave.', ALIANZAS, { Id: 4, Title: 'Convenios' }, { Id: 5, Title: 'Eficiencia en el canal' }, Duracion.Permanente, 25, false, '2026-01-01', '2026-12-31', Estado.FinalizadoCumplido),
+	createRrii(1, 'Convertir datos e insights en ventaja competitiva', 'Que las decisiones del negocio se apoyen en estudios y datos.', MARKETING, { Id: 1, Title: 'B2B' }, { Id: 1, Title: 'Excelencia comercial' }, Duracion.Anual, 20, true, '2026-01-01', '2026-12-31', Estado.EnCurso, PESO_VP_EJEMPLO, undefined),
+	createRrii(2, 'Nuevo motor de crecimiento a través de YPF Store', 'Llevar YPF Store a las estaciones de servicio y al canal online.', MARKETING, { Id: 2, Title: 'B2C' }, { Id: 2, Title: 'Experiencia de cliente' }, Duracion.Plurianual, 30, false, '2026-01-01', '2027-12-31', Estado.EnCurso, undefined, ANIOS_EJEMPLO),
+	createRrii(3, 'Duplicar la cantidad de clientes YPF', 'Duplicar los clientes activos con campañas y promociones.', MARKETING, { Id: 3, Title: 'Growth' }, { Id: 2, Title: 'Experiencia de cliente' }, Duracion.Anual, 25, true, '2026-03-01', '2026-12-31', Estado.NoIniciada, undefined, undefined),
+	createRrii(4, 'Consolidar alianzas estratégicas', 'Sostener las alianzas vigentes con socios clave.', ALIANZAS, { Id: 4, Title: 'Convenios' }, { Id: 5, Title: 'Eficiencia en el canal' }, Duracion.Permanente, 25, false, '2026-01-01', '2026-12-31', Estado.FinalizadoCumplido, undefined, undefined),
 	createOtraVp(5, 'Habilitar la movilidad eléctrica', 'Instalar puntos de carga en la red de estaciones.', { Id: 3, Title: 'VP Downstream' }, FIDELIZACION, { Id: 5, Title: 'Programas' }, Estado.EnCurso),
 	createOtraVp(6, 'Integrar los canales de atención', 'Unificar la atención de clientes en un solo canal.', { Id: 4, Title: 'VP Finanzas' }, ALIANZAS, { Id: 4, Title: 'Convenios' }, Estado.FinalizadoIncumplido)
 ];

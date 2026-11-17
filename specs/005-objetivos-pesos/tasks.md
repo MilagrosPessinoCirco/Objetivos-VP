@@ -63,7 +63,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
 ## Phase 1: Setup
 
-- [ ] T001 Verificar las precondiciones, sin código. Registrar el resultado en el mensaje de la tarea, sin tocar archivos:
+- [X] T001 Verificar las precondiciones, sin código. Registrar el resultado en el mensaje de la tarea, sin tocar archivos:
   1. `npm run build` pasa antes de empezar.
   2. En el sitio de desarrollo, la lista `Objetivo` tiene la columna con nombre interno exactamente `PesoVP`: en su configuración, la URL termina en `Field=PesoVP`. Es de tipo Número, con mínimo 1, máximo 100 y no obligatoria.
   3. `CantidadAnios` es de tipo Número. La usuaria ya lo confirmó: solo se registra.
@@ -72,11 +72,13 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
   **Criterio de terminado**: el build da verde y los puntos 2 y 3 quedan confirmados o informados.
 
+  **Estado**: build base OK. Punto 2 informado, no verificado: la sesión no tiene acceso al sitio de desarrollo. Punto 3 confirmado por la usuaria.
+
 ---
 
 ## Phase 2: Foundational (bloquea todas las historias)
 
-- [ ] T002 Modificar `src/core/entities/Objetivo.ts` (plan, D1 y D3; [contracts/ui-contracts.md](./contracts/ui-contracts.md), §1):
+- [X] T002 Modificar `src/core/entities/Objetivo.ts` (plan, D1 y D3; [contracts/ui-contracts.md](./contracts/ui-contracts.md), §1):
   - En `mapItem`, agregar `this.PesoVP = item.PesoVP ?? undefined;` después de `this.Peso`.
   - En `toListItem`, agregar `PesoVP: this.PesoVP,` después de `Peso`. `CantidadAnios: this.CantidadAnios` ya existe y no cambia.
   - Declarar `public PesoVP?: number | null | undefined;` después de `Peso`, y cambiar el tipo de `CantidadAnios` a `number | null | undefined`.
@@ -84,11 +86,11 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
   **Criterio de terminado**: `npm run build` sin errores.
 
-- [ ] T003 [P] Modificar `src/core/api/Objetivo/ObjetivoDataSource.ts`: agregar `'PesoVP'` en `selectProperties`, después de `'Peso'`. No cambiar nada más.
+- [X] T003 [P] Modificar `src/core/api/Objetivo/ObjetivoDataSource.ts`: agregar `'PesoVP'` en `selectProperties`, después de `'Peso'`. No cambiar nada más.
 
   **Criterio de terminado**: `npm run build` sin errores.
 
-- [ ] T004 Modificar `src/core/api/Objetivo/ObjetivoMock.ts` (plan, D10; depende de T002):
+- [X] T004 Modificar `src/core/api/Objetivo/ObjetivoMock.ts` (plan, D10; depende de T002):
   - `createRrii` suma dos parámetros al final, `pesoVp: number | undefined` y `cantidadAnios: number | undefined`, que se asignan como `PesoVP` y `CantidadAnios` en el objeto que recibe `new Objetivo({...})`.
   - `createOtraVp` suma `EsDelVp: false` al objeto.
   - Datos (los demás valores no cambian):
@@ -105,7 +107,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
   **Criterio de terminado**: `npm run build` sin errores.
 
-- [ ] T005 [P] Modificar `src/webparts/objetivosVp/loc/mystrings.d.ts` y `src/webparts/objetivosVp/loc/en-us.js` (plan, D9). Para cada clave nueva, declararla `string` en `mystrings.d.ts`, junto a las claves `Objetivo*` que ya existen.
+- [X] T005 [P] Modificar `src/webparts/objetivosVp/loc/mystrings.d.ts` y `src/webparts/objetivosVp/loc/en-us.js` (plan, D9). Para cada clave nueva, declararla `string` en `mystrings.d.ts`, junto a las claves `Objetivo*` que ya existen.
 
   Claves que cambian:
 
@@ -143,7 +145,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
 **Independent Test**: quickstart, escenarios 1 a 10.
 
-- [ ] T006 [US1] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoForm/ObjetivoForm.tsx` (spec FR-001 a FR-006, FR-008 a FR-010; plan D2, D4 y D5). DS: `Switch`, `SpinButton` y `Dropdown`, que ya se importan.
+- [X] T006 [US1] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoForm/ObjetivoForm.tsx` (spec FR-001 a FR-006, FR-008 a FR-010; plan D2, D4 y D5). DS: `Switch`, `SpinButton` y `Dropdown`, que ya se importan.
 
   1. **Constantes**: agregar `VP_WEIGHT_MIN = 1`. `WEIGHT_MAX` se reutiliza como máximo de los dos pesos.
   2. **Estado**: `const [pesoVp, setPesoVp] = React.useState<string>(objetivo?.PesoVP === undefined || objetivo?.PesoVP === null ? '' : String(objetivo.PesoVP));`. El estado `esDeVp` que ya existe no cambia.
@@ -186,7 +188,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
 **Independent Test**: quickstart, escenarios 6, 14 y 15.
 
-- [ ] T007 [P] [US2] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoDetalle/ObjetivoInfo/ObjetivoInfo.tsx` (spec FR-011 y FR-012; plan D7). DS: `Field`, que ya existe.
+- [X] T007 [P] [US2] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoDetalle/ObjetivoInfo/ObjetivoInfo.tsx` (spec FR-011 y FR-012; plan D7). DS: `Field`, que ya existe.
   - Calcular en el render:
     - `const pesoVpText = objetivo.PesoVP === undefined || objetivo.PesoVP === null ? strings.ObjetivoNoValue : `${objetivo.PesoVP} %`;`
     - `const vpObjectiveText = objetivo.EsDeVp ? Utils.replaceAll(strings.ObjetivoVpObjectiveYes, '{0}', pesoVpText) : strings.No;`
@@ -201,7 +203,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
   - OBJ-03 muestra "Sí · peso en la VP: —";
   - OBJ-02 muestra "No".
 
-- [ ] T008 [P] [US2] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivosTable/ObjetivosTable.tsx` (spec FR-014; plan D8).
+- [X] T008 [P] [US2] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivosTable/ObjetivosTable.tsx` (spec FR-014; plan D8).
   - `ObjetivoRow` suma `pesoVp: string`, con este valor: `objetivo.PesoVP === undefined || objetivo.PesoVP === null ? strings.ObjetivoNoValue : `${objetivo.PesoVP}%``.
   - Nueva columna `vpWeightColumn`: `{ key: 'pesoVp', header: strings.ObjetivoColumnVpWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined }`.
   - En la rama `delVp` de `columns`, insertarla después de `weightColumn`.
@@ -223,7 +225,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
 
 **Independent Test**: quickstart, escenarios 11 a 13.
 
-- [ ] T009 [US3] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoForm/ObjetivoForm.tsx` (spec FR-007; plan D2, D4, D5 y D6; depende de T006). DS: `Dropdown`.
+- [X] T009 [US3] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoForm/ObjetivoForm.tsx` (spec FR-007; plan D2, D4, D5 y D6; depende de T006). DS: `Dropdown`.
   1. **Constante local**: `ANIOS_PLURIANUAL = [2, 3, 4, 5]`.
   2. **Estado**: `cantidadAnios: string`. El valor inicial es `String(objetivo.CantidadAnios)` si ese número está en `ANIOS_PLURIANUAL`, y `''` en cualquier otro caso.
   3. **Opciones**: `aniosOptions = ANIOS_PLURIANUAL.map((n) => ({ key: String(n), text: String(n) }))`.
@@ -237,7 +239,7 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
   - con Plurianual aparece "Cantidad de años" (2 a 5) después de Duración y es obligatoria;
   - al cambiar a Anual se oculta y el objetivo se guarda sin cantidad.
 
-- [ ] T010 [US3] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoDetalle/ObjetivoInfo/ObjetivoInfo.tsx` (spec FR-013; plan D7; depende de T007, porque es el mismo archivo).
+- [X] T010 [US3] Modificar `src/webparts/objetivosVp/components/Objetivo/ObjetivoDetalle/ObjetivoInfo/ObjetivoInfo.tsx` (spec FR-013; plan D7; depende de T007, porque es el mismo archivo).
   - Calcular `durationText`:
     - si `objetivo.Duracion === Duracion.Plurianual` y `CantidadAnios` tiene valor (ni `undefined` ni `null`): `Utils.replaceAll(Utils.replaceAll(strings.ObjetivoDurationYears, '{0}', objetivo.Duracion), '{1}', String(objetivo.CantidadAnios))`;
     - si no: `objetivo.Duracion ?? ''`.
@@ -268,7 +270,9 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
   - ningún otro elemento ni columna se modificó;
   - `npm run build` sin errores.
 
-- [ ] T012 Revisar las reglas en los archivos que se modificaron (los de T002 a T010):
+  **Estado**: pendiente. La sesión no tiene acceso al sitio de desarrollo; la hace la usuaria (quickstart, "Corrección de datos de otras VP") e informa la cantidad y los ID.
+
+- [X] T012 Revisar las reglas en los archivos que se modificaron (los de T002 a T010):
   - sin hexadecimales ni px de espaciado o tipografía;
   - sin `any` nuevos y sin comentarios;
   - sin textos visibles escritos en el código (incluido "—", que sale de `strings.ObjetivoNoValue`);
@@ -289,6 +293,8 @@ En `core`, se modifican `src/core/entities/Objetivo.ts` y `src/core/api/Objetivo
   Si algo falla, corregirlo en el archivo de la tarea que lo implementa. Informar los escenarios que no se pudieron ejecutar y por qué.
 
   **Criterio de terminado**: escenarios en verde o informados, y `npm run build` sin errores.
+
+  **Estado**: pendiente. `npm run build` OK. Los escenarios requieren el workbench hospedado y la lista de desarrollo, a los que la sesión no tiene acceso.
 
 ---
 

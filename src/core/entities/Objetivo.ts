@@ -15,6 +15,7 @@ export default class Objetivo extends BaseEntity {
 		this.Duracion = toChoiceValue(Duracion, item.Duracion, 'Duracion');
 		this.CantidadAnios = item.CantidadAnios ?? undefined;
 		this.Peso = item.Peso ?? undefined;
+		this.PesoVP = item.PesoVP ?? undefined;
 		this.FechaInicio = toDateValue(item.FechaInicio);
 		this.FechaCompromiso = toDateValue(item.FechaCompromiso);
 		this.Estado = toChoiceValue(Estado, item.Estado, 'Estado');
@@ -38,6 +39,7 @@ export default class Objetivo extends BaseEntity {
 			Duracion: this.Duracion === undefined ? undefined : assertChoiceValue(Duracion, this.Duracion, 'Duracion'),
 			CantidadAnios: this.CantidadAnios,
 			Peso: this.Peso,
+			PesoVP: this.PesoVP,
 			FechaInicio: this.FechaInicio,
 			FechaCompromiso: this.FechaCompromiso,
 			Estado: assertChoiceValue(Estado, this.Estado, 'Estado'),
@@ -52,8 +54,9 @@ export default class Objetivo extends BaseEntity {
 	public Descripcion?: string | undefined;
 	public Palanca?: ILookupValue | undefined;
 	public Duracion?: Duracion | undefined;
-	public CantidadAnios?: number | undefined;
+	public CantidadAnios?: number | null | undefined;
 	public Peso?: number | undefined;
+	public PesoVP?: number | null | undefined;
 	public FechaInicio?: Date | null | undefined;
 	public FechaCompromiso?: Date | null | undefined;
 	public Estado?: Estado | undefined;

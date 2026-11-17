@@ -17,6 +17,7 @@ export default class ObjetivoDataSource implements IObjetivoDataSource {
 		'Duracion',
 		'CantidadAnios',
 		'Peso',
+		'PesoVP',
 		'FechaInicio',
 		'FechaCompromiso',
 		'Estado',
