@@ -11,7 +11,7 @@ Usa listas que ya existen (spec, Assumptions). Los nombres internos son los que 
 | `Nombre` | `Nombre` | texto, hasta 255 | sí | Se guarda sin espacios al inicio y al final. Solo espacios = vacío. |
 | `Descripcion` | `Descripcion` | texto largo | sí | Ídem. Se muestra como "Descripción / impacto esperado". |
 | `Objetivo` | `Objetivo` (lookup a `Objetivo`) | lookup, un valor | sí | No cambia después del alta (FR-024). |
-| `Responsables` | `Responsables` (persona, varios) | personas | sí, uno o más | Se muestra como **Accountable**. La columna no se renombra. |
+| `Accountable` | `Accountable` (persona, **una sola**; columna nueva, plan P2) | persona | sí, una | Por defecto, quien carga la iniciativa. Reemplaza a la columna `Responsables`, que la usuaria borra después de verificar. |
 | `Area` | `Area` (lookup a `Area`, **varios**) | lookups | no | Se muestra como "Áreas involucradas". Cambia de `ILookupValue` a `ILookupValue[]` (D3). |
 | `Estado` | `Estado` (opción) | `EstadoIniciativa` | sí | "No iniciada" al crear (FR-005). Cualquier estado pasa a cualquier otro (FR-006). |
 | `FechaInicio` | `FechaInicio` | fecha | sí | No anterior a la del objetivo, si la tiene (FR-004). |
@@ -25,7 +25,7 @@ Usa listas que ya existen (spec, Assumptions). Los nombres internos son los que 
 |---|---|---|
 | Peso en el objetivo | Si el objetivo es de la VP RRII y la iniciativa no está cancelada: `100 ÷ n`, con `n` = iniciativas no canceladas del objetivo. Si no, sin valor (FR-013). | Detalle de la iniciativa y grilla de iniciativas del detalle del objetivo. |
 | Peso en el departamento | Mismas condiciones. `Objetivo.Peso ÷ n` (algebraicamente igual a `(100 ÷ n) × Objetivo.Peso ÷ 100`, sin redondeo intermedio). Si el objetivo no tiene `Peso`, "—" (FR-014a, FR-014b). | Detalle de la iniciativa. |
-| Pertenece a "Mis iniciativas" | Algún `Responsables[i].Id` es igual al Id de usuario del sitio del usuario actual. Nunca se compara por nombre (plan, D5a). | Bandeja. |
+| Pertenece a "Mis iniciativas" | `Accountable.Id` es igual al Id de usuario del sitio del usuario actual. Nunca se compara por nombre (plan, D5a). | Bandeja. |
 | Años de la iniciativa | Todos los años entre `FechaInicio.getFullYear()` y `FechaCompromiso.getFullYear()`, incluidos (FR-020). | Filtro Año. |
 
 Los dos pesos se redondean solo al mostrarlos (D12).
@@ -53,7 +53,7 @@ Maestro de áreas: `Nombre` y `Gerencia`. Se ofrecen todas (FR-011), ordenadas p
 | Atributo | Uso |
 |---|---|
 | `Usuario` (persona: `Id`, `Title`, `EMail`) | Opción del campo Accountable: clave `Id` (identificador único del usuario en el sitio), nombre `Title` (solo para mostrar). |
-| `Activo` | Solo se ofrecen los activos, más los que ya son accountable de la iniciativa que se edita y el usuario actual (D7). |
+| `Activo` | Solo se ofrecen los activos, más el accountable actual de la iniciativa que se edita y el usuario actual (D7). |
 
 El datasource suma `getCurrentUser()` (D5). La entidad no cambia.
 
@@ -88,16 +88,15 @@ stateDiagram-v2
   Cancelada --> Finalizada
 ```
 
-Cualquier transición es manual, desde la edición o desde "Cambiar estado". Pasar a Cancelada o salir de ella cambia `n` y, por lo tanto, los pesos de las demás iniciativas del objetivo.
+Cualquier transición es manual y solo desde "Cambiar estado": el panel de edición no muestra el Estado (plan, D26). Pasar a Cancelada o salir de ella cambia `n` y, por lo tanto, los pesos de las demás iniciativas del objetivo.
 
 ## Validaciones del panel de cargar y editar
 
 | Campo | Regla | Mensaje |
 |---|---|---|
-| Objetivo, Nombre, Descripción, Accountable, Fecha de inicio, Fecha de compromiso | Obligatorios; texto recortado | `RequiredField` "Este campo es obligatorio." |
+| Objetivo, Nombre, Descripción, Accountable (una persona), Fecha de inicio, Fecha de compromiso | Obligatorios; texto recortado | `RequiredField` "Este campo es obligatorio." |
 | Fecha de compromiso | No anterior a la de inicio | `ObjetivoDateOrder` (se reutiliza) |
 | Fecha de inicio | No anterior a la del objetivo, si la tiene | `IniciativaDateOutOfRange` |
 | Fecha de compromiso | No posterior a la del objetivo, si la tiene | `IniciativaDateOutOfRange` |
-| Estado (edición) | Uno de los cinco | — |
 
 Las fechas se comparan como texto `AAAA-MM-DD`, sin aritmética.

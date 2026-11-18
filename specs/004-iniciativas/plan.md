@@ -22,7 +22,7 @@ Enfoque técnico:
 
 **Primary Dependencies**: SPFx `1.22.2`, React `17.0.1`, Fluent UI v8 (`@fluentui/react ^8.106.4`), PnPjs `@pnp/sp 4.18.0` (`core/pnp/sp/pnpjs-presets.ts`, que ya importa `site-users`), `react-router-dom 6.30.6`. Esta feature no agrega dependencias.
 
-**Storage**: listas de SharePoint `Iniciativa`, `Comentario iniciativa`, `Area`, `Usuario` y `Objetivo` (`Lista.*` en `src/core/utils/Constants.ts`), que ya existen. La columna `Area` de `Iniciativa` ya es de valores múltiples (research, U4). La columna `Iniciativa` de `Comentario iniciativa` tiene que estar **indexada**, porque el detalle filtra por ella (D24, P1). Detalle en [data-model.md](./data-model.md). Mocks en memoria fuera de SharePoint.
+**Storage**: listas de SharePoint `Iniciativa`, `Comentario iniciativa`, `Area`, `Usuario` y `Objetivo` (`Lista.*` en `src/core/utils/Constants.ts`), que ya existen. La columna `Area` de `Iniciativa` ya es de valores múltiples (research, U4). El Accountable se guarda en una columna nueva `Accountable` (Persona, una sola persona), que reemplaza a `Responsables` (D25, P2). La columna `Iniciativa` de `Comentario iniciativa` tiene que estar **indexada**, porque el detalle filtra por ella (D24, P1). Detalle en [data-model.md](./data-model.md). Mocks en memoria fuera de SharePoint.
 
 **Testing**: no hay runner de pruebas. Validación: `npm run build` (principio V), escenarios de [quickstart.md](./quickstart.md) con mocks y en el workbench hospedado del sitio de desarrollo, y comparación visual con el prototipo. Se escribe solo en las listas de desarrollo y con autorización explícita.
 
@@ -60,7 +60,7 @@ Detalle en [research.md](./research.md).
 | Principio | Estado | Verificación |
 |-----------|--------|--------------|
 | I. Plataforma | ✅ Cumple | Mismo stack y versiones; sin dependencias nuevas. `sp.web.currentUser` ya está habilitado por `pnpjs-presets.ts`. |
-| II. La interfaz no se inventa | ✅ Cumple, con los desvíos que aprobó la spec | Pantallas tomadas de `scr.iniciativas`, `showFilters`, `sideIni`, `scr.iniciativa`, `m.is.iniUpd` y la sección `o_inis` de `scr.objetivo` del prototipo v10. Desvíos aprobados: "Cambiar estado" en panel en vez de modal (FR-028), sin avance, "Ubicación en la estrategia", resultados clave, tareas ni el resto de secciones (FR-034), sin columna Avance ni botón Actualizar (FR-016, FR-018), migas en lugar de "Ubicación en la estrategia" (FR-031). Todo se arma con piezas del catálogo. |
+| II. La interfaz no se inventa | ✅ Cumple, con los desvíos que aprobó la spec | Pantallas tomadas de `scr.iniciativas`, `showFilters`, `sideIni`, `scr.iniciativa`, `m.is.iniUpd` y la sección `o_inis` de `scr.objetivo` del prototipo v10. Desvíos aprobados: "Cambiar estado" en panel en vez de modal (FR-028), sin avance, "Ubicación en la estrategia", resultados clave, tareas ni el resto de secciones (FR-034), sin columna Avance ni botón Actualizar (FR-016, FR-018), migas en lugar de "Ubicación en la estrategia" (FR-031), panel de edición sin el campo Estado (FR-024, decisión del 2026-11-18). Todo se arma con piezas del catálogo. |
 | II. `core/ui` de solo lectura | ✅ Cumple | No se modifica el DS. |
 | II. Estructura de pantalla | ✅ Cumple | `IniciativasBandeja/` e `IniciativaDetalle/`, cada una con su `.tsx` y `.module.scss` y las piezas en subcarpetas. |
 | II. Textos en español (AR) | ✅ Cumple | Claves nuevas en `loc/mystrings.d.ts` y `loc/en-us.js`, reutilizando las que ya existen para el mismo concepto. |
@@ -121,10 +121,9 @@ Detalle en [research.md](./research.md).
 | Objetivo | `Dropdown` | `required`, opciones "OBJ-nn · nombre" ordenadas por Id; `disabled` al editar (FR-024). |
 | Nombre de la iniciativa | `Input` | `required`, `maxLength={255}`, placeholder del prototipo. |
 | Descripción / impacto esperado | `Multiline` | `required`, placeholder del prototipo. |
-| Accountable | `Picker` `mode="people"` | `required`, `people` = usuarios (D7), `selectedPeople`, `onSelectedPeopleChange`. Error en `span` bajo el campo. |
+| Accountable | `Picker` `mode="people"` | `required`, `people` = usuarios (D7), `selectedPeople` con **una sola persona**, `onSelectedPeopleChange` que conserva solo la última elegida (D25). Error en `span` bajo el campo. |
 | Áreas involucradas | `Dropdown` `multiple` | Opciones del maestro `Area`, por `Nombre`. Opcional. |
 | Fecha de inicio / de compromiso | `Picker` `mode="date"`, lado a lado | `required`; error en `span` (A2 de la 003). |
-| Estado (solo edición) | `Dropdown` | `required`, cinco estados. |
 | Error al guardar | `MessageBar` `type="error"` | Una línea; el panel conserva lo ingresado. |
 | Pie | `Button` x2 | Cancelar `secondary` · "Cargar iniciativa" o "Guardar cambios" `primary`. |
 | Carga de maestros | `Spinner` / `MessageBar` | Como `ObjetivoFormPanel`. |
@@ -186,33 +185,34 @@ Detalle en [research.md](./research.md).
 
 **D1. Capa de datos y mocks.** Se usan `useIniciativaDataSource`, `useComentarioIniciativaDataSource`, `useAreaDataSource`, `useUsuarioDataSource`, `useObjetivoDataSource` y `useDepartamentoDataSource`. Cada hook nuevo pasa su mock como segundo argumento de `useDatasource`. Los mocks guardan el estado a nivel de módulo, como `ObjetivoMock`, y usan los Id de `ObjetivoMock`, `DepartamentoMock` y `GerenciaMock`. Tienen que cubrir:
 
-- `IniciativaMock`: un objetivo de la VP RRII con 3 iniciativas no canceladas (pesos no exactos) y otro con 4 no canceladas y 1 cancelada; una iniciativa de un objetivo de otra VP; un objetivo de la VP RRII sin peso en el departamento (para "—"); iniciativas con fechas en un solo año y en varios años; más de 10 iniciativas en total (paginado); iniciativas del usuario de prueba y de otros; varias con dos accountable y con dos áreas. `getFilteredItems(objetivoId)` filtra por objetivo. `getById` de un Id inexistente rechaza con `status: 404`.
+- `IniciativaMock`: un objetivo de la VP RRII con 3 iniciativas no canceladas (pesos no exactos) y otro con 4 no canceladas y 1 cancelada; una iniciativa de un objetivo de otra VP; un objetivo de la VP RRII sin peso en el departamento (para "—"); iniciativas con fechas en un solo año y en varios años; más de 10 iniciativas en total (paginado); iniciativas del usuario de prueba y de otros; cada una con **un solo** accountable; varias con dos áreas. `getFilteredItems(objetivoId)` filtra por objetivo. `getById` de un Id inexistente rechaza con `status: 404`.
 - `ComentarioIniciativaMock`: una iniciativa con dos comentarios (para el historial) y otra sin comentarios. `getFilteredItems(iniciativaId)` devuelve los de esa iniciativa, del más nuevo al más viejo. `add` asigna `Created` = ahora y `Author` = usuario de prueba.
 - `AreaMock`: áreas de más de una gerencia.
 - `UsuarioMock`: usuarios activos e inactivos; `getCurrentUser` devuelve el usuario de prueba, que es accountable de algunas iniciativas.
 
 **D2. Title.** `Iniciativa.toListItem` envía `Title: this.Nombre` (FR-009), como `Objetivo` y `Palanca`.
 
-**D3. Áreas múltiples.** `Iniciativa.Area` pasa a `ILookupValue[]`: se lee con `toLookupValueArray` y se escribe `AreaId: toLookupIds(this.Area)`. `toLookupIds` se agrega en `Mappers.ts`, con el mismo contrato que `toPersonIds`. Al editar, el panel siempre arma la lista (vacía si no hay áreas), así que quitar todas las áreas envía `[]` y borra el valor. El `select` y el `expand` del datasource no cambian: `Area/Id` y `Area/Title` sirven igual para un lookup múltiple. Los nombres que se muestran salen del maestro `Area` por Id (como `useObjetivoNames`), porque el `Title` del lookup puede no ser el `Nombre`.
+**D3. Áreas múltiples.** `Iniciativa.Area` pasa a `ILookupValue[]`: se lee con `toLookupValueArray` y se escribe `AreaId: toLookupIds(this.Area)`. `toLookupIds` se agrega en `Mappers.ts`, con el mismo contrato que `toPersonIds`. Al editar, el panel siempre arma la lista (vacía si no hay áreas), así que quitar todas las áreas envía `[]` y borra el valor. El `select` pide solo `Area/Id`: en la prueba en el sitio, `Area/Title` dio "No se puede obtener el valor del campo proyectado Area_x005f_Title" con la búsqueda múltiple. Los nombres que se muestran salen del maestro `Area` por Id (como `useObjetivoNames`), porque el `Title` del lookup puede no ser el `Nombre`.
 
-**D4. Accountable en SharePoint.** Se sigue escribiendo `ResponsablesId: toPersonIds(this.Responsables)`. Los Id son los de usuario del sitio, los mismos que trae la persona `Usuario` de la lista `Usuario` y `sp.web.currentUser`.
+**D4. Accountable en SharePoint.** Se escribe `AccountableId: this.Accountable?.Id` (D25). Los Id son los de usuario del sitio, los mismos que trae la persona `Usuario` de la lista `Usuario` y `sp.web.currentUser`.
 
 **D5. Usuario actual.** `IUsuarioDataSource.getCurrentUser(): Promise<IPersonValue>`; `UsuarioDataSource` lo implementa con `this._sp.web.currentUser.select('Id', 'Title', 'Email')()`, devolviendo `{ Id, Title, EMail: Email }`. Hook nuevo `core/api/Usuario/useCurrentUser.ts`: elige datasource o mock con el mismo criterio que `useDatasource`, consulta una vez al montar y devuelve `{ user, error }`. Se justifica un hook propio porque `useDatasource` solo expone el CRUD.
 
 **D5a. Identificación del usuario actual.** El usuario actual se compara con los accountable **por el Id de usuario del sitio** (`IPersonValue.Id`), nunca por el nombre que se muestra (`Title`):
 
-- "Mis iniciativas": `isAccountable(iniciativa, currentUser.Id)` = algún `Responsables[i].Id === currentUser.Id`.
+- "Mis iniciativas": `isAccountable(iniciativa, currentUser.Id)` = `iniciativa.Accountable?.Id === currentUser.Id`.
 - Accountable por defecto en el alta: se busca en las opciones del `Picker` la clave `String(currentUser.Id)`; si no está, se agrega el usuario actual como opción (D7).
-- El Id es un identificador único dentro del sitio y es el mismo valor en los tres orígenes: `sp.web.currentUser`, la columna `Responsables` (que se escribe con `ResponsablesId`) y la persona `Usuario` de la lista `Usuario`. Se elige frente al email porque es lo que guarda la columna y porque el email puede venir vacío en algunas cuentas y no distingue mayúsculas de forma consistente; frente al login, porque no hace falta sumar `Name` al `select`.
+- El Id es un identificador único dentro del sitio y es el mismo valor en los tres orígenes: `sp.web.currentUser`, la columna `Accountable` (que se escribe con `AccountableId`) y la persona `Usuario` de la lista `Usuario`. Se elige frente al email porque es lo que guarda la columna y porque el email puede venir vacío en algunas cuentas y no distingue mayúsculas de forma consistente; frente al login, porque no hace falta sumar `Name` al `select`.
 
 **D6. Rutas y acceso desde la home.** Ver [contracts](./contracts/ui-contracts.md#1-rutas-componentsobjetivosvproutests). La solapa vive en la URL (`?vista=todas`; sin el parámetro, "Mis iniciativas"), así el acceso de la home siempre abre "Mis iniciativas" (FR-015) y Volver desde el detalle vuelve a la solapa de origen. Cambiar de solapa usa `setSearchParams` con `replace`.
 
 **D7. Campo Accountable.** `Picker` `mode="people"`:
 
-- `people`: los usuarios de la lista `Usuario` con `Activo === true`, más los accountable actuales de la iniciativa que se edita y el usuario actual, aunque no estén en la lista o estén inactivos (U1). Clave = `String(Usuario.Id)`, nombre = `Usuario.Title`. Sin duplicados por Id; ordenados por nombre.
+- `people`: los usuarios de la lista `Usuario` con `Activo === true`, más el accountable actual de la iniciativa que se edita y el usuario actual, aunque no estén en la lista o estén inactivos (U1). Clave = `String(Usuario.Id)`, nombre = `Usuario.Title`. Sin duplicados por Id; ordenados por nombre.
 - Alta: arranca con el usuario actual (FR-010). Si `useCurrentUser` falla, arranca vacío y el campo es obligatorio.
-- Edición: arranca con `iniciativa.Responsables`.
-- Al guardar, `Responsables` se arma con los elegidos (`Id`, `Title`, `EMail`).
+- Edición: arranca con `iniciativa.Accountable`.
+- Selección única (D25): si `onSelectedPeopleChange` recibe más de una persona, se conserva solo la última agregada; quitarla deja el campo vacío y obligatorio.
+- Al guardar, `Accountable` es la persona elegida (`Id`, `Title`, `EMail`).
 
 **D8. Estado de la bandeja.** La búsqueda, los filtros aplicados y la página viven en `ObjetivosVpRoutes` y bajan por props, como el filtro de palancas (D4 de la 003): se conservan al ir al detalle y volver, y al cambiar de solapa (US3, escenario 6). La página vuelve a 1 cuando cambia la solapa, la búsqueda o los filtros; si queda fuera de rango, se lleva a la última (edge case "página vacía").
 
@@ -235,8 +235,8 @@ Detalle en [research.md](./research.md).
 - Aplicar: copia el borrador a los filtros aplicados y cierra el panel.
 - Limpiar filtros: deja todos en "Todos", aplica y cierra el panel (US3, escenario 9).
 - Cerrar el panel con la X descarta el borrador.
-- Opciones: Departamento = maestro `Departamento` por `Nombre`; Objetivo = objetivos "OBJ-nn · nombre" por Id; Accountable = accountable de todas las iniciativas cargadas, sin duplicados, por nombre; Estado = los cinco; Año = de `min(año de FechaInicio)` a `max(año de FechaCompromiso)` de todas las iniciativas, sin huecos (U3).
-- Reglas: Departamento compara `objetivo.Departamento.Id`; Objetivo, `iniciativa.Objetivo.Id`; Accountable, algún `Responsables[i].Id`; Estado, `iniciativa.Estado`; Año, `getAniosIniciativa` (FR-020).
+- Opciones: Departamento = maestro `Departamento` por `Nombre`; Objetivo = objetivos "OBJ-nn · nombre" por Id; Accountable = el accountable de cada iniciativa cargada, sin duplicados, por nombre; Estado = los cinco; Año = de `min(año de FechaInicio)` a `max(año de FechaCompromiso)` de todas las iniciativas, sin huecos (U3).
+- Reglas: Departamento compara `objetivo.Departamento.Id`; Objetivo, `iniciativa.Objetivo.Id`; Accountable, `Accountable.Id`; Estado, `iniciativa.Estado`; Año, `getAniosIniciativa` (FR-020).
 - La búsqueda compara `formatIniciativaId(id)` y `Nombre` en minúsculas con el texto recortado (FR-019).
 
 **D14. Contadores y vacíos de la bandeja.**
@@ -251,7 +251,7 @@ Detalle en [research.md](./research.md).
 
 - Los maestros (objetivos, áreas, usuarios, usuario actual) se cargan con `useIniciativaFormMasters`, como `useObjetivoFormMasters`.
 - Validación al elegir "Cargar iniciativa" o "Guardar cambios" (D14 de la 003): obligatorios recortando espacios, compromiso no anterior al inicio, fechas dentro de las del objetivo elegido si las tiene (FR-004). Los errores se limpian cuando el campo deja de ser inválido. Si hay dos errores de fecha en el mismo campo, se muestra el de obligatorio, después el de orden y por último el de rango.
-- Si todo es válido, se abre `ConfirmacionModal` (FR-025). Cancelar en el modal lo cierra y conserva lo ingresado. Aceptar guarda: alta con `addItem` y `Estado = No iniciada` (FR-005); edición con `editItem`, con el `Objetivo` original.
+- Si todo es válido, se abre `ConfirmacionModal` (FR-025). Cancelar en el modal lo cierra y conserva lo ingresado. Aceptar guarda: alta con `addItem` y `Estado = No iniciada` (FR-005); edición con `editItem`, con el `Objetivo` y el `Estado` originales: el panel de edición no muestra el Estado (D26).
 - Si falla, se cierra el modal, el panel muestra `IniciativaSaveError` y conserva lo ingresado. Si sale bien, se llama `onSaved`, que cierra el panel, muestra el mensaje de éxito y recarga la lista de la pantalla de origen (FR-026).
 - `initialObjetivoId` preselecciona el objetivo en el alta desde el detalle del objetivo (FR-027); se puede cambiar.
 
@@ -296,6 +296,18 @@ Detalle en [research.md](./research.md).
 - Para registrar un comentario se sigue usando `addItem` de `useComentarioIniciativaDataSource`; después se llama `reload`.
 - La bandeja y el detalle del objetivo no cargan comentarios.
 - **P1. Índice.** La columna `Iniciativa` (lookup) de la lista `Comentario iniciativa` tiene que estar indexada, para que el filtro no dependa del umbral de vista de lista (5000 elementos). Crear el índice cambia la configuración de la lista: lo hace la usuaria, en cada sitio, antes de probar con SharePoint (pasos en [quickstart.md](./quickstart.md)). El agente no lo crea.
+
+**D25. Un solo Accountable (decisión de las usuarias, 2026-11-18).** Reemplaza el modelo de varios accountable:
+
+- Entidad: `Iniciativa.Accountable?: IPersonValue` (lectura `toPersonValue(item.Accountable)`, escritura `AccountableId: this.Accountable?.Id`). Se eliminan `Responsables` y `ResponsablesId`; no queda ninguna referencia a `Responsables` en el código.
+- Datasource: `select` con `Accountable/Id`, `Accountable/Title`, `Accountable/EMail` y `expand` con `Accountable`.
+- `iniciativaUtils`: `formatAccountable` devuelve `Accountable.Title`; `isAccountable` compara `Accountable.Id` con el Id del usuario actual.
+- Bandeja: el filtro Accountable compara `Accountable.Id` y sus opciones salen del accountable de cada iniciativa.
+- Panel: `Picker` con selección única (D7). Obligatorio; por defecto, el usuario actual.
+- Mocks: cada iniciativa de `IniciativaMock` tiene un solo `Accountable`.
+- **P2. Columna `Accountable`.** Nombre interno `Accountable`, tipo Persona o grupo, solo personas, una sola persona, no obligatoria en la lista (la obligatoriedad la controla el panel). En el sitio de desarrollo la crea la usuaria y copia los datos de `Responsables`; en los demás sitios, con los pasos de [quickstart.md](./quickstart.md), "Creación de la columna Accountable". La usuaria borra `Responsables` después de verificar. El agente no crea ni borra columnas.
+
+**D26. Estado fuera de la edición (2026-11-18).** El panel de edición no muestra el campo Estado: el estado se cambia solo desde "Cambiar estado" (FR-006, FR-024). Al guardar la edición, la iniciativa conserva su `Estado`. El recálculo de pesos al cancelar se verifica desde "Cambiar estado" (historia 7). Es un desvío del prototipo (`sideIni` muestra Estado al editar), registrado en Complexity Tracking.
 
 ## Estructura de carpetas
 
@@ -378,6 +390,10 @@ src/webparts/objetivosVp/
 | 12 | `IniciativaEstadoPanel` (US7) | 9 |
 | 13 | La usuaria indexa la columna `Iniciativa` de `Comentario iniciativa` (P1) | — |
 | 14 | Validación con [quickstart.md](./quickstart.md) | 8, 10, 11, 12, 13 |
+| 15 | La usuaria crea la columna `Accountable` y copia los datos (P2) | — |
+| 16 | Un solo Accountable en `core`, panel, bandeja y mocks (D25) | 15 para probar en el sitio |
+| 17 | Panel de edición sin Estado (D26) | — |
+| 18 | Validación de los escenarios afectados del quickstart | 16, 17 |
 
 ## Complexity Tracking
 
@@ -388,4 +404,6 @@ src/webparts/objetivosVp/
 | Cambios en `core` (`Iniciativa.ts`, `Mappers.ts`, `Usuario`, `ComentarioIniciativa`, hooks) y hooks nuevos `useCurrentUser` y `useComentariosIniciativa` (principio IV) | Title y áreas múltiples (FR-009, FR-011); mocks (principio III); usuario actual para "Mis iniciativas" y Accountable por defecto (FR-010, FR-017); comentarios filtrados en la consulta, pedido de la usuaria el 2026-11-18. | Pasar el contexto de SPFx por props: atraviesa todo el árbol y no tiene mock. Traer todos los comentarios y filtrar en pantalla: crece sin límite y supera el umbral de 5000. |
 | Ampliar `PalancaBreadcrumb` y `SectionBand` (principio IV) | FR-031 exige el mismo componente de migas; FR-032 pide una sección contraída al entrar. Props opcionales: los usos actuales no cambian. | Crear otro componente: duplica código. |
 | Estilos de campos del panel de iniciativa en su propio `.module.scss`, parecidos a los de `ObjetivoForm.module.scss` | El panel de iniciativa necesita el mismo ancho y el mismo marcado de error. | Extraer los estilos de `ObjetivoForm` a `shared/`: modifica código de la 003 y la 005 que la tarea no necesita tocar. |
+| Panel de edición sin el campo Estado, cuando el prototipo (`sideIni`) lo muestra (principio II) | Decisión del 2026-11-18 registrada en la spec (FR-006, FR-024): el estado se cambia solo desde "Cambiar estado", que registra además el comentario ejecutivo. | Seguir el prototipo: habría dos caminos para cambiar el estado y uno de ellos no registraría el comentario. |
+| Columna nueva `Accountable` en la lista `Iniciativa`, que reemplaza a `Responsables` | Decisión de las usuarias del 2026-11-18: un solo accountable por iniciativa (FR-003, FR-010). | Seguir usando `Responsables` limitado a uno desde el panel: la columna seguiría admitiendo varias personas y los datos no reflejarían la regla. |
 | Se mantienen los desvíos de la 003: migas en lugar de "Ubicación en la estrategia", `Breadcrumb` de Fluent, error de fecha bajo `Picker` | FR-031 y FR-038 de la spec. | — |

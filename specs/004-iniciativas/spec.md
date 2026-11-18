@@ -34,7 +34,7 @@ La persona carga una iniciativa desde la bandeja, eligiendo el objetivo, o desde
 8. **Given** el modal de confirmación, **When** la persona elige Aceptar, **Then** la iniciativa se registra en estado "No iniciada" con un ID asignado, el panel se cierra, la persona sigue en la pantalla de origen y ve «La iniciativa "[nombre]" se ha cargado correctamente.».
 9. **Given** el modal de confirmación, **When** la persona elige Cancelar, **Then** el modal se cierra, no se registra nada y el panel conserva lo ingresado.
 10. **Given** el panel con datos cargados, **When** la persona elige Cancelar en el pie, **Then** el panel se cierra y no se registra nada.
-11. **Given** el campo Accountable, **When** la persona agrega o quita usuarios, **Then** admite uno o más, sin límite de cantidad.
+11. **Given** el campo Accountable, **When** la persona elige un usuario, **Then** admite uno solo: si elige otro, reemplaza al anterior.
 12. **Given** el campo Áreas involucradas, **When** la persona lo abre, **Then** ofrece todas las áreas del maestro, incluidas las de otra VP o de otro departamento que el del objetivo, y permite elegir varias o ninguna.
 
 ---
@@ -51,7 +51,7 @@ Desde el acceso "Mis iniciativas" de la home, la persona entra a la bandeja en l
 
 1. **Given** la home, **When** la persona elige "Mis iniciativas", **Then** se abre la bandeja en la solapa "Mis iniciativas", con el título "Mis iniciativas".
 2. **Given** la bandeja, **When** se abre, **Then** el encabezado muestra el botón Volver, el título, la búsqueda, el botón Filtros y el botón "Cargar iniciativa".
-3. **Given** la solapa "Mis iniciativas", **When** se abre, **Then** lista solo las iniciativas en las que la persona actual figura entre los accountable.
+3. **Given** la solapa "Mis iniciativas", **When** se abre, **Then** lista solo las iniciativas en las que la persona actual es el accountable.
 4. **Given** la bandeja, **When** la persona elige la solapa "Todas", **Then** el título pasa a "Todas las iniciativas" y se listan todas las iniciativas.
 5. **Given** la bandeja, **When** se observa, **Then** cada solapa muestra su cantidad total, que no depende de la búsqueda ni de los filtros, y arriba de la grilla se lee "N iniciativas en esta vista", con N igual a las iniciativas de la vista actual con la búsqueda y los filtros aplicados.
 6. **Given** la grilla, **When** se observa, **Then** sus columnas son ID, Iniciativa, Objetivo (ID · nombre), Accountable, Estado y Ver, con Estado como anteúltima columna y el estado como chip.
@@ -134,21 +134,20 @@ En el detalle de un objetivo, la persona ve la sección Iniciativas con la lista
 
 ### User Story 6 - Editar una iniciativa (Priority: P2)
 
-Desde el detalle, la persona edita una iniciativa en el mismo panel del alta, que trae los datos actuales e incluye el Estado.
+Desde el detalle, la persona edita una iniciativa en el mismo panel del alta, que trae los datos actuales. El estado no se edita acá: se cambia desde "Cambiar estado".
 
 **Why this priority**: Las iniciativas cambian durante el año y requieren correcciones; es secundario frente a cargarlas y verlas.
 
-**Independent Test**: Editar una iniciativa, cambiar nombre, accountable, fechas y estado, confirmar y verificar mensaje, detalle actualizado y pesos recalculados si pasó a o desde Cancelada.
+**Independent Test**: Editar una iniciativa, cambiar nombre, accountable y fechas, confirmar y verificar mensaje y detalle actualizado, y que el panel no muestra el Estado.
 
 **Acceptance Scenarios**:
 
-1. **Given** el detalle, **When** la persona elige Editar o el lápiz de "Información de la iniciativa", **Then** se abre el panel de edición con los datos actuales, el Estado visible y el pie Cancelar · "Guardar cambios".
+1. **Given** el detalle, **When** la persona elige Editar o el lápiz de "Información de la iniciativa", **Then** se abre el panel de edición con los datos actuales, sin el campo Estado, y el pie Cancelar · "Guardar cambios".
 2. **Given** el panel de edición, **When** la persona observa el Objetivo, **Then** lo ve en modo lectura y no puede cambiarlo.
 3. **Given** cambios válidos, **When** la persona elige "Guardar cambios", **Then** se muestra el modal "Estás por guardar los cambios de la iniciativa. ¿Querés continuar?" con Cancelar y Aceptar.
 4. **Given** el modal, **When** la persona elige Aceptar, **Then** se guardan los cambios, el panel se cierra, la persona sigue en el detalle, que refleja los cambios, y ve «La iniciativa "[nombre]" se ha actualizado correctamente.».
 5. **Given** el panel de edición con un campo obligatorio vacío o fechas inválidas, **When** la persona elige "Guardar cambios", **Then** no se guarda y el error se muestra en el campo.
 6. **Given** el panel de edición con cambios, **When** la persona elige Cancelar, **Then** la iniciativa queda sin cambios.
-7. **Given** una iniciativa de un objetivo de la VP RRII, **When** su estado pasa a Cancelada o deja de ser Cancelada, **Then** el peso de las demás iniciativas no canceladas del objetivo se recalcula.
 
 ---
 
@@ -156,7 +155,7 @@ Desde el detalle, la persona edita una iniciativa en el mismo panel del alta, qu
 
 Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario ejecutivo" y, en un panel lateral, cambia el estado y actualiza el comentario ejecutivo.
 
-**Why this priority**: Es el seguimiento cotidiano de la iniciativa por parte de sus accountable.
+**Why this priority**: Es el seguimiento cotidiano de la iniciativa por parte de su accountable.
 
 **Independent Test**: Cambiar el estado de una iniciativa con un comentario nuevo, confirmar y verificar chip, comentario con fecha y autor, y pesos recalculados al cancelar.
 
@@ -168,6 +167,7 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 4. **Given** el modal, **When** la persona elige Aceptar, **Then** se registra el estado, el detalle muestra el chip nuevo y, si el comentario cambió, se registra como un comentario ejecutivo nuevo y el detalle muestra ese texto con su fecha y su autor; el panel se cierra y la persona ve «El estado de la iniciativa "[nombre]" se ha actualizado correctamente.».
 5. **Given** el modal o el panel, **When** la persona elige Cancelar, **Then** no se registra ningún cambio.
 6. **Given** varios comentarios ejecutivos registrados, **When** se abre el detalle, **Then** se muestra solo el último; los anteriores se conservan como historial, sin mostrarse.
+7. **Given** una iniciativa de un objetivo de la VP RRII, **When** en "Cambiar estado" su estado pasa a Cancelada o deja de ser Cancelada, **Then** el peso de las demás iniciativas no canceladas del objetivo se recalcula.
 
 ---
 
@@ -179,7 +179,8 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 - Fechas de la iniciativa iguales a las del objetivo: se admiten; quedan dentro del rango.
 - Cambian las fechas del objetivo después de cargar iniciativas: las iniciativas existentes no se modifican; la regla se vuelve a validar cuando se edita la iniciativa.
 - Al elegir un objetivo en el alta después de cargar fechas: la validación de rango se hace contra las fechas del objetivo elegido al guardar.
-- Persona que se quita a sí misma de Accountable: se admite si queda al menos un accountable; la iniciativa deja de aparecer en su solapa "Mis iniciativas".
+- Se cambia el Accountable de una iniciativa por otra persona: la iniciativa deja de aparecer en la solapa "Mis iniciativas" de quien era accountable y pasa a la de la persona nueva.
+- Accountable vacío al guardar: no se guarda; el campo muestra "Este campo es obligatorio.".
 - Todas las iniciativas de un objetivo de la VP RRII canceladas: ninguna muestra peso.
 - Peso que no es un número exacto (3 iniciativas): se muestra redondeado, aunque la suma visible no dé exactamente 100 %.
 - Iniciativa cancelada de un objetivo de la VP RRII: no muestra peso en el objetivo ni peso en el departamento.
@@ -188,6 +189,7 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 - Cambio de estado sin modificar el comentario: no se registra un comentario nuevo; se sigue mostrando el anterior con su fecha y autor.
 - Comentario ejecutivo vacío o solo con espacios en "Cambiar estado": no se registra; se sigue mostrando el anterior.
 - "Cambiar estado" sin cambiar el estado ni el comentario: al aceptar, el panel se cierra sin registrar nada y sin mensaje de éxito.
+- Se quiere cambiar el estado desde la edición: no se puede; el panel de edición no muestra el Estado y el estado se cambia desde "Cambiar estado".
 - Se necesita pasar una iniciativa a otro objetivo: no se puede editar; se cancela y se carga una nueva en el otro objetivo.
 - Iniciativa contenida en un solo año: aparece solo al filtrar por ese año.
 - Nombres repetidos: no se exige unicidad.
@@ -224,6 +226,11 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 - Q: ¿FR-008 (sin guardado parcial) rige para "Cambiar estado"? → A: No. Rige para el panel de cargar y editar. En "Cambiar estado", comentario y estado se registran por separado, primero el comentario, y el reintento no lo duplica.
 - Q: Si se pide el detalle de una iniciativa que no existe y no hay pantalla de origen, ¿adónde llevan Volver y Cancelar? → A: A la bandeja de iniciativas.
 - Q: ¿Cómo se titula la sección del detalle del objetivo? → A: "Iniciativas (N)", como en el prototipo, con N igual a la cantidad de iniciativas del objetivo, incluidas las canceladas.
+### Session 2026-11-18 (cambios de alcance durante la implementación)
+
+- Q: ¿El panel de edición muestra el Estado? → A: No. El estado se cambia solo desde "Cambiar estado" (FR-006, FR-024). Es un desvío del prototipo, que muestra Estado en la edición. El recálculo de pesos al cancelar pasa a la historia 7.
+- Q: ¿Cuántos Accountable tiene una iniciativa? → A: Uno solo, obligatorio, por defecto quien la carga (decisión de las usuarias). El selector permite elegir una sola persona; si se elige otra, reemplaza a la anterior (FR-003, FR-010).
+- Q: ¿Qué columna guarda el Accountable? → A: Una columna nueva de la lista Iniciativa, nombre interno Accountable, tipo Persona, una sola persona, que reemplaza a Responsables. La usuaria la crea en el sitio de desarrollo, copia los datos existentes y borra Responsables después de verificar. Reemplaza la respuesta anterior de esta fecha sobre la columna Responsables.
 
 ## Requirements *(mandatory)*
 
@@ -233,14 +240,14 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 
 - **FR-001**: Toda iniciativa DEBE pertenecer a un único objetivo; el sistema NO DEBE permitir guardar una iniciativa sin objetivo.
 - **FR-002**: El ID DEBE asignarlo el sistema al registrar la iniciativa y NO DEBE poder editarse.
-- **FR-003**: Son obligatorios Objetivo, Nombre de la iniciativa, Descripción / impacto esperado, Accountable (uno o más, sin límite), Fecha de inicio y Fecha de compromiso. Áreas involucradas y Comentario ejecutivo son opcionales. El sistema NO DEBE guardar con un obligatorio vacío o solo con espacios, y DEBE mostrar "Este campo es obligatorio." en línea, en cada campo faltante.
+- **FR-003**: Son obligatorios Objetivo, Nombre de la iniciativa, Descripción / impacto esperado, Accountable (un único usuario), Fecha de inicio y Fecha de compromiso. Áreas involucradas y Comentario ejecutivo son opcionales. El sistema NO DEBE guardar con un obligatorio vacío o solo con espacios, y DEBE mostrar "Este campo es obligatorio." en línea, en cada campo faltante.
 - **FR-004**: La Fecha de compromiso NO DEBE ser anterior a la Fecha de inicio. Si el objetivo tiene fechas, la Fecha de inicio NO DEBE ser anterior a la del objetivo y la Fecha de compromiso NO DEBE ser posterior a la del objetivo. En cada caso el error se muestra en el campo de la fecha inválida.
 - **FR-005**: Al crearse, la iniciativa DEBE quedar en estado "No iniciada"; el alta NO DEBE mostrar el campo Estado.
-- **FR-006**: Estado DEBE ofrecer No iniciada, En curso, Frenada, Finalizada y Cancelada. Cualquier estado puede pasar a cualquier otro, solo por acción manual en la edición o en "Cambiar estado"; el sistema NO DEBE derivarlo de ningún otro dato.
+- **FR-006**: Estado DEBE ofrecer No iniciada, En curso, Frenada, Finalizada y Cancelada. Cualquier estado puede pasar a cualquier otro, solo por acción manual en "Cambiar estado"; el sistema NO DEBE derivarlo de ningún otro dato.
 - **FR-007**: La aplicación NO DEBE ofrecer ninguna acción para eliminar una iniciativa; se cancela con el estado Cancelada.
 - **FR-008**: Al guardar una iniciativa desde el panel de cargar o editar, el sistema DEBE registrar todos sus datos o ninguno: no hay guardado parcial. En "Cambiar estado", el comentario y el estado se registran por separado: si falla uno, se informa el error, el panel conserva lo ingresado y reintentar no duplica el comentario.
 - **FR-009**: Al guardar, la columna Title de la lista DEBE recibir el mismo valor que el nombre de la iniciativa, al crear y al editar.
-- **FR-010**: Accountable DEBE venir completado en el alta con la persona que carga, que puede quitarse o agregar a otros.
+- **FR-010**: Accountable DEBE admitir un único usuario y venir completado en el alta con la persona que carga, que puede reemplazarse por otra persona. El selector NO DEBE permitir elegir más de una.
 - **FR-011**: Áreas involucradas DEBE ofrecer todas las áreas del maestro Áreas, sin limitarlas a la VP o al departamento del objetivo, y admitir varias.
 - **FR-012**: El campo Objetivo DEBE ofrecer los objetivos cargados, mostrados como "ID · nombre".
 
@@ -269,7 +276,7 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 
 **Panel de cargar y editar**
 
-- **FR-024**: El alta y la edición DEBEN hacerse en un panel lateral de una columna, con Fecha de inicio y Fecha de compromiso lado a lado, los campos desplazables dentro del panel y el pie fijo: Cancelar · "Cargar iniciativa" (alta) o Cancelar · "Guardar cambios" (edición). La edición muestra además el Estado y el Objetivo en modo lectura: una vez guardada, la iniciativa NO DEBE poder cambiar de objetivo. El Comentario ejecutivo no forma parte de este panel.
+- **FR-024**: El alta y la edición DEBEN hacerse en un panel lateral de una columna, con Fecha de inicio y Fecha de compromiso lado a lado, los campos desplazables dentro del panel y el pie fijo: Cancelar · "Cargar iniciativa" (alta) o Cancelar · "Guardar cambios" (edición). La edición muestra el Objetivo en modo lectura (una vez guardada, la iniciativa NO DEBE poder cambiar de objetivo) y NO DEBE mostrar el Estado, que se cambia solo desde "Cambiar estado". El Comentario ejecutivo no forma parte de este panel.
 - **FR-025**: Antes de guardar, el sistema DEBE pedir confirmación: "Estás por cargar la iniciativa. ¿Querés continuar?" (alta) o "Estás por guardar los cambios de la iniciativa. ¿Querés continuar?" (edición), con Cancelar y Aceptar. La validación de campos ocurre antes del modal.
 - **FR-026**: Al guardar, la persona DEBE quedar en la pantalla de origen y ver «La iniciativa "[nombre]" se ha cargado correctamente.» o «La iniciativa "[nombre]" se ha actualizado correctamente.».
 - **FR-027**: Desde el detalle de un objetivo, el alta DEBE abrirse con ese objetivo elegido.
@@ -305,10 +312,10 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 
 ### Key Entities
 
-- **Iniciativa**: conjunto coordinado de acciones para lograr un objetivo; principal unidad de gestión. Atributos: ID (autonumérico); Objetivo (uno); Nombre; Descripción / impacto esperado; Accountable (uno o más usuarios); Áreas involucradas (0..N); Fecha de inicio; Fecha de compromiso; Estado (No iniciada, En curso, Frenada, Finalizada, Cancelada); Comentario ejecutivo con fecha y autor de la última modificación; Peso en el objetivo (calculado, solo VP RRII); Peso en el departamento (calculado a partir del peso en el objetivo y del peso del objetivo en el departamento, solo VP RRII). Nunca se elimina.
+- **Iniciativa**: conjunto coordinado de acciones para lograr un objetivo; principal unidad de gestión. Atributos: ID (autonumérico); Objetivo (uno); Nombre; Descripción / impacto esperado; Accountable (un usuario); Áreas involucradas (0..N); Fecha de inicio; Fecha de compromiso; Estado (No iniciada, En curso, Frenada, Finalizada, Cancelada); Comentario ejecutivo con fecha y autor de la última modificación; Peso en el objetivo (calculado, solo VP RRII); Peso en el departamento (calculado a partir del peso en el objetivo y del peso del objetivo en el departamento, solo VP RRII). Nunca se elimina.
 - **Objetivo**: definido en la feature 003. Tiene 0..N iniciativas. Sus fechas, si las tiene, acotan las de sus iniciativas; su VP decide si las iniciativas tienen peso; su peso en el departamento (feature 005) se usa para el peso en el departamento de sus iniciativas; su departamento es el que usa el filtro de la bandeja.
 - **Área**: maestro de áreas (subgerencias) que participan en una iniciativa. Puede ser de cualquier VP o departamento.
-- **Comentario ejecutivo**: situación de la iniciativa en palabras de sus accountable. Una iniciativa tiene 0..N comentarios, cada uno con su texto, fecha y autor; se muestra el último y los anteriores quedan como historial.
+- **Comentario ejecutivo**: situación de la iniciativa en palabras de su accountable. Una iniciativa tiene 0..N comentarios, cada uno con su texto, fecha y autor; se muestra el último y los anteriores quedan como historial.
 
 ## Success Criteria *(mandatory)*
 
@@ -328,17 +335,17 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 
 - Las listas Iniciativa, Áreas y ComentarioIniciativa ya existen en SharePoint; su creación está fuera de alcance. El plan releva sus nombres internos.
 - Áreas involucradas es una búsqueda de valores múltiples sobre la lista Áreas. La usuaria cambia la columna de la lista Iniciativa en SharePoint para que admita varios valores; el plan se basa en esa columna ya modificada.
-- "Accountable" es el nombre en pantalla de la columna Responsables de la lista Iniciativa, que no se renombra. "Áreas involucradas" equivale a "Subgerencias involucradas" de RF-07.
+- "Accountable" es la columna Accountable de la lista Iniciativa (Persona, una sola persona), que reemplaza a la columna Responsables. La crea la usuaria en el sitio de desarrollo y copia los datos existentes; la columna Responsables se borra después de verificar. "Áreas involucradas" equivale a "Subgerencias involucradas" de RF-07.
 - El peso en el objetivo y el peso en el departamento se calculan al mostrarlos y no se guardan; la columna Peso de la lista Iniciativa no se usa. El peso del objetivo en el departamento es el que registra la feature 005.
 - El comentario ejecutivo vive en la lista ComentarioIniciativa: cada modificación es un elemento nuevo, y la fecha y el autor que se muestran son los de creación del último elemento.
 - El prototipo de referencia es el v10, que está en la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` aunque su nombre diga v5.
 - La VP RRII se reconoce como en la feature 003 (nombre "VP RRII").
-- El panel de edición muestra los mismos campos del alta más Estado, con el Objetivo en modo lectura; el Comentario ejecutivo se edita solo desde el panel "Cambiar estado" (confirmado por la usuaria).
+- El panel de edición muestra los mismos campos del alta, con el Objetivo en modo lectura y sin el Estado; el Comentario ejecutivo se edita solo desde el panel "Cambiar estado" (confirmado por la usuaria).
 - El estado vacío de la sección Iniciativas del detalle del objetivo es "Este objetivo no tiene iniciativas cargadas." (confirmado por la usuaria).
 - El mensaje de error de fechas fuera de las del objetivo es una línea que indica el rango del objetivo; el de compromiso anterior a inicio reutiliza el de la feature 003. Los textos exactos los define el plan.
 - El peso se muestra redondeado (por ejemplo, 33,33 %); el formato exacto sigue al del peso del objetivo en la feature 003.
 - El campo Objetivo ofrece todos los objetivos cargados, de cualquier estado y VP, en el orden en que la aplicación ya los lista; el orden con los del departamento del usuario primero queda fuera de alcance (RF-20).
 - La solapa "Todas" muestra todas las iniciativas, sin filtro por defecto por departamento (RF-20 fuera de alcance).
-- Las opciones del filtro Accountable salen de los accountable de las iniciativas cargadas; las de Departamento y Objetivo, de los maestros y objetivos cargados; las de Estado, de los cinco estados.
+- Las opciones del filtro Accountable salen del accountable de cada iniciativa cargada; las de Departamento y Objetivo, de los maestros y objetivos cargados; las de Estado, de los cinco estados.
 - Cambiar el estado de la iniciativa no impide nada en esta feature; la regla de no admitir tareas nuevas con Finalizada o Cancelada llega con las tareas.
 - Fuera de alcance: resultados clave, su seguimiento y pesos, cálculos de avance (C-01 a C-04, C-07) y la regla de al menos un resultado clave para la VP RRII; tareas, riesgos, decisiones y presupuesto (RF-12 a RF-15) y sus secciones, botones y chips; el peso junto al objetivo en la bandeja; la vista por departamento del usuario (RF-20); la bandeja de tareas; roles y permisos (RF-19). No se crean rutas para pantallas no implementadas.

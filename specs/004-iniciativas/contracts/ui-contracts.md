@@ -38,6 +38,20 @@ public Area?: ILookupValue[] | undefined;
 
 El resto de la entidad no cambia.
 
+Además (plan, D25), `Responsables` se reemplaza por `Accountable`:
+
+```ts
+// lectura
+this.Accountable = toPersonValue(item.Accountable);
+
+// escritura
+AccountableId: this.Accountable?.Id,
+
+public Accountable?: IPersonValue | undefined;
+```
+
+`IniciativaDataSource`: `select` con `Accountable/Id`, `Accountable/Title`, `Accountable/EMail` y `Area/Id`; `expand` con `Accountable`. No queda ninguna referencia a `Responsables`.
+
 ### `utils/Mappers.ts`
 
 ```ts
@@ -113,8 +127,8 @@ export const formatIniciativaId: (id: number | undefined) => string;            
 export const getEstadoIniciativaChipColor: (estado: EstadoIniciativa | undefined) => ChipColor;
 export const getPesosIniciativa: (iniciativa: Iniciativa, delObjetivo: Iniciativa[], objetivo: Objetivo | undefined) => IIniciativaPesos;
 export const formatPeso: (valor: number) => string;                               // '33,33'
-export const formatAccountable: (iniciativa: Iniciativa) => string;               // nombres separados por ', '
-export const isAccountable: (iniciativa: Iniciativa, userId: number | undefined) => boolean;   // compara Id de usuario del sitio, nunca Title
+export const formatAccountable: (iniciativa: Iniciativa) => string;               // Accountable.Title
+export const isAccountable: (iniciativa: Iniciativa, userId: number | undefined) => boolean;   // Accountable.Id === userId, nunca Title
 export const getAniosIniciativa: (iniciativa: Iniciativa) => number[];
 export const getUltimoComentario: (comentarios: ComentarioIniciativa[], iniciativaId: number) => ComentarioIniciativa | undefined;
 ```

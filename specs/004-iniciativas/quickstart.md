@@ -10,8 +10,22 @@ Guion de QA manual. Prerrequisitos y condiciones iguales a los del [quickstart d
    - la columna `Area` de `Iniciativa` admite varios valores (confirmado por la usuaria el 2026-11-18);
    - la columna `Iniciativa` de `Comentario iniciativa` está indexada (plan, P1; pasos abajo);
    - la lista `Usuario` tiene al menos dos usuarios activos, uno inactivo, y la persona que prueba;
+   - la lista `Iniciativa` tiene la columna `Accountable` (Persona, una sola persona) con los datos copiados de `Responsables` (plan, P2; pasos abajo);
    - la lista `Area` tiene áreas de más de una gerencia;
    - hay un objetivo de la VP RRII con peso en el departamento, uno de la VP RRII sin peso en el departamento (cargado antes de la 005), uno de otra VP, y uno de la VP RRII con fechas.
+
+## Creación de la columna Accountable (plan, P2)
+
+En el sitio de desarrollo la crea la usuaria. En cada sitio siguiente se repite antes de desplegar el paquete que la usa.
+
+1. Abrir la lista `Iniciativa` > Configuración (engranaje) > Configuración de la lista.
+2. Columnas > "Crear columna" (no "Agregar columna" desde la vista moderna, para poder elegir el nombre interno).
+3. Nombre: `Accountable`, escrito exactamente así. Ese texto queda como nombre interno.
+4. Tipo: Persona o grupo. Permitir selección de: solo personas. Permitir varias selecciones: **No**.
+5. "Requiere que esta columna contenga información": No (la obligatoriedad la controla el panel).
+6. Guardar. Verificar que la URL de la configuración de la columna termina en `Field=Accountable`.
+7. Si la lista ya tiene iniciativas, copiar en `Accountable` una persona de `Responsables` por cada elemento (en la edición en cuadrícula).
+8. Después de verificar los escenarios 16 a 24, 38 y 39, borrar la columna `Responsables`. La borra la usuaria.
 
 ## Índice de la columna Iniciativa (plan, P1)
 
@@ -45,7 +59,7 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 17 | US1 | "Cargar iniciativa" con todo vacío | No guarda; cada obligatorio dice "Este campo es obligatorio." en línea. |
 | 18 | US1 | Compromiso anterior a inicio | Error en la fecha de compromiso. Igual a inicio: se admite. |
 | 19 | US1 | Objetivo con fechas; inicio anterior o compromiso posterior a las del objetivo | Error en la fecha fuera de rango, con el rango del objetivo. Fechas iguales a las del objetivo: se admiten. |
-| 20 | US1 | Accountable: agregar tres personas y quitar a la persona actual | Se admite; ofrece los usuarios activos de la lista `Usuario`. |
+| 20 | US1 | Accountable: elegir otra persona; después quitarla y guardar | Ofrece los usuarios activos de la lista `Usuario`. Queda una sola persona: la nueva reemplaza a la anterior. Sin ninguna, no guarda y muestra "Este campo es obligatorio.". En la lista, `Accountable` tiene esa persona. |
 | 21 | US1 | Áreas involucradas | Ofrece todas las áreas del maestro; admite varias o ninguna. |
 | 22 | US1 | Datos válidos > "Cargar iniciativa" | Modal "Estás por cargar la iniciativa. ¿Querés continuar?" con Cancelar y Aceptar. Cancelar: vuelve al panel con los datos. |
 | 23 | US1 | Aceptar | El panel se cierra, la persona sigue en la bandeja, ve «La iniciativa "[nombre]" se ha cargado correctamente.» y la iniciativa aparece en "No iniciada". En la lista, `Title` = Nombre y `Area` con varios valores. |
@@ -63,9 +77,9 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 35 | US5 | Detalle de un objetivo de otra VP | Grilla sin la columna Peso. |
 | 36 | US5 | Objetivo sin iniciativas | "Este objetivo no tiene iniciativas cargadas." |
 | 37 | US5 | "+" > cargar | Panel con el objetivo elegido; al aceptar, sigue en el detalle del objetivo, ve el mensaje de éxito y la grilla la incluye con los pesos recalculados (de 4 a 5 no canceladas: 20 % cada una). |
-| 38 | US6 | Detalle > Editar (y el lápiz de la información) | Panel con los datos actuales, Objetivo en modo lectura, Estado visible, pie Cancelar · "Guardar cambios". |
+| 38 | US6 | Detalle > Editar (y el lápiz de la información) | Panel con los datos actuales, Objetivo en modo lectura, **sin el campo Estado**, pie Cancelar · "Guardar cambios". |
 | 39 | US6 | Cambiar nombre, accountable, áreas (quitar todas) y fechas > Guardar cambios > Aceptar | Modal "Estás por guardar los cambios de la iniciativa. ¿Querés continuar?"; luego el detalle refleja los cambios y se ve «La iniciativa "[nombre]" se ha actualizado correctamente.». En la lista, `Title` = nombre nuevo y `Area` vacía. |
-| 40 | US6 | Editar el estado a Cancelada | Las demás iniciativas no canceladas del objetivo suben de peso. Volver a "En curso": bajan. |
+| 40 | US7 | "Cambiar estado" a Cancelada | Las demás iniciativas no canceladas del objetivo suben de peso. Volver a "En curso": bajan. Guardar una edición no cambia el estado. |
 | 41 | US7 | "Cambiar estado" o el lápiz del comentario | Panel con Estado (el actual) y Comentario ejecutivo precargado con el último. |
 | 42 | US7 | Elegir Frenada, escribir un comentario, "Cambiar estado" | Modal "Estás por cambiar el estado de la iniciativa "[nombre]" de En curso a Frenada. ¿Querés continuar?". Aceptar: el panel se cierra, se ve «El estado de la iniciativa "[nombre]" se ha actualizado correctamente.», chip Frenada y el comentario con fecha y autor; en `Comentario iniciativa` hay un elemento nuevo y el anterior sigue. En la red, la consulta de comentarios filtra por `IniciativaId`. |
 | 43 | US7 | Cambiar solo el comentario | Se registra el comentario nuevo; el estado no cambia. |
