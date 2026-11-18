@@ -10,7 +10,7 @@
 
 **Fuente vigente**: `docs/especificacion-funcional.md` v1.9, con lo decidido en la reunión 6, y la feature 005 (pesos del objetivo por departamento y por VP), ya implementada. Ver Clarifications, sesión 2026-11-18.
 
-**Diseño de referencia**: `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`, que contiene el prototipo v9 aunque el nombre de la carpeta diga v5, pantallas "Iniciativas" (bandeja), detalle de objetivo, detalle de iniciativa y panel de cargar/editar iniciativa. Donde el prototipo difiere de lo ya implementado en palancas y objetivos (features 002 y 003), manda lo implementado.
+**Diseño de referencia**: `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`, que contiene el prototipo v10 aunque el nombre de la carpeta diga v5, pantallas "Iniciativas" (bandeja), detalle de objetivo, detalle de iniciativa y panel de cargar/editar iniciativa. Donde el prototipo difiere de lo ya implementado en palancas y objetivos (features 002 y 003), manda lo implementado.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -122,7 +122,7 @@ En el detalle de un objetivo, la persona ve la sección Iniciativas con la lista
 
 **Acceptance Scenarios**:
 
-1. **Given** el detalle de un objetivo de la VP RRII, **When** se observa la sección Iniciativas, **Then** tiene un "+" en el título y una grilla con ID, Iniciativa, Accountable, Peso, Estado y Ver, con Estado como anteúltima columna.
+1. **Given** el detalle de un objetivo de la VP RRII, **When** se observa la sección Iniciativas, **Then** se titula "Iniciativas (N)", con N igual a la cantidad de iniciativas del objetivo (incluidas las canceladas), tiene un "+" en el título y una grilla con ID, Iniciativa, Accountable, Peso, Estado y Ver, con Estado como anteúltima columna.
 2. **Given** el detalle de un objetivo de otra VP, **When** se observa la sección Iniciativas, **Then** la grilla muestra sus iniciativas sin la columna Peso.
 3. **Given** una fila, **When** la persona elige "Ver", **Then** se abre el detalle de esa iniciativa.
 4. **Given** un objetivo de la VP RRII con 5 iniciativas no canceladas, **When** se observa la grilla, **Then** cada una muestra 20 % de peso.
@@ -165,7 +165,7 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 1. **Given** el detalle, **When** la persona elige "Cambiar estado" o el lápiz de "Comentario ejecutivo", **Then** se abre un panel lateral con Estado (el actual) y Comentario ejecutivo precargado con el último.
 2. **Given** el panel, **When** la persona abre Estado, **Then** ofrece No iniciada, En curso, Frenada, Finalizada y Cancelada, y cualquier estado puede pasar a cualquier otro.
 3. **Given** un estado nuevo elegido, **When** la persona guarda, **Then** se muestra el modal "Estás por cambiar el estado de la iniciativa "[nombre]" de [estado actual] a [estado nuevo]. ¿Querés continuar?" con Cancelar y Aceptar.
-4. **Given** el modal, **When** la persona elige Aceptar, **Then** se registra el estado, el detalle muestra el chip nuevo y, si el comentario cambió, se registra como un comentario ejecutivo nuevo y el detalle muestra ese texto con su fecha y su autor.
+4. **Given** el modal, **When** la persona elige Aceptar, **Then** se registra el estado, el detalle muestra el chip nuevo y, si el comentario cambió, se registra como un comentario ejecutivo nuevo y el detalle muestra ese texto con su fecha y su autor; el panel se cierra y la persona ve «El estado de la iniciativa "[nombre]" se ha actualizado correctamente.».
 5. **Given** el modal o el panel, **When** la persona elige Cancelar, **Then** no se registra ningún cambio.
 6. **Given** varios comentarios ejecutivos registrados, **When** se abre el detalle, **Then** se muestra solo el último; los anteriores se conservan como historial, sin mostrarse.
 
@@ -186,6 +186,8 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 - Objetivo de la VP RRII sin peso en el departamento cargado (por ejemplo, cargado antes de la feature 005): el peso en el departamento de sus iniciativas se muestra como "—".
 - Cambio de estado sin cambiar el estado, solo el comentario: se registra el comentario nuevo con su fecha y autor.
 - Cambio de estado sin modificar el comentario: no se registra un comentario nuevo; se sigue mostrando el anterior con su fecha y autor.
+- Comentario ejecutivo vacío o solo con espacios en "Cambiar estado": no se registra; se sigue mostrando el anterior.
+- "Cambiar estado" sin cambiar el estado ni el comentario: al aceptar, el panel se cierra sin registrar nada y sin mensaje de éxito.
 - Se necesita pasar una iniciativa a otro objetivo: no se puede editar; se cancela y se carga una nueva en el otro objetivo.
 - Iniciativa contenida en un solo año: aparece solo al filtrar por ese año.
 - Nombres repetidos: no se exige unicidad.
@@ -203,7 +205,7 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 - Q: ¿Se puede cambiar el objetivo al editar una iniciativa? → A: No. Se muestra en modo lectura, igual que la VP en la edición del objetivo (feature 003).
 - Q: ¿Qué dato decide el año de una iniciativa en el filtro Año? → A: La iniciativa aparece en todos los años entre su fecha de inicio y su fecha de compromiso, incluidos ambos. La feature 003 no definió una regla de año para objetivos.
 - Q: ¿Las cantidades de las solapas dependen de la búsqueda y los filtros? → A: No. Son el total de cada solapa, como en el prototipo; solo el contador "N iniciativas en esta vista" refleja la búsqueda y los filtros.
-- Q: ¿Qué prototipo se usa como referencia? → A: El de la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` (corregido en la sesión 2026-11-18: esa carpeta contiene el v9).
+- Q: ¿Qué prototipo se usa como referencia? → A: El de la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` (corregido en la sesión 2026-11-18: esa carpeta contiene el v10).
 - Q: En el panel de filtros de la bandeja, ¿cada filtro permite un solo valor o varios, y se aplican al momento o con un botón? → A: Un solo valor por filtro; se aplican con "Aplicar" y hay "Limpiar filtros".
 
 ### Session 2026-11-18
@@ -213,8 +215,12 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 - Q: ¿Cómo se llama en pantalla a quien responde por la iniciativa? → A: "Accountable", en lugar de "Líderes": campo del panel, columna de la bandeja y de la sección Iniciativas del detalle del objetivo, dato de "Información de la iniciativa" y filtro (antes "Líder"). La solapa "Mis iniciativas" lista las iniciativas en las que la persona actual figura como accountable. La columna de SharePoint sigue siendo Responsables; solo cambia la etiqueta en pantalla.
 - Q: ¿El detalle de la iniciativa muestra el peso en el departamento? → A: Sí. "Peso en el departamento" va en "Información de la iniciativa", inmediatamente después de "Peso en el objetivo", como en el prototipo. Vale peso de la iniciativa en el objetivo × peso del objetivo en el departamento ÷ 100 (por ejemplo, 25 % en un objetivo que pesa 40 % da 10 %). Solo para iniciativas no canceladas de objetivos de la VP RRII; si el objetivo no tiene peso en el departamento cargado, se muestra "—". Es calculado, no se guarda y se muestra a todos mientras no estén los roles, igual que el peso en el objetivo. Deja de estar fuera de alcance.
 - Q: ¿El peso en el departamento se calcula con el peso en el objetivo exacto o con el redondeado? → A: Con el exacto; se redondea solo al mostrarlo, con el mismo formato que el peso en el objetivo.
-- Q: ¿Qué prototipo se usa como referencia? → A: El v9, que está en la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` aunque su nombre diga v5. Reemplaza la respuesta de la sesión 2026-11-13.
+- Q: ¿Qué prototipo se usa como referencia? → A: El v10 (16/11/2026), que está en la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` aunque su nombre diga v5. Para iniciativas, su único cambio respecto del v9 es "Líderes" → "Accountable". Reemplaza la respuesta de la sesión 2026-11-13.
 - Q: ¿Cuál es la fuente funcional? → A: `docs/especificacion-funcional.md` v1.9.
+- Q: ¿Qué versión del prototipo hay en `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/`? → A: El v10 (16/11/2026), confirmado en su `LEEME.md`. Las respuestas siguientes se verificaron contra esa versión.
+- Q: ¿"Cambiar estado" muestra un mensaje de éxito? → A: Sí, como en el prototipo: «El estado de la iniciativa "[nombre]" se ha actualizado correctamente.».
+- Q: En "Cambiar estado", ¿qué pasa con un comentario vacío o si no cambió nada? → A: Un comentario vacío o solo con espacios no se registra. Si no cambió ni el estado ni el comentario, Aceptar cierra el panel sin registrar nada.
+- Q: ¿Cómo se titula la sección del detalle del objetivo? → A: "Iniciativas (N)", como en el prototipo, con N igual a la cantidad de iniciativas del objetivo, incluidas las canceladas.
 
 ## Requirements *(mandatory)*
 
@@ -268,8 +274,8 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 **Cambiar estado**
 
 - **FR-028**: "Cambiar estado" y el lápiz de "Comentario ejecutivo" DEBEN abrir el mismo panel lateral con Estado y Comentario ejecutivo, precargados con los valores actuales.
-- **FR-029**: Antes de guardar, el sistema DEBE pedir confirmación con "Estás por cambiar el estado de la iniciativa "[nombre]" de [estado actual] a [estado nuevo]. ¿Querés continuar?", con Cancelar y Aceptar.
-- **FR-030**: Cada vez que se modifica el comentario ejecutivo, el sistema DEBE registrarlo como un comentario nuevo, con su fecha y su autor, conservando los anteriores como historial. El detalle y el panel DEBEN mostrar solo el último. Si el comentario no cambió, NO DEBE registrarse uno nuevo.
+- **FR-029**: Antes de guardar, el sistema DEBE pedir confirmación con "Estás por cambiar el estado de la iniciativa "[nombre]" de [estado actual] a [estado nuevo]. ¿Querés continuar?", con Cancelar y Aceptar. Al guardar, el panel se cierra, la persona sigue en el detalle y ve «El estado de la iniciativa "[nombre]" se ha actualizado correctamente.».
+- **FR-030**: Cada vez que se modifica el comentario ejecutivo, el sistema DEBE registrarlo como un comentario nuevo, con su fecha y su autor, conservando los anteriores como historial. El detalle y el panel DEBEN mostrar solo el último. Si el comentario no cambió, o queda vacío o solo con espacios, NO DEBE registrarse uno nuevo. Si no cambió ni el estado ni el comentario, NO DEBE registrarse nada.
 
 **Detalle de la iniciativa**
 
@@ -281,7 +287,7 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 
 **Detalle del objetivo**
 
-- **FR-035**: El detalle del objetivo DEBE sumar la sección Iniciativas, con un "+" en el título que abre el alta con ese objetivo elegido, y una grilla con ID, Iniciativa, Accountable, Peso (solo objetivos de la VP RRII), Estado (chip, anteúltima) y Ver, que abre el detalle de la iniciativa.
+- **FR-035**: El detalle del objetivo DEBE sumar la sección "Iniciativas (N)", con N igual a la cantidad de iniciativas del objetivo, incluidas las canceladas, con un "+" en el título que abre el alta con ese objetivo elegido, y una grilla con ID, Iniciativa, Accountable, Peso (solo objetivos de la VP RRII), Estado (chip, anteúltima) y Ver, que abre el detalle de la iniciativa.
 
 **Preparación para permisos**
 
@@ -322,7 +328,7 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 - "Accountable" es el nombre en pantalla de la columna Responsables de la lista Iniciativa, que no se renombra. "Áreas involucradas" equivale a "Subgerencias involucradas" de RF-07.
 - El peso en el objetivo y el peso en el departamento se calculan al mostrarlos y no se guardan; la columna Peso de la lista Iniciativa no se usa. El peso del objetivo en el departamento es el que registra la feature 005.
 - El comentario ejecutivo vive en la lista ComentarioIniciativa: cada modificación es un elemento nuevo, y la fecha y el autor que se muestran son los de creación del último elemento.
-- El prototipo de referencia es el v9, que está en la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` aunque su nombre diga v5.
+- El prototipo de referencia es el v10, que está en la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` aunque su nombre diga v5.
 - La VP RRII se reconoce como en la feature 003 (nombre "VP RRII").
 - El panel de edición muestra los mismos campos del alta más Estado, con el Objetivo en modo lectura; el Comentario ejecutivo se edita solo desde el panel "Cambiar estado" (confirmado por la usuaria).
 - El estado vacío de la sección Iniciativas del detalle del objetivo es "Este objetivo no tiene iniciativas cargadas." (confirmado por la usuaria).
