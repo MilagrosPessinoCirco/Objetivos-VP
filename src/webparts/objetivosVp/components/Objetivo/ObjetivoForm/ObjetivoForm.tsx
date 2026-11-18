@@ -33,6 +33,8 @@ interface INamed {
 
 const WEIGHT_MIN = 0;
 const WEIGHT_MAX = 100;
+const VP_WEIGHT_MIN = 1;
+const ANIOS_PLURIANUAL = [2, 3, 4, 5];
 const NAME_MAX_LENGTH = 255;
 const NAME_INPUT_ID = 'objetivo-nombre';
 
@@ -86,6 +88,10 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 	const [duracion, setDuracion] = React.useState<Duracion | ''>(objetivo?.Duracion ?? '');
 	const [peso, setPeso] = React.useState<string>(objetivo?.Peso === undefined ? '' : String(objetivo.Peso));
 	const [esDeVp, setEsDeVp] = React.useState<boolean>(objetivo?.EsDeVp === true);
+	const [cantidadAnios, setCantidadAnios] = React.useState<string>(
+		typeof objetivo?.CantidadAnios === 'number' && ANIOS_PLURIANUAL.indexOf(objetivo.CantidadAnios) >= 0 ? String(objetivo.CantidadAnios) : ''
+	);
+	const [pesoVp, setPesoVp] =React.useState<string>(objetivo?.PesoVP === undefined || objetivo?.PesoVP === null ? '' : String(objetivo.PesoVP));
 	const [fechaInicio, setFechaInicio] = React.useState<string>(toDateInput(objetivo?.FechaInicio));
 	const [fechaCompromiso, setFechaCompromiso] = React.useState<string>(toDateInput(objetivo?.FechaCompromiso));
 	const [submitted, setSubmitted] = React.useState<boolean>(false);
@@ -100,12 +106,18 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 	const gerenciaOptions = toOptions(gerencias.filter((gerencia) => String(gerencia.Departamento?.Id) === departamentoId));
 	const palancaOptions = toOptions(palancas.filter((palanca) => palanca.Activa === true || String(palanca.Id) === palancaId));
 	const duracionOptions = Object.values(Duracion).map((value) => ({ key: value, text: value }));
+	const aniosOptions = ANIOS_PLURIANUAL.map((anios) => ({ key: String(anios), text: String(anios) }));
+	const isPlurianual = duracion === Duracion.Plurianual;
 	const estadoOptions = Object.values(Estado).map((value) => ({ key: value, text: value }));
 
 	const pesoValue = parseWeight(peso);
 	const weightIssue = peso.trim() === ''
 		? strings.RequiredField
 		: pesoValue === undefined || pesoValue < WEIGHT_MIN || pesoValue > WEIGHT_MAX ? strings.ObjetivoWeightRange : undefined;
+	const pesoVpValue = parseWeight(pesoVp);
+	const vpWeightIssue = pesoVp.trim() === ''
+		? strings.RequiredField
+		: pesoVpValue === undefined || pesoVpValue < VP_WEIGHT_MIN || pesoVpValue > WEIGHT_MAX ? strings.ObjetivoVpWeightRange : undefined;
 	const commitmentIssue = fechaCompromiso === ''
 		? strings.RequiredField
 		: fechaInicio !== '' && fechaCompromiso < fechaInicio ? strings.ObjetivoDateOrder : undefined;
@@ -118,7 +130,9 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		descripcion: descripcion.trim() === '' ? strings.RequiredField : undefined,
 		palanca: isRrii && palancaId === '' ? strings.RequiredField : undefined,
 		duracion: isRrii && duracion === '' ? strings.RequiredField : undefined,
+		cantidadAnios: isRrii && isPlurianual && cantidadAnios === '' ? strings.RequiredField : undefined,
 		peso: isRrii ? weightIssue : undefined,
+		pesoVp: isRrii && esDeVp ? vpWeightIssue : undefined,
 		fechaInicio: isRrii && fechaInicio === '' ? strings.RequiredField : undefined,
 		fechaCompromiso: isRrii ? commitmentIssue : undefined
 	};
@@ -132,14 +146,18 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		isEdit ? objetivo?.Nombre : strings.ObjetivoFormSubtitle
 	);
 
-	const stepWeight = (current: string, delta: number): string => {
-		const next = String(Math.min(WEIGHT_MAX, Math.max(WEIGHT_MIN, (parseWeight(current) ?? 0) + delta)));
-		setPeso(next);
+	const stepWeight = (current: string, delta: number, min: number, setValue: (value: string) => void): string => {
+		const next = String(Math.min(WEIGHT_MAX, Math.max(min, (parseWeight(current) ?? 0) + delta)));
+		setValue(next);
 		return next;
 	};
 	const weightSteppers = {
-		onIncrement: (current: string): string => stepWeight(current, 1),
-		onDecrement: (current: string): string => stepWeight(current, -1)
+		onIncrement: (current: string): string => stepWeight(current, 1, WEIGHT_MIN, setPeso),
+		onDecrement: (current: string): string => stepWeight(current, -1, WEIGHT_MIN, setPeso)
+	};
+	const vpWeightSteppers = {
+		onIncrement: (current: string): string => stepWeight(current, 1, VP_WEIGHT_MIN, setPesoVp),
+		onDecrement: (current: string): string => stepWeight(current, -1, VP_WEIGHT_MIN, setPesoVp)
 	};
 
 	const onDepartamentoChange = (value: string | string[]): void => {
@@ -160,7 +178,9 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		toSave.Departamento = findLookup(departamentos, departamentoId);
 		toSave.Gerencia = findLookup(gerencias, gerenciaId);
 		toSave.Estado = estado;
-		toSave.EsDeVp = esDeVp;
+		toSave.EsDeVp = isRrii && esDeVp;
+		toSave.PesoVP = isRrii && esDeVp ? pesoVpValue : null;
+		toSave.CantidadAnios = isRrii && isPlurianual ? Number(cantidadAnios) : null;
 		if (isRrii) {
 			toSave.Palanca = findLookup(palancas, palancaId);
 			toSave.Duracion = duracion === '' ? undefined : duracion;
@@ -200,7 +220,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							onChange={(value) => setVpId(toKey(value))}
 						/>
 						<Dropdown
-							label={strings.ObjetivoFormDepartment}
+							label={isRrii || vpId === '' ? strings.ObjetivoFormDepartment : strings.ObjetivoFormDepartmentCollab}
 							required
 							placeholder={strings.ObjetivoFormSelect}
 							options={departamentoOptions}
@@ -218,13 +238,6 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 							className={invalid(issues.gerencia)}
 								errorMessage={shown(issues.gerencia)}
 							onChange={(value) => setGerenciaId(toKey(value))}
-						/>
-						<Switch
-							label={strings.ObjetivoFormVpObjective}
-							labelPosition="top"
-							textOff
-							active={esDeVp}
-							onChange={setEsDeVp}
 						/>
 					</div>
 					<div className={styles.nameField} style={{ gap: spacing.xs }}>
@@ -287,6 +300,18 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 								errorMessage={shown(issues.duracion)}
 							onChange={(value) => setDuracion(toEnumValue(Object.values(Duracion), toKey(value)) ?? '')}
 						/>
+						{isPlurianual && (
+							<Dropdown
+								label={strings.ObjetivoFormYears}
+								required
+								placeholder={strings.ObjetivoFormSelect}
+								options={aniosOptions}
+								value={cantidadAnios}
+								className={invalid(issues.cantidadAnios)}
+								errorMessage={shown(issues.cantidadAnios)}
+								onChange={(value) => setCantidadAnios(toKey(value))}
+							/>
+						)}
 						<SpinButton
 							className={invalid(issues.peso, styles.weight)}
 							label={strings.ObjetivoFormWeight}
@@ -303,6 +328,31 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 								}
 							}}
 						/>
+						<Switch
+							label={strings.ObjetivoFormVpObjective}
+							labelPosition="top"
+							textOff
+							active={esDeVp}
+							onChange={setEsDeVp}
+						/>
+						{esDeVp && (
+							<SpinButton
+								className={invalid(issues.pesoVp, styles.weight)}
+								label={strings.ObjetivoFormVpWeight}
+								placeholder={strings.ObjetivoFormVpWeightPlaceholder}
+								required
+								min={VP_WEIGHT_MIN}
+								max={WEIGHT_MAX}
+								value={pesoVp}
+								errorMessage={shown(issues.pesoVp)}
+								{...vpWeightSteppers}
+								onChange={(event) => {
+									if (event.target instanceof HTMLInputElement) {
+										setPesoVp(event.target.value);
+									}
+								}}
+							/>
+						)}
 					</div>
 					<div className={styles.gridPair} style={{ columnGap: spacing.lg, rowGap: spacing.md }}>
 						<div className={invalid(issues.fechaInicio, styles.field)} style={{ gap: spacing.xs }}>

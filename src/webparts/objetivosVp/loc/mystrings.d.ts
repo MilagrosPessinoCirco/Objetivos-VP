@@ -74,6 +74,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoColumnDepartment: string;
 	ObjetivoColumnManagement: string;
 	ObjetivoColumnWeight: string;
+	ObjetivoColumnVpWeight: string;
 	ObjetivoColumnStatus: string;
 	ObjetivoColumnProgress: string;
 	ObjetivoColumnView: string;
@@ -95,7 +96,10 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoFieldManagement: string;
 	ObjetivoFieldLever: string;
 	ObjetivoFieldVpObjective: string;
+	ObjetivoVpObjectiveYes: string;
+	ObjetivoNoValue: string;
 	ObjetivoFieldDuration: string;
+	ObjetivoDurationYears: string;
 	ObjetivoFieldWeight: string;
 	ObjetivoFieldStartDate: string;
 	ObjetivoFieldCommitmentDate: string;
@@ -105,6 +109,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoFormPlanningSection: string;
 	ObjetivoFormVp: string;
 	ObjetivoFormDepartment: string;
+	ObjetivoFormDepartmentCollab: string;
 	ObjetivoFormManagement: string;
 	ObjetivoFormName: string;
 	ObjetivoFormNamePlaceholder: string;
@@ -115,6 +120,9 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoFormWeightPlaceholder: string;
 	ObjetivoFormWeight: string;
 	ObjetivoFormVpObjective: string;
+	ObjetivoFormVpWeight: string;
+	ObjetivoFormVpWeightPlaceholder: string;
+	ObjetivoFormYears: string;
 	ObjetivoFormSubtitle: string;
 	ObjetivoFormStartDate: string;
 	ObjetivoFormCommitmentDate: string;
@@ -124,6 +132,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoGuideTitle: string;
 	ObjetivoGuideText: string;
 	ObjetivoWeightRange: string;
+	ObjetivoVpWeightRange: string;
 	ObjetivoDateOrder: string;
 	ObjetivoSaveError: string;
 	ObjetivoFormLoadError: string;

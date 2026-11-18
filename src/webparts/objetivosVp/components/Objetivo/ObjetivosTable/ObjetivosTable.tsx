@@ -29,6 +29,7 @@ type ObjetivoRow = {
 	departamento: string;
 	gerencia: string;
 	peso: string;
+	pesoVp: string;
 	avance: string;
 	estado: string;
 	objetivo: Objetivo;
@@ -56,6 +57,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		departamento: objetivo.Departamento?.Title ?? '',
 		gerencia: objetivo.Gerencia?.Title ?? '',
 		peso: objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
+		pesoVp: objetivo.PesoVP === undefined || objetivo.PesoVP === null ? strings.ObjetivoNoValue : `${objetivo.PesoVP}%`,
 		avance: `${DEFAULT_PROGRESS}%`,
 		estado: objetivo.Estado ?? '',
 		objetivo
@@ -91,6 +93,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 	const departmentColumn: ITableColumn<ObjetivoRow> = { key: 'departamento', header: strings.ObjetivoColumnDepartment, width: fixedWidths ? DEPARTMENT_WIDTH : undefined };
 	const managementColumn: ITableColumn<ObjetivoRow> = { key: 'gerencia', header: strings.ObjetivoColumnManagement, width: fixedWidths ? MANAGEMENT_WIDTH : undefined };
 	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined };
+	const vpWeightColumn: ITableColumn<ObjetivoRow> = { key: 'pesoVp', header: strings.ObjetivoColumnVpWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined };
 	const progressColumn: ITableColumn<ObjetivoRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (value) => <span style={PROGRESS_STYLE}>{String(value)}</span> };
 	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: fixedWidths ? STATUS_WIDTH : undefined, render: (_value, row) => renderEstado(row) };
 	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: strings.ObjetivoColumnView, width: fixedWidths ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
@@ -98,7 +101,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 	const columns: ITableColumn<ObjetivoRow>[] = variant === 'palanca'
 		? [idColumn, nameColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
 		: variant === 'delVp'
-			? [idColumn, nameColumn, leverColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
+			? [idColumn, nameColumn, leverColumn, departmentColumn, managementColumn, weightColumn, vpWeightColumn, progressColumn, statusColumn, actionsColumn]
 			: [idColumn, nameColumn, vpColumn, departmentColumn, managementColumn, statusColumn, actionsColumn];
 
 	return <Table<ObjetivoRow> columns={columns} rows={rows} getRowKey={(row) => row.id} emptyText={emptyText} />;

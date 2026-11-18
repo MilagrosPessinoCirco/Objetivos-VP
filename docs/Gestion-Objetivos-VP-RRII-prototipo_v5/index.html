@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Gestión de Objetivos VP RRII – Prototipo SharePoint · v9</title>
+<title>Gestión de Objetivos VP RRII – Prototipo SharePoint · v10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./assets/dc-runtime.js"></script>
 </head>
@@ -726,7 +726,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <p class="lCount">{{bi.countTxt}}</p>
 <div class="uTabs" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="2"><button class="uTab {{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}} <i>{{t.count}}</i></button></sc-for></div>
 <div class="lTable"><div class="lt">
-<div class="lr lh c-ib"><span>ID</span><span>Iniciativa</span><span>{{bi.objHdr}}</span><span>Líderes</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-ib"><span>ID</span><span>Iniciativa</span><span>{{bi.objHdr}}</span><span>Accountable</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{rows}}" as="it" hint-placeholder-count="6">
 <div class="lr c-ib"><span>{{it.id}}</span><span>{{it.nombre}}</span><span>{{it.objTxt}}</span><span>{{it.resp}}</span><span><sc-if value="{{it.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{it.col}}">{{it.avT}}</b></sc-if><sc-if value="{{it.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{it.estCls}}">{{it.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver detalle" aria-label="Abrir {{it.id}}" onClick="{{it.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
@@ -784,13 +784,13 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Iniciativas ({{od.nIni}})</b><span class="secR"><span class="bandL"><span class="bandNote">{{od.iniNote}}</span><sc-if value="{{od.canIni}}" hint-placeholder-val="{{ false }}"><button class="bandAdd" aria-label="Agregar iniciativa" data-tip="Agregar iniciativa" onClick="{{od.newIni}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></sc-if></span><span class="secCtl"><sc-if value="{{sec.o_inis.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.o_inis.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.o_inis.tgL}}" aria-expanded="{{sec.o_inis.open}}" data-tip="{{sec.o_inis.tgL}}" onClick="{{sec.o_inis.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="lTable"><div class="lt fit">
 <sc-if value="{{od.showW}}" hint-placeholder-val="{{ false }}">
-<div class="lr lh c-oiP"><span>ID</span><span>Iniciativa</span><span>Líderes</span><span>Avance</span><span>Peso</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-oiP"><span>ID</span><span>Iniciativa</span><span>Accountable</span><span>Avance</span><span>Peso</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{od.inis}}" as="it" hint-placeholder-count="2">
 <div class="lr c-oiP"><span>{{it.id}}</span><span>{{it.nombre}}</span><span>{{it.resp}}</span><span><b class="pctC {{it.col}}">{{it.avT}}</b></span><span><b>{{it.peso}}</b></span><span><span class="{{it.estCls}}">{{it.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver detalle" aria-label="Abrir {{it.id}}" onClick="{{it.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
 </sc-if>
 <sc-if value="{{od.noW}}" hint-placeholder-val="{{ true }}">
-<div class="lr lh c-oi"><span>ID</span><span>Iniciativa</span><span>Líderes</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
+<div class="lr lh c-oi"><span>ID</span><span>Iniciativa</span><span>Accountable</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{od.inis}}" as="it" hint-placeholder-count="2">
 <div class="lr c-oi"><span>{{it.id}}</span><span>{{it.nombre}}</span><span>{{it.resp}}</span><span><sc-if value="{{it.hasAv}}" hint-placeholder-val="{{ true }}"><b class="pctC {{it.col}}">{{it.avT}}</b></sc-if><sc-if value="{{it.noAv}}" hint-placeholder-val="{{ false }}"><span class="muted">No aplica</span></sc-if></span><span><span class="{{it.estCls}}">{{it.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver detalle" aria-label="Abrir {{it.id}}" onClick="{{it.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div>
 </sc-for>
@@ -821,7 +821,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="fBand"><b>Información de la iniciativa</b><span class="secR"><span class="secCtl"><sc-if value="{{sec.i_info.ed}}" hint-placeholder-val="{{ true }}"><button class="secEd" aria-label="Editar sección" data-tip="Editar" onClick="{{sec.i_info.edit}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path><path d="M4 22h16"></path></svg></button></sc-if><button class="secTg" aria-label="{{sec.i_info.tgL}}" aria-expanded="{{sec.i_info.open}}" data-tip="{{sec.i_info.tgL}}" onClick="{{sec.i_info.tg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5"></path></svg></button></span></span></div>
 <div class="fGrid g4">
 <div class="ro"><span>Objetivo</span><b>{{idt.objTxt}}</b></div>
-<div class="ro"><span>Líderes</span><b>{{idt.resp}}</b></div>
+<div class="ro"><span>Accountable</span><b>{{idt.resp}}</b></div>
 <div class="ro"><span>Áreas involucradas</span><b>{{idt.areas}}</b></div>
 <div class="ro"><span>Estado</span><b>{{idt.est}}</b></div>
 <div class="ro"><span>Fecha de inicio</span><b>{{idt.fini}}</b></div>
@@ -953,8 +953,6 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.vp}}"><label for="oVp">VP <em>*</em></label><select id="oVp" value="{{fv.vp}}" onChange="{{fh.vp}}"><option value="">Seleccionar</option><sc-for list="{{opt.vp}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.vp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.vp}}</span></sc-if></div>
 <div class="{{fc.dir}}"><label for="oDir">{{fm.dirLbl}} <em>*</em></label><select id="oDir" value="{{fv.dir}}" onChange="{{fh.dir}}" disabled="{{fm.dirDis}}"><option value="">{{fm.dirPh}}</option><sc-for list="{{opt.dir}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dir}}</span></sc-if></div>
 <div class="{{fc.ger}}"><label for="oGer">Gerencia <em>*</em></label><select id="oGer" value="{{fv.ger}}" onChange="{{fh.ger}}" disabled="{{fm.gerDis}}"><option value="">{{fm.gerPh}}</option><sc-for list="{{opt.gerO}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.ger}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ger}}</span></sc-if></div>
-<div class="tglF"><span class="tglL" id="oEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="oEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
-<sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="oPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="oPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g1">
 <div class="{{fc.nombre}}"><div class="lblRow"><label for="oNom">Nombre del objetivo <em>*</em></label><button type="button" class="helpIc" aria-label="Ver guía de redacción" aria-expanded="{{fm.showGuide}}" onClick="{{fm.toggleGuide}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4v.3M12 17h.01"></path></svg></button></div>
@@ -962,9 +960,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <input id="oNom" maxlength="255" placeholder="Ej. Duplicar la cantidad de clientes YPF" value="{{fv.nombre}}" onChange="{{fh.nombre}}"><sc-if value="{{fe.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.nombre}}</span></sc-if></div>
 <div class="{{fc.desc}}"><label for="oDesc">Descripción <em>*</em></label><textarea id="oDesc" placeholder="Qué se busca lograr con este objetivo" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
-<sc-if value="{{fm.isEdit}}" hint-placeholder-val="{{ false }}">
-<div class="fGrid g3"><div class="{{fc.estado}}"><label for="oEst">Estado <em>*</em></label><select id="oEst" value="{{fv.estado}}" onChange="{{fh.estado}}"><sc-for list="{{opt.estObj}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></div>
-</sc-if>
+<div class="fGrid g3"><div class="{{fc.estado}}"><label for="oEst">Estado <em>*</em></label><select id="oEst" value="{{fv.estado}}" onChange="{{fh.estado}}"><sc-for list="{{opt.estObj}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></div>
 </div>
 <sc-if value="{{fm.isRrii}}" hint-placeholder-val="{{ true }}">
 <div class="fSec">
@@ -974,6 +970,8 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.dur}}"><label for="oDur">Duración <em>*</em></label><select id="oDur" value="{{fv.dur}}" onChange="{{fh.dur}}"><option value="">Seleccionar</option><option value="Anual">Anual</option><option value="Plurianual">Plurianual</option><option value="Permanente">Permanente</option></select><sc-if value="{{fe.dur}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dur}}</span></sc-if></div>
 <sc-if value="{{fm.isPluri}}" hint-placeholder-val="{{ false }}"><div class="{{fc.anios}}"><label for="oAn">Cantidad de años <em>*</em></label><select id="oAn" value="{{fv.anios}}" onChange="{{fh.anios}}"><option value="">Seleccionar</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><sc-if value="{{fe.anios}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.anios}}</span></sc-if></div></sc-if>
 <div class="{{fc.peso}}"><label for="oPeso">Peso del objetivo en el Departamento (%)</label><input id="oPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Definido de antemano</span></div>
+<div class="tglF"><span class="tglL" id="oEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="oEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
+<sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="oPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="oPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g4">
 <div class="{{fc.fini}}"><label for="oIni">Fecha de inicio <em>*</em></label><input id="oIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -992,7 +990,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.desc}}"><label for="iDesc">Descripción / impacto esperado <em>*</em></label><textarea id="iDesc" placeholder="Qué se va a hacer y qué se espera lograr" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
 <div class="fGrid g3 top">
-<div class="{{fc.resp}}"><label for="iResp">Líderes <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.resp}}"><label for="iResp">Accountable <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
 <div class="ff"><label for="iAreas">Áreas involucradas</label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="0"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
 <div class="dates2">
 <div class="{{fc.fini}}"><label for="iIni">Fecha de inicio <em>*</em></label><input id="iIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -1238,8 +1236,6 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.vp}}"><label for="soVp">VP <em>*</em></label><select id="soVp" value="{{fv.vp}}" onChange="{{fh.vp}}"><option value="">Seleccionar</option><sc-for list="{{opt.vp}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.vp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.vp}}</span></sc-if></div>
 <div class="{{fc.dir}}"><label for="soDir">{{fm.dirLbl}} <em>*</em></label><select id="soDir" value="{{fv.dir}}" onChange="{{fh.dir}}" disabled="{{fm.dirDis}}"><option value="">{{fm.dirPh}}</option><sc-for list="{{opt.dir}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.dir}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dir}}</span></sc-if></div>
 <div class="{{fc.ger}}"><label for="soGer">Gerencia <em>*</em></label><select id="soGer" value="{{fv.ger}}" onChange="{{fh.ger}}" disabled="{{fm.gerDis}}"><option value="">{{fm.gerPh}}</option><sc-for list="{{opt.gerO}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.ger}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.ger}}</span></sc-if></div>
-<div class="tglF"><span class="tglL" id="soEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="soEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
-<sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="soPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="soPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g1">
 <div class="{{fc.nombre}}"><div class="lblRow"><label for="soNom">Nombre del objetivo <em>*</em></label><button type="button" class="helpIc" aria-label="Ver guía de redacción" aria-expanded="{{fm.showGuide}}" onClick="{{fm.toggleGuide}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4v.3M12 17h.01"></path></svg></button></div>
@@ -1247,9 +1243,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <input id="soNom" maxlength="255" placeholder="Ej. Duplicar la cantidad de clientes YPF" value="{{fv.nombre}}" onChange="{{fh.nombre}}"><sc-if value="{{fe.nombre}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.nombre}}</span></sc-if></div>
 <div class="{{fc.desc}}"><label for="soDesc">Descripción <em>*</em></label><textarea id="soDesc" placeholder="Qué se busca lograr con este objetivo" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
-<sc-if value="{{fm.isEdit}}" hint-placeholder-val="{{ false }}">
-<div class="fGrid g1"><div class="{{fc.estado}}"><label for="soEst">Estado <em>*</em></label><select id="soEst" value="{{fv.estado}}" onChange="{{fh.estado}}"><sc-for list="{{opt.estObj}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></div>
-</sc-if>
+<div class="fGrid g1"><div class="{{fc.estado}}"><label for="soEst">Estado <em>*</em></label><select id="soEst" value="{{fv.estado}}" onChange="{{fh.estado}}"><sc-for list="{{opt.estObj}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div></div>
 </div>
 <sc-if value="{{fm.isRrii}}" hint-placeholder-val="{{ true }}">
 <div class="fSec">
@@ -1259,6 +1253,8 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.dur}}"><label for="soDur">Duración <em>*</em></label><select id="soDur" value="{{fv.dur}}" onChange="{{fh.dur}}"><option value="">Seleccionar</option><option value="Anual">Anual</option><option value="Plurianual">Plurianual</option><option value="Permanente">Permanente</option></select><sc-if value="{{fe.dur}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dur}}</span></sc-if></div>
 <sc-if value="{{fm.isPluri}}" hint-placeholder-val="{{ false }}"><div class="{{fc.anios}}"><label for="soAn">Cantidad de años <em>*</em></label><select id="soAn" value="{{fv.anios}}" onChange="{{fh.anios}}"><option value="">Seleccionar</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><sc-if value="{{fe.anios}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.anios}}</span></sc-if></div></sc-if>
 <div class="{{fc.peso}}"><label for="soPeso">Peso del objetivo en el Departamento (%)</label><input id="soPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Definido de antemano</span></div>
+<div class="tglF"><span class="tglL" id="soEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="soEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
+<sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="soPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="soPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g2">
 <div class="{{fc.fini}}"><label for="soIni">Fecha de inicio <em>*</em></label><input id="soIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -1285,7 +1281,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.desc}}"><label for="iDesc">Descripción / impacto esperado <em>*</em></label><textarea id="iDesc" placeholder="Qué se va a hacer y qué se espera lograr" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
 <div class="fGrid g3 top">
-<div class="{{fc.resp}}"><label for="iResp">Líderes <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.resp}}"><label for="iResp">Accountable <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
 <div class="ff"><label for="iAreas">Áreas involucradas</label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="0"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
 <div class="dates2">
 <div class="{{fc.fini}}"><label for="iIni">Fecha de inicio <em>*</em></label><input id="iIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -1487,9 +1483,9 @@ var ROL_DESC = {
   CargadorObjetivo: 'Lo del Usuario, más: crea objetivos y edita iniciativas, resultados clave y tareas.',
   Administrador: 'Todo lo anterior, más: palancas, edición de objetivos, carga de los pesos de las iniciativas, maestros, parámetros, asignación de roles y eliminación de tareas.'
 };
-var EST_OBJ = ['No iniciada', 'En curso', 'Finalizada'];
+var EST_OBJ = ['No iniciado', 'En curso', 'Finalizado cumplido', 'Finalizado incumplido'], EST_PAL = ['No iniciada', 'En curso', 'Finalizada'];
 var EST_INI = ['No iniciada', 'En curso', 'Frenada', 'Finalizada', 'Cancelada'];
-var ESTCLS = { 'No iniciada': 'chip c-none', 'En curso': 'chip c-info', 'Frenada': 'chip c-bad', 'Finalizada': 'chip c-ok', 'Cancelada': 'chip c-ret' };
+var ESTCLS = { 'No iniciada': 'chip c-none', 'En curso': 'chip c-info', 'Frenada': 'chip c-bad', 'Finalizada': 'chip c-ok', 'Cancelada': 'chip c-ret', 'No iniciado': 'chip c-none', 'Finalizado cumplido': 'chip c-ok', 'Finalizado incumplido': 'chip c-bad' };
 var RCLS = { Activo: 'chip c-warn', Escalado: 'chip c-bad', Resuelto: 'chip c-ok' };
 var KRCLS = { 'No cumple': 'chip c-bad', 'Mínimo': 'chip c-warn', 'Meta': 'chip c-yel', 'Máximo': 'chip c-ok', 'Sin dato': 'chip c-none' };
 var EST_ORDER = ['En curso', 'Frenada', 'No iniciada', 'Finalizada', 'Cancelada'];
@@ -1676,7 +1672,7 @@ class Component extends DCLogic {
     var me = this.me(), U = this.meU(), C = calc(this.state.D, this.state.params), f = { tipo: tipo, mode: rec ? 'edit' : 'new', id: rec ? rec.id : null, tried: false, krs: [] }, v;
     if (tipo === 'obj') {
       v = rec ? { vp: rec.vp, dir: rec.dir, ger: rec.ger || '', area: rec.oArea || '', esVp: rec.esVp ? 'Sí' : 'No', pesoVp: rec.pesoVp != null ? String(rec.pesoVp) : '', resp: rec.resp, nombre: rec.nombre, desc: rec.desc, pal: rec.pal, dur: rec.dur, anios: rec.anios || '', peso: rec.peso != null ? String(rec.peso) : '', fini: rec.fini, fcomp: rec.fcomp, estado: rec.estado }
-        : { vp: ctx && ctx.pal ? 'VP RRII' : '', dir: '', ger: '', area: '', esVp: 'No', pesoVp: '', resp: '', nombre: '', desc: '', pal: (ctx && ctx.pal) || '', dur: '', anios: '', peso: '', fini: (this.state.anio || '2026') + '-01-01', fcomp: (this.state.anio || '2026') + '-12-31', estado: 'No iniciada' };
+        : { vp: ctx && ctx.pal ? 'VP RRII' : '', dir: '', ger: '', area: '', esVp: 'No', pesoVp: '', resp: '', nombre: '', desc: '', pal: (ctx && ctx.pal) || '', dur: '', anios: '', peso: '', fini: (this.state.anio || '2026') + '-01-01', fcomp: (this.state.anio || '2026') + '-12-31', estado: 'No iniciado' };
     }
     if (tipo === 'ini') {
       var oid = rec ? rec.obj : (ctx && ctx.obj) || '';
@@ -1701,7 +1697,7 @@ class Component extends DCLogic {
     var order = function () { if (v.fini && v.fcomp && v.fcomp < v.fini) m.fcomp = 'La fecha de compromiso no puede ser anterior a la de inicio.'; };
     if (f.tipo === 'obj') {
       ['vp', 'dir', 'ger', 'nombre', 'desc'].forEach(req);
-      if (v.esVp === 'Sí') { req('pesoVp'); if (isNum(v.pesoVp) && (Number(v.pesoVp) <= 0 || Number(v.pesoVp) > 100)) m.pesoVp = 'Ingresá un valor entre 1 y 100.'; }
+      if (v.vp === 'VP RRII' && v.esVp === 'Sí') { req('pesoVp'); if (isNum(v.pesoVp) && (Number(v.pesoVp) <= 0 || Number(v.pesoVp) > 100)) m.pesoVp = 'Ingresá un valor entre 1 y 100.'; }
       if (v.vp === 'VP RRII') { ['pal', 'dur', 'fini', 'fcomp'].forEach(req); if (v.dur === 'Plurianual') req('anios'); order(); }
     }
     if (f.tipo === 'ini') {
@@ -1781,7 +1777,7 @@ class Component extends DCLogic {
     var power = U.rol === 'Administrador' || U.rol === 'CargadorObjetivo';
     if (f.tipo === 'obj') {
       var rr = v.vp === 'VP RRII';
-      var data = { vp: v.vp, dir: v.dir, ger: v.ger || '', oArea: v.area || '', esVp: v.esVp === 'Sí', pesoVp: v.esVp === 'Sí' && isNum(v.pesoVp) ? Number(v.pesoVp) : null, resp: v.resp || '', nombre: v.nombre, desc: v.desc, pal: rr ? v.pal : '', dur: rr ? v.dur : '', anios: rr && v.dur === 'Plurianual' ? v.anios : '', peso: rr && isNum(v.peso) ? Number(v.peso) : null, fini: rr ? v.fini : '', fcomp: rr ? v.fcomp : '', estado: v.estado || 'No iniciada' };
+      var data = { vp: v.vp, dir: v.dir, ger: v.ger || '', oArea: v.area || '', esVp: rr && v.esVp === 'Sí', pesoVp: rr && v.esVp === 'Sí' && isNum(v.pesoVp) ? Number(v.pesoVp) : null, resp: v.resp || '', nombre: v.nombre, desc: v.desc, pal: rr ? v.pal : '', dur: rr ? v.dur : '', anios: rr && v.dur === 'Plurianual' ? v.anios : '', peso: rr && isNum(v.peso) ? Number(v.peso) : null, fini: rr ? v.fini : '', fcomp: rr ? v.fcomp : '', estado: v.estado || 'No iniciado' };
       if (f.mode === 'new') { var r = this.newId('OBJ', seq); id = r.id; seq = r.seq; nd.objs = D.objs.concat([Object.assign({ id: id }, data)]); msg = 'El objetivo "' + v.nombre + '" se ha cargado correctamente.'; }
       else { nd.objs = D.objs.map(function (o) { return o.id === id ? Object.assign({}, o, data) : o; }); msg = 'El objetivo "' + v.nombre + '" se ha actualizado correctamente.'; }
       scr = 'objetivo';
@@ -2163,7 +2159,7 @@ class Component extends DCLogic {
         if (pm && !os.length) os = D.objs.filter(function (o) { return o.pal === p.id && C.rrii(o) && C.inYear(o, Y); });
         if (!os.length && anyFl && !pm) return;
         var av = os.length ? os.reduce(function (a2, o) { return a2 + C.avObj(o, 'r'); }, 0) / os.length : null;
-        var est = !os.length ? 'No iniciada' : os.every(function (o) { return o.estado === 'Finalizada'; }) ? 'Finalizada' : os.some(function (o) { return o.estado !== 'No iniciada'; }) ? 'En curso' : 'No iniciada';
+        var est = !os.length ? 'No iniciada' : os.every(function (o) { return /^Finalizado/.test(o.estado); }) ? 'Finalizada' : os.some(function (o) { return o.estado !== 'No iniciado'; }) ? 'En curso' : 'No iniciada';
         var isExp = exp[p.id] !== undefined ? exp[p.id] : autoExp;
         gal.push({ id: p.id, nombre: p.nombre, desc: p.desc, n: os.length, hasAv: true, noAv: false, avT: pct(av), col: C.col(av), hasEst: true, est: est, estCls: ESTCLS[est], canEdit: isAdm, hasDet: true,
           edit: function () { self.openModal('palanca', { id: p.id }, { nombre: p.nombre, desc: p.desc, act: p.act ? 'Sí' : 'No' }); }, open: goF('palanca', p.id),
@@ -2183,7 +2179,7 @@ class Component extends DCLogic {
       var curV = s.tab === 'vp' || s.tab === 'otras' ? s.tab : 'todas';
       var rowsV = (curV === 'otras' ? othO : mineO).filter(passO);
       vpo = { isTabs: true, showGal: curV === 'todas', showMine: curV === 'vp', showOth: curV === 'otras', empty: curV === 'vp' && !rowsV.length, emptyOth: curV === 'otras' && !rowsV.length,
-        tabs: [{ k: 'todas', l: 'Todas las palancas', n: D.pals.filter(function (p) { return p.act; }).length }, { k: 'vp', l: 'Objetivos del VP', n: mineO.length }, { k: 'otras', l: 'Objetivos de otras VP', n: othO.length }].map(function (d) { return { label: d.l, count: d.n, cls: curV === d.k ? 'on' : '', sel: curV === d.k ? 'true' : 'false', pick: function () { self.setState({ tab: d.k }); } }; }),
+        tabs: [{ k: 'todas', l: 'Todas las palancas', n: D.pals.filter(function (p) { return p.act; }).length }, { k: 'vp', l: 'Objetivos de la VP RRII', n: mineO.length }, { k: 'otras', l: 'Objetivos de otras VP', n: othO.length }].map(function (d) { return { label: d.l, count: d.n, cls: curV === d.k ? 'on' : '', sel: curV === d.k ? 'true' : 'false', pick: function () { self.setState({ tab: d.k }); } }; }),
         rows: rowsV.map(function (o) { var a = C.avObj(o, 'r'), rr2 = C.rrii(o); return { id: o.id, nombre: o.nombre, vp: o.vp, pal: rr2 ? C.palName(o.pal) : 'Otra VP', dir: o.dir, ger: o.ger || '—', peso: o.pesoVp != null ? o.pesoVp + ' %' : '—', avT: rr2 ? pct(a) : '—', col: rr2 ? C.col(a) : 'gris', est: o.estado, estCls: ESTCLS[o.estado], open: goF('objetivo', o.id) }; }) };
     }
     var flCount = Object.keys(curFl).filter(function (k) { return curFl[k]; }).length;
@@ -2259,7 +2255,7 @@ class Component extends DCLogic {
       if (pp) {
         var pos = D.objs.filter(function (o) { return o.pal === pp.id && C.rrii(o) && C.inYear(o, anio); });
         var pav = pos.length ? pos.reduce(function (a2, o) { return a2 + C.avObj(o, 'r'); }, 0) / pos.length : null, ppv = pos.length ? pos.reduce(function (a2, o) { return a2 + C.avObj(o, 'p'); }, 0) / pos.length : null;
-        var pest = !pos.length ? 'No iniciada' : pos.every(function (o) { return o.estado === 'Finalizada'; }) ? 'Finalizada' : pos.some(function (o) { return o.estado !== 'No iniciada'; }) ? 'En curso' : 'No iniciada';
+        var pest = !pos.length ? 'No iniciada' : pos.every(function (o) { return /^Finalizado/.test(o.estado); }) ? 'Finalizada' : pos.some(function (o) { return o.estado !== 'No iniciado'; }) ? 'En curso' : 'No iniciada';
         pd = { id: pp.id, nombre: pp.nombre, desc: pp.desc, act: pp.act ? 'Sí' : 'No', actTxt: pp.act ? 'Activa' : 'Inactiva', actCls: pp.act ? 'chip c-ok' : 'chip c-none', n: pos.length, noObjs: !pos.length,
           objs: pos.map(function (o) { return Object.assign(objRow(o), { hasAv: true, noAv: false }); }), avT: pct(pav), col: C.col(pav), pT: pct(ppv), pcol: C.col(ppv), est: pest,
           newObj: function () { self.openForm('obj', { pal: pp.id }); }, edit: function () { self.openModal('palanca', { id: pp.id }, { nombre: pp.nombre, desc: pp.desc, act: pp.act ? 'Sí' : 'No' }); } };
@@ -2302,7 +2298,7 @@ class Component extends DCLogic {
         dirDis: f.tipo === 'obj' && !fv.vp, dirPh: f.tipo === 'obj' && !fv.vp ? 'Primero elegí la VP' : 'Seleccionar',
         gerDis: !fv.dir, gerPh: fv.dir ? 'Seleccionar' : 'Primero elegí el departamento',
         areaDis: !fv.ger, areaPh: fv.ger ? 'Seleccionar' : 'Primero elegí la gerencia',
-        esVpSi: fv.esVp === 'Sí', esVpOn: fv.esVp === 'Sí' ? 'true' : 'false', esVpCls: fv.esVp === 'Sí' ? 'on' : '',
+        esVpSi: fv.esVp === 'Sí' && fv.vp === 'VP RRII', esVpOn: fv.esVp === 'Sí' ? 'true' : 'false', esVpCls: fv.esVp === 'Sí' ? 'on' : '',
         toggleEsVp: function () { var f2 = self.state.f, nv2 = Object.assign({}, f2.vals); nv2.esVp = nv2.esVp === 'Sí' ? 'No' : 'Sí'; self.setState({ f: Object.assign({}, f2, { vals: nv2 }) }); },
         isRrii: fv.vp === 'VP RRII', isPluri: fv.dur === 'Plurianual', pesoOtros: others,
         showGuide: s.showGuide, toggleGuide: function () { self.setState({ showGuide: !self.state.showGuide }); },
@@ -2339,7 +2335,7 @@ class Component extends DCLogic {
       pal: D.pals.filter(function (p) { return p.act || (s.f && s.f.vals && s.f.vals.pal === p.id); }).map(function (p) { return { v: p.id, l: p.id + ' · ' + p.nombre }; }),
       estObj: EST_OBJ.map(function (x) { return { v: x, l: x }; }),
       estIni: EST_INI.map(function (x) { return { v: x, l: x }; }),
-      estFl: (s.screen === 'palancas' ? EST_OBJ : EST_INI).map(function (x) { return { v: x, l: x }; }),
+      estFl: (s.screen === 'palancas' ? EST_PAL : EST_INI).map(function (x) { return { v: x, l: x }; }),
       palFl: D.pals.filter(function (p) { return p.act; }).map(function (p) { return { v: p.id, l: p.id + ' · ' + p.nombre }; }).concat([{ v: 'otras', l: 'Otras VP' }]),
       objs: objsOrd.map(function (o) { return { v: o.id, l: o.id + ' · ' + o.nombre + ' (' + o.dir + (C.rrii(o) ? '' : ' · ' + o.vp) + ')' }; }),
       objsAll: D.objs.map(function (o) { return { v: o.id, l: o.id + ' · ' + o.nombre }; }),
