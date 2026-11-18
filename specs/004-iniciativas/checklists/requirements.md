@@ -32,6 +32,8 @@
 ## Notes
 
 - Clarificaciones resueltas el 2026-11-13: Volver/Cancelar a la pantalla de origen con el detalle del objetivo por defecto (FR-033a), objetivo en modo lectura al editar (FR-024), filtro Año por rango de fechas (FR-020) y cantidades de solapas totales (FR-017).
-- Modelo de datos definido por la usuaria: Áreas como búsqueda múltiple (la columna la cambia ella en SharePoint), Responsables mostrado como "Líderes", peso calculado sin columna Peso y comentarios en ComentarioIniciativa.
-- Prototipo de referencia: v5.
+- Clarificaciones resueltas el 2026-11-18 (reunión 6, `docs/especificacion-funcional.md` v1.9, y feature 005 implementada): "Líderes" pasa a "Accountable" en todos los textos visibles, incluido el filtro; "Peso en el departamento" calculado en "Información de la iniciativa" (FR-014a a FR-014c, FR-032), con el peso exacto en el objetivo y redondeo solo al mostrarlo, que sale de FR-034 y de fuera de alcance; prototipo de referencia corregido; fuente v1.9.
+- Modelo de datos definido por la usuaria: Áreas como búsqueda múltiple (la columna la cambia ella en SharePoint), Responsables mostrado como "Accountable", pesos calculados sin columna Peso y comentarios en ComentarioIniciativa.
+- Prototipo de referencia: v9, en la carpeta `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` (el nombre de la carpeta dice v5).
+- Fuente: `docs/especificacion-funcional.md` v1.9.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
