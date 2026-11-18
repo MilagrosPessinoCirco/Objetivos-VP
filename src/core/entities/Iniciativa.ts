@@ -1,6 +1,6 @@
 import { BaseEntity } from './';
 import { IPersonValue, toPersonValue, toDateValue } from '../utils/Mappers';
-import { ILookupValue, toLookupValue, toLookupValueArray, toLookupIds, toPersonValueArray, toPersonIds, toChoiceValue, toChoiceValueArray, assertChoiceValue } from '../utils/Mappers';
+import { ILookupValue, toLookupValue, toLookupValueArray, toLookupIds, toChoiceValue, toChoiceValueArray, assertChoiceValue } from '../utils/Mappers';
 import { EstadoIniciativa } from '../utils/Constants';
 
 export default class Iniciativa extends BaseEntity {
@@ -12,7 +12,7 @@ export default class Iniciativa extends BaseEntity {
 		this.Nombre = item.Nombre ?? undefined;
 		this.Descripcion = item.Descripcion ?? undefined;
 		this.Objetivo = toLookupValue(item.Objetivo);
-		this.Responsables = toPersonValueArray(item.Responsables);
+		this.Accountable = toPersonValue(item.Accountable);
 		this.Peso = item.Peso ?? undefined;
 		this.Estado = toChoiceValue(EstadoIniciativa, item.Estado, 'Estado');
 		this.FechaInicio = toDateValue(item.FechaInicio);
@@ -31,7 +31,7 @@ export default class Iniciativa extends BaseEntity {
 			Nombre: this.Nombre,
 			Descripcion: this.Descripcion,
 			ObjetivoId: this.Objetivo?.Id,
-			ResponsablesId: toPersonIds(this.Responsables),
+			AccountableId: this.Accountable?.Id,
 			Peso: this.Peso,
 			Estado: assertChoiceValue(EstadoIniciativa, this.Estado, 'Estado'),
 			FechaInicio: this.FechaInicio,
@@ -43,7 +43,7 @@ export default class Iniciativa extends BaseEntity {
 	public Nombre?: string | undefined;
 	public Descripcion?: string | undefined;
 	public Objetivo?: ILookupValue | undefined;
-	public Responsables?: IPersonValue[] | undefined;
+	public Accountable?: IPersonValue | undefined;
 	public Peso?: number | undefined;
 	public Estado?: EstadoIniciativa | undefined;
 	public FechaInicio?: Date | null | undefined;

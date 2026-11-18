@@ -10,7 +10,6 @@ const ID_MIN_DIGITS = 2;
 const FULL_WEIGHT = 100;
 const WEIGHT_LOCALE = 'es-AR';
 const WEIGHT_MAX_DECIMALS = 2;
-const NAME_SEPARATOR = ', ';
 
 export type IniciativasVista = 'mis' | 'todas';
 
@@ -73,10 +72,10 @@ export const formatPeso = (valor: number): string =>
 	valor.toLocaleString(WEIGHT_LOCALE, { maximumFractionDigits: WEIGHT_MAX_DECIMALS });
 
 export const formatAccountable = (iniciativa: Iniciativa): string =>
-	(iniciativa.Responsables ?? []).map((persona) => persona.Title).join(NAME_SEPARATOR);
+	iniciativa.Accountable?.Title ?? '';
 
 export const isAccountable = (iniciativa: Iniciativa, userId: number | undefined): boolean =>
-	userId !== undefined && (iniciativa.Responsables ?? []).some((persona) => persona.Id === userId);
+	userId !== undefined && iniciativa.Accountable?.Id === userId;
 
 export const getAniosIniciativa = (iniciativa: Iniciativa): number[] => {
 	if (!iniciativa.FechaInicio || !iniciativa.FechaCompromiso) {

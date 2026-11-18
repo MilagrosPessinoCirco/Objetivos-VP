@@ -495,7 +495,9 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
 
   **Criterio de terminado**: la columna existe con nombre interno `Accountable` y una sola persona, o queda informada como pendiente.
 
-- [ ] T041 Modificar `src/core/entities/Iniciativa.ts` (plan, D25; contracts §2):
+  **Estado**: pendiente; la hace la usuaria después de esta implementación.
+
+- [X] T041 Modificar `src/core/entities/Iniciativa.ts` (plan, D25; contracts §2):
   - `mapItem`: reemplazar `this.Responsables = toPersonValueArray(item.Responsables);` por `this.Accountable = toPersonValue(item.Accountable);`.
   - `toListItem`: reemplazar `ResponsablesId: toPersonIds(this.Responsables),` por `AccountableId: this.Accountable?.Id,`.
   - Declaración: reemplazar `public Responsables?: IPersonValue[] | undefined;` por `public Accountable?: IPersonValue | undefined;`.
@@ -503,11 +505,11 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
 
   **Criterio de terminado**: `npm run build` puede fallar en los archivos de T042 a T046 hasta completarlos; `tsc` sin errores en `Iniciativa.ts`.
 
-- [ ] T042 Modificar `src/core/api/Iniciativa/IniciativaDataSource.ts` (plan, D25): en `selectProperties`, reemplazar `'Responsables/Id', 'Responsables/Title', 'Responsables/EMail'` por `'Accountable/Id', 'Accountable/Title', 'Accountable/EMail'`; en `expand`, reemplazar `'Responsables'` por `'Accountable'`. No cambiar nada más (`Area/Id` queda como está).
+- [X] T042 Modificar `src/core/api/Iniciativa/IniciativaDataSource.ts` (plan, D25): en `selectProperties`, reemplazar `'Responsables/Id', 'Responsables/Title', 'Responsables/EMail'` por `'Accountable/Id', 'Accountable/Title', 'Accountable/EMail'`; en `expand`, reemplazar `'Responsables'` por `'Accountable'`. No cambiar nada más (`Area/Id` queda como está).
 
   **Criterio de terminado**: el archivo no menciona `Responsables`.
 
-- [ ] T043 Modificar `src/core/api/Iniciativa/IniciativaMock.ts` (plan, D1 y D25): `createIniciativa` recibe `accountable: IPersonValue` en lugar de `responsables: IPersonValue[]` y lo asigna como `Accountable`. Cada iniciativa tiene **una sola** persona; se conserva la primera de la lista anterior:
+- [X] T043 Modificar `src/core/api/Iniciativa/IniciativaMock.ts` (plan, D1 y D25): `createIniciativa` recibe `accountable: IPersonValue` en lugar de `responsables: IPersonValue[]` y lo asigna como `Accountable`. Cada iniciativa tiene **una sola** persona; se conserva la primera de la lista anterior:
 
   | Id | Accountable |
   |---|---|
@@ -517,19 +519,19 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
 
   **Criterio de terminado**: el archivo no menciona `Responsables` ni listas de personas.
 
-- [ ] T044 Modificar `src/webparts/objetivosVp/components/Iniciativa/iniciativaUtils.ts` (plan, D25; contracts §3):
+- [X] T044 Modificar `src/webparts/objetivosVp/components/Iniciativa/iniciativaUtils.ts` (plan, D25; contracts §3):
   - `formatAccountable(iniciativa)` = `iniciativa.Accountable?.Title ?? ''`; quitar `NAME_SEPARATOR` si deja de usarse.
   - `isAccountable(iniciativa, userId)` = `userId !== undefined && iniciativa.Accountable?.Id === userId`. **Por Id, nunca por `Title`.**
 
   **Criterio de terminado**: `tsc` sin errores en el archivo.
 
-- [ ] T045 Modificar `src/webparts/objetivosVp/components/Iniciativa/IniciativasBandeja/IniciativasBandeja.tsx` (plan, D13 y D25):
+- [X] T045 Modificar `src/webparts/objetivosVp/components/Iniciativa/IniciativasBandeja/IniciativasBandeja.tsx` (plan, D13 y D25):
   - Filtro Accountable: `String(iniciativa.Accountable?.Id) === filtros.accountableId`.
   - `getAccountables`: el `Accountable` de cada iniciativa que lo tenga, sin duplicados por `Id`.
 
   **Criterio de terminado**: el archivo no menciona `Responsables`.
 
-- [ ] T046 Modificar `src/webparts/objetivosVp/components/Iniciativa/IniciativaForm/IniciativaForm.tsx`, campo Accountable (plan, D7 y D25; FR-003, FR-010):
+- [X] T046 Modificar `src/webparts/objetivosVp/components/Iniciativa/IniciativaForm/IniciativaForm.tsx`, campo Accountable (plan, D7 y D25; FR-003, FR-010):
   - Estado inicial: alta, el usuario actual; edición, `iniciativa.Accountable`; vacío si no hay ninguno.
   - `people`: usuarios activos de la lista `Usuario`, más el usuario actual y el accountable actual de la iniciativa (sin duplicados por Id).
   - Selección única: en `onSelectedPeopleChange(next)`, si `next.length > 1`, conservar solo la última persona agregada (`next.slice(-1)`); si no, `next`.
@@ -538,20 +540,24 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
 
   **Criterio de terminado**: el archivo no menciona `Responsables`; `tsc` sin errores.
 
-- [ ] T047 Modificar `src/webparts/objetivosVp/components/Iniciativa/IniciativaForm/IniciativaForm.tsx`, edición sin Estado (plan, D26; FR-006, FR-024): quitar el `Dropdown` de Estado, su estado local y sus opciones. Al guardar la edición, `toSave.Estado = iniciativa.Estado` (se conserva); en el alta sigue `EstadoIniciativa.NoIniciada`. **Referencia**: `sideIni` del prototipo muestra Estado al editar: desvío aprobado (plan, Complexity Tracking).
+- [X] T047 Modificar `src/webparts/objetivosVp/components/Iniciativa/IniciativaForm/IniciativaForm.tsx`, edición sin Estado (plan, D26; FR-006, FR-024): quitar el `Dropdown` de Estado, su estado local y sus opciones. Al guardar la edición, `toSave.Estado = iniciativa.Estado` (se conserva); en el alta sigue `EstadoIniciativa.NoIniciada`. **Referencia**: `sideIni` del prototipo muestra Estado al editar: desvío aprobado (plan, Complexity Tracking).
 
   **Criterio de terminado**: el panel de edición no tiene campo Estado; `tsc` sin errores.
 
-- [ ] T048 Revisar el código (plan, D25):
+- [X] T048 Revisar el código (plan, D25):
   - buscar `Responsables` y `ResponsablesId` en `src/`: no tiene que quedar ninguna referencia;
   - repetir las búsquedas de T037 (hexadecimales, `any`, comentarios, textos escritos en el código, comparaciones por `Title`) en los archivos de T041 a T047;
   - `npm run build` sin errores.
 
   **Criterio de terminado**: las búsquedas no encuentran coincidencias y el build da verde.
 
+  **Estado**: sin referencias a `Responsables` en `src/`. Ningún mapeo trata `Accountable` como arreglo: solo el estado del `Picker` del DS es un arreglo, limitado a una persona con `slice(-1)`. Sin hexadecimales, `any` nuevos, comentarios, separadores escritos ni comparaciones por `Title`. `tsc`, `eslint` y `npm run build` OK.
+
 - [ ] T049 Verificar los escenarios afectados de [quickstart.md](./quickstart.md): 1 a 7 ("Mis iniciativas" por `Accountable`), 16 a 24 (en especial 20: una sola persona, reemplazo y obligatorio), 38 a 40 (edición sin Estado; el recálculo de pesos se prueba desde "Cambiar estado") y 41 a 45b. Primero con los mocks y, después de T040, en el sitio de desarrollo, verificando que `Accountable` se guarda en la lista. Informar los escenarios que no se pudieron ejecutar y por qué.
 
   **Criterio de terminado**: escenarios en verde o informados, y `npm run build` sin errores.
+
+  **Estado**: parcial. Verificado contra el código y los mocks: "Mis iniciativas" del usuario de prueba = iniciativas 1, 4, 9 y 11 por `Accountable.Id`; el filtro Accountable ofrece tres personas; el selector conserva una sola persona (la nueva reemplaza a la anterior) y sin persona muestra "Este campo es obligatorio."; el panel de edición no tiene Estado y al guardar conserva el estado de la iniciativa; "Cambiar estado" no cambió. Sin ejecutar en el navegador: la sesión no tiene acceso al workbench hospedado. La prueba en SharePoint espera a T040.
 
 - [ ] T050 Borrar la columna `Responsables` de la lista `Iniciativa` del sitio de desarrollo, después de que T049 esté en verde en SharePoint (quickstart, "Creación de la columna Accountable", paso 8). Lo hace la usuaria; el agente no borra columnas.
 

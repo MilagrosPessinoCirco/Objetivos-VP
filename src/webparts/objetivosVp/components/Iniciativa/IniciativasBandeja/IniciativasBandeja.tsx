@@ -55,14 +55,14 @@ const matchesFiltros = (iniciativa: Iniciativa, filtros: IIniciativasFiltros, ob
 	const objetivo = objetivos.filter((item) => item.Id === iniciativa.Objetivo?.Id)[0];
 	return (filtros.departamentoId === '' || String(objetivo?.Departamento?.Id) === filtros.departamentoId) &&
 		(filtros.objetivoId === '' || String(iniciativa.Objetivo?.Id) === filtros.objetivoId) &&
-		(filtros.accountableId === '' || (iniciativa.Responsables ?? []).some((persona) => String(persona.Id) === filtros.accountableId)) &&
+		(filtros.accountableId === '' || String(iniciativa.Accountable?.Id) === filtros.accountableId) &&
 		(filtros.estado === '' || iniciativa.Estado === filtros.estado) &&
 		(filtros.anio === '' || getAniosIniciativa(iniciativa).indexOf(Number(filtros.anio)) >= 0);
 };
 
 const getAccountables = (iniciativas: Iniciativa[]): IPersonValue[] =>
 	iniciativas
-		.reduce<IPersonValue[]>((personas, iniciativa) => personas.concat(iniciativa.Responsables ?? []), [])
+		.reduce<IPersonValue[]>((personas, iniciativa) => (iniciativa.Accountable ? personas.concat([iniciativa.Accountable]) : personas), [])
 		.filter((persona, index, personas) => personas.findIndex((other) => other.Id === persona.Id) === index);
 
 const getAnios = (iniciativas: Iniciativa[]): number[] => {

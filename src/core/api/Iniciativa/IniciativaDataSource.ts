@@ -14,7 +14,7 @@ export default class IniciativaDataSource implements IIniciativaDataSource {
 		'Nombre',
 		'Descripcion',
 		'Objetivo/Id', 'Objetivo/Title',
-		'Responsables/Id', 'Responsables/Title', 'Responsables/EMail',
+		'Accountable/Id', 'Accountable/Title', 'Accountable/EMail',
 		'Peso',
 		'Estado',
 		'FechaInicio',
@@ -24,7 +24,7 @@ export default class IniciativaDataSource implements IIniciativaDataSource {
 		'Author/Id', 'Author/Title', 'Author/EMail',
 		'Editor/Id', 'Editor/Title', 'Editor/EMail'
 	];
-	private expand: Array<string> = ['Author', 'Editor', 'Objetivo', 'Responsables', 'Area'];
+	private expand: Array<string> = ['Author', 'Editor', 'Objetivo', 'Accountable', 'Area'];
 
 	constructor() {
 		this._sp = getSP();

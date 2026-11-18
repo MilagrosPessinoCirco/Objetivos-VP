@@ -23,7 +23,7 @@ const createIniciativa = (
 	id: number,
 	nombre: string,
 	objetivo: ILookupValue,
-	responsables: IPersonValue[],
+	accountable: IPersonValue,
 	areas: ILookupValue[],
 	estado: EstadoIniciativa,
 	fechaInicio: string,
@@ -35,7 +35,7 @@ const createIniciativa = (
 		Nombre: nombre,
 		Descripcion: `Impacto esperado de ${nombre.toLowerCase()}.`,
 		Objetivo: objetivo,
-		Responsables: responsables,
+		Accountable: accountable,
 		Area: areas,
 		Estado: estado,
 		FechaInicio: fechaInicio,
@@ -43,19 +43,19 @@ const createIniciativa = (
 	});
 
 let iniciativas: Iniciativa[] = [
-	createIniciativa(1, 'Tablero de insights comerciales', OBJETIVO_DATOS, [USUARIO_PRUEBA, BARBARA], [AREA_MERCADO, AREA_DIGITAL], EstadoIniciativa.EnCurso, '2026-01-15', '2026-06-30'),
-	createIniciativa(2, 'Estudio de segmentación de clientes', OBJETIVO_DATOS, [BARBARA], [AREA_MERCADO], EstadoIniciativa.NoIniciada, '2026-03-01', '2026-12-31'),
-	createIniciativa(3, 'Modelo de propensión de compra', OBJETIVO_DATOS, [MARIA], [], EstadoIniciativa.Frenada, '2026-02-01', '2026-09-30'),
-	createIniciativa(4, 'YPF Store en estaciones', OBJETIVO_STORE, [USUARIO_PRUEBA, MARIA], [AREA_DIGITAL, AREA_PROMOCIONES], EstadoIniciativa.EnCurso, '2026-01-01', '2027-12-31'),
-	createIniciativa(5, 'Catálogo online de YPF Store', OBJETIVO_STORE, [BARBARA], [AREA_PROMOCIONES], EstadoIniciativa.EnCurso, '2026-04-01', '2027-06-30'),
-	createIniciativa(6, 'Piloto de tienda en Córdoba', OBJETIVO_STORE, [MARIA], [], EstadoIniciativa.Finalizada, '2026-01-01', '2026-06-30'),
-	createIniciativa(7, 'Expansión de YPF Store al interior', OBJETIVO_STORE, [BARBARA], [AREA_DIGITAL], EstadoIniciativa.NoIniciada, '2027-01-01', '2027-12-31'),
-	createIniciativa(8, 'Venta de YPF Store por catálogo impreso', OBJETIVO_STORE, [MARIA], [], EstadoIniciativa.Cancelada, '2026-01-01', '2026-12-31'),
-	createIniciativa(9, 'Promo vaso coleccionable', OBJETIVO_CLIENTES, [USUARIO_PRUEBA], [AREA_PROMOCIONES], EstadoIniciativa.EnCurso, '2026-03-01', '2026-12-31'),
-	createIniciativa(10, 'Programa de referidos', OBJETIVO_CLIENTES, [BARBARA], [], EstadoIniciativa.NoIniciada, '2026-05-01', '2026-11-30'),
-	createIniciativa(11, 'Puntos de carga en estaciones propias', OBJETIVO_MOVILIDAD, [USUARIO_PRUEBA], [AREA_CONVENIOS], EstadoIniciativa.EnCurso, '2026-01-01', '2028-12-31'),
-	createIniciativa(12, 'Centro de atención unificado', OBJETIVO_ATENCION, [MARIA], [AREA_CONVENIOS], EstadoIniciativa.Frenada, '2026-02-01', '2026-10-31'),
-	createIniciativa(13, 'Manual de marcas del portfolio', OBJETIVO_MARCAS, [BARBARA], [AREA_MERCADO], EstadoIniciativa.EnCurso, '2026-02-01', '2026-11-30')
+	createIniciativa(1, 'Tablero de insights comerciales', OBJETIVO_DATOS, USUARIO_PRUEBA, [AREA_MERCADO, AREA_DIGITAL], EstadoIniciativa.EnCurso, '2026-01-15', '2026-06-30'),
+	createIniciativa(2, 'Estudio de segmentación de clientes', OBJETIVO_DATOS, BARBARA, [AREA_MERCADO], EstadoIniciativa.NoIniciada, '2026-03-01', '2026-12-31'),
+	createIniciativa(3, 'Modelo de propensión de compra', OBJETIVO_DATOS, MARIA, [], EstadoIniciativa.Frenada, '2026-02-01', '2026-09-30'),
+	createIniciativa(4, 'YPF Store en estaciones', OBJETIVO_STORE, USUARIO_PRUEBA, [AREA_DIGITAL, AREA_PROMOCIONES], EstadoIniciativa.EnCurso, '2026-01-01', '2027-12-31'),
+	createIniciativa(5, 'Catálogo online de YPF Store', OBJETIVO_STORE, BARBARA, [AREA_PROMOCIONES], EstadoIniciativa.EnCurso, '2026-04-01', '2027-06-30'),
+	createIniciativa(6, 'Piloto de tienda en Córdoba', OBJETIVO_STORE, MARIA, [], EstadoIniciativa.Finalizada, '2026-01-01', '2026-06-30'),
+	createIniciativa(7, 'Expansión de YPF Store al interior', OBJETIVO_STORE, BARBARA, [AREA_DIGITAL], EstadoIniciativa.NoIniciada, '2027-01-01', '2027-12-31'),
+	createIniciativa(8, 'Venta de YPF Store por catálogo impreso', OBJETIVO_STORE, MARIA, [], EstadoIniciativa.Cancelada, '2026-01-01', '2026-12-31'),
+	createIniciativa(9, 'Promo vaso coleccionable', OBJETIVO_CLIENTES, USUARIO_PRUEBA, [AREA_PROMOCIONES], EstadoIniciativa.EnCurso, '2026-03-01', '2026-12-31'),
+	createIniciativa(10, 'Programa de referidos', OBJETIVO_CLIENTES, BARBARA, [], EstadoIniciativa.NoIniciada, '2026-05-01', '2026-11-30'),
+	createIniciativa(11, 'Puntos de carga en estaciones propias', OBJETIVO_MOVILIDAD, USUARIO_PRUEBA, [AREA_CONVENIOS], EstadoIniciativa.EnCurso, '2026-01-01', '2028-12-31'),
+	createIniciativa(12, 'Centro de atención unificado', OBJETIVO_ATENCION, MARIA, [AREA_CONVENIOS], EstadoIniciativa.Frenada, '2026-02-01', '2026-10-31'),
+	createIniciativa(13, 'Manual de marcas del portfolio', OBJETIVO_MARCAS, BARBARA, [AREA_MERCADO], EstadoIniciativa.EnCurso, '2026-02-01', '2026-11-30')
 ];
 
 const notFoundError = (): Error => Object.assign(new Error(NOT_FOUND_MESSAGE), { status: NOT_FOUND_STATUS });

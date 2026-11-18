@@ -52,16 +52,15 @@ const uniquePeople = (personas: IPersonValue[]): IPersonValue[] =>
 export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetivos, areas, usuarios, currentUser, initialObjetivoId, iniciativa, onSave, onCancel }) => {
 	const isEdit = iniciativa !== undefined;
 	const initialObjetivo = iniciativa?.Objetivo?.Id ?? objetivos.filter((objetivo) => objetivo.Id === initialObjetivoId)[0]?.Id;
-	const initialAccountable = iniciativa ? iniciativa.Responsables ?? [] : currentUser ? [currentUser] : [];
+	const initialAccountable = iniciativa ? iniciativa.Accountable : currentUser;
 
 	const [objetivoId, setObjetivoId] = React.useState<string>(initialObjetivo === undefined ? '' : String(initialObjetivo));
 	const [nombre, setNombre] = React.useState<string>(iniciativa?.Nombre ?? '');
 	const [descripcion, setDescripcion] = React.useState<string>(iniciativa?.Descripcion ?? '');
-	const [accountables, setAccountables] = React.useState<IPersonOption[]>(initialAccountable.map(toPersonOption));
+	const [accountable, setAccountable] = React.useState<IPersonOption[]>(initialAccountable ? [toPersonOption(initialAccountable)] : []);
 	const [areaIds, setAreaIds] = React.useState<string[]>((iniciativa?.Area ?? []).map((area) => String(area.Id)));
 	const [fechaInicio, setFechaInicio] = React.useState<string>(toDateInput(iniciativa?.FechaInicio));
 	const [fechaCompromiso, setFechaCompromiso] = React.useState<string>(toDateInput(iniciativa?.FechaCompromiso));
-	const [estado, setEstado] = React.useState<EstadoIniciativa>(iniciativa?.Estado ?? EstadoIniciativa.NoIniciada);
 	const [submitted, setSubmitted] = React.useState<boolean>(false);
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
@@ -70,7 +69,7 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 	const personas = uniquePeople([
 		...usuarios.filter((usuario) => usuario.Activo === true && usuario.Usuario).map((usuario) => usuario.Usuario as IPersonValue),
 		...(currentUser ? [currentUser] : []),
-		...(iniciativa?.Responsables ?? [])
+		...(iniciativa?.Accountable ? [iniciativa.Accountable] : [])
 	]).sort(byName);
 	const peopleOptions = personas.map(toPersonOption);
 
@@ -82,7 +81,6 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 		.slice()
 		.sort((a, b) => (a.Nombre ?? '').localeCompare(b.Nombre ?? '', PEOPLE_LOCALE))
 		.map((area) => ({ key: String(area.Id), text: area.Nombre ?? '' }));
-	const estadoOptions = Object.values(EstadoIniciativa).map((value) => ({ key: value, text: value }));
 
 	const objetivo = objetivos.filter((item) => String(item.Id) === objetivoId)[0];
 	const objetivoInicio = toDateInput(objetivo?.FechaInicio);
@@ -105,7 +103,7 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 		objetivo: objetivoId === '' ? strings.RequiredField : undefined,
 		nombre: nombre.trim() === '' ? strings.RequiredField : undefined,
 		descripcion: descripcion.trim() === '' ? strings.RequiredField : undefined,
-		accountables: accountables.length === 0 ? strings.RequiredField : undefined,
+		accountable: accountable.length === 0 ? strings.RequiredField : undefined,
 		fechaInicio: startIssue,
 		fechaCompromiso: commitmentIssue
 	};
@@ -131,16 +129,14 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 		toSave.Nombre = nombre.trim();
 		toSave.Descripcion = descripcion.trim();
 		toSave.Objetivo = isEdit ? iniciativa?.Objetivo : { Id: objetivo?.Id as number, Title: objetivo?.Nombre ?? '' };
-		toSave.Responsables = accountables
-			.map((option) => personas.filter((persona) => String(persona.Id) === option.key)[0])
-			.filter((persona): persona is IPersonValue => persona !== undefined);
+		toSave.Accountable = personas.filter((persona) => String(persona.Id) === accountable[0]?.key)[0];
 		toSave.Area = areaIds
 			.map((id) => areas.filter((area) => String(area.Id) === id)[0])
 			.filter((area): area is Area => area !== undefined)
 			.map((area): ILookupValue => ({ Id: area.Id as number, Title: area.Nombre ?? '' }));
 		toSave.FechaInicio = fromDateInput(fechaInicio);
 		toSave.FechaCompromiso = fromDateInput(fechaCompromiso);
-		toSave.Estado = isEdit ? estado : EstadoIniciativa.NoIniciada;
+		toSave.Estado = isEdit ? iniciativa?.Estado : EstadoIniciativa.NoIniciada;
 		return toSave;
 	};
 
@@ -204,16 +200,16 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 					errorMessage={shown(issues.descripcion)}
 					onChange={(event) => setDescripcion(event.target.value)}
 				/>
-				<div className={invalid(issues.accountables, styles.field)} style={{ gap: spacing.xs }}>
+				<div className={invalid(issues.accountable, styles.field)} style={{ gap: spacing.xs }}>
 					<Picker
 						mode="people"
 						label={strings.IniciativaAccountable}
 						required
 						people={peopleOptions}
-						selectedPeople={accountables}
-						onSelectedPeopleChange={setAccountables}
+						selectedPeople={accountable}
+						onSelectedPeopleChange={(next) => setAccountable(next.slice(-1))}
 					/>
-					{renderFieldError(issues.accountables)}
+					{renderFieldError(issues.accountable)}
 				</div>
 				<Dropdown
 					label={strings.IniciativaAreas}
@@ -233,15 +229,6 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 						{renderFieldError(issues.fechaCompromiso)}
 					</div>
 				</div>
-				{isEdit && (
-					<Dropdown
-						label={strings.ObjetivoFormStatus}
-						required
-						options={estadoOptions}
-						value={estado}
-						onChange={(value) => setEstado(Object.values(EstadoIniciativa).filter((item) => item === toKey(value))[0] ?? estado)}
-					/>
-				)}
 				{saveFailed && <MessageBar type="error" message={strings.IniciativaSaveError} />}
 			</div>
 			{isConfirmOpen && (
