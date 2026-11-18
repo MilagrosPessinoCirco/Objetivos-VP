@@ -34,7 +34,7 @@ Enfoque técnico:
 
 **Constraints**: `src/core/ui` de solo lectura; sin colores, tipografías ni espaciados fuera del DS; textos en español (AR) con `loc/`; sin acción de eliminar; no se crean ni modifican listas o columnas.
 
-**Scale/Scope**: 2 rutas y 2 pantallas nuevas (bandeja y detalle), 2 paneles y 1 modal, 1 sección nueva en el detalle del objetivo, 4 mocks y 1 hook en `core`, 3 archivos de `core` modificados, 5 piezas existentes ampliadas, claves nuevas en `loc/`.
+**Scale/Scope**: 2 rutas y 2 pantallas nuevas (bandeja y detalle), 2 paneles y 1 modal, 1 sección nueva en el detalle del objetivo, 4 mocks y 2 hooks nuevos en `core` (`useCurrentUser`, `useComentariosIniciativa`), 5 archivos de `core` modificados (`Iniciativa.ts`, `Mappers.ts`, datasource e interfaz de `Usuario` y de `ComentarioIniciativa`) más `ObjetivoMock.ts` (objetivo 7), 5 piezas existentes ampliadas, claves nuevas en `loc/`.
 
 ## Hallazgos del repo
 
@@ -64,8 +64,8 @@ Detalle en [research.md](./research.md).
 | II. `core/ui` de solo lectura | ✅ Cumple | No se modifica el DS. |
 | II. Estructura de pantalla | ✅ Cumple | `IniciativasBandeja/` e `IniciativaDetalle/`, cada una con su `.tsx` y `.module.scss` y las piezas en subcarpetas. |
 | II. Textos en español (AR) | ✅ Cumple | Claves nuevas en `loc/mystrings.d.ts` y `loc/en-us.js`, reutilizando las que ya existen para el mismo concepto. |
-| III. Datos desacoplados | ✅ Cumple | Las pantallas usan solo hooks de `core/api`. Cuatro mocks nuevos y el mock del usuario actual. Tipos en `core/entities`. |
-| IV. Simplicidad y cambios acotados | ✅ Cumple, con cambios justificados | En `core`: `Iniciativa.ts`, `Mappers.ts` (`toLookupIds`), `Usuario` (`getCurrentUser`) y los cuatro hooks. En el webpart: `ObjetivoDetalle`, `PalancaBreadcrumb`, `SectionBand`, `AccessList`, `ObjetivosVp` y `routes.ts`, con props opcionales que no cambian su uso actual. |
+| III. Datos desacoplados | ✅ Cumple | Las pantallas usan solo hooks de `core/api`. Cuatro mocks nuevos (`UsuarioMock` incluye el usuario actual; `ComentarioIniciativaMock` incluye los comentarios filtrados). Tipos en `core/entities`. |
+| IV. Simplicidad y cambios acotados | ✅ Cumple, con cambios justificados | En `core`: `Iniciativa.ts`, `Mappers.ts` (`toLookupIds`), `Usuario` (`getCurrentUser`), `ComentarioIniciativa` (`getFilteredItems`), `ObjetivoMock.ts` (objetivo 7), los cuatro hooks y los hooks nuevos `useCurrentUser` y `useComentariosIniciativa`. En el webpart: `ObjetivoDetalle`, `PalancaBreadcrumb`, `SectionBand`, `AccessList`, `ObjetivosVp` y `routes.ts`, con props opcionales que no cambian su uso actual. |
 | V. Validación | ✅ Cumple | Cada tarea cierra con `npm run build`. |
 
 **Re-check post-diseño**: sin cambios. Los pendientes de diseño se resolvieron con la usuaria el 2026-11-18 (research, U1 a U8). Queda P1, un prerrequisito de SharePoint a cargo de la usuaria.
@@ -218,7 +218,7 @@ Detalle en [research.md](./research.md).
 
 **D9. Formato del ID.** `INI-<Id con dos dígitos>` (`INI-01`), como el prototipo, en `formatIniciativaId`.
 
-**D10. Origen y Volver (FR-033a).** Bandeja y detalle del objetivo navegan al detalle con `state.from`. En el detalle, Volver y Cancelar van a `state.from` si existe; si no, al detalle del objetivo de la iniciativa (`getObjetivoPath`). Las migas navegan siempre a su nivel, sin `from`.
+**D10. Origen y Volver (FR-033a).** Bandeja y detalle del objetivo navegan al detalle con `state.from`. En el detalle, Volver y Cancelar van a `state.from` si existe; si no, al detalle del objetivo de la iniciativa (`getObjetivoPath`). Si la iniciativa no existe y no hay `state.from`, Volver y Cancelar van a la bandeja (`INICIATIVAS_PATH`). Las migas navegan siempre a su nivel, sin `from`.
 
 **D11. Migas.** `PalancaBreadcrumb` suma `objetivoId?` e `iniciativaNombre?`. Con `iniciativaNombre`: Inicio › Palancas › [palanca, enlace, solo VP RRII] › [objetivo, enlace a `getObjetivoPath(objetivoId)`] › [iniciativa, sin enlace]. Para un objetivo de otra VP, el detalle no pasa `palancaNombre` y se omite el nivel de palanca (FR-031). Sin `iniciativaNombre`, igual que hoy.
 

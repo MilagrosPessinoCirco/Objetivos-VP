@@ -64,7 +64,7 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
 - [ ] T001 Verificar las precondiciones, sin código. Registrar el resultado en el mensaje de la tarea, sin tocar archivos:
   1. `npm run build` pasa antes de empezar.
   2. La columna `Area` de la lista `Iniciativa` admite varios valores y su nombre interno es `Area` (confirmado por la usuaria el 2026-11-18: solo se registra).
-  3. La columna `Iniciativa` de la lista `Comentario iniciativa` está indexada (plan, P1). Si no se puede verificar o no lo está, informarlo: las fases 2 a 9 se avanzan con mocks, pero la validación en SharePoint (T046) espera a que la usuaria cree el índice (quickstart, "Índice de la columna Iniciativa").
+  3. La columna `Iniciativa` de la lista `Comentario iniciativa` está indexada (plan, P1). Si no se puede verificar o no lo está, informarlo: las fases 2 a 9 se avanzan con mocks, pero la validación en SharePoint (T039) espera a que la usuaria cree el índice (quickstart, "Índice de la columna Iniciativa").
 
   **Criterio de terminado**: el build da verde y los puntos 2 y 3 quedan confirmados o informados.
 
@@ -246,7 +246,7 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
   - Página: `PAGE_SIZE = 10`; la página efectiva es `min(state.page, cantidad de páginas)` (mínimo 1). Grilla con la porción de la página. `IniciativasPaginador` con `onPageChange={(page) => onStateChange({ ...state, page })}`.
   - `IniciativasTable` variante `bandeja` con `objetivos`; `emptyText`: `IniciativasEmpty` si la solapa no tiene iniciativas, si no `IniciativasEmptyFilters` (D14).
   - Ver: `navigate(getIniciativaPath(id), { state: { from: location.pathname + location.search } })` (D10).
-  - Carga: `Spinner` mientras carga; error de iniciativas, objetivos o usuario actual: `MessageBar` `type="error"` `IniciativasLoadError`, sin grilla ni contadores.
+  - Carga: `Spinner` mientras cargan iniciativas u objetivos. Si falla alguno de los dos: `MessageBar` `type="error"` `IniciativasLoadError`, sin grilla ni contadores. Si falla solo `useCurrentUser`: se muestra el mismo `MessageBar` arriba de las solapas, "Mis iniciativas" queda en 0 y vacía, y "Todas" funciona normalmente (plan, D14).
   - Volver: `navigate(HOME_PATH)`. En esta tarea, `onOpenFilters` y `onNew` todavía no hacen nada (los conectan T026 y T024).
   - Contenedor con `padding` y un margen inferior suficiente para el paginador fijo (constante con nombre).
 
@@ -290,7 +290,7 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
   **Criterio de terminado**: `npm run build` sin errores.
 
 - [ ] T024 [US1] Crear `src/webparts/objetivosVp/components/Iniciativa/IniciativaForm/IniciativaFormPanel.tsx` y conectar el alta en la bandeja (plan, D15; contracts §3). Depende de T021 y T023.
-  - Panel: mismo patrón que `ObjetivoFormPanel`: con `useIniciativaFormMasters`; mientras carga, `Panel` con `Spinner`; si hay error, `Panel` con `MessageBar` `ObjetivoFormLoadError` y Cancelar. `save` usa `addItem` de `useIniciativaDataSource` (o `editItem` si hay `iniciativa`, que US6 completa) y llama `onSaved` con la guardada.
+  - Panel: mismo patrón que `ObjetivoFormPanel`: con `useIniciativaFormMasters`; mientras carga, `Panel` con `Spinner`; si hay error, `Panel` con `MessageBar` `ObjetivoFormLoadError` y Cancelar. `save` usa `addItem` de `useIniciativaDataSource` y llama `onSaved` con la guardada.
   - `IniciativasBandeja.tsx`: `onNew` abre `IniciativaFormPanel` sin `initialObjetivoId`; `onSaved` cierra el panel, recarga iniciativas (`getItems`) y muestra `SuccessNotice` con `IniciativaCreated` y el nombre.
 
   **Criterio de terminado**: `npm run build` sin errores; quickstart, escenarios 16 a 24, con mocks.
@@ -359,7 +359,7 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
   - Encabezado como `ObjetivoDetalle`: `BackButton`, `h1` `HEADER_TITLE_STYLE` con `ObjetivoDetailTitle` (`INI-nn` y nombre) y `HeaderChip` con `getEstadoIniciativaChipColor`. Sin avance ni `LocationButton`.
   - Cuerpo: `IniciativaInfo` y `IniciativaComentario` (sin `onEdit` en esta tarea; los conectan T034 y T036).
   - Pie: `DetailFooter` con Cancelar (`secondary`). Editar y "Cambiar estado" los agregan T034 y T036.
-  - Volver y Cancelar: `location.state?.from` si es un texto; si no, `getObjetivoPath(objetivoId)` (FR-033a).
+  - Volver y Cancelar: `location.state?.from` si es un texto; si no, `getObjetivoPath(objetivoId)` si hay iniciativa; si no (no encontrada), `INICIATIVAS_PATH` (FR-033a, plan D10).
   - Mismo `PAGE_PADDING` y estructura de `ObjetivoDetalle.module.scss`.
   - `ObjetivosVp.tsx`: `<Route path={INICIATIVA_DETAIL_PATH} element={<IniciativaDetalle canEdit={CAN_EDIT_INICIATIVA} canChangeEstado={CAN_CHANGE_ESTADO_INICIATIVA} />} />`.
 
@@ -465,9 +465,10 @@ description: "Tareas de implementación de Iniciativas (bandeja, alta, edición,
   **Criterio de terminado**: la columna aparece en "Columnas indizadas" o queda informado como pendiente.
 
 - [ ] T039 Validar con [quickstart.md](./quickstart.md):
-  - escenarios 1 a 47, primero con los mocks y después contra las listas de desarrollo (con T038 hecha);
+  - escenarios 1 a 48, primero con los mocks y después contra las listas de desarrollo (con T038 hecha);
   - en SharePoint, verificar además que `Title` = Nombre, que `Area` guarda varios valores y se vacía al quitar todas, que se crea un elemento en `Comentario iniciativa` por cada cambio de comentario y que la consulta de comentarios filtra por `IniciativaId`;
   - comparar lado a lado con el prototipo y anotar las aproximaciones A1 a A4 (SC-009);
+  - SC-008: en el sitio de desarrollo, con el volumen que haya en las listas (no se cargan iniciativas para la medición), medir con las herramientas del navegador (pestaña Red, tiempo hasta la última respuesta) la apertura de la bandeja, del detalle de la iniciativa, del detalle del objetivo y de los paneles: menos de 3 s cada una. La búsqueda y los filtros no hacen consultas nuevas. **Informar la cantidad de iniciativas y de comentarios usada en la medición**;
   - en las listas de desarrollo se escriben solo iniciativas y comentarios de prueba de estos escenarios.
 
   Si algo falla, corregirlo en el archivo de la tarea que lo implementa. Informar los escenarios que no se pudieron ejecutar y por qué.

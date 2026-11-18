@@ -196,6 +196,7 @@ Desde el detalle, la persona elige "Cambiar estado" o el lápiz de "Comentario e
 - Maestro de áreas vacío: Áreas involucradas no ofrece opciones y la iniciativa se puede guardar igual, porque es opcional.
 - Ningún objetivo cargado: el campo Objetivo no ofrece opciones y no se puede cargar una iniciativa desde la bandeja.
 - Página actual vacía tras aplicar un filtro: la bandeja vuelve a la primera página.
+- Falla "Cambiar estado" después de registrar el comentario: se informa en una línea que la operación no pudo completarse; el comentario queda registrado y, al reintentar, no se vuelve a registrar porque coincide con el último.
 
 ## Clarifications
 
@@ -220,6 +221,8 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 - Q: ¿Qué versión del prototipo hay en `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/`? → A: El v10 (16/11/2026), confirmado en su `LEEME.md`. Las respuestas siguientes se verificaron contra esa versión.
 - Q: ¿"Cambiar estado" muestra un mensaje de éxito? → A: Sí, como en el prototipo: «El estado de la iniciativa "[nombre]" se ha actualizado correctamente.».
 - Q: En "Cambiar estado", ¿qué pasa con un comentario vacío o si no cambió nada? → A: Un comentario vacío o solo con espacios no se registra. Si no cambió ni el estado ni el comentario, Aceptar cierra el panel sin registrar nada.
+- Q: ¿FR-008 (sin guardado parcial) rige para "Cambiar estado"? → A: No. Rige para el panel de cargar y editar. En "Cambiar estado", comentario y estado se registran por separado, primero el comentario, y el reintento no lo duplica.
+- Q: Si se pide el detalle de una iniciativa que no existe y no hay pantalla de origen, ¿adónde llevan Volver y Cancelar? → A: A la bandeja de iniciativas.
 - Q: ¿Cómo se titula la sección del detalle del objetivo? → A: "Iniciativas (N)", como en el prototipo, con N igual a la cantidad de iniciativas del objetivo, incluidas las canceladas.
 
 ## Requirements *(mandatory)*
@@ -235,7 +238,7 @@ Cambios por la reunión 6 (`docs/especificacion-funcional.md` v1.9) y la feature
 - **FR-005**: Al crearse, la iniciativa DEBE quedar en estado "No iniciada"; el alta NO DEBE mostrar el campo Estado.
 - **FR-006**: Estado DEBE ofrecer No iniciada, En curso, Frenada, Finalizada y Cancelada. Cualquier estado puede pasar a cualquier otro, solo por acción manual en la edición o en "Cambiar estado"; el sistema NO DEBE derivarlo de ningún otro dato.
 - **FR-007**: La aplicación NO DEBE ofrecer ninguna acción para eliminar una iniciativa; se cancela con el estado Cancelada.
-- **FR-008**: Al guardar una iniciativa, el sistema DEBE registrar todos sus datos o ninguno: no hay guardado parcial.
+- **FR-008**: Al guardar una iniciativa desde el panel de cargar o editar, el sistema DEBE registrar todos sus datos o ninguno: no hay guardado parcial. En "Cambiar estado", el comentario y el estado se registran por separado: si falla uno, se informa el error, el panel conserva lo ingresado y reintentar no duplica el comentario.
 - **FR-009**: Al guardar, la columna Title de la lista DEBE recibir el mismo valor que el nombre de la iniciativa, al crear y al editar.
 - **FR-010**: Accountable DEBE venir completado en el alta con la persona que carga, que puede quitarse o agregar a otros.
 - **FR-011**: Áreas involucradas DEBE ofrecer todas las áreas del maestro Áreas, sin limitarlas a la VP o al departamento del objetivo, y admitir varias.

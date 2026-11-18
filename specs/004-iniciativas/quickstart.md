@@ -58,7 +58,7 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 30 | US4 | Expandir "Comentario ejecutivo" sin comentarios | "Todavía no hay comentario ejecutivo." |
 | 31 | US4 | Volver y Cancelar, entrando desde la bandeja en "Todas" | Vuelven a la bandeja en "Todas", con la búsqueda y los filtros que tenía. |
 | 32 | US4 | Abrir `#/iniciativa/<id>` directo y elegir Volver | Va al detalle del objetivo de la iniciativa. |
-| 33 | US4 | `#/iniciativa/99999` | "No se encontró la iniciativa." y Volver. |
+| 33 | US4 | `#/iniciativa/99999` | "No se encontró la iniciativa." y Volver; Volver y Cancelar llevan a la bandeja. |
 | 34 | US5 | Detalle de un objetivo de la VP RRII con 4 no canceladas y 1 cancelada | Sección "Iniciativas (5)" con "+" y grilla ID, Iniciativa, Accountable, Peso, Estado, Ver. Las 4 con 25 %; la cancelada sin peso. |
 | 35 | US5 | Detalle de un objetivo de otra VP | Grilla sin la columna Peso. |
 | 36 | US5 | Objetivo sin iniciativas | "Este objetivo no tiene iniciativas cargadas." |
@@ -75,6 +75,7 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 45b | US2 | Usuario de prueba con el mismo nombre visible que otro accountable | "Mis iniciativas" lista solo las del usuario actual (se compara por Id, no por nombre). |
 | 46 | — | Revisar todas las pantallas | No hay acción para eliminar iniciativas (SC-007). |
 | 47 | — | Comparar con palancas y objetivos | Mismo encabezado, grilla, columna Ver, chips, carga, vacíos, errores, migas, secciones, pie y panel (SC-009). |
+| 48 | — | En el sitio de desarrollo, con el volumen que haya en las listas (sin cargar iniciativas para la prueba), abrir bandeja, detalles y paneles; buscar y filtrar | Cada pantalla en menos de 3 s; la búsqueda y los filtros no hacen consultas nuevas (SC-008). Se informa la cantidad de iniciativas y de comentarios usada. |
 
 ## Revisión visual
 
