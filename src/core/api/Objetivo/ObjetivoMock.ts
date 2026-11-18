@@ -20,7 +20,7 @@ const createRrii = (
 	gerencia: { Id: number; Title: string },
 	palanca: { Id: number; Title: string },
 	duracion: Duracion,
-	peso: number,
+	peso: number | undefined,
 	esDeVp: boolean,
 	fechaInicio: string,
 	fechaCompromiso: string,
@@ -74,7 +74,8 @@ let objetivos: Objetivo[] = [
 	createRrii(3, 'Duplicar la cantidad de clientes YPF', 'Duplicar los clientes activos con campañas y promociones.', MARKETING, { Id: 3, Title: 'Growth' }, { Id: 2, Title: 'Experiencia de cliente' }, Duracion.Anual, 25, true, '2026-03-01', '2026-12-31', Estado.NoIniciada, undefined, undefined),
 	createRrii(4, 'Consolidar alianzas estratégicas', 'Sostener las alianzas vigentes con socios clave.', ALIANZAS, { Id: 4, Title: 'Convenios' }, { Id: 5, Title: 'Eficiencia en el canal' }, Duracion.Permanente, 25, false, '2026-01-01', '2026-12-31', Estado.FinalizadoCumplido, undefined, undefined),
 	createOtraVp(5, 'Habilitar la movilidad eléctrica', 'Instalar puntos de carga en la red de estaciones.', { Id: 3, Title: 'VP Downstream' }, FIDELIZACION, { Id: 5, Title: 'Programas' }, Estado.EnCurso),
-	createOtraVp(6, 'Integrar los canales de atención', 'Unificar la atención de clientes en un solo canal.', { Id: 4, Title: 'VP Finanzas' }, ALIANZAS, { Id: 4, Title: 'Convenios' }, Estado.FinalizadoIncumplido)
+	createOtraVp(6, 'Integrar los canales de atención', 'Unificar la atención de clientes en un solo canal.', { Id: 4, Title: 'VP Finanzas' }, ALIANZAS, { Id: 4, Title: 'Convenios' }, Estado.FinalizadoIncumplido),
+	createRrii(7, 'Ordenar el portfolio de marcas', 'Objetivo cargado antes de los pesos por departamento.', FIDELIZACION, { Id: 5, Title: 'Programas' }, { Id: 4, Title: 'Marca y portfolio' }, Duracion.Anual, undefined, false, '2026-01-01', '2026-12-31', Estado.EnCurso, undefined, undefined)
 ];
 
 const notFoundError = (): Error => Object.assign(new Error(NOT_FOUND_MESSAGE), { status: NOT_FOUND_STATUS });

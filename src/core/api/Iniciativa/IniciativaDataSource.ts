@@ -19,7 +19,7 @@ export default class IniciativaDataSource implements IIniciativaDataSource {
 		'Estado',
 		'FechaInicio',
 		'FechaCompromiso',
-		'Area/Id', 'Area/Title',
+		'Area/Id',
 		'Created', 'Modified',
 		'Author/Id', 'Author/Title', 'Author/EMail',
 		'Editor/Id', 'Editor/Title', 'Editor/EMail'

@@ -32,6 +32,17 @@ export default class ComentarioIniciativaDataSource implements IComentarioInicia
 		return items.map(item => new ComentarioIniciativa(item));
 	}
 
+	public async getFilteredItems(iniciativaId: number): Promise<Array<ComentarioIniciativa>> {
+		const items: any[] = await this._sp.web.lists.getByTitle(this.listTitle).items
+			.select(...this.selectProperties)
+			.expand(...this.expand)
+			.filter(`IniciativaId eq ${iniciativaId}`)
+			.orderBy('Created', false)
+			.orderBy('Id', false)
+			.top(TOP_DEFAULT)();
+		return items.map(item => new ComentarioIniciativa(item));
+	}
+
 	public add(item: ComentarioIniciativa): Promise<ComentarioIniciativa> {
 		const listItem = item.toListItem();
 		return this._sp.web.lists.getByTitle(this.listTitle).items.add(listItem).then((result: any) => {

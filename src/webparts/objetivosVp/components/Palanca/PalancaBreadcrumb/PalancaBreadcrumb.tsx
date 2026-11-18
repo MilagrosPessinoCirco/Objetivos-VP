@@ -6,12 +6,14 @@ import type { IBreadcrumbItem, IBreadcrumbStyles, IDividerAsProps } from '@fluen
 import { colors, typography } from '../../../../../core/ui/foundations';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
-import { HOME_PATH, PALANCAS_PATH, getPalancaPath } from '../../ObjetivosVp/routes';
+import { HOME_PATH, PALANCAS_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 
 export interface IPalancaBreadcrumbProps {
 	palancaNombre?: string;
 	palancaId?: number;
 	objetivoNombre?: string;
+	objetivoId?: number;
+	iniciativaNombre?: string;
 }
 
 const BREADCRUMB_DIVIDER = '›';
@@ -43,7 +45,7 @@ const BREADCRUMB_STYLES: Partial<IBreadcrumbStyles> = {
 	}
 };
 
-const PalancaBreadcrumb: React.FC<IPalancaBreadcrumbProps> = ({ palancaNombre, palancaId, objetivoNombre }) => {
+const PalancaBreadcrumb: React.FC<IPalancaBreadcrumbProps> = ({ palancaNombre, palancaId, objetivoNombre, objetivoId, iniciativaNombre }) => {
 	const navigate = useNavigate();
 
 	const items: IBreadcrumbItem[] = [
@@ -54,7 +56,17 @@ const PalancaBreadcrumb: React.FC<IPalancaBreadcrumbProps> = ({ palancaNombre, p
 		if (palancaNombre && palancaId !== undefined) {
 			items.push({ key: 'palanca', text: palancaNombre, onClick: () => navigate(getPalancaPath(palancaId)) });
 		}
-		items.push({ key: 'current', text: objetivoNombre, isCurrentItem: true });
+		if (iniciativaNombre) {
+			items.push({
+				key: 'objetivo',
+				text: objetivoNombre,
+				onClick: objetivoId === undefined ? undefined : () => navigate(getObjetivoPath(objetivoId))
+			});
+			items.push({ key: 'current', text: iniciativaNombre, isCurrentItem: true });
+		}
+		else {
+			items.push({ key: 'current', text: objetivoNombre, isCurrentItem: true });
+		}
 	}
 	else if (palancaNombre) {
 		items.push({ key: 'current', text: palancaNombre, isCurrentItem: true });

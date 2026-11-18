@@ -13,6 +13,7 @@ export interface ISectionBandProps {
 	title: string;
 	action?: React.ReactNode;
 	collapsible?: boolean;
+	defaultCollapsed?: boolean;
 	children: React.ReactNode;
 }
 
@@ -33,8 +34,8 @@ const BAND_STYLE: CSSProperties = {
 	padding: `0 ${spacing.md}`
 };
 
-const SectionBand: React.FC<ISectionBandProps> = ({ title, action, collapsible, children }) => {
-	const [isOpen, setIsOpen] = React.useState<boolean>(true);
+const SectionBand: React.FC<ISectionBandProps> = ({ title, action, collapsible, defaultCollapsed, children }) => {
+	const [isOpen, setIsOpen] = React.useState<boolean>(!defaultCollapsed);
 	const toggleLabel = isOpen ? strings.SectionCollapse : strings.SectionExpand;
 
 	return (

@@ -2,6 +2,7 @@ import { SPFI } from "@pnp/sp";
 import { getSP } from '../../pnp/sp/pnpjs-presets';
 import { Lista } from '../../utils/Constants';
 import { Usuario } from "../../entities";
+import { IPersonValue } from '../../utils/Mappers';
 import IUsuarioDataSource from './IUsuarioDataSource';
 
 const TOP_DEFAULT = 5000;
@@ -34,6 +35,11 @@ export default class UsuarioDataSource implements IUsuarioDataSource {
 			.expand(...this.expand)
 			.top(TOP_DEFAULT)();
 		return items.map(item => new Usuario(item));
+	}
+
+	public async getCurrentUser(): Promise<IPersonValue> {
+		const user = await this._sp.web.currentUser.select('Id', 'Title', 'Email')();
+		return { Id: user.Id, Title: user.Title ?? '', EMail: user.Email ?? '' };
 	}
 
 	public add(item: Usuario): Promise<Usuario> {

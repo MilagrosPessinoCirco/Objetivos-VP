@@ -63,6 +63,14 @@ export function toLookupValueArray(value: any): ILookupValue[] | undefined {
 	return items.map((item: any) => toLookupValue(item)).filter((item: ILookupValue | undefined): item is ILookupValue => item != null);
 }
 
+export function toLookupIds(values: ILookupValue[] | undefined): number[] | undefined {
+	if (values == null) {
+		return undefined;
+	}
+
+	return values.map(value => value.Id);
+}
+
 export function toUrlValue(value: any): IUrlValue | undefined {
 	if (value == null) {
 		return undefined;

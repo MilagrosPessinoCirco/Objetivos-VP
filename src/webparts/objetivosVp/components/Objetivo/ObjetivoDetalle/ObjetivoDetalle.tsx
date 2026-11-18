@@ -6,7 +6,7 @@ import { Button } from '../../../../../core/ui/components';
 import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
 import { spacing, typography } from '../../../../../core/ui/foundations';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
-import { Objetivo } from '../../../../../core/entities';
+import { Iniciativa, Objetivo } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { PALANCAS_PATH } from '../../ObjetivosVp/routes';
@@ -21,11 +21,13 @@ import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb
 import { DEFAULT_PROGRESS, formatObjetivoId, getEstadoChipColor, isNotFoundError, isVpRrii } from '../objetivoUtils';
 import useObjetivoNames from '../useObjetivoNames';
 import ObjetivoFormPanel from '../ObjetivoForm/ObjetivoFormPanel';
+import ObjetivoIniciativas from './ObjetivoIniciativas/ObjetivoIniciativas';
 import ObjetivoInfo from './ObjetivoInfo/ObjetivoInfo';
 import styles from './ObjetivoDetalle.module.scss';
 
 export interface IObjetivoDetalleProps {
 	canEditObjetivo: boolean;
+	canCreateIniciativa: boolean;
 }
 
 type LoadError = 'notFound' | 'error';
@@ -39,7 +41,7 @@ const PROGRESS_LABEL_STYLE: CSSProperties = {
 };
 const PROGRESS_VALUE_STYLE: CSSProperties = { fontWeight: typography.weight.bold, color: getColorStep('Red', '600').value };
 
-const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) => {
+const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, canCreateIniciativa }) => {
 	const { id } = useParams<{ id: string }>();
 	const objetivoId = Number(id);
 	const isValidId = Number.isInteger(objetivoId) && objetivoId > 0;
@@ -70,6 +72,10 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 		getById(objetivoId).catch((error: unknown) => setLoadError(isNotFoundError(error) ? 'notFound' : 'error'));
 	};
 
+	const onIniciativaCreated = (iniciativa: Iniciativa): void => {
+		setNoticeMessage(Utils.replaceAll(strings.IniciativaCreated, '{0}', iniciativa.Nombre ?? ''));
+	};
+
 	const renderBody = (): React.ReactNode => {
 		if (loadError === 'notFound') {
 			return <MessageBar type="error" message={strings.ObjetivoNotFound} />;
@@ -80,7 +86,12 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo }) =
 		if (!objetivo) {
 			return state.isLoading ? <Spinner /> : null;
 		}
-		return <ObjetivoInfo objetivo={objetivo} onEdit={canEditObjetivo ? () => setIsFormOpen(true) : undefined} />;
+		return (
+			<>
+				<ObjetivoInfo objetivo={objetivo} onEdit={canEditObjetivo ? () => setIsFormOpen(true) : undefined} />
+				<ObjetivoIniciativas objetivo={objetivo} canCreate={canCreateIniciativa} onCreated={onIniciativaCreated} />
+			</>
+		);
 	};
 
 	return (
