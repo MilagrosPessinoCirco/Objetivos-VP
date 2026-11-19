@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-18
 
-**Status**: Draft
+**Status**: Clarified
 
 **Input**: User description: "Feature: Resultados clave y cálculo de avance. Fuente: docs/especificacion-funcional.md v1.9, RF-08 (peso de los resultados clave), RF-09, RF-10 y la sección 5 (cálculos C-01 a C-04 y C-07), y el prototipo (bloque 'Resultados clave' del panel de cargar/editar iniciativa, sección 'Resultados clave' del detalle de la iniciativa y panel 'Seguimiento del resultado clave'). Continúa la 004-iniciativas, que dejó fuera los resultados clave y el avance. Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados clave; el avance se calcula de resultado clave → iniciativa → objetivo y se muestra en la bandeja, el detalle de la iniciativa, el detalle del objetivo y el detalle de la palanca."
 
@@ -27,7 +27,7 @@ Al cargar una iniciativa de un objetivo de la VP RRII, la persona completa en el
 **Acceptance Scenarios**:
 
 1. **Given** el panel de alta con un objetivo de la VP RRII elegido, **When** se muestra el panel, **Then** aparece el bloque "Resultados clave" después de los campos de la iniciativa, con un resultado clave y un "+" para agregar más, y sin botón para quitar el primero.
-2. **Given** dos o más resultados clave en el panel, **When** la persona quita uno con su botón, **Then** desaparece del panel y los restantes se renumeran.
+2. **Given** dos o más resultados clave en el panel de alta, todavía sin guardar, **When** la persona descarta uno con su botón, **Then** desaparece del panel y los restantes se renumeran.
 3. **Given** un resultado clave con Mínimo 10, Meta 5 y Máximo 100, **When** la persona intenta guardar, **Then** no se guarda y el error aparece en el campo correspondiente.
 4. **Given** un resultado clave sin nombre, tipo, unidad, mínimo, meta o máximo, **When** la persona intenta guardar, **Then** no se guarda y cada campo faltante muestra su error.
 5. **Given** un objetivo de otra VP elegido, **When** se muestra el panel, **Then** el bloque "Resultados clave" no se muestra y la iniciativa se guarda sin ellos.
@@ -94,21 +94,21 @@ La persona ve el avance de las iniciativas en la bandeja y en la sección Inicia
 
 ---
 
-### User Story 5 - Agregar, editar o quitar resultados clave al editar la iniciativa (Priority: P2)
+### User Story 5 - Agregar o editar resultados clave al editar la iniciativa (Priority: P2)
 
-Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar resultados clave, modificar los existentes o quitarlos, siempre que quede al menos uno. Los pesos se recalculan.
+Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar resultados clave y modificar los existentes, pero no quitar ninguno ya guardado. Los pesos se recalculan.
 
 **Why this priority**: Corrige y completa lo cargado; es secundario frente a la carga y el seguimiento.
 
-**Independent Test**: Editar una iniciativa con dos resultados clave, quitar uno, agregar otro y modificar la meta de un tercero; guardar y verificar el detalle, los pesos y el avance; verificar que no se puede quitar el único resultado clave.
+**Independent Test**: Editar una iniciativa con dos resultados clave, agregar un tercero y modificar la meta de uno existente; guardar y verificar el detalle, los pesos y el avance; verificar que ningún resultado clave ya guardado ofrece quitarse.
 
 **Acceptance Scenarios**:
 
 1. **Given** el panel de edición de una iniciativa de la VP RRII, **When** se abre, **Then** muestra el bloque "Resultados clave" con los resultados clave actuales precargados.
-2. **Given** un solo resultado clave, **When** se muestra el panel, **Then** no ofrece quitarlo.
-3. **Given** el panel de edición con cambios en los resultados clave, **When** la persona confirma, **Then** la iniciativa y los resultados clave agregados, modificados y quitados se guardan juntos, con la misma confirmación y el mismo mensaje de éxito de la 004.
+2. **Given** el panel de edición, **When** se muestra un resultado clave ya guardado, **Then** no ofrece quitarlo; solo los agregados en esa edición y todavía sin guardar se pueden descartar.
+3. **Given** el panel de edición con cambios en los resultados clave, **When** la persona confirma, **Then** la iniciativa y los resultados clave agregados y modificados se guardan juntos, con la misma confirmación y el mismo mensaje de éxito de la 004.
 4. **Given** un resultado clave con seguimiento cargado, **When** se modifica su nombre, tipo, unidad, mínimo, meta o máximo en la edición, **Then** su valor actual, valor proyectado, fuente, evidencia y comentario se conservan.
-5. **Given** un resultado clave quitado, **When** se guarda, **Then** deja de mostrarse y de contar en los pesos y en el avance.
+5. **Given** un resultado clave agregado en la edición, **When** se guarda, **Then** se muestra en el detalle y cuenta en los pesos y en el avance.
 
 ---
 
@@ -121,7 +121,12 @@ Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar 
 - Máximo menor o igual que 0: no se guarda y el error aparece en el campo Máximo.
 - Mínimo o meta negativos: son números válidos mientras se cumpla Mínimo ≤ Meta ≤ Máximo.
 - Valor actual mayor que el máximo: el cumplimiento supera 100 % y se muestra tal cual, pero suma como 100 % en el avance de la iniciativa.
-- Valor actual o proyectado negativo: es numérico y se acepta; el cumplimiento resultante se muestra tal cual.
+- Valor actual o proyectado negativo: es numérico y se acepta; el cumplimiento resultante se muestra tal cual, pero en el avance de la iniciativa ese resultado clave aporta 0 % (nunca negativo).
+- Se guarda el seguimiento sin tocar el comentario precargado: no se registra un comentario nuevo (no se duplica con otra fecha y autor).
+- Se borra el valor actual de un resultado clave que ya lo tenía: se acepta y el resultado clave vuelve a "Sin dato".
+- Dos personas guardan el seguimiento del mismo resultado clave a la vez: gana el último guardado.
+- Un avance como 59,6 % se muestra "60 %" pero con color rojo, porque el color se calcula con el valor sin redondear (FR-031): es el comportamiento esperado.
+- Iniciativa con tres resultados clave: cada peso se muestra "33 %" aunque la suma visible no llegue a 100 %.
 - Evidencia que no es un link válido, o que no es de un dominio de confianza (por ejemplo, un link de otro sitio): no se guarda y el error aparece en el campo.
 - Se modifica el mínimo, la meta o el máximo de un resultado clave con seguimiento cargado: el valor proyectado no se modifica; cumplimiento y estado se recalculan con los nuevos límites.
 - Se guarda un seguimiento sin cambios: se acepta y no altera los valores.
@@ -132,6 +137,19 @@ Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar 
 - Iniciativa, resultado clave o seguimiento que no existe al abrir el detalle o el panel: se aplica el comportamiento de la 004 para iniciativas inexistentes (FR-033a).
 
 ## Clarifications
+
+### Session 2026-11-19
+
+- Q: ¿Qué largos máximos tienen los textos? → A: Nombre 100, Unidad 20, Fuente 100, Evidencia 255, Comentario 500 caracteres.
+- Q: ¿Qué es el campo Unidad? → A: Texto libre obligatorio, sin catálogo ni valor fijo según el tipo.
+- Q: ¿Se puede quitar un resultado clave ya guardado? → A: No. Ni se borra ni se inactiva (inactivar exigiría una columna nueva en la lista). Solo se pueden descartar los bloques todavía sin guardar del panel. Reemplaza el "quitar siempre que quede uno" de la versión anterior.
+- Q: ¿Qué pasa con un comentario precargado que no se toca? → A: No se vuelve a registrar.
+- Q: ¿Se puede limitar en 0 % el aporte al avance? → A: Sí, cada resultado clave aporta entre 0 % y 100 %.
+- Q: ¿Se puede borrar un valor actual ya cargado? → A: Sí; vuelve a "Sin dato".
+- Q: ¿Cómo se muestra el peso con tres resultados clave? → A: "33 %" cada uno, redondeado a entero.
+- Q: ¿Hay tope de resultados clave por iniciativa? → A: No.
+- Q: ¿En qué orden se muestran? → A: En el orden en que se cargaron.
+- Q: ¿Qué pasa si dos personas guardan el seguimiento a la vez? → A: Gana el último guardado.
 
 ### Session 2026-11-18
 
@@ -157,6 +175,8 @@ Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar 
 
 - **FR-001**: Todo resultado clave DEBE pertenecer a una única iniciativa. El ID lo asigna el sistema y NO DEBE poder editarse.
 - **FR-002**: Son obligatorios Nombre, Tipo de medición, Unidad, Mínimo, Meta, Máximo y Valor proyectado al 31/12. Valor actual, Fuente, Evidencia y Comentario son opcionales.
+- **FR-002a**: Unidad DEBE ser texto libre (por ejemplo "proyectos", "%" o "USD"), sin catálogo ni valor fijo según el tipo de medición.
+- **FR-002b**: Los textos DEBEN tener estos largos máximos: Nombre 100, Unidad 20, Fuente 100, Evidencia 255 y Comentario 500 caracteres. Al superarlos, el sistema NO DEBE guardar y DEBE mostrar el error en el campo, en una sola línea.
 - **FR-003**: Tipo de medición DEBE ofrecer Cantidad, Porcentaje, Moneda e Indicador. Un resultado de hitos se expresa como Cantidad.
 - **FR-004**: Mínimo, Meta, Máximo, Valor actual y Valor proyectado DEBEN ser numéricos. Máximo DEBE ser mayor que 0.
 - **FR-005**: DEBE cumplirse Mínimo ≤ Meta ≤ Máximo; si no se cumple, el sistema NO DEBE guardar y DEBE mostrar el error en el campo correspondiente.
@@ -164,27 +184,27 @@ Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar 
 - **FR-007**: Al crearse, el Valor proyectado DEBE tomar el valor de la Meta y el Valor actual DEBE quedar vacío. Ambos NO se cargan en el panel de cargar y editar iniciativa.
 - **FR-008**: Al guardar, la columna Title de la lista DEBE recibir el mismo valor que el nombre del resultado clave, al crear y al editar.
 - **FR-009**: Evidencia DEBE admitir un único link válido, de un dominio de confianza de la plantilla (sharepoint.com, office.com, microsoft.com, powerbi.com, outlook.com u onedrive.com). Si el link no es válido o no es de uno de esos dominios, el error del campo DEBE decir «Ingresá un link de SharePoint u Office 365.».
-- **FR-010**: La aplicación NO DEBE ofrecer ninguna acción para eliminar un resultado clave por fuera del panel de edición de la iniciativa (FR-016).
+- **FR-010**: La aplicación NO DEBE ofrecer ninguna acción para eliminar un resultado clave ya guardado, ni en el detalle ni en el panel de edición de la iniciativa.
 
 **Peso**
 
-- **FR-011**: Cada resultado clave DEBE pesar 100 % ÷ la cantidad de resultados clave de su iniciativa. El peso DEBE recalcularse al agregar o quitar un resultado clave y DEBE mostrarse siempre en modo lectura, en la sección Resultados clave del detalle. El panel NO DEBE tener campo de peso.
+- **FR-011**: Cada resultado clave DEBE pesar 100 % ÷ la cantidad de resultados clave de su iniciativa. El peso DEBE recalcularse al agregar un resultado clave y DEBE mostrarse siempre en modo lectura, en la sección Resultados clave del detalle. El panel NO DEBE tener campo de peso.
 
 **Panel de cargar y editar iniciativa**
 
 - **FR-012**: Si el objetivo elegido es de la VP RRII, el panel DEBE mostrar el bloque "Resultados clave" después de los campos de la iniciativa, con un primer resultado clave y un "+" para agregar más. Si el objetivo es de otra VP, o todavía no hay objetivo elegido, el bloque NO DEBE mostrarse.
-- **FR-013**: Cada resultado clave DEBE cargarse en un bloque con el nombre ("Resultado clave N") a todo el ancho, Tipo de medición | Unidad, y Mínimo | Meta | Máximo. Cada resultado clave, salvo el primero, DEBE tener un botón para quitarlo.
+- **FR-013**: Cada resultado clave DEBE cargarse en un bloque con el nombre ("Resultado clave N") a todo el ancho, Tipo de medición | Unidad, y Mínimo | Meta | Máximo. Cada resultado clave todavía sin guardar, salvo el primero, DEBE tener un botón para descartarlo; los ya guardados no se pueden quitar (FR-010). NO hay límite de resultados clave por iniciativa. Los resultados clave DEBEN mostrarse (en el panel, el detalle y al renumerar) en el orden en que se cargaron.
 - **FR-014**: Una iniciativa de un objetivo de la VP RRII DEBE tener al menos un resultado clave; el sistema NO DEBE permitir guardarla sin uno.
 - **FR-015**: La iniciativa y sus resultados clave DEBEN guardarse juntos, con la misma confirmación y el mismo mensaje de éxito de la 004 (FR-025 y FR-026): si falla el alta, el sistema DEBE deshacer lo que alcanzó a guardar; si el deshacer también falla, DEBE informar en una línea que la operación no pudo completarse. Si falla la edición, lo que se alcanzó a guardar queda y el sistema DEBE informar en una línea que la operación no pudo completarse. En los dos casos el panel DEBE conservar lo ingresado y reintentar NO DEBE duplicar lo que ya se guardó.
-- **FR-016**: Al editar, la persona DEBE poder agregar resultados clave, modificar los existentes o quitarlos, siempre que quede al menos uno. Modificar un resultado clave NO DEBE alterar su valor actual, valor proyectado, fuente, evidencia ni comentario.
+- **FR-016**: Al editar, la persona DEBE poder agregar resultados clave y modificar los existentes; NO DEBE poder quitar los ya guardados. Modificar un resultado clave NO DEBE alterar su valor actual, valor proyectado, fuente, evidencia ni comentario.
 - **FR-017**: Los errores de validación DEBEN mostrarse en el campo que los origina, en una sola línea, y NO DEBE mostrarse el texto de ayuda del prototipo.
 
 **Seguimiento**
 
 - **FR-018**: La acción de cada fila de la sección Resultados clave del detalle DEBE abrir un panel lateral "Seguimiento del resultado clave", que muestra en modo lectura "Unidad · tipo" y "Mínimo · Meta · Máximo", y los campos editables Valor actual, Valor proyectado al 31/12, Fuente, Evidencia (link) y Comentario.
 - **FR-018a**: Al guardar el seguimiento, el sistema DEBE mostrar «El resultado clave "[nombre]" se ha actualizado correctamente.» sin pedir confirmación previa, como la maqueta.
-- **FR-019**: En el seguimiento SOLO DEBEN poder modificarse el valor actual, el valor proyectado, la fuente, la evidencia y el comentario. Valor proyectado es obligatorio; el valor actual puede quedar vacío.
-- **FR-020**: Al guardar el seguimiento, el comentario DEBE registrarse con su fecha y su autor. Solo se muestra el último; NO se ofrece historial de seguimientos. Un comentario vacío NO DEBE registrar uno nuevo.
+- **FR-019**: En el seguimiento SOLO DEBEN poder modificarse el valor actual, el valor proyectado, la fuente, la evidencia y el comentario. Valor proyectado es obligatorio; el valor actual puede quedar vacío, y si ya tenía un valor puede borrarse (vuelve a "Sin dato").
+- **FR-020**: Al guardar el seguimiento, el comentario DEBE registrarse con su fecha y su autor. Solo se muestra el último; NO se ofrece historial de seguimientos. Un comentario vacío, o que no cambió respecto del precargado, NO DEBE registrar uno nuevo.
 - **FR-021**: Al guardar el seguimiento, el sistema DEBE recalcular el cumplimiento y el estado del resultado clave y el avance de la iniciativa y del objetivo.
 - **FR-022**: El valor es declarativo: NO DEBE depender de las tareas.
 
@@ -198,10 +218,10 @@ Al editar una iniciativa de un objetivo de la VP RRII, la persona puede agregar 
 
 - **FR-026 (C-01)**: El cumplimiento del resultado clave DEBE ser valor actual ÷ máximo. Sin valor actual, el cumplimiento real vale 0 % para el avance de la iniciativa (FR-028), pero la columna Cumplim. DEBE mostrar "—". PUEDE superar 100 %.
 - **FR-027 (C-02)**: El estado del resultado clave DEBE ser: valor < mínimo → No cumple (rojo); mínimo ≤ valor < meta → Mínimo (naranja); meta ≤ valor < máximo → Meta (amarillo); valor ≥ máximo → Máximo (verde). Sin valor actual, el estado DEBE ser "Sin dato", como chip gris. Las columnas Cumplim. y Estado de la tabla de resultados clave DEBEN calcularse con el valor actual; el valor proyectado se muestra solo como valor en la columna Proyect.
-- **FR-028 (C-03)**: El avance de la iniciativa DEBE ser el promedio simple de mín(cumplimiento, 100 %) de sus resultados clave. Las tareas NO intervienen.
+- **FR-028 (C-03)**: El avance de la iniciativa DEBE ser el promedio simple de máx(0 %, mín(cumplimiento, 100 %)) de sus resultados clave, es decir, cada uno aporta entre 0 % y 100 %. Las tareas NO intervienen.
 - **FR-029 (C-04)**: El avance del objetivo DEBE ser el promedio simple del avance de sus iniciativas no canceladas. NO DEBE calcularse para objetivos de otra VP.
 - **FR-030 (C-07)**: El color del avance de iniciativas y objetivos DEBE ser: menos de 60 % → rojo; de 60 % a menos de 80 % → amarillo; 80 % o más → verde. Los umbrales son fijos en esta feature.
-- **FR-031**: Todos los porcentajes de cumplimiento y de avance DEBEN mostrarse redondeados a entero (por ejemplo "70 %" y "73 %"), en la tabla, el encabezado, la bandeja y los detalles del objetivo y de la palanca. El redondeo es solo de presentación: los promedios y los colores se calculan con los valores sin redondear.
+- **FR-031**: Todos los porcentajes de cumplimiento, de avance y de peso DEBEN mostrarse redondeados a entero (por ejemplo "70 %" y "73 %"), en la tabla, el encabezado, la bandeja y los detalles del objetivo y de la palanca. El redondeo es solo de presentación: los promedios y los colores se calculan con los valores sin redondear.
 
 **Vistas**
 

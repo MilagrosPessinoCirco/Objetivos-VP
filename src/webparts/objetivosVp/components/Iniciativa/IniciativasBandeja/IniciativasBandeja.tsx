@@ -7,6 +7,7 @@ import { spacing, typography } from '../../../../../core/ui/foundations';
 import useDepartamentoDataSource from '../../../../../core/api/Departamento/useDepartamentoDataSource';
 import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import useCurrentUser from '../../../../../core/api/Usuario/useCurrentUser';
 import { Iniciativa, Objetivo } from '../../../../../core/entities';
 import { IPersonValue } from '../../../../../core/utils/Mappers';
@@ -15,6 +16,7 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
 import { HOME_PATH, INICIATIVAS_VISTA_PARAM, INICIATIVAS_VISTA_TODAS, getIniciativaPath } from '../../ObjetivosVp/routes';
+import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import IniciativaFormPanel from '../IniciativaForm/IniciativaFormPanel';
 import IniciativasTable from '../IniciativasTable/IniciativasTable';
 import { EMPTY_FILTROS, IIniciativasFiltros, IniciativasVista, formatIniciativaId, getAniosIniciativa, isAccountable } from '../iniciativaUtils';
@@ -31,6 +33,7 @@ export interface IIniciativasBandejaState {
 
 export interface IIniciativasBandejaProps {
 	canCreate: boolean;
+	canLoadResultadosClave: boolean;
 	state: IIniciativasBandejaState;
 	onStateChange: (state: IIniciativasBandejaState) => void;
 }
@@ -74,10 +77,12 @@ const getAnios = (iniciativas: Iniciativa[]): number[] => {
 	return Array.from({ length: Math.max(...anios) - first + 1 }, (_, index) => first + index);
 };
 
-const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, state, onStateChange }) => {
+const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, canLoadResultadosClave, state, onStateChange }) => {
 	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
 	const [objetivoState, getObjetivos] = useObjetivoDataSource();
 	const [departamentoState, getDepartamentos] = useDepartamentoDataSource();
+	const [resultadoState, getResultados] = useResultadoClaveDataSource();
+	const names = useObjetivoNames();
 	const currentUser = useCurrentUser();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -89,12 +94,12 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, sta
 	const closeNotice = React.useCallback((): void => setNoticeMessage(undefined), []);
 
 	React.useEffect(() => {
-		Promise.all([getIniciativas(), getObjetivos(), getDepartamentos()]).then(() => setReady(true));
+		Promise.all([getIniciativas(), getObjetivos(), getDepartamentos(), getResultados()]).then(() => setReady(true));
 	}, []);
 
 	const vista: IniciativasVista = searchParams.get(INICIATIVAS_VISTA_PARAM) === INICIATIVAS_VISTA_TODAS ? 'todas' : 'mis';
 	const iniciativas = iniciativaState.items;
-	const objetivos = objetivoState.items;
+	const objetivos = names.resolve(objetivoState.items);
 	const mias = iniciativas.filter((iniciativa) => isAccountable(iniciativa, currentUser.user?.Id));
 	const deLaVista = vista === 'mis' ? mias : iniciativas;
 	const search = state.searchText.trim().toLowerCase();
@@ -103,7 +108,7 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, sta
 	const lastPage = Math.max(FIRST_PAGE, Math.ceil(visibles.length / PAGE_SIZE));
 	const page = Math.min(Math.max(FIRST_PAGE, state.page), lastPage);
 	const pageItems = visibles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-	const loadError = iniciativaState.error || objetivoState.error || departamentoState.error;
+	const loadError = iniciativaState.error || objetivoState.error || departamentoState.error || resultadoState.error || names.error;
 
 	const changeVista = (key: string): void => {
 		setSearchParams(key === INICIATIVAS_VISTA_TODAS ? { [INICIATIVAS_VISTA_PARAM]: INICIATIVAS_VISTA_TODAS } : {}, { replace: true });
@@ -122,6 +127,7 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, sta
 	const onCreated = (iniciativa: Iniciativa): void => {
 		setIsFormOpen(false);
 		getIniciativas();
+		getResultados();
 		setNoticeMessage(Utils.replaceAll(strings.IniciativaCreated, '{0}', iniciativa.Nombre ?? ''));
 	};
 
@@ -129,7 +135,7 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, sta
 		if (loadError) {
 			return <MessageBar type="error" message={strings.IniciativasLoadError} />;
 		}
-		if (!ready) {
+		if (!ready || !names.ready) {
 			return <Spinner />;
 		}
 		return (
@@ -149,6 +155,7 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, sta
 				/>
 				<IniciativasTable
 					iniciativas={pageItems}
+					resultados={resultadoState.items}
 					variant="bandeja"
 					objetivos={objetivos}
 					emptyText={deLaVista.length === 0 ? strings.IniciativasEmpty : strings.IniciativasEmptyFilters}
@@ -185,7 +192,7 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, sta
 						onClose={() => setIsFiltersOpen(false)}
 					/>
 				)}
-				{isFormOpen && <IniciativaFormPanel onSaved={onCreated} onCancel={() => setIsFormOpen(false)} />}
+				{isFormOpen && <IniciativaFormPanel canLoadResultadosClave={canLoadResultadosClave} onSaved={onCreated} onCancel={() => setIsFormOpen(false)} />}
 			</div>
 		</>
 	);

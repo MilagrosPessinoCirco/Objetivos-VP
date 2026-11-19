@@ -31,4 +31,4 @@
 
 ## Notes
 
-- Las 3 preguntas se resolvieron el 2026-11-18 (ver Clarifications de la spec; Q2 y Q3: opción A). Lista para `/speckit-plan`.
+- Las 3 preguntas se resolvieron el 2026-11-18 (ver Clarifications de la spec; Q2 y Q3: opción A). Aclaraciones del 2026-11-19 aplicadas; plan, tareas y documentos de apoyo alineados con la spec.

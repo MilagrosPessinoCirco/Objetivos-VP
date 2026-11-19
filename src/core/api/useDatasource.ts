@@ -111,7 +111,7 @@ function useDatasource<TItem extends BaseEntity>(
 		dispatch({ type: EDIT, payload: itemResult });
 	});
 
-	const deleteItem = handleAsync(async (itemId: number) => {
+	const deleteItem = handleAsyncAndRethrow(async (itemId: number) => {
 		dispatch({ type: LOAD });
 		await datasource.delete(itemId);
 		dispatch({ type: DELETE, payload: itemId });

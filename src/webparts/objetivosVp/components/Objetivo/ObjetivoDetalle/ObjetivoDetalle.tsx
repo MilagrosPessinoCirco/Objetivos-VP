@@ -5,7 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../../../../../core/ui/components';
 import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
 import { spacing, typography } from '../../../../../core/ui/foundations';
+import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import { Iniciativa, Objetivo } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
@@ -15,10 +17,11 @@ import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import LocationButton from '../../shared/LocationButton/LocationButton';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
-import { getColorStep } from '../../shared/getColorStep';
+import AvanceText from '../../shared/AvanceText/AvanceText';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
-import { DEFAULT_PROGRESS, formatObjetivoId, getEstadoChipColor, isNotFoundError, isVpRrii } from '../objetivoUtils';
+import { getAvanceObjetivo } from '../../Iniciativa/resultadoClaveUtils';
+import { formatObjetivoId, getEstadoChipColor, isNotFoundError, isVpRrii } from '../objetivoUtils';
 import useObjetivoNames from '../useObjetivoNames';
 import ObjetivoFormPanel from '../ObjetivoForm/ObjetivoFormPanel';
 import ObjetivoIniciativas from './ObjetivoIniciativas/ObjetivoIniciativas';
@@ -28,6 +31,7 @@ import styles from './ObjetivoDetalle.module.scss';
 export interface IObjetivoDetalleProps {
 	canEditObjetivo: boolean;
 	canCreateIniciativa: boolean;
+	canLoadResultadosClave: boolean;
 }
 
 type LoadError = 'notFound' | 'error';
@@ -39,15 +43,17 @@ const PROGRESS_LABEL_STYLE: CSSProperties = {
 	fontSize: typography.size[14],
 	lineHeight: typography.lineHeight[14]
 };
-const PROGRESS_VALUE_STYLE: CSSProperties = { fontWeight: typography.weight.bold, color: getColorStep('Red', '600').value };
 
-const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, canCreateIniciativa }) => {
+const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, canCreateIniciativa, canLoadResultadosClave }) => {
 	const { id } = useParams<{ id: string }>();
 	const objetivoId = Number(id);
 	const isValidId = Number.isInteger(objetivoId) && objetivoId > 0;
 	const navigate = useNavigate();
 	const [state, , , , , getById] = useObjetivoDataSource();
 	const names = useObjetivoNames();
+	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
+	const [resultadoState, getResultados] = useResultadoClaveDataSource();
+	const [ready, setReady] = React.useState<boolean>(false);
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
 	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>(undefined);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
@@ -60,7 +66,15 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, can
 			return;
 		}
 		getById(objetivoId).catch((error: unknown) => setLoadError(isNotFoundError(error) ? 'notFound' : 'error'));
+		Promise.all([getIniciativas(), getResultados()]).then(() => setReady(true));
 	}, [objetivoId]);
+
+	const dataError = iniciativaState.error || resultadoState.error;
+
+	const reloadIniciativas = (): void => {
+		getIniciativas();
+		getResultados();
+	};
 
 	const loaded = !loadError && state.item?.Id === objetivoId && names.ready ? state.item : undefined;
 	const objetivo = loaded ? names.resolve([loaded])[0] : undefined;
@@ -89,7 +103,17 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, can
 		return (
 			<>
 				<ObjetivoInfo objetivo={objetivo} onEdit={canEditObjetivo ? () => setIsFormOpen(true) : undefined} />
-				<ObjetivoIniciativas objetivo={objetivo} canCreate={canCreateIniciativa} onCreated={onIniciativaCreated} />
+				<ObjetivoIniciativas
+					objetivo={objetivo}
+					iniciativas={iniciativaState.items}
+					resultados={resultadoState.items}
+					ready={ready}
+					error={dataError}
+					canCreate={canCreateIniciativa}
+					canLoadResultadosClave={canLoadResultadosClave}
+					onCreated={onIniciativaCreated}
+					onReload={reloadIniciativas}
+				/>
 			</>
 		);
 	};
@@ -112,9 +136,10 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, can
 							</h1>
 							<HeaderChip color={getEstadoChipColor(objetivo.Estado)} label={objetivo.Estado ?? ''} />
 							<div className={styles.headerEnd} style={{ gap: spacing.md }}>
-								{isVpRrii(objetivo.VP?.Title) && (
+								{isVpRrii(objetivo.VP?.Title) && ready && !dataError && (
 									<span style={PROGRESS_LABEL_STYLE}>
-										{strings.ObjetivoDetailProgress} <b style={PROGRESS_VALUE_STYLE}>{`${DEFAULT_PROGRESS} %`}</b>
+										{strings.ObjetivoDetailProgress}{' '}
+										<AvanceText value={getAvanceObjetivo(objetivo.Id, iniciativaState.items, resultadoState.items)} spaced />
 									</span>
 								)}
 								<LocationButton />

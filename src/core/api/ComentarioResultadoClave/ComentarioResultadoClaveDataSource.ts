@@ -37,6 +37,8 @@ export default class ComentarioResultadoClaveDataSource implements IComentarioRe
 			.select(...this.selectProperties)
 			.expand(...this.expand)
 			.filter(`ResultadoClaveId eq ${resultadoClaveId}`)
+			.orderBy('Created', false)
+			.orderBy('Id', false)
 			.top(TOP_DEFAULT)();
 		return items.map(item => new ComentarioResultadoClave(item));
 	}

@@ -38,7 +38,7 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 1 | US1 | Bandeja > "Cargar iniciativa", sin elegir objetivo | No aparece el bloque "Resultados clave". |
 | 2 | US1 | Elegir un objetivo de la VP RRII | Después de los campos de la iniciativa aparece la banda "Resultados clave" con "+", y un resultado clave ("Resultado clave 1") sin botón de quitar: nombre a todo el ancho, Tipo de medición \| Unidad, Mínimo \| Meta \| Máximo. Sin campo de peso, sin responsable, sin descripción y sin textos de ayuda. |
 | 3 | US1 | Elegir un objetivo de otra VP | El bloque desaparece. Volver a uno de la VP RRII: reaparece con lo cargado. |
-| 4 | US1 | "+" dos veces | Aparecen "Resultado clave 2" y "3", cada uno con su botón de quitar. Quitar el 2: el 3 pasa a ser el 2. |
+| 4 | US1 | "+" dos veces | Aparecen "Resultado clave 2" y "3", cada uno con su botón de quitar. Descartar el 2 (todavía sin guardar): el 3 pasa a ser el 2. |
 | 5 | US1 | "Cargar iniciativa" con el resultado clave vacío | No guarda; cada campo del resultado clave muestra "Este campo es obligatorio.". |
 | 6 | US1 | Mínimo 10, Meta 5, Máximo 100 | Error en Meta: "La meta no puede ser menor que el mínimo.". |
 | 7 | US1 | Mínimo 10, Meta 50, Máximo 20 | Error en Máximo: "El máximo no puede ser menor que la meta.". |
@@ -72,17 +72,20 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 35 | US4 | Avance de 59, 60, 79 y 80 % (ajustar valores) | Rojo, amarillo, amarillo y verde. Un avance de 79,6 % se muestra "80 %" y sigue en amarillo. |
 | 36 | US4 | Guardar un seguimiento y volver a la bandeja, al objetivo y a la palanca | El avance nuevo se ve en las cuatro pantallas. |
 | 37 | US5 | Detalle > Editar de una iniciativa con dos resultados clave | Panel con los datos actuales y los dos resultados clave precargados; Objetivo en modo lectura. |
-| 38 | US5 | Quitar uno, agregar otro y cambiar la meta de un tercero > Guardar cambios > Aceptar | Modal "Estás por guardar los cambios de la iniciativa. ¿Querés continuar?"; luego el detalle refleja los cambios, los pesos se recalculan (100 ÷ cantidad) y se ve «La iniciativa "[nombre]" se ha actualizado correctamente.». El quitado ya no está en la lista. |
+| 38 | US5 | Agregar un resultado clave y cambiar la meta de uno existente > Guardar cambios > Aceptar | Modal "Estás por guardar los cambios de la iniciativa. ¿Querés continuar?"; luego el detalle refleja los cambios, los pesos se recalculan (100 ÷ cantidad, redondeados) y se ve «La iniciativa "[nombre]" se ha actualizado correctamente.». |
 | 39 | US5 | Un resultado clave con seguimiento: cambiar su unidad en la edición | Valor actual, valor proyectado, fuente, evidencia y comentario se conservan. |
 | 40 | US5 | Con un resultado clave que ya tiene seguimiento, editar su meta desde el panel de la iniciativa y guardar | `ValorActual`, `ValorProyectado`, `Fuente` y `Evidencia` no se tocan en la lista (el panel envía solo sus campos, D2). El valor proyectado no cambia aunque cambie la meta. |
-| 41 | US5 | Iniciativa con un solo resultado clave | La edición no ofrece quitarlo. |
+| 41 | US5 | Editar una iniciativa con resultados clave ya guardados | Ninguno ofrece quitarse; solo los agregados en esa edición, todavía sin guardar, se pueden descartar. |
 | 42 | US5 | Editar una iniciativa de la VP RRII sin resultados clave | El panel arranca con un resultado clave vacío y exige completarlo para guardar. |
-| 43 | US5 | Quitar un resultado clave que tiene comentarios | Se quita; los comentarios no se borran. Si la lista lo impide, una línea de error (plan, D15). |
+| 43 | US5 | Tres resultados clave en una iniciativa | Cada peso se muestra "33%". |
 | 44 | US5 | Forzar un error al guardar un resultado clave en la edición (por ejemplo, que falle el segundo paso) | Una línea de error; lo que se alcanzó a guardar queda (no se deshace); el panel conserva lo ingresado; reintentar hace solo lo que faltaba y no duplica lo ya guardado. |
-| 45 | — | Revisar todas las pantallas | No hay acción para eliminar resultados clave fuera del panel de edición (FR-010). Ninguna pantalla muestra responsable ni descripción de un resultado clave. |
+| 45 | — | Revisar todas las pantallas | No hay acción para eliminar ni quitar un resultado clave ya guardado (FR-010). Ninguna pantalla muestra responsable ni descripción de un resultado clave. |
 | 46 | — | Revisar los permisos | `CAN_LOAD_RESULTADOS_CLAVE` y `CAN_TRACK_RESULTADO_CLAVE` están separadas y en `true`. Con la primera en `false`, el panel no muestra el bloque; con la segunda en `false`, la acción de cada fila muestra "—". |
 | 47 | — | Comparar con palancas, objetivos e iniciativas | Mismo encabezado, grilla, chips, carga, vacíos, errores, secciones, pie y panel que las features anteriores. |
 | 48 | — | En el sitio de desarrollo, con el volumen que haya en las listas, abrir bandeja, detalles y paneles | Cada pantalla en menos de 3 s; cálculos y filtros sin consultas adicionales. |
+| 49 | US1, US3 | Nombre de 101 caracteres, unidad de 21, fuente de 101, evidencia de 256 o comentario de 501 | No guarda; el campo muestra «No puede superar N caracteres.» en una línea (FR-002b). |
+| 50 | US2 | Resultado clave con valor actual negativo | Cumplim. se muestra tal cual (negativo), pero aporta 0 % al avance de la iniciativa: nunca negativo (FR-028). |
+| 51 | US3 | Borrar el valor actual de un resultado clave que lo tenía, o guardar con el comentario precargado sin tocar | Vuelve a "Sin dato"; no se registra un comentario nuevo (FR-019, FR-020). |
 
 ## Revisión visual
 

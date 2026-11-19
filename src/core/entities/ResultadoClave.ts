@@ -12,7 +12,6 @@ export default class ResultadoClave extends BaseEntity {
 	protected mapItem(item: any): void {
 		this.Nombre = item.Nombre ?? undefined;
 		this.Descripcion = item.Descripcion ?? undefined;
-		this.Responsable = toPersonValue(item.Responsable);
 		this.TipoMedicion = toChoiceValue(TipoMedicion, item.TipoMedicion, 'TipoMedicion');
 		this.UnidadMedida = item.UnidadMedida ?? undefined;
 		this.Minimo = item.Minimo ?? undefined;
@@ -33,10 +32,10 @@ export default class ResultadoClave extends BaseEntity {
 	public toListItem(): any {
 		return {
 			...super.toListItem(),
+			Title: this.Nombre,
 			Nombre: this.Nombre,
 			Descripcion: this.Descripcion,
-			ResponsableId: this.Responsable?.Id,
-			TipoMedicion: assertChoiceValue(TipoMedicion, this.TipoMedicion, 'TipoMedicion'),
+			TipoMedicion: this.TipoMedicion === undefined ? undefined : assertChoiceValue(TipoMedicion, this.TipoMedicion, 'TipoMedicion'),
 			UnidadMedida: this.UnidadMedida,
 			Minimo: this.Minimo,
 			Meta: this.Meta,
@@ -52,16 +51,15 @@ export default class ResultadoClave extends BaseEntity {
 
 	public Nombre?: string | undefined;
 	public Descripcion?: string | undefined;
-	public Responsable?: IPersonValue | undefined;
 	public TipoMedicion?: TipoMedicion | undefined;
 	public UnidadMedida?: string | undefined;
 	public Minimo?: number | undefined;
 	public Meta?: number | undefined;
 	public Maximo?: number | undefined;
 	public Peso?: number | undefined;
-	public ValorActual?: number | undefined;
-	public Fuente?: string | undefined;
-	public Evidencia?: IUrlValue | undefined;
+	public ValorActual?: number | null | undefined;
+	public Fuente?: string | null | undefined;
+	public Evidencia?: IUrlValue | null | undefined;
 	public ValorProyectado?: number | undefined;
 	public Iniciativa?: ILookupValue | undefined;
 

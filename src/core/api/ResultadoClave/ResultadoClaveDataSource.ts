@@ -13,7 +13,6 @@ export default class ResultadoClaveDataSource implements IResultadoClaveDataSour
 		'Id', 'Title',
 		'Nombre',
 		'Descripcion',
-		'Responsable/Id', 'Responsable/Title', 'Responsable/EMail',
 		'TipoMedicion',
 		'UnidadMedida',
 		'Minimo',
@@ -29,7 +28,7 @@ export default class ResultadoClaveDataSource implements IResultadoClaveDataSour
 		'Author/Id', 'Author/Title', 'Author/EMail',
 		'Editor/Id', 'Editor/Title', 'Editor/EMail'
 	];
-	private expand: Array<string> = ['Author', 'Editor', 'Responsable', 'Iniciativa'];
+	private expand: Array<string> = ['Author', 'Editor', 'Iniciativa'];
 
 	constructor() {
 		this._sp = getSP();

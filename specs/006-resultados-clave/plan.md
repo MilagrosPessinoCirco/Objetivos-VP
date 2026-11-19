@@ -33,7 +33,7 @@ Enfoque técnico:
 
 **Performance Goals**: bandeja, detalles y paneles en menos de 3 s con cientos de iniciativas y unos pocos miles de resultados clave (SC-001, SC-002, SC-005). Cada pantalla con avance hace una consulta más (todos los resultados clave): la bandeja pasa a 5, el detalle de la iniciativa a 5 (iniciativas, objetivos, áreas, comentarios de la iniciativa y resultados clave; los comentarios del seguimiento se traen solo al abrir el panel), el detalle del objetivo a 4 (objetivo, nombres, iniciativas y resultados clave) y las palancas a 5. Búsqueda, filtros, pesos y cálculos son en memoria.
 
-**Constraints**: `src/core/ui` de solo lectura; sin colores, tipografías ni espaciados fuera del DS; textos en español (AR) con `loc/`; sin acción de eliminar fuera del panel de edición (FR-010); no se crean ni modifican listas ni columnas.
+**Constraints**: `src/core/ui` de solo lectura; sin colores, tipografías ni espaciados fuera del DS; textos en español (AR) con `loc/`; sin acción de eliminar o quitar un resultado clave ya guardado (FR-010); no se crean ni modifican listas ni columnas.
 
 **Scale/Scope**: sin rutas ni pantallas nuevas. 3 piezas nuevas de pantalla (bloque del panel, sección del detalle, panel de seguimiento), 1 componente compartido de avance, 1 archivo de cálculos, 2 mocks y 1 hook nuevos en `core`, 4 archivos de `core` modificados (`ResultadoClave.ts`, `useDatasource.ts`, hook de `ResultadoClave`, hook de `ComentarioResultadoClave`) más `IniciativaMock.ts` y `ObjetivoMock.ts` si hace falta cubrir casos, y 12 piezas existentes del webparts ampliadas (ver "Estructura de carpetas").
 
@@ -46,13 +46,13 @@ Detalle en [research.md](./research.md).
 | H1 | `ResultadoClave` y `ComentarioResultadoClave` tienen entidad, datasource, interfaz y hooks, pero no mock (R1). | Dos mocks nuevos (D1). No se crean servicios. |
 | H2 | `ResultadoClave.toListItem` no envía `Title` y no puede vaciar un valor ya cargado: un campo `undefined` se omite (R2). | `Title = Nombre` (FR-008) y `null` explícito para vaciar valor actual, fuente y evidencia (D2). |
 | H3 | La entidad ya lee y escribe `Descripcion`, `Responsable` y `Peso` (R2). | No se tocan: los objetos que se guardan son parciales, así que esos campos no se envían (FR-006, D2). |
-| H4 | `useDatasource.deleteItem` traga el error, y nadie lo usa (R4). | Pasa a relanzarlo, para detectar el fallo al quitar un resultado clave o al deshacer un alta (D9). |
+| H4 | `useDatasource.deleteItem` traga el error, y nadie lo usa (R4). | Pasa a relanzarlo, para detectar el fallo al deshacer un alta (D9). |
 | H5 | `ComentarioResultadoClaveDataSource` ya implementa `getFilteredItems`, pero no hay mock ni hook que lo exponga (R5). | `ComentarioResultadoClaveMock` y `useComentariosResultadoClave`, como `useComentariosIniciativa` (D10). |
 | H6 | Las grillas de objetivos y el encabezado del objetivo muestran `DEFAULT_PROGRESS` (0 %) en rojo fijo (R7). | Se reemplaza por el avance calculado, con el color de C-07 (D5, D6). |
 | H7 | `IniciativaFormBody` no conoce los resultados clave y sus maestros no los cargan (R8). | `useIniciativaFormMasters` suma los resultados clave de la iniciativa al editar (D7). |
 | H8 | `ObjetivoDetalle` no carga iniciativas: lo hace `ObjetivoIniciativas` (R9). | Pasa a cargarlas `ObjetivoDetalle`, que necesita el avance en el encabezado, y se las da a `ObjetivoIniciativas` por props (D11). |
 | H9 | El DS no tiene chip amarillo ni ícono de seguimiento (R10, R11). | Chip `warning` con colores de la escala Yellow para "Meta" y `editPrimary` para la acción (A1, A2). |
-| H10 | El registro de íconos del DS incluye `delete` y `deletePrimary` (R11). | Botón de quitar con `deletePrimary`. |
+| H10 | El registro de íconos del DS incluye `delete` y `deletePrimary` (R11). | Botón de descartar un bloque sin guardar con `deletePrimary`. |
 | H11 | `Utils.validateAndSanitizeUrl` solo acepta dominios de confianza (R12). | La evidencia se valida con esa utilidad; un dominio rechazado muestra el error del campo y no se amplía la lista (P3). |
 
 ## Constitution Check
@@ -91,12 +91,12 @@ Detalle en [research.md](./research.md).
 | Elemento | Componente | Observaciones |
 |---|---|---|
 | Banda "Resultados clave" con "+" | `SectionBand` (`shared/`) con `action` | Sin `collapsible`. "+" = `Button` `iconOnly` + `FigmaIcon` `addPrimary` + `Tooltip` "Agregar resultado clave", como el de `ObjetivoIniciativas`. |
-| Nombre ("Resultado clave N") | `Input` | `required`, `maxLength={255}`, placeholder "Ej. Implementar YPF Store en 40 EESS". A todo el ancho. |
+| Nombre ("Resultado clave N") | `Input` | `required`, máximo 100 caracteres con error en el campo (FR-002b), placeholder "Ej. Implementar YPF Store en 40 EESS". A todo el ancho. |
 | Tipo de medición | `Dropdown` (`core/ui/components`) | `required`, opciones del enum `TipoMedicion`, placeholder "Seleccionar". |
-| Unidad | `Input` | `required`, placeholder "Ej. estaciones". Lado a lado con Tipo. |
+| Unidad | `Input` | `required`, texto libre de hasta 20 caracteres (FR-002a, FR-002b), placeholder "Ej. estaciones". Lado a lado con Tipo. |
 | Mínimo, Meta, Máximo | `Input` `type="number"` | `required`, los tres lado a lado. Error en el propio campo (`errorMessage`). |
-| Quitar | `Button` `iconOnly` + `FigmaIcon` `deletePrimary` + `Tooltip` | Solo en los resultados clave que no son el primero. |
-| Error "al menos uno" | no hace falta | El primero no se puede quitar, así que el bloque siempre tiene uno. |
+| Descartar | `Button` `iconOnly` + `FigmaIcon` `deletePrimary` + `Tooltip` | Solo en los bloques todavía sin guardar que no son el primero. Un resultado clave ya guardado no se puede quitar (FR-010). |
+| Error "al menos uno" | no hace falta | El primero no se puede quitar y los guardados tampoco, así que el bloque siempre tiene uno. |
 
 **Sección del detalle (`IniciativaResultadosClave`, `i_kr`)**
 
@@ -115,9 +115,9 @@ Detalle en [research.md](./research.md).
 | Panel | `Panel` | Ancho 480 px (estilos de `IniciativaForm.module.scss`, como `IniciativaEstadoPanel`). Título "Seguimiento del resultado clave", subtítulo "KR-nn · nombre" con `buildPanelTitle`. |
 | "Unidad · tipo" y "Mínimo · Meta · Máximo" | `Field` (`shared/`) | Modo lectura, uno al lado del otro, como `IniciativaInfo`. |
 | Valor actual, Valor proyectado al 31/12 | `Input` `type="number"` | El proyectado es `required`. |
-| Fuente | `Input` | Placeholder "De dónde sale el dato". |
-| Evidencia (link) | `Input` `type="url"` | Placeholder "https://ypf.sharepoint.com/…". Error de link en el campo. |
-| Comentario | `Multiline` | Precargado con el último, placeholder "Novedad de este seguimiento"; debajo, una línea de solo lectura con fecha y autor del último (U1). |
+| Fuente | `Input` | Placeholder "De dónde sale el dato". Hasta 100 caracteres. |
+| Evidencia (link) | `Input` `type="url"` | Placeholder "https://ypf.sharepoint.com/…". Hasta 255 caracteres. Error de link en el campo. |
+| Comentario | `Multiline` | Hasta 500 caracteres. Precargado con el último, placeholder "Novedad de este seguimiento"; debajo, una línea de solo lectura con fecha y autor del último (U1). |
 | Pie | `Button` x2 | Cancelar `secondary` · Guardar `primary`. Sin modal de confirmación: la maqueta no lo tiene. |
 | Error al guardar | `MessageBar` `type="error"` | Una línea. |
 
@@ -143,7 +143,7 @@ Detalle en [research.md](./research.md).
 |---|---|---|---|
 | A1 | Chip de estado del resultado clave | No cumple `danger`, Mínimo `warning`, Meta `warning` con fondo Yellow 100 y texto Yellow 800, Máximo `success`, Sin dato `neutral` | El DS no tiene chip amarillo. Los colores salen de `colorScales`, no son valores propios, y coinciden con los de la maqueta (`c-yel`). |
 | A2 | Ícono de la acción "Registrar seguimiento" | `editPrimary` | No hay ícono de tendencia en el registro del DS. |
-| A3 | Porcentajes de la tabla de resultados clave | Peso y Cumplim. como `40%` (sin espacio), como las tablas ya implementadas (`ObjetivosTable`, `IniciativasTable`) | Manda lo implementado (H6 de la 005); la maqueta usa `40 %`. En encabezados y campos del detalle, con espacio. |
+| A3 | Porcentajes de la tabla de resultados clave | Peso y Cumplim. como `40%` (sin espacio) y redondeados a entero ("33%" con tres resultados clave), como las tablas ya implementadas (`ObjetivosTable`, `IniciativasTable`) | Manda lo implementado (H6 de la 005); la maqueta usa `40 %`. En encabezados y campos del detalle, con espacio. |
 | A4 | Columna Avance de las grillas del detalle del objetivo y de la bandeja para otra VP | "No aplica" | La maqueta lo muestra así en la bandeja y en el detalle del objetivo (`it.noAv`). |
 
 ## Decisiones
@@ -175,8 +175,9 @@ Detalle en [research.md](./research.md).
 - `getCumplimiento(resultado)`: `ValorActual × 100 ÷ Maximo`. Sin valor actual o con máximo menor o igual que 0, devuelve 0 (C-01, para el avance). Puede superar 100.
 - `hasValorActual(resultado)`: `ValorActual` distinto de `undefined` y `null`. La tabla muestra "—" en Cumplim. cuando es falso.
 - `getEstadoResultadoClave(resultado)`: "Sin dato" sin valor actual; si no, No cumple, Mínimo, Meta o Máximo según C-02, comparando el valor con `Minimo`, `Meta` y `Maximo` tal como se ingresaron.
-- `getPesoResultadoClave(cantidad)`: `100 ÷ cantidad` (FR-011). Se muestra con `formatPeso` de `iniciativaUtils`.
-- `getAvanceIniciativa(resultados)`: promedio simple de `mín(cumplimiento, 100)`. Sin resultados clave, 0 (FR-024).
+- `getPesoResultadoClave(cantidad)`: `100 ÷ cantidad` (FR-011). Se muestra con `formatAvance`, redondeado a entero ("33 %" con tres, FR-031).
+- `getAvanceIniciativa(resultados)`: promedio simple de `máx(0, mín(cumplimiento, 100))`: cada resultado clave aporta entre 0 y 100, así que un valor actual negativo nunca da avance negativo (FR-028). Sin resultados clave, 0 (FR-024).
+- Largos máximos (FR-002b): constante `RESULTADO_CLAVE_MAX_LENGTH` (nombre 100, unidad 20, fuente 100, evidencia 255, comentario 500) y `getLengthIssue`, con el error `ResultadoClaveTooLong` en el campo.
 - `getAvanceObjetivo(objetivoId, iniciativas, resultados)`: promedio simple del avance de las iniciativas del objetivo que no están canceladas. Sin ninguna, 0 (FR-025).
 - `getAvanceColor(avance)`: rojo si es menor que 60, amarillo si es menor que 80, verde si no (FR-030).
 - `formatAvance(valor)`: entero redondeado (FR-031), sin `-0`.
@@ -196,9 +197,9 @@ Detalle en [research.md](./research.md).
 **D7. Bloque del panel (FR-012 a FR-017).**
 
 - `IniciativaFormBody` suma el prop `resultadosClave: ResultadoClave[]` (los de la iniciativa que se edita; vacío en el alta) y `canLoadResultadosClave: boolean`. El bloque se muestra si el objetivo elegido es de la VP RRII (`isVpRrii(objetivo?.VP?.Title)`) y `canLoadResultadosClave` es verdadero.
-- Estado: lista de borradores `{ key, id?, nombre, tipo, unidad, minimo, meta, maximo }` con los números como texto. Alta y edición de una iniciativa sin resultados clave arrancan con un borrador vacío. `key` es un contador local, estable al quitar. "+" agrega un borrador vacío al final; quitar elimina el borrador (no el primero).
+- Estado: lista de borradores `{ key, id?, nombre, tipo, unidad, minimo, meta, maximo }` con los números como texto. Alta y edición de una iniciativa sin resultados clave arrancan con un borrador vacío. `key` es un contador local, estable al quitar. "+" agrega un borrador vacío al final; descartar elimina un borrador que todavía no se guardó (sin `id`; no el primero). Los borradores de resultados clave ya guardados no ofrecen quitarse (FR-010). Los resultados clave se muestran en el orden en que se cargaron (Id ascendente) y no hay tope de cantidad.
 - Si se cambia el objetivo elegido (solo en el alta) a uno de otra VP, el bloque se oculta y los borradores no se envían ni validan; al volver a uno de la VP RRII reaparecen con lo cargado.
-- Validación (al elegir "Cargar iniciativa" o "Guardar cambios", como los demás campos): nombre, tipo y unidad obligatorios recortando espacios; mínimo, meta y máximo obligatorios y numéricos; `Maximo > 0`; `Minimo ≤ Meta ≤ Maximo`. El error de orden se muestra en el campo que lo rompe: en Meta si `Meta < Minimo`, en Máximo si `Maximo < Meta` (si ambos, se muestra el de Meta). Los errores se limpian cuando el campo deja de ser inválido. Mensajes de una línea: `RequiredField`, "Ingresá un valor numérico.", "El máximo debe ser mayor que 0.", "La meta no puede ser menor que el mínimo.", "El máximo no puede ser menor que la meta." (`ResultadoClave*` en `loc/`).
+- Validación (al elegir "Cargar iniciativa" o "Guardar cambios", como los demás campos): nombre, tipo y unidad obligatorios recortando espacios; nombre hasta 100 y unidad hasta 20 caracteres; mínimo, meta y máximo obligatorios y numéricos; `Maximo > 0`; `Minimo ≤ Meta ≤ Maximo`. El error de orden se muestra en el campo que lo rompe: en Meta si `Meta < Minimo`, en Máximo si `Maximo < Meta` (si ambos, se muestra el de Meta). Los errores se limpian cuando el campo deja de ser inválido. Mensajes de una línea: `RequiredField`, "Ingresá un valor numérico.", "El máximo debe ser mayor que 0.", "La meta no puede ser menor que el mínimo.", "El máximo no puede ser menor que la meta." (`ResultadoClave*` en `loc/`).
 - Un número válido es el que `Number(texto)` convierte en finito y el texto, recortado, no está vacío.
 - Los resultados clave y la iniciativa comparten la misma confirmación (`IniciativaConfirmCreate` o `IniciativaConfirmEdit`) y el mismo mensaje de éxito (FR-015): no se agregan textos.
 
@@ -207,7 +208,7 @@ Detalle en [research.md](./research.md).
 **D9. Guardado conjunto (FR-015, riesgo R1).** `IniciativaFormPanel.save` recibe la iniciativa y los borradores y hace lo siguiente, con `useIniciativaDataSource` y `useResultadoClaveDataSource` (`addItem`, `editItem` y `deleteItem`, este último relanzando el error por H4):
 
 - **Alta**: (1) `addItem` de la iniciativa; (2) `addItem` de cada resultado clave, en orden, con `Iniciativa` = la nueva, `Title`/`Nombre`, tipo, unidad, mínimo, meta, máximo y `ValorProyectado` = meta (FR-007). Si falla un resultado clave, se deshace: primero se quitan los resultados clave ya creados y después la iniciativa (`deleteItem`); el panel muestra `IniciativaSaveError` ("No se pudo guardar la iniciativa.") y conserva lo ingresado. El borrado del deshacer es interno: no es una acción de la persona y no contradice FR-007 de la 004 (R1). Si el deshacer también falla, el error queda registrado por `useDatasource`, se conservan las referencias de lo que sigue guardado y el reintento retoma lo pendiente: no vuelve a crear la iniciativa ni los resultados clave ya creados (el panel guarda en `useRef` la iniciativa creada y los resultados clave creados por `key` de borrador).
-- **Edición**: (1) `editItem` de la iniciativa; (2) `addItem` de los borradores nuevos; (3) `editItem` de los existentes que cambiaron (se comparan los seis campos con el original); (4) `deleteItem` de los originales que ya no están. Agregar va antes que quitar, para que nunca quede una iniciativa sin resultados clave. Si un paso falla, la edición no se deshace: lo que se alcanzó a guardar queda (FR-015), el panel muestra `IniciativaSaveError` ("No se pudo guardar la iniciativa.") y conserva lo ingresado. Al reintentar, `IniciativaFormPanel` toma como original lo ya guardado en el intento anterior (un `useRef` con la lista vigente y otro con los Id creados por `key` de borrador, que se actualizan después de cada paso), así que los pasos completados no se repiten. `onSave` devuelve los borradores con los Id asignados (`Promise<IResultadoClaveDraft[]>`).
+- **Edición**: (1) `editItem` de la iniciativa; (2) `addItem` de los borradores nuevos; (3) `editItem` de los existentes que cambiaron (se comparan los seis campos con el original). No se quita ningún resultado clave guardado (FR-010). Si un paso falla, la edición no se deshace: lo que se alcanzó a guardar queda (FR-015), el panel muestra `IniciativaSaveError` ("No se pudo guardar la iniciativa.") y conserva lo ingresado. Al reintentar, `IniciativaFormPanel` toma como original lo ya guardado en el intento anterior (un `useRef` con la lista vigente y otro con los Id creados por `key` de borrador, que se actualizan después de cada paso), así que los pasos completados no se repiten. `onSave` devuelve los borradores con los Id asignados (`Promise<IResultadoClaveDraft[]>`).
 - Solo con `canLoadResultadosClave` y un objetivo de la VP RRII; si no, la iniciativa se guarda como en la 004.
 - Al terminar, `onSaved` recibe la iniciativa, como hoy; las pantallas recargan iniciativas y resultados clave.
 
@@ -228,7 +229,7 @@ Detalle en [research.md](./research.md).
 **D12. Sección del detalle (FR-032, FR-037).** `IniciativaResultadosClave` recibe los resultados clave de la iniciativa y `onTrack?: (resultado) => void` (ausente = sin permiso). Orden de la grilla: por Id ascendente. Formatos:
 
 - números (`Mín.`, `Meta`, `Máx.`, `Actual`, `Proyect.`): `toLocaleString('es-AR')` sin tope de decimales útil (máximo 4); vacío → "—";
-- Peso y Cumplim.: `${n}%` con el entero de `formatAvance` para Cumplim. y `formatPeso` para Peso (A3);
+- Peso y Cumplim.: `${n}%` con el entero de `formatAvance` en los dos (A3, FR-031): con tres resultados clave, "33%" cada uno;
 - nombre con debajo "unidad" y, si hay, " · Fuente: texto" (como la maqueta);
 - Estado: `Chip` de A1.
 
@@ -243,7 +244,7 @@ Detalle en [research.md](./research.md).
 
 **D14. Permisos (FR-038, FR-039).** `CAN_LOAD_RESULTADOS_CLAVE` controla el bloque del panel de iniciativa; `CAN_TRACK_RESULTADO_CLAVE`, la acción de cada fila y el panel de seguimiento. Las dos en `true` en `ObjetivosVp.tsx`. `canLoadResultadosClave` baja por props a `IniciativasBandeja`, `ObjetivoDetalle` (→ `ObjetivoIniciativas`) e `IniciativaDetalle`, que abren el panel de iniciativa. Con el valor en `false`, el panel no muestra el bloque, no valida los resultados clave y no los toca al guardar; cómo se resuelve entonces FR-014 lo decide la feature que implemente los roles (RF-19).
 
-**D15. Quitar un resultado clave.** `deleteItem` borra el elemento de `Resultado clave`; los comentarios de la lista `Comentario resultado clave` no se borran. Si esa lista impide quitar un resultado clave con comentarios (relación de la columna de búsqueda), el paso falla y se informa con `IniciativaSaveError`. Se verifica en el quickstart (P2).
+**D15. No se quita ningún resultado clave guardado (FR-010).** La aplicación no borra ni inactiva un resultado clave ya guardado: se descartó inactivarlo porque exigiría una columna nueva en la lista. `deleteItem` solo se usa para deshacer un alta fallida (D9), antes de que el resultado clave sea visible. Los comentarios de seguimiento no se borran nunca.
 
 **D16. Errores.** Una línea con `MessageBar`, sin el error técnico (FR-041). El registro de errores queda en `useDatasource`; las pantallas no vuelven a registrarlos. Los errores de validación se muestran en el campo, sin texto de ayuda (FR-017).
 
@@ -325,7 +326,7 @@ src/webparts/objetivosVp/
 
 | # | Riesgo | Mitigación |
 |---|---|---|
-| R1 | La iniciativa y sus resultados clave se guardan en listas distintas y SharePoint no tiene transacciones entre listas, así que un guardado conjunto puede quedar a medias. | Todo se valida antes de escribir. El alta se deshace si falla un resultado clave (D9). La edición no se deshace: lo que se alcanzó a guardar queda, se informa en una línea que la operación no pudo completarse y se escribe en un orden seguro (agregar antes de quitar). Si falla el deshacer del alta, también se informa en una línea. En todos los casos el panel conserva lo ingresado y reintentar retoma lo pendiente sin duplicar lo ya guardado (FR-015). Es una limitación de la plataforma. |
+| R1 | La iniciativa y sus resultados clave se guardan en listas distintas y SharePoint no tiene transacciones entre listas, así que un guardado conjunto puede quedar a medias. | Todo se valida antes de escribir. El alta se deshace si falla un resultado clave (D9). La edición no se deshace: lo que se alcanzó a guardar queda, se informa en una línea que la operación no pudo completarse y no hay borrados, así que nunca queda una iniciativa sin resultados clave. Si falla el deshacer del alta, también se informa en una línea. En todos los casos el panel conserva lo ingresado y reintentar retoma lo pendiente sin duplicar lo ya guardado (FR-015). Es una limitación de la plataforma. |
 | R2 | El criterio de "objetivo de la VP RRII" es `objetivo.VP.Title === 'VP RRII'` sobre el lookup sin resolver, igual que los pesos de la 004. Si el título del lookup difiriera del nombre de la VP, el bloque y el avance no aparecerían. | Se mantiene el criterio ya validado en la 004 (los registros de la lista se crean con Title = Nombre). Si se detectara la diferencia, es una inconsistencia de la 004 y se informa antes de tocarla. |
 | R3 | Las listas leen hasta 5000 elementos (`TOP_DEFAULT`). Con muchos más resultados clave, el avance sería incorrecto. | Está muy por encima del volumen esperado (cientos de iniciativas). Si se superara, hay que paginar o consultar por filtro. |
 | R4 | La lista `Resultado clave` puede tener `Responsable` o `Peso` como obligatorias. En ese caso, el alta fallaría porque esta feature no los envía. | P2: verificación previa de la usuaria. No se planifica ningún cambio de columnas sin avisar (spec, Assumptions). |
@@ -343,7 +344,7 @@ src/webparts/objetivosVp/
 | Violación | Por qué es necesaria | Alternativa más simple descartada porque |
 |-----------|----------------------|-------------------------------------------|
 | Guardado conjunto con deshacer compensatorio y `useRef` de lo ya guardado, en lugar de un guardado simple (principio IV) | FR-015 pide guardar la iniciativa y los resultados clave juntos, y SharePoint no ofrece transacciones (R1). | Guardar la iniciativa y después los resultados clave sin deshacer: deja iniciativas de la VP RRII sin resultados clave, que FR-014 no admite. |
-| Cambio en `core/api/useDatasource.ts` (`deleteItem` relanza el error) (principio IV) | Hace falta detectar el fallo al quitar un resultado clave y al deshacer un alta (D9). Nadie usa `deleteItem` hoy. | Llamar al datasource sin pasar por el hook: viola el principio III. |
+| Cambio en `core/api/useDatasource.ts` (`deleteItem` relanza el error) (principio IV) | Hace falta detectar el fallo al deshacer un alta (D9). Nadie usa `deleteItem` hoy. | Llamar al datasource sin pasar por el hook: viola el principio III. |
 | `ObjetivoDetalle` pasa a cargar iniciativas y resultados clave y `ObjetivoIniciativas` los recibe por props (principio IV) | El encabezado del objetivo necesita el avance y la sección necesita los mismos datos (FR-034). | Que ambos carguen por su cuenta: duplica dos consultas de hasta 5000 elementos en la misma pantalla. |
 | Componente nuevo `AvanceText` en `shared/` (principio II) | El mismo porcentaje con color se usa en cinco lugares y reemplaza dos estilos duplicados que hoy lo muestran fijo en rojo. | Repetir el estilo en cada lugar: duplica la regla de color de C-07. |
 | Chip `warning` con colores de la escala Yellow para "Meta" (principio II) | El DS no tiene chip amarillo y la maqueta distingue Mínimo (naranja) de Meta (amarillo). | Usar `warning` para los dos: pierde la distinción de C-02. |

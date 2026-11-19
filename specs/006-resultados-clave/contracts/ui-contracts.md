@@ -20,7 +20,7 @@ La lectura no cambia. Las demás propiedades y `toListItem` no cambian.
 
 ### `api/useDatasource.ts`
 
-`deleteItem` pasa de `handleAsync` a `handleAsyncAndRethrow`: marca `error` en el estado, igual que hoy, y además relanza el error. Ninguna pantalla lo usa todavía.
+`deleteItem` pasa de `handleAsync` a `handleAsyncAndRethrow`: marca `error` en el estado, igual que hoy, y además relanza el error. Solo lo usa el deshacer de un alta fallida (`IniciativaFormPanel`).
 
 ### `api/ResultadoClave`
 
@@ -61,7 +61,9 @@ export const getEstadoResultadoClave = (resultado: ResultadoClave): EstadoResult
 export const getEstadoResultadoClaveChip = (estado: EstadoResultadoClave): { color: ChipColor; style?: CSSProperties };   // A1
 export const getEstadoResultadoClaveLabel = (estado: EstadoResultadoClave): string;
 export const getPesoResultadoClave = (cantidad: number): number;                       // 100 / cantidad
-export const getAvanceIniciativa = (resultados: ResultadoClave[]): number;             // C-03, 0 sin resultados
+export const getAvanceIniciativa = (resultados: ResultadoClave[]): number;             // C-03, cada resultado aporta entre 0 y 100; 0 sin resultados
+export const RESULTADO_CLAVE_MAX_LENGTH: { nombre: 100; unidad: 20; fuente: 100; evidencia: 255; comentario: 500 };   // FR-002b
+export const getLengthIssue = (valor: string, max: number): string | undefined;        // ResultadoClaveTooLong
 export const getAvanceObjetivo = (objetivoId: number | undefined, iniciativas: Iniciativa[], resultados: ResultadoClave[]): number;   // C-04, 0 sin iniciativas no canceladas
 export const getAvanceColor = (avance: number): AvanceColor;                           // C-07, umbrales 60 y 80
 export const formatAvance = (avance: number): number;                                  // entero, sin -0
@@ -119,7 +121,7 @@ export interface IResultadosClaveBloqueProps {
 }
 ```
 
-Muestra `SectionBand` "Resultados clave" con "+" y un bloque por borrador (nombre "Resultado clave N" a todo el ancho; Tipo de medición | Unidad; Mínimo | Meta | Máximo). Papelera en todos menos el primero. La validación vive en `IniciativaFormBody` (D7).
+Muestra `SectionBand` "Resultados clave" con "+" y un bloque por borrador (nombre "Resultado clave N" a todo el ancho; Tipo de medición | Unidad; Mínimo | Meta | Máximo). Papelera solo en los borradores sin `id` (todavía sin guardar) que no son el primero; los ya guardados no se pueden quitar (FR-010). La validación vive en `IniciativaFormBody` (D7).
 
 ### `ResultadoClaveSeguimientoPanel/ResultadoClaveSeguimientoPanel.tsx`
 
@@ -178,6 +180,7 @@ Claves nuevas. Se reutilizan `RequiredField`, `Cancel`, `SaveChanges`, `Objetivo
 | `ResultadoClaveSelect` | Seleccionar |
 | `ResultadoClaveAddTooltip` | Agregar resultado clave |
 | `ResultadoClaveRemoveTooltip` | Quitar resultado clave {0} |
+| `ResultadoClaveTooLong` | No puede superar {0} caracteres. |
 | `ResultadoClaveNotNumber` | Ingresá un valor numérico. |
 | `ResultadoClaveMaxPositive` | El máximo debe ser mayor que 0. |
 | `ResultadoClaveGoalBelowMin` | La meta no puede ser menor que el mínimo. |

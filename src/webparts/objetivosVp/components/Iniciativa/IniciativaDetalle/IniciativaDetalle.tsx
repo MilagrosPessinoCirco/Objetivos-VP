@@ -4,12 +4,13 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../../../core/ui/components';
 import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
-import { spacing } from '../../../../../core/ui/foundations';
+import { spacing, typography } from '../../../../../core/ui/foundations';
 import useAreaDataSource from '../../../../../core/api/Area/useAreaDataSource';
 import useComentariosIniciativa from '../../../../../core/api/ComentarioIniciativa/useComentariosIniciativa';
 import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
-import { Iniciativa } from '../../../../../core/entities';
+import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
+import { Iniciativa, ResultadoClave } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { INICIATIVAS_PATH, getObjetivoPath } from '../../ObjetivosVp/routes';
@@ -17,20 +18,27 @@ import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
+import AvanceText from '../../shared/AvanceText/AvanceText';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
 import { isVpRrii } from '../../Objetivo/objetivoUtils';
+import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import IniciativaEstadoPanel from '../IniciativaEstadoPanel/IniciativaEstadoPanel';
 import IniciativaFormPanel from '../IniciativaForm/IniciativaFormPanel';
+import ResultadoClaveSeguimientoPanel from '../ResultadoClaveSeguimientoPanel/ResultadoClaveSeguimientoPanel';
 import { formatIdNombre, formatIniciativaId, getEstadoIniciativaChipColor, getPesosIniciativa, getUltimoComentario } from '../iniciativaUtils';
+import { getAvanceIniciativa } from '../resultadoClaveUtils';
 import IniciativaComentario from './IniciativaComentario/IniciativaComentario';
 import IniciativaInfo from './IniciativaInfo/IniciativaInfo';
+import IniciativaResultadosClave from './IniciativaResultadosClave/IniciativaResultadosClave';
 import styles from './IniciativaDetalle.module.scss';
 
 export interface IIniciativaDetalleProps {
 	canEdit: boolean;
 	canChangeEstado: boolean;
+	canLoadResultadosClave: boolean;
+	canTrackResultadoClave: boolean;
 }
 
 const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
@@ -38,13 +46,18 @@ const NAME_SEPARATOR = ', ';
 
 const CHANGE_STATUS_COLOR = getColorStep('Secondary', '700').value;
 const CHANGE_STATUS_STYLE: CSSProperties = { backgroundColor: CHANGE_STATUS_COLOR, borderColor: CHANGE_STATUS_COLOR };
+const PROGRESS_LABEL_STYLE: CSSProperties = {
+	fontFamily: typography.family.base,
+	fontSize: typography.size[14],
+	lineHeight: typography.lineHeight[14]
+};
 
 const getFrom = (state: unknown): string | undefined => {
 	const from = typeof state === 'object' && state !== null && 'from' in state ? (state as { from: unknown }).from : undefined;
 	return typeof from === 'string' ? from : undefined;
 };
 
-const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChangeEstado }) => {
+const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChangeEstado, canLoadResultadosClave, canTrackResultadoClave }) => {
 	const { id } = useParams<{ id: string }>();
 	const iniciativaId = Number(id);
 	const isValidId = Number.isInteger(iniciativaId) && iniciativaId > 0;
@@ -53,27 +66,32 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
 	const [objetivoState, getObjetivos] = useObjetivoDataSource();
 	const [areaState, getAreas] = useAreaDataSource();
+	const [resultadoState, getResultados] = useResultadoClaveDataSource();
+	const names = useObjetivoNames();
 	const comentarios = useComentariosIniciativa(isValidId ? iniciativaId : undefined);
 	const [ready, setReady] = React.useState<boolean>(false);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const [isEstadoOpen, setIsEstadoOpen] = React.useState<boolean>(false);
+	const [trackingResultado, setTrackingResultado] = React.useState<ResultadoClave | undefined>(undefined);
 	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>(undefined);
 	const closeNotice = React.useCallback((): void => setNoticeMessage(undefined), []);
 
 	React.useEffect(() => {
-		Promise.all([getIniciativas(), getObjetivos(), getAreas()]).then(() => setReady(true));
+		Promise.all([getIniciativas(), getObjetivos(), getAreas(), getResultados()]).then(() => setReady(true));
 	}, []);
 
 	const iniciativa = isValidId ? iniciativaState.items.filter((item) => item.Id === iniciativaId)[0] : undefined;
-	const objetivo = objetivoState.items.filter((item) => item.Id === iniciativa?.Objetivo?.Id)[0];
+	const objetivo = names.resolve(objetivoState.items.filter((item) => item.Id === iniciativa?.Objetivo?.Id))[0];
 	const delObjetivo = iniciativaState.items.filter((item) => item.Objetivo?.Id === iniciativa?.Objetivo?.Id);
 	const pesos = iniciativa ? getPesosIniciativa(iniciativa, delObjetivo, objetivo) : {};
 	const areaNames = (iniciativa?.Area ?? [])
 		.map((area) => areaState.items.filter((item) => item.Id === area.Id)[0]?.Nombre ?? area.Title)
 		.join(NAME_SEPARATOR);
 	const ultimoComentario = getUltimoComentario(comentarios.items, iniciativaId);
-	const loadError = iniciativaState.error || objetivoState.error || areaState.error || comentarios.error;
-	const notFound = !isValidId || (ready && !loadError && !iniciativa);
+	const resultados = resultadoState.items.filter((item) => item.Iniciativa?.Id === iniciativaId);
+	const loadError = iniciativaState.error || objetivoState.error || areaState.error || comentarios.error || resultadoState.error || names.error;
+	const loaded = ready && names.ready;
+	const notFound = !isValidId || (loaded && !loadError && !iniciativa);
 	const isRrii = isVpRrii(objetivo?.VP?.Title);
 
 	const goBack = (): void => {
@@ -92,6 +110,7 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 	const onEdited = (saved: Iniciativa): void => {
 		setIsFormOpen(false);
 		getIniciativas();
+		getResultados();
 		setNoticeMessage(Utils.replaceAll(strings.IniciativaUpdated, '{0}', saved.Nombre ?? ''));
 	};
 
@@ -102,6 +121,13 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 		setNoticeMessage(Utils.replaceAll(strings.IniciativaStatusUpdated, '{0}', iniciativa?.Nombre ?? ''));
 	};
 
+	const onTracked = (): void => {
+		const nombre = trackingResultado?.Nombre ?? '';
+		setTrackingResultado(undefined);
+		getResultados();
+		setNoticeMessage(Utils.replaceAll(strings.ResultadoClaveUpdated, '{0}', nombre));
+	};
+
 	const renderBody = (): React.ReactNode => {
 		if (notFound) {
 			return <MessageBar type="error" message={strings.IniciativaNotFound} />;
@@ -109,7 +135,7 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 		if (loadError) {
 			return <MessageBar type="error" message={strings.IniciativaLoadError} />;
 		}
-		if (!ready || !iniciativa) {
+		if (!loaded || !iniciativa) {
 			return <Spinner />;
 		}
 		return (
@@ -121,6 +147,7 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 					pesos={pesos}
 					onEdit={canEdit ? () => setIsFormOpen(true) : undefined}
 				/>
+				{isRrii && <IniciativaResultadosClave resultados={resultados} onTrack={canTrackResultadoClave ? setTrackingResultado : undefined} />}
 				<IniciativaComentario comentario={ultimoComentario} onEdit={canChangeEstado ? () => setIsEstadoOpen(true) : undefined} />
 			</>
 		);
@@ -145,6 +172,13 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 								{formatIdNombre(formatIniciativaId(iniciativa.Id), iniciativa.Nombre)}
 							</h1>
 							<HeaderChip color={getEstadoIniciativaChipColor(iniciativa.Estado)} label={iniciativa.Estado ?? ''} />
+							{isRrii && loaded && (
+								<div className={styles.headerEnd} style={{ gap: spacing.md }}>
+									<span style={PROGRESS_LABEL_STYLE}>
+										{strings.ObjetivoDetailProgress} <AvanceText value={getAvanceIniciativa(resultados)} spaced />
+									</span>
+								</div>
+							)}
 						</>
 					)}
 				</div>
@@ -164,13 +198,20 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 						</Button>
 					)}
 				</DetailFooter>
-				{isFormOpen && iniciativa && <IniciativaFormPanel iniciativa={iniciativa} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
+				{isFormOpen && iniciativa && <IniciativaFormPanel iniciativa={iniciativa} canLoadResultadosClave={canLoadResultadosClave} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
 				{isEstadoOpen && iniciativa && (
 					<IniciativaEstadoPanel
 						iniciativa={iniciativa}
 						ultimoComentario={ultimoComentario}
 						onSaved={onEstadoSaved}
 						onCancel={() => setIsEstadoOpen(false)}
+					/>
+				)}
+				{trackingResultado && (
+					<ResultadoClaveSeguimientoPanel
+						resultado={trackingResultado}
+						onSaved={onTracked}
+						onCancel={() => setTrackingResultado(undefined)}
 					/>
 				)}
 			</div>

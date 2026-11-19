@@ -7,6 +7,8 @@ import { spacing, typography } from '../../../../../core/ui/foundations';
 import { Objetivo, Palanca } from '../../../../../core/entities';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
+import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
@@ -49,6 +51,8 @@ const matchesObjetivo = (objetivo: Objetivo, search: string): boolean =>
 const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filtro, onFiltroChange }) => {
 	const [state, getItems, addItem, editItem] = usePalancaDataSource();
 	const [objetivoState, getObjetivos] = useObjetivoDataSource();
+	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
+	const [resultadoState, getResultados] = useResultadoClaveDataSource();
 	const names = useObjetivoNames();
 	const navigate = useNavigate();
 	const [searchText, setSearchText] = React.useState<string>('');
@@ -57,15 +61,21 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const [isObjetivoFormOpen, setIsObjetivoFormOpen] = React.useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
 
+	const loadObjetivos = (): void => {
+		getObjetivos();
+		getIniciativas();
+		getResultados();
+	};
+
 	React.useEffect(() => {
 		getItems();
-		getObjetivos();
+		loadObjetivos();
 	}, []);
 
 	const refresh = (): void => {
 		setLastOperation('load');
 		getItems();
-		getObjetivos();
+		loadObjetivos();
 	};
 
 	const closeNotice = React.useCallback((): void => setSuccessMessage(undefined), []);
@@ -86,7 +96,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 
 	const onObjetivoCreated = (objetivo: Objetivo): void => {
 		setIsObjetivoFormOpen(false);
-		getObjetivos();
+		loadObjetivos();
 		setSuccessMessage(Utils.replaceAll(strings.ObjetivoCreated, '{0}', objetivo.Nombre ?? ''));
 	};
 
@@ -95,8 +105,8 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const objetivosEmptyText = (defaultText: string): string => search === '' ? defaultText : strings.ObjetivosEmptySearch;
 	const bySearch = (items: Objetivo[]): Objetivo[] => search === '' ? items : items.filter((objetivo) => matchesObjetivo(objetivo, search));
 
-	const objetivosError = objetivoState.error || names.error;
-	const objetivosReady = !objetivosError && !objetivoState.isLoading && names.ready;
+	const objetivosError = objetivoState.error || names.error || iniciativaState.error || resultadoState.error;
+	const objetivosReady = !objetivosError && !objetivoState.isLoading && !iniciativaState.isLoading && !resultadoState.isLoading && names.ready;
 	const objetivos = objetivosReady ? names.resolve(objetivoState.items) : [];
 	const objetivosOfPalanca = (palancaId: number | undefined): Objetivo[] =>
 		filterObjetivos(objetivos, filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId);
@@ -140,8 +150,8 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 				return objetivosError ? null : <Spinner />;
 			}
 			return filtro === 'delVp'
-				? <ObjetivosTable objetivos={bySearch(vpObjetivos)} variant="delVp" emptyText={objetivosEmptyText(strings.ObjetivosVpEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />
-				: <ObjetivosTable objetivos={bySearch(otrasVpObjetivos)} variant="otrasVp" emptyText={objetivosEmptyText(strings.OtherVpObjectivesEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />;
+				? <ObjetivosTable objetivos={bySearch(vpObjetivos)} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="delVp" emptyText={objetivosEmptyText(strings.ObjetivosVpEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />
+				: <ObjetivosTable objetivos={bySearch(otrasVpObjetivos)} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="otrasVp" emptyText={objetivosEmptyText(strings.OtherVpObjectivesEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />;
 		}
 		return (
 			<PalancasTable
@@ -149,6 +159,8 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 				emptyText={emptyText}
 				canManage={canManage}
 				objetivosByPalanca={objetivosByPalanca}
+				iniciativas={iniciativaState.items}
+				resultados={resultadoState.items}
 				onView={(id) => navigate(getPalancaPath(id))}
 				onViewObjetivo={(id) => navigate(getObjetivoPath(id))}
 				onEdit={(palanca) => setForm({ mode: 'edit', palanca })}

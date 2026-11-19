@@ -9,7 +9,7 @@ Resuelve las consultas del plan contra el repo, el prototipo v10 y las respuesta
 | R1 | Datos existentes | `core/entities` y `core/api` ya tienen `ResultadoClave` y `ComentarioResultadoClave`, con datasource, interfaz y los dos hooks (`use<E>DataSource`, `useItem<E>DataSource`), generados con la skill `data-source`. Ninguno tiene mock. |
 | R2 | `ResultadoClave` | Lee y escribe `Nombre`, `Descripcion`, `Responsable`, `TipoMedicion`, `UnidadMedida`, `Minimo`, `Meta`, `Maximo`, `Peso`, `ValorActual`, `Fuente`, `Evidencia` (link), `ValorProyectado` e `Iniciativa` (lookup). `toListItem` no envía `Title`. Un campo `undefined` se omite al guardar, así que no se puede vaciar un valor ya cargado. |
 | R3 | Lista y enum | `Lista.ResultadoClave` = "Resultado clave"; `Lista.ComentarioResultadoClave` = "Comentario resultado clave"; `TipoMedicion` = Cantidad · Porcentaje · Moneda · Indicador. Coincide con FR-003. |
-| R4 | `useDatasource` | Devuelve `[state, getItems, addItem, editItem, deleteItem, getById]`. `addItem` y `editItem` relanzan el error; `deleteItem` lo traga (`handleAsync`) y solo marca `state.error`. Ninguna pantalla usa `deleteItem` (búsqueda en `src/`). |
+| R4 | `useDatasource` | Devuelve `[state, getItems, addItem, editItem, deleteItem, getById]`. `addItem` y `editItem` relanzan el error; `deleteItem` lo traga (`handleAsync`) y solo marca `state.error`. Ninguna pantalla usa `deleteItem` (búsqueda en `src/`); en esta feature solo lo usa el deshacer de un alta fallida. |
 | R5 | `ComentarioResultadoClave` | `ResultadoClave` (lookup) y `Comentario`; `Created` y `Author` vienen en el `select`. El datasource ya implementa `getFilteredItems(resultadoClaveId)` con `ResultadoClaveId eq <id>`; la interfaz lo declara. No hay mock ni hook que lo exponga. |
 | R6 | `ComentarioIniciativa` (referencia) | Patrón de la 004: `getFilteredItems`, `ComentarioIniciativaMock`, hook `useComentariosIniciativa`, comentario nuevo en cada cambio (D24, D16 de la 004). |
 | R7 | Avance actual | `DEFAULT_PROGRESS = 0` en `objetivoUtils.ts`. `ObjetivosTable` lo muestra en la columna Avance (variantes `palanca` y `delVp`) con `PROGRESS_STYLE` (rojo fijo, Red 600). `ObjetivoDetalle` lo muestra en el encabezado con `PROGRESS_VALUE_STYLE` si el objetivo es de la VP RRII. |
@@ -40,6 +40,12 @@ Resuelve las consultas del plan contra el repo, el prototipo v10 y las respuesta
 | # | Pregunta | Respuesta |
 |---|----------|-----------|
 | U1 | ¿Cómo se muestra el comentario del último seguimiento? La maqueta lo abre vacío y sin fecha ni autor; la spec pide ver el último con fecha y autor. | Precargado en el campo Comentario, con una línea de solo lectura con la fecha y el autor del último (2026-11-18). |
+
+| U2 | ¿Se puede quitar un resultado clave ya guardado? | No: ni se borra ni se inactiva (inactivar exigiría una columna nueva). Solo se descartan los bloques sin guardar (2026-11-19). |
+| U3 | ¿Qué es Unidad y qué largos tienen los textos? | Unidad es texto libre. Máximos: Nombre 100, Unidad 20, Fuente 100, Evidencia 255, Comentario 500 (2026-11-19). |
+| U4 | Avance con valor actual negativo, peso con tres resultados clave, comentario precargado sin tocar, borrar el valor actual, tope y orden | Cada resultado clave aporta entre 0 % y 100 %; peso "33 %"; el comentario sin cambios no se vuelve a registrar; el valor actual se puede borrar; sin tope; orden de carga (2026-11-19). |
+
+| U5 | ¿Pueden repetirse los nombres de resultados clave dentro de una misma iniciativa? | Sí: se permiten nombres repetidos y no se valida (2026-11-19). |
 
 ## Decisiones técnicas sin consulta
 

@@ -7,6 +7,8 @@ import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
 import { FigmaIcon, spacing } from '../../../../../core/ui/foundations';
 import usePalancaDataSource from '../../../../../core/api/Palanca/usePalancaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
+import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import { Objetivo, Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
@@ -60,6 +62,8 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	const navigate = useNavigate();
 	const [state, , , editItem, , getById] = usePalancaDataSource();
 	const [objetivoState, getObjetivos] = useObjetivoDataSource();
+	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
+	const [resultadoState, getResultados] = useResultadoClaveDataSource();
 	const names = useObjetivoNames();
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
@@ -74,6 +78,8 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 			return;
 		}
 		getObjetivos();
+		getIniciativas();
+		getResultados();
 		getById(palancaId).catch((error: unknown) => setLoadError(isNotFoundError(error) ? 'notFound' : 'error'));
 	}, [palancaId]);
 
@@ -89,9 +95,13 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	const onObjetivoCreated = (objetivo: Objetivo): void => {
 		setIsObjetivoFormOpen(false);
 		getObjetivos();
+		getIniciativas();
+		getResultados();
 		setSuccessMessage(Utils.replaceAll(strings.ObjetivoCreated, '{0}', objetivo.Nombre ?? ''));
 	};
 
+	const avanceError = iniciativaState.error || resultadoState.error;
+	const avanceLoading = iniciativaState.isLoading || resultadoState.isLoading;
 	const palancaObjetivos = filterObjetivos(names.resolve(objetivoState.items), filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId);
 
 	const renderBody = (): React.ReactNode => {
@@ -123,11 +133,15 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 						</Tooltip>
 					)}
 				>
-					{objetivoState.error || names.error ? (
+					{objetivoState.error || names.error || avanceError ? (
 						<MessageBar type="error" message={strings.ObjetivosLoadError} />
+					) : avanceLoading ? (
+						<Spinner />
 					) : (
 						<ObjetivosTable
 							objetivos={palancaObjetivos}
+							iniciativas={iniciativaState.items}
+							resultados={resultadoState.items}
 							variant="palanca"
 							emptyText={strings.PalancaObjectivesEmpty}
 							onView={(objetivoId) => navigate(getObjetivoPath(objetivoId))}

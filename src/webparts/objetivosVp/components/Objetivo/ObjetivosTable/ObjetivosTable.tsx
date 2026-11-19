@@ -5,17 +5,20 @@ import { Button, Table, Tooltip } from '../../../../../core/ui/components';
 import type { ITableColumn } from '../../../../../core/ui/components';
 import { Chip } from '../../../../../core/ui/patterns';
 import { FigmaIcon } from '../../../../../core/ui/foundations';
-import { spacing, typography } from '../../../../../core/ui/foundations';
-import { Objetivo } from '../../../../../core/entities';
+import { spacing } from '../../../../../core/ui/foundations';
+import { Iniciativa, Objetivo, ResultadoClave } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { getColorStep } from '../../shared/getColorStep';
+import AvanceText from '../../shared/AvanceText/AvanceText';
 import { ICON_BUTTON_STYLE } from '../../shared/iconButtonStyle';
-import { DEFAULT_PROGRESS, formatObjetivoId, getEstadoChipColor } from '../objetivoUtils';
+import { getAvanceObjetivo } from '../../Iniciativa/resultadoClaveUtils';
+import { formatObjetivoId, getEstadoChipColor, isVpRrii } from '../objetivoUtils';
 import styles from './ObjetivosTable.module.scss';
 
 export interface IObjetivosTableProps {
 	objetivos: Objetivo[];
+	iniciativas: Iniciativa[];
+	resultados: ResultadoClave[];
 	variant: 'palanca' | 'delVp' | 'otrasVp';
 	emptyText: string;
 	onView: (id: number) => void;
@@ -30,7 +33,6 @@ type ObjetivoRow = {
 	gerencia: string;
 	peso: string;
 	pesoVp: string;
-	avance: string;
 	estado: string;
 	objetivo: Objetivo;
 };
@@ -43,12 +45,11 @@ const WEIGHT_WIDTH = 60;
 const STATUS_WIDTH = 104;
 const PROGRESS_WIDTH = 90;
 const ACTIONS_WIDTH = 48;
-const PROGRESS_STYLE: CSSProperties = { fontWeight: typography.weight.bold, color: getColorStep('Red', '600').value };
 const ACTION_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 24, minWidth: 24, padding: 0 };
 
 const byId = (a: Objetivo, b: Objetivo): number => (a.Id ?? 0) - (b.Id ?? 0);
 
-const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, emptyText, onView }) => {
+const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, iniciativas, resultados, variant, emptyText, onView }) => {
 	const rows: ObjetivoRow[] = objetivos.slice().sort(byId).map((objetivo) => ({
 		id: formatObjetivoId(objetivo.Id),
 		nombre: objetivo.Nombre ?? '',
@@ -58,7 +59,6 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		gerencia: objetivo.Gerencia?.Title ?? '',
 		peso: objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
 		pesoVp: objetivo.PesoVP === undefined || objetivo.PesoVP === null ? strings.ObjetivoNoValue : `${objetivo.PesoVP}%`,
-		avance: `${DEFAULT_PROGRESS}%`,
 		estado: objetivo.Estado ?? '',
 		objetivo
 	}));
@@ -85,6 +85,10 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 		</div>
 	);
 
+	const renderAvance = (row: ObjetivoRow): React.ReactNode =>
+		isVpRrii(row.objetivo.VP?.Title)
+			? <AvanceText value={getAvanceObjetivo(row.objetivo.Id, iniciativas, resultados)} />
+			: strings.AvanceNotApplicable;
 
 	const idColumn: ITableColumn<ObjetivoRow> = { key: 'id', header: strings.ObjetivoColumnId, width: fixedWidths ? ID_WIDTH : undefined };
 	const nameColumn: ITableColumn<ObjetivoRow> = { key: 'nombre', header: strings.ObjetivoColumnName };
@@ -94,7 +98,7 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, variant, em
 	const managementColumn: ITableColumn<ObjetivoRow> = { key: 'gerencia', header: strings.ObjetivoColumnManagement, width: fixedWidths ? MANAGEMENT_WIDTH : undefined };
 	const weightColumn: ITableColumn<ObjetivoRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined };
 	const vpWeightColumn: ITableColumn<ObjetivoRow> = { key: 'pesoVp', header: strings.ObjetivoColumnVpWeight, width: fixedWidths ? WEIGHT_WIDTH : undefined };
-	const progressColumn: ITableColumn<ObjetivoRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (value) => <span style={PROGRESS_STYLE}>{String(value)}</span> };
+	const progressColumn: ITableColumn<ObjetivoRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (_value, row) => renderAvance(row) };
 	const statusColumn: ITableColumn<ObjetivoRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: fixedWidths ? STATUS_WIDTH : undefined, render: (_value, row) => renderEstado(row) };
 	const actionsColumn: ITableColumn<ObjetivoRow> = { key: 'acciones', header: strings.ObjetivoColumnView, width: fixedWidths ? ACTIONS_WIDTH : undefined, render: (_value, row) => renderActions(row) };
 

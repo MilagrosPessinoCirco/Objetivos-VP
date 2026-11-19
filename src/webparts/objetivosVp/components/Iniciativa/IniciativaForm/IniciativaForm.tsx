@@ -4,16 +4,18 @@ import { Button, Dropdown, Input, Multiline } from '../../../../../core/ui/compo
 import { MessageBar, Panel, Picker } from '../../../../../core/ui/patterns';
 import type { IPersonOption } from '../../../../../core/ui/patterns';
 import { spacing, typography } from '../../../../../core/ui/foundations';
-import { Area, Iniciativa, Objetivo, Usuario } from '../../../../../core/entities';
+import { Area, Iniciativa, Objetivo, ResultadoClave, Usuario } from '../../../../../core/entities';
 import { EstadoIniciativa } from '../../../../../core/utils/Constants';
 import { ILookupValue, IPersonValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
-import { formatDate, fromDateInput, toDateInput } from '../../Objetivo/objetivoUtils';
+import { formatDate, fromDateInput, isVpRrii, toDateInput } from '../../Objetivo/objetivoUtils';
 import ConfirmacionModal from '../ConfirmacionModal/ConfirmacionModal';
 import { formatIniciativaId, formatObjetivoLabel } from '../iniciativaUtils';
+import { IResultadoClaveDraft, IResultadoClaveIssues, createEmptyDraft, getDraftIssues, hasDraftIssues, toDraft } from '../resultadoClaveUtils';
+import ResultadosClaveBloque from './ResultadosClaveBloque/ResultadosClaveBloque';
 import styles from './IniciativaForm.module.scss';
 
 export interface IIniciativaFormBodyProps {
@@ -23,7 +25,9 @@ export interface IIniciativaFormBodyProps {
 	currentUser?: IPersonValue;
 	initialObjetivoId?: number;
 	iniciativa?: Iniciativa;
-	onSave: (iniciativa: Iniciativa) => Promise<void>;
+	resultadosClave: ResultadoClave[];
+	canLoadResultadosClave: boolean;
+	onSave: (iniciativa: Iniciativa, drafts: IResultadoClaveDraft[]) => Promise<IResultadoClaveDraft[]>;
 	onCancel: () => void;
 }
 
@@ -49,7 +53,25 @@ const byName = (a: IPersonValue, b: IPersonValue): number => a.Title.localeCompa
 const uniquePeople = (personas: IPersonValue[]): IPersonValue[] =>
 	personas.filter((persona, index) => personas.findIndex((other) => other.Id === persona.Id) === index);
 
-export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetivos, areas, usuarios, currentUser, initialObjetivoId, iniciativa, onSave, onCancel }) => {
+const byResultadoId = (a: ResultadoClave, b: ResultadoClave): number => (a.Id ?? 0) - (b.Id ?? 0);
+
+const initialDrafts = (resultadosClave: ResultadoClave[]): IResultadoClaveDraft[] =>
+	resultadosClave.length === 0
+		? [createEmptyDraft(0)]
+		: resultadosClave.slice().sort(byResultadoId).map((resultado, index) => toDraft(resultado, index));
+
+export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({
+	objetivos,
+	areas,
+	usuarios,
+	currentUser,
+	initialObjetivoId,
+	iniciativa,
+	resultadosClave,
+	canLoadResultadosClave,
+	onSave,
+	onCancel
+}) => {
 	const isEdit = iniciativa !== undefined;
 	const initialObjetivo = iniciativa?.Objetivo?.Id ?? objetivos.filter((objetivo) => objetivo.Id === initialObjetivoId)[0]?.Id;
 	const initialAccountable = iniciativa ? iniciativa.Accountable : currentUser;
@@ -65,6 +87,7 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [drafts, setDrafts] = React.useState<IResultadoClaveDraft[]>(() => initialDrafts(resultadosClave));
 
 	const personas = uniquePeople([
 		...usuarios.filter((usuario) => usuario.Activo === true && usuario.Usuario).map((usuario) => usuario.Usuario as IPersonValue),
@@ -107,7 +130,10 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 		fechaInicio: startIssue,
 		fechaCompromiso: commitmentIssue
 	};
-	const hasIssues = Object.values(issues).some((issue) => issue !== undefined);
+	const showResultadosClave = canLoadResultadosClave && isVpRrii(objetivo?.VP?.Title);
+	const draftIssues: IResultadoClaveIssues[] = drafts.map((draft) => getDraftIssues(draft));
+	const hasDraftErrors = showResultadosClave && draftIssues.some(hasDraftIssues);
+	const hasIssues = Object.values(issues).some((issue) => issue !== undefined) || hasDraftErrors;
 	const shown = (issue: string | undefined): string | undefined => (submitted ? issue : undefined);
 	const invalid = (issue: string | undefined, extra?: string): string | undefined =>
 		[shown(issue) ? styles.invalid : undefined, extra].filter(Boolean).join(' ') || undefined;
@@ -144,7 +170,7 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 		setIsSaving(true);
 		setSaveFailed(false);
 		try {
-			await onSave(buildIniciativa());
+			await onSave(buildIniciativa(), showResultadosClave ? drafts : []);
 		}
 		catch {
 			setSaveFailed(true);
@@ -229,6 +255,9 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({ objetiv
 						{renderFieldError(issues.fechaCompromiso)}
 					</div>
 				</div>
+				{showResultadosClave && (
+					<ResultadosClaveBloque drafts={drafts} issues={submitted ? draftIssues : []} onChange={setDrafts} />
+				)}
 				{saveFailed && <MessageBar type="error" message={strings.IniciativaSaveError} />}
 			</div>
 			{isConfirmOpen && (

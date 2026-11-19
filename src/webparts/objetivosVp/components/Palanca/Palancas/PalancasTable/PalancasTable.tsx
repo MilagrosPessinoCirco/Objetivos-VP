@@ -4,7 +4,7 @@ import type { CSSProperties } from 'react';
 import { Button, Table, Tooltip } from '../../../../../../core/ui/components';
 import type { ITableColumn } from '../../../../../../core/ui/components';
 import { FigmaIcon, spacing, typography } from '../../../../../../core/ui/foundations';
-import { Objetivo, Palanca } from '../../../../../../core/entities';
+import { Iniciativa, Objetivo, Palanca, ResultadoClave } from '../../../../../../core/entities';
 import { Utils } from '../../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import ObjetivosTable from '../../../Objetivo/ObjetivosTable/ObjetivosTable';
@@ -18,6 +18,8 @@ export interface IPalancasTableProps {
 	emptyText: string;
 	canManage: boolean;
 	objetivosByPalanca?: Record<number, Objetivo[]>;
+	iniciativas: Iniciativa[];
+	resultados: ResultadoClave[];
 	onView: (id: number) => void;
 	onViewObjetivo: (id: number) => void;
 	onEdit?: (palanca: Palanca) => void;
@@ -46,7 +48,7 @@ const NESTED_STYLE: CSSProperties = {
 	['--nested-header-bg' as string]: getColorStep('Primary', '50').value
 };
 
-const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, canManage, objetivosByPalanca, onView, onViewObjetivo, onEdit }) => {
+const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, canManage, objetivosByPalanca, iniciativas, resultados, onView, onViewObjetivo, onEdit }) => {
 	const [expanded, setExpanded] = React.useState<number[]>([]);
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [containerWidth, setContainerWidth] = React.useState<number>(0);
@@ -157,7 +159,7 @@ const PalancasTable: React.FC<IPalancasTableProps> = ({ palancas, emptyText, can
 						<Table<TableRow> columns={columns} rows={[row]} getRowKey={(item) => item.key} emptyText={emptyText} />
 						{objetivos && (
 							<div className={styles.nested} style={NESTED_STYLE}>
-								<ObjetivosTable objetivos={objetivos} variant="palanca" emptyText={strings.PalancaObjectivesEmpty} onView={onViewObjetivo} />
+								<ObjetivosTable objetivos={objetivos} iniciativas={iniciativas} resultados={resultados} variant="palanca" emptyText={strings.PalancaObjectivesEmpty} onView={onViewObjetivo} />
 							</div>
 						)}
 					</div>

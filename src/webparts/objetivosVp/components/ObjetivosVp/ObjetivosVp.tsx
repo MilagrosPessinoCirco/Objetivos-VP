@@ -24,6 +24,8 @@ const CAN_EDIT_OBJETIVO = true;
 const CAN_CREATE_INICIATIVA = true;
 const CAN_EDIT_INICIATIVA = true;
 const CAN_CHANGE_ESTADO_INICIATIVA = true;
+const CAN_LOAD_RESULTADOS_CLAVE = true;
+const CAN_TRACK_RESULTADO_CLAVE = true;
 const DEFAULT_FILTRO: ObjetivosFiltro = 'todos';
 const DEFAULT_BANDEJA_STATE: IIniciativasBandejaState = { searchText: '', filtros: EMPTY_FILTROS, page: 1 };
 
@@ -36,9 +38,9 @@ const ObjetivosVpRoutes: React.FC = () => {
 			<Route path={HOME_PATH} element={<Home />} />
 			<Route path={PALANCAS_PATH} element={<Palancas canManage={CAN_MANAGE_PALANCAS} canCreateObjetivo={CAN_CREATE_OBJETIVO} filtro={filtro} onFiltroChange={setFiltro} />} />
 			<Route path={PALANCA_DETAIL_PATH} element={<PalancaDetalle canManage={CAN_MANAGE_PALANCAS} canCreateObjetivo={CAN_CREATE_OBJETIVO} filtro={filtro} />} />
-			<Route path={INICIATIVAS_PATH} element={<IniciativasBandeja canCreate={CAN_CREATE_INICIATIVA} state={bandejaState} onStateChange={setBandejaState} />} />
-			<Route path={INICIATIVA_DETAIL_PATH} element={<IniciativaDetalle canEdit={CAN_EDIT_INICIATIVA} canChangeEstado={CAN_CHANGE_ESTADO_INICIATIVA} />} />
-			<Route path={OBJETIVO_DETAIL_PATH} element={<ObjetivoDetalle canEditObjetivo={CAN_EDIT_OBJETIVO} canCreateIniciativa={CAN_CREATE_INICIATIVA} />} />
+			<Route path={INICIATIVAS_PATH} element={<IniciativasBandeja canCreate={CAN_CREATE_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} state={bandejaState} onStateChange={setBandejaState} />} />
+			<Route path={INICIATIVA_DETAIL_PATH} element={<IniciativaDetalle canEdit={CAN_EDIT_INICIATIVA} canChangeEstado={CAN_CHANGE_ESTADO_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} canTrackResultadoClave={CAN_TRACK_RESULTADO_CLAVE} />} />
+			<Route path={OBJETIVO_DETAIL_PATH} element={<ObjetivoDetalle canEditObjetivo={CAN_EDIT_OBJETIVO} canCreateIniciativa={CAN_CREATE_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} />} />
 		</Routes>
 	);
 };
