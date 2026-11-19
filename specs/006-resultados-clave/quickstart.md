@@ -78,7 +78,7 @@ Lo hace la usuaria en el sitio de desarrollo y se repite en cada sitio antes de 
 | 41 | US5 | Iniciativa con un solo resultado clave | La edición no ofrece quitarlo. |
 | 42 | US5 | Editar una iniciativa de la VP RRII sin resultados clave | El panel arranca con un resultado clave vacío y exige completarlo para guardar. |
 | 43 | US5 | Quitar un resultado clave que tiene comentarios | Se quita; los comentarios no se borran. Si la lista lo impide, una línea de error (plan, D15). |
-| 44 | US5 | Forzar un error al guardar un resultado clave en la edición | Una línea de error; el panel conserva lo ingresado; reintentar no repite los pasos ya hechos. |
+| 44 | US5 | Forzar un error al guardar un resultado clave en la edición (por ejemplo, que falle el segundo paso) | Una línea de error; lo que se alcanzó a guardar queda (no se deshace); el panel conserva lo ingresado; reintentar hace solo lo que faltaba y no duplica lo ya guardado. |
 | 45 | — | Revisar todas las pantallas | No hay acción para eliminar resultados clave fuera del panel de edición (FR-010). Ninguna pantalla muestra responsable ni descripción de un resultado clave. |
 | 46 | — | Revisar los permisos | `CAN_LOAD_RESULTADOS_CLAVE` y `CAN_TRACK_RESULTADO_CLAVE` están separadas y en `true`. Con la primera en `false`, el panel no muestra el bloque; con la segunda en `false`, la acción de cada fila muestra "—". |
 | 47 | — | Comparar con palancas, objetivos e iniciativas | Mismo encabezado, grilla, chips, carga, vacíos, errores, secciones, pie y panel que las features anteriores. |
