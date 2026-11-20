@@ -5,6 +5,11 @@ import { Tarea } from "../../entities";
 import ITareaDataSource from './ITareaDataSource';
 
 const TOP_DEFAULT = 5000;
+const COLUMNAS_NUEVAS_DISPONIBLES = false;
+const COLUMNAS_NUEVAS = ['QueHabilita', 'FechaUltimaActualizacion', 'ComentarioEjecutivo', 'ComentarioEjecutivoFecha', 'ComentarioEjecutivoAutor'];
+
+const isColumnaNueva = (property: string): boolean =>
+	COLUMNAS_NUEVAS.some((columna) => property === columna || property.indexOf(`${columna}/`) === 0 || property === `${columna}Id`);
 
 export default class TareaDataSource implements ITareaDataSource {
 	private _sp: SPFI;
@@ -38,6 +43,27 @@ export default class TareaDataSource implements ITareaDataSource {
 	constructor() {
 		this._sp = getSP();
 		this.listTitle = Lista.Tarea;
+		if (!COLUMNAS_NUEVAS_DISPONIBLES) {
+			this.selectProperties = this.selectProperties.filter((property) => !isColumnaNueva(property));
+			this.expand = this.expand.filter((property) => !isColumnaNueva(property));
+		}
+	}
+
+	private toWritableItem(item: Tarea): any {
+		const listItem = item.toListItem();
+		if (COLUMNAS_NUEVAS_DISPONIBLES) {
+			return listItem;
+		}
+		const writable: any = {};
+		Object.keys(listItem)
+			.filter((key) => !isColumnaNueva(key))
+			.forEach((key) => {
+				writable[key] = listItem[key];
+			});
+		if (Array.isArray(writable.AreaId)) {
+			writable.AreaId = writable.AreaId[0];
+		}
+		return writable;
 	}
 
 	public async getItems(): Promise<Array<Tarea>> {
@@ -58,14 +84,14 @@ export default class TareaDataSource implements ITareaDataSource {
 	}
 
 	public add(item: Tarea): Promise<Tarea> {
-		const listItem = item.toListItem();
+		const listItem = this.toWritableItem(item);
 		return this._sp.web.lists.getByTitle(this.listTitle).items.add(listItem).then((result: any) => {
 			return this.getById(result.Id ?? result.ID);
 		});
 	}
 
 	public edit(item: Tarea): Promise<Tarea> {
-		const listItem = item.toListItem();
+		const listItem = this.toWritableItem(item);
 		return this._sp.web.lists.getByTitle(this.listTitle).items
 			.getById(item.Id as number)
 			.update(listItem)

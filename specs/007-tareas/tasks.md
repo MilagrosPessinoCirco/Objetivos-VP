@@ -564,6 +564,8 @@ No son tareas de código y las **no ejecuta el agente**. Todo depende del acceso
 - [ ] P7 Verificar permisos: agregar y editar en `Tarea`, borrar en `Tarea` (solo para deshacer un alta fallida) y agregar en `Avance tarea`. *Bloquea: T079 (deshacer del alta).*
 - [ ] P8 Cargar los datos de prueba del quickstart en las listas de desarrollo, con autorización: una iniciativa con 9 tareas no canceladas, otra con 10, una iniciativa Finalizada y otra Cancelada, y tareas en cada estado. *Bloquea: T079 (tope y estados reales).*
 
+**Estado actual (decisión de la usuaria)**: P1 a P5 quedan **pendientes**; no se crean ni modifican columnas por ahora. Mientras tanto `src/core/api/Tarea/TareaDataSource.ts` tiene `COLUMNAS_NUEVAS_DISPONIBLES = false`: no pide ni escribe `QueHabilita`, `ComentarioEjecutivo*` ni `FechaUltimaActualizacion`, y escribe una sola área (la primera). Al terminar P1 a P3 hay que pasar esa constante a `true` y repetir la prueba (T079).
+
 **Tareas de validación que dependen de estos preparativos**: **T079** (depende de P1 a P8). T078 y T080 no dependen de ellos (se hacen con mocks). Ninguna tarea de código (T003 a T075) depende de los preparativos.
 
 ---
