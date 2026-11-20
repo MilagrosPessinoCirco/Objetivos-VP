@@ -1,0 +1,83 @@
+.fluentPanel :global(.ms-Panel-main) {
+  width: 583px;
+  max-width: calc(100vw - 32px);
+  height: min(978px, 100vh);
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(21, 34, 50, 0.08);
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.fluentPanel :global(.ms-Panel-contentInner) {
+  height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.fluentPanel :global(.ms-Panel-header) {
+  min-height: 28px;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.fluentPanel :global(.ms-Panel-headerText) {
+  color: #01225e;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.fluentPanel :global(.ms-Panel-closeButton) {
+  width: 24px;
+  height: 24px;
+  color: #5c5c5c;
+}
+
+.fluentPanel :global(.ms-Panel-content) {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 0;
+}
+
+.content {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.fluentPanel :global(.ms-Panel-footer) {
+  position: static;
+  width: 100%;
+  padding-top: 16px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.actions :global(.ms-Button) {
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.actions :global(.ms-Button--primary) {
+  border: 1px solid #0451dd;
+  background: #0451dd;
+  color: #ffffff;
+}
+
+.actions :global(.ms-Button:not(.ms-Button--primary)) {
+  border: 1px solid #0451dd;
+  background: transparent;
+  color: #0451dd;
+}

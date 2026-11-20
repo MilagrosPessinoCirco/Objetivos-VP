@@ -1,0 +1,234 @@
+.rating {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.label {
+  display: flex;
+  gap: 4px;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.28px;
+  line-height: normal;
+}
+
+.required {
+  color: #ab0017;
+  font-weight: 600;
+}
+
+.rating.dark .label {
+  color: #fcfcfc;
+}
+
+.rating.disabled .label,
+.rating.disabled .required {
+  color: #c5c5c5;
+}
+
+.rating.dark.disabled .label,
+.rating.dark.disabled .required {
+  color: #5c5c5c;
+}
+
+.root {
+  line-height: 0 !important;
+}
+
+.rootLarge {
+  height: 20px !important;
+}
+
+.rootSmall {
+  height: 16px !important;
+}
+
+.focusZone {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 100% !important;
+}
+
+.button {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  line-height: 0 !important;
+}
+
+.star {
+  display: inline-block !important;
+  position: relative !important;
+}
+
+.back,
+.front {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+.back {
+  width: 100%;
+}
+
+.front {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  overflow: hidden !important;
+}
+
+.large .star {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.large .back,
+.large .front {
+  height: 20px;
+  background-size: 20px 20px;
+}
+
+.small .star {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.small .back,
+.small .front {
+  height: 16px;
+  background-size: 16px 16px;
+}
+
+.large .line {
+  background-image: url('./assets/star-line-20.svg');
+}
+
+.large .solid {
+  background-image: url('./assets/star-solid-20.svg');
+}
+
+.small .line {
+  background-image: url('./assets/star-line-16.svg');
+}
+
+.small .solid {
+  background-image: url('./assets/star-solid-16.svg');
+}
+
+.large.disabled .line {
+  background-image: url('./assets/star-line-disabled-20.svg');
+}
+
+.large.disabled .solid {
+  background-image: url('./assets/star-solid-disabled-20.svg');
+}
+
+.small.disabled .line {
+  background-image: url('./assets/star-line-disabled-16.svg');
+}
+
+.small.disabled .solid {
+  background-image: url('./assets/star-solid-disabled-16.svg');
+}
+
+.large.dark .line {
+  background-image: url('./assets/star-line-dark-20.svg');
+}
+
+.large.dark .solid {
+  background-image: url('./assets/star-solid-dark-20.svg');
+}
+
+.small.dark .line {
+  background-image: url('./assets/star-line-dark-16.svg');
+}
+
+.small.dark .solid {
+  background-image: url('./assets/star-solid-dark-16.svg');
+}
+
+.large.dark.disabled .line {
+  background-image: url('./assets/star-line-disabled-dark-20.svg');
+}
+
+.large.dark.disabled .solid {
+  background-image: url('./assets/star-solid-disabled-dark-20.svg');
+}
+
+.small.dark.disabled .line {
+  background-image: url('./assets/star-line-disabled-dark-16.svg');
+}
+
+.small.dark.disabled .solid {
+  background-image: url('./assets/star-solid-disabled-dark-16.svg');
+}
+
+.large.interactive:hover .line {
+  background-image: url('./assets/star-line-hover-20.svg');
+}
+
+.large.interactive:hover .solid {
+  background-image: url('./assets/star-solid-hover-20.svg');
+}
+
+.small.interactive:hover .line {
+  background-image: url('./assets/star-line-hover-16.svg');
+}
+
+.small.interactive:hover .solid {
+  background-image: url('./assets/star-solid-hover-16.svg');
+}
+
+/* Figma no define estrella hover en dark mode; se usa el azul claro #9bc2f4 del DS oscuro. */
+.large.dark.interactive:hover .line {
+  background-image: url('./assets/star-line-hover-dark-20.svg');
+}
+
+.large.dark.interactive:hover .solid {
+  background-image: url('./assets/star-solid-hover-dark-20.svg');
+}
+
+.small.dark.interactive:hover .line {
+  background-image: url('./assets/star-line-hover-dark-16.svg');
+}
+
+.small.dark.interactive:hover .solid {
+  background-image: url('./assets/star-solid-hover-dark-16.svg');
+}
+
+.large.interactive .button:hover ~ .button .line {
+  background-image: url('./assets/star-line-20.svg');
+}
+
+.large.interactive .button:hover ~ .button .solid {
+  background-image: url('./assets/star-solid-20.svg');
+}
+
+.small.interactive .button:hover ~ .button .line {
+  background-image: url('./assets/star-line-16.svg');
+}
+
+.small.interactive .button:hover ~ .button .solid {
+  background-image: url('./assets/star-solid-16.svg');
+}
+
+.large.dark.interactive .button:hover ~ .button .line {
+  background-image: url('./assets/star-line-dark-20.svg');
+}
+
+.large.dark.interactive .button:hover ~ .button .solid {
+  background-image: url('./assets/star-solid-dark-20.svg');
+}
+
+.small.dark.interactive .button:hover ~ .button .line {
+  background-image: url('./assets/star-line-dark-16.svg');
+}
+
+.small.dark.interactive .button:hover ~ .button .solid {
+  background-image: url('./assets/star-solid-dark-16.svg');
+}

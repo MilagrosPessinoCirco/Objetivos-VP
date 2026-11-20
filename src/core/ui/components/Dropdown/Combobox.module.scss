@@ -1,0 +1,319 @@
+.combobox {
+  position: relative;
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.fluentContainer {
+  width: 100%;
+}
+
+.label {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 5px;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  line-height: 1;
+}
+
+.dark .label {
+  color: #fcfcfc;
+}
+
+.required {
+  color: #ab0017;
+}
+
+.errorMessage {
+  color: #ab0017;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.trigger {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  min-height: 30px;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 0 2px 0 8px;
+  border: 1px solid #1f1f1f;
+  background: #fcfcfc;
+  color: #1f1f1f;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.triggerOpen {
+  border: 2px solid #0451dd;
+  padding-left: 7px;
+}
+
+.triggerError {
+  border: 2px solid #ab0017;
+  padding-left: 7px;
+}
+
+.trigger:focus-visible {
+  border: 2px solid #0451dd;
+  outline: none;
+}
+
+.dark .trigger {
+  border-color: #605e5c;
+  background: #1f1f1f;
+  color: #fcfcfc;
+}
+
+.darkTrigger,
+.darkTrigger:hover,
+.darkTrigger:focus,
+.darkTrigger:active {
+  border-color: #605e5c;
+  background: #1f1f1f;
+  color: #fcfcfc;
+}
+
+.dark .triggerOpen {
+  border-color: #0451dd;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.triggerFocused {
+  border-color: #0451dd;
+  box-shadow: inset 0 0 0 1px #0451dd;
+}
+
+.triggerHovered {
+  border-color: #1f1f1f;
+}
+
+.triggerDisabled {
+  border-color: #dbdbdb;
+  background: #f1f1f1;
+  color: #999999;
+}
+
+.fluentErrorMessage {
+  display: none;
+}
+
+.caretDownButton {
+  position: static;
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: url('./assets/combobox-chevron.svg') center / 30px 30px no-repeat;
+}
+
+.caretDownButton i {
+  visibility: hidden;
+}
+
+.darkCaretDownButton,
+.darkCaretDownButton:hover,
+.darkCaretDownButton:focus,
+.darkCaretDownButton:active {
+  background: url('./assets/combobox-chevron.svg') center / 30px 30px no-repeat;
+  color: #fcfcfc;
+}
+
+.callout {
+  max-width: 300px;
+}
+
+.value {
+  display: block;
+  width: auto;
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.darkValue,
+.darkValue:hover,
+.darkValue:focus,
+.darkValue:active {
+  background: #1f1f1f;
+  color: #fcfcfc !important;
+}
+
+.darkValue::placeholder,
+.darkValue:hover::placeholder,
+.darkValue:focus::placeholder,
+.darkValue:active::placeholder {
+  color: #fcfcfc !important;
+  opacity: 1;
+}
+
+.value:focus {
+  outline: none;
+}
+
+.chevron {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  object-fit: contain;
+}
+
+.menu {
+  width: 100%;
+  max-height: 416px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border-radius: 1px;
+  background: #ffffff;
+  box-shadow: 0 3.2px 7.2px rgba(0, 0, 0, 0.25);
+}
+
+.darkMenu {
+  width: 100%;
+  max-height: 416px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border-radius: 1px;
+  background: #1f1f1f;
+  box-shadow: 0 3.2px 7.2px rgba(0, 0, 0, 0.25);
+}
+
+.darkMenu :global(.ms-ComboBox-option:hover),
+.darkMenu :global(.ms-ComboBox-option:focus),
+.darkMenu :global(.ms-ComboBox-option:active) {
+  background: #fcfcfc !important;
+  color: #1f1f1f !important;
+}
+
+.darkMenu :global(.ms-ComboBox-option:hover) :global(.ms-ComboBox-optionText),
+.darkMenu :global(.ms-ComboBox-option:focus) :global(.ms-ComboBox-optionText),
+.darkMenu :global(.ms-ComboBox-option:active) :global(.ms-ComboBox-optionText),
+.darkMenu :global(.ms-ComboBox-option:hover) :global(.ms-Checkbox-label),
+.darkMenu :global(.ms-ComboBox-option:focus) :global(.ms-Checkbox-label),
+.darkMenu :global(.ms-ComboBox-option:active) :global(.ms-Checkbox-label) {
+  color: #1f1f1f !important;
+}
+
+.dark .menu {
+  background: #1f1f1f;
+}
+
+.option {
+  display: flex;
+  width: 100%;
+  min-height: 40px;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #1f1f1f;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.dark .option {
+  color: #fcfcfc;
+}
+
+.option:hover,
+.optionSelected {
+  background: #f1f1f1;
+}
+
+.dark .option:hover,
+.dark .optionSelected {
+  background: #323130;
+}
+
+.darkOption {
+  color: #fcfcfc;
+}
+
+.darkOption {
+  background: #1f1f1f;
+}
+
+.darkOptionHovered,
+.darkOptionFocused {
+  background: #fcfcfc !important;
+  color: #1f1f1f !important;
+}
+
+.darkOptionHovered :global(.ms-ComboBox-optionText),
+.darkOptionFocused :global(.ms-ComboBox-optionText) {
+  color: #1f1f1f !important;
+}
+
+.darkOptionDisabled {
+  background: #1f1f1f;
+  color: #999999;
+}
+
+.checkbox {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 20px;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.checkboxSelected {
+  border-color: #0451dd;
+  background: #0451dd;
+}
+
+.checkmark {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.divider {
+  height: 16px;
+  border-top: 1px solid #ededed;
+}
+
+.dark .divider {
+  border-top-color: #484644;
+}

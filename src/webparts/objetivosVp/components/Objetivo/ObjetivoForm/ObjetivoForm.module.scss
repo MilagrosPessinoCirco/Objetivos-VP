@@ -1,0 +1,93 @@
+.section {
+	display: flex;
+	flex-direction: column;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+}
+
+.panel.panel :global(.ms-Panel-main) {
+	width: 480px !important;
+}
+
+.panelContent {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.gridPanel {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.gridPair {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nameField {
+	display: flex;
+	flex-direction: column;
+}
+
+.nameLabel {
+	display: flex;
+	align-items: center;
+}
+
+.panelContent.panelContent .section > *,
+.panelContent.panelContent .gridPanel > *,
+.panelContent.panelContent .gridPair > *,
+.panelContent.panelContent .nameField > *,
+.panelContent.panelContent .field > * {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .nameLabel {
+	width: auto;
+}
+
+.panelContent.panelContent .multiline :global(.ms-TextField),
+.panelContent.panelContent .multiline :global(.ms-TextField-wrapper),
+.panelContent.panelContent .multiline :global(.ms-TextField-fieldGroup),
+.panelContent.panelContent .multiline textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .weight > div {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .invalid [class*='control_'],
+.panelContent.panelContent .invalid textarea,
+.panelContent.panelContent .invalid :global(.ms-Dropdown-title),
+.panelContent.panelContent .invalid :global(.ms-SpinButton-spinButtonWrapper),
+.panelContent.panelContent .field.invalid :global(.ms-TextField-fieldGroup) {
+	border-color: var(--field-error);
+	box-shadow: inset 0 0 0 1px var(--field-error);
+}
+
+.panelContent.panelContent .invalid [class*='errorMessage_'] {
+	width: 100%;
+	color: var(--field-error);
+	font-size: 12px;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 16px;
+}
+
+.panelContent.panelContent .weight.invalid > div > div {
+	outline: 2px solid var(--field-error);
+	outline-offset: -2px;
+}
+
+.panelContent.panelContent .weight.invalid > div > div::after {
+	border-color: var(--field-error);
+}

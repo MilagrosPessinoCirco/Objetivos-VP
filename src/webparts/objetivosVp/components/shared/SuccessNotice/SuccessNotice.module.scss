@@ -1,0 +1,13 @@
+$notice-z-index: 1000;
+
+.notice {
+	position: sticky;
+	top: 0;
+	z-index: $notice-z-index;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+}
+
+.notice .noticeBar {
+	width: 100%;
+}

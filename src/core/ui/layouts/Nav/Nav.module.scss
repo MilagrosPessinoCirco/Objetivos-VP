@@ -1,0 +1,310 @@
+.panel {
+  display: flex;
+  width: 300px;
+  min-height: 420px;
+  box-sizing: border-box;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(21, 34, 50, 0.08);
+  color: #0d0d0d;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.dark {
+  background: #0d0d0d;
+  color: #fcfcfc;
+}
+
+.header {
+  display: flex;
+  min-height: 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.title {
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  color: #01225e;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.dark .title {
+  color: #a1c2fd;
+}
+
+.header :global(.ms-Button).close {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: #5c5c5c;
+}
+
+.close :global(.ms-Icon) {
+  font-size: 12px;
+  -webkit-text-stroke: 0.45px #5c5c5c;
+}
+
+.dark .close {
+  color: #fcfcfc;
+}
+
+.dark .close :global(.ms-Icon) {
+  -webkit-text-stroke: 0;
+}
+
+.close:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.dark .close:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.list {
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.list :global(.ms-Nav-navItems) {
+  width: 252px;
+}
+
+.list :global(.ms-Nav-navItem) {
+  width: 252px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.list :global(.ms-Nav-link) {
+  display: flex;
+  height: 44px;
+  min-height: 44px;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+  color: #5c5c5c;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.list :global(.ms-Nav-linkText) {
+  display: block;
+  width: 100%;
+  margin: 0;
+  overflow: visible;
+  line-height: 20px;
+}
+
+.linkContent {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemText {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list :global(.ms-Nav-navItems > .ms-Nav-navItem > .ms-Nav-link:not(.is-disabled):hover),
+.list :global(.ms-Nav-navItems > .ms-Nav-navItem > .ms-Nav-compositeLink > .ms-Nav-link:not(.is-disabled):hover),
+.hoverPreview .list :global(.ms-Nav-compositeLink[data-nav-status="hover"] > .ms-Nav-link) {
+  border-left: 2px solid #0451dd;
+  background: #dbdbdb;
+  color: #0d0d0d;
+  font-weight: 700;
+}
+
+.list :global(.ms-Nav-link.is-selected) {
+  border-left: 0;
+  background: #0451dd;
+  color: #fcfcfc;
+  font-weight: 700;
+}
+
+.list :global(.ms-Nav-link.is-selected)::after {
+  border: 0;
+}
+
+.list :global(.ms-Nav-link.is-disabled),
+.list :global(.ms-Nav-link:disabled) {
+  background: #c5c5c5;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+.dark :global(.ms-Nav-link) {
+  background: #0d0d0d;
+  color: #fcfcfc;
+}
+
+.dark :global(.ms-Nav-navItems > .ms-Nav-navItem > .ms-Nav-link:not(.is-disabled):hover),
+.dark :global(.ms-Nav-navItems > .ms-Nav-navItem > .ms-Nav-compositeLink > .ms-Nav-link:not(.is-disabled):hover),
+.dark.hoverPreview .list :global(.ms-Nav-compositeLink[data-nav-status="hover"] > .ms-Nav-link) {
+  border-left: 2px solid #0451dd;
+  background: #1f1f1f;
+  color: #dbdbdb;
+}
+
+.dark :global(.ms-Nav-link.is-selected) {
+  background: #0451dd;
+  color: #fcfcfc;
+}
+
+.dark :global(.ms-Nav-link.is-disabled),
+.dark :global(.ms-Nav-link:disabled) {
+  background: #c5c5c5;
+  color: #999999;
+}
+
+.dark .icon img {
+  filter: brightness(0) invert(1);
+}
+
+.dark .icon {
+  color: #fcfcfc;
+}
+
+.dark .icon:hover {
+  color: #0d0d0d;
+}
+
+.dark .close:hover :global(.ms-Icon) {
+  color: #0d0d0d;
+}
+
+.dark :global(.ms-Nav-link.is-disabled) .icon img,
+.dark :global(.ms-Nav-link:disabled) .icon img {
+  filter: none;
+}
+
+.list :global(.ms-Nav-compositeLink) {
+  width: 252px;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-link) {
+  gap: 18px;
+  padding: 0 16px 0 56px;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-linkText) {
+  padding-left: 0;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-chevronButton) {
+  left: 0;
+  width: 56px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  color: #5c5c5c;
+  z-index: 1;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-chevron) {
+  left: 16px;
+  font-size: 20px;
+  transform: rotate(-90deg);
+}
+
+.list :global(.ms-Nav-compositeLink.is-expanded .ms-Nav-chevron) {
+  transform: rotate(0deg);
+}
+
+.dark .list :global(.ms-Nav-compositeLink .ms-Nav-chevronButton) {
+  color: #fcfcfc;
+}
+
+.list :global(.ms-Nav-compositeLink:hover .ms-Nav-chevronButton) {
+  color: #0d0d0d;
+}
+
+.dark .list :global(.ms-Nav-compositeLink:hover .ms-Nav-chevronButton) {
+  color: #dbdbdb;
+}
+
+.list :global(.ms-Nav-compositeLink.is-selected .ms-Nav-chevronButton) {
+  color: #fcfcfc;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-groupContent) {
+  margin: 0;
+  padding-left: 0;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link),
+.list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link:hover),
+.list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link:active),
+.list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link.is-selected) {
+  padding-left: 70px;
+  border-top: 1px solid #dbdbdb;
+  border-left: 0;
+  background: #ffffff !important;
+  color: #5c5c5c !important;
+  font-weight: 600 !important;
+}
+
+.list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link.is-selected)::after {
+  border: 0;
+}
+
+.dark .list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link) {
+  border-top-color: #5c5c5c;
+}
+
+.dark .list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link:hover),
+.dark .list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link:active),
+.dark .list :global(.ms-Nav-compositeLink .ms-Nav-groupContent .ms-Nav-link.is-selected) {
+  border-left: 0;
+  background: #0d0d0d !important;
+  color: #fcfcfc !important;
+  font-weight: 600 !important;
+}
+
+@media (max-width: 360px) {
+  .panel {
+    width: min(300px, 100%);
+    padding: 20px;
+  }
+
+  .list :global(.ms-Nav-navItems),
+  .list :global(.ms-Nav-navItem),
+  .list :global(.ms-Nav-compositeLink) {
+    width: 100%;
+  }
+}

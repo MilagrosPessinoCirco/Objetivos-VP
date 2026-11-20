@@ -1,0 +1,14 @@
+.detalle {
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.boldWhiteIcon {
+	filter: brightness(0) invert(1) drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 0.6px #fff);
+}

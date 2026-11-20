@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Actions / Chevron Circle" clip-path="url(#clip0_0_54)">
+<path id="color" d="M8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16ZM6.14645 11.1464C5.95118 11.3417 5.95118 11.6583 6.14645 11.8536C6.34171 12.0488 6.65829 12.0488 6.85355 11.8536L10.3536 8.35355C10.4473 8.25979 10.5 8.13261 10.5 8C10.5 7.86739 10.4473 7.74022 10.3536 7.64645L6.85355 4.14645C6.65829 3.95118 6.34171 3.95118 6.14645 4.14645C5.95118 4.34171 5.95118 4.65829 6.14645 4.85355L9.29289 8L6.14645 11.1464Z" fill="#0451DD"/>
+</g>
+<defs>
+<clipPath id="clip0_0_54">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,17 @@
+.content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.art {
+	margin-top: auto;
+}
+
+.illustration {
+	display: block;
+	width: 58%;
+	max-width: 100%;
+	height: auto;
+	mix-blend-mode: multiply;
+}

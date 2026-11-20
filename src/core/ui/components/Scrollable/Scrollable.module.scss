@@ -1,0 +1,44 @@
+// Scrollbar styling matches the Figma "Scroll" spec: light track, rounded neutral thumb.
+.scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: #999999 #fcfcfc;
+}
+
+.vertical {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.both {
+  overflow: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  border: 1px solid #f1f1f1;
+  background: #fcfcfc;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  min-height: 24px;
+  border: 2px solid #fcfcfc;
+  border-radius: 8px;
+  background: #999999;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #7a7a7a;
+}
+
+.scrollable::-webkit-scrollbar-corner {
+  background: #fcfcfc;
+}

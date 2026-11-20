@@ -1,0 +1,28 @@
+@mixin design-system-theme($dark: false) {
+  --ds-font-family-base: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  --ds-font-size-body: 16px;
+  --ds-font-size-caption: 12px;
+  --ds-line-height-body: 22px;
+  --ds-line-height-caption: 16px;
+  --ds-space-xs: 4px;
+  --ds-space-lg: 16px;
+  // Colors below are the exact tokens extracted from the Figma "DS - Sharepoint - Fluent UI v8" file.
+  --ds-color-brand-primary: #0451dd;
+  --ds-color-brand-primary-hover: #003fa3;
+  --ds-color-neutral-white: #ffffff;
+  --ds-color-neutral-background: #fcfcfc;
+  --ds-color-neutral-border: #dbdbdb;
+  --ds-color-neutral-text: #1f1f1f;
+  --ds-color-neutral-text-muted: #5c5c5c;
+  --ds-color-semantic-success: #107c41;
+  --ds-color-semantic-warning: #ffb900;
+  --ds-color-semantic-error: #ab0017;
+  --ds-color-semantic-info: #0078d4;
+
+  @if $dark {
+    --ds-color-neutral-background: #1f1f1f;
+    --ds-color-neutral-border: #484644;
+    --ds-color-neutral-text: #fcfcfc;
+    --ds-color-neutral-text-muted: #c8c6c4;
+  }
+}

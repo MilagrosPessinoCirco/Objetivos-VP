@@ -1,0 +1,26 @@
+.actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.description {
+	white-space: normal;
+}
+
+.chevron,
+.chevronOpen {
+	transition: transform 0.15s;
+}
+
+.chevronOpen {
+	transform: rotate(90deg);
+}
+
+.withoutHeader > :first-child :global(.ms-DetailsHeader) {
+	display: none;
+}
+
+.nested :global(.ms-DetailsHeader) {
+	background: var(--nested-header-bg);
+}

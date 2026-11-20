@@ -1,0 +1,140 @@
+.tableFilters {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 0 32px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.title {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px 8px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #0451dd;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+  background: #f1f6ff;
+  outline: none;
+}
+
+.dark .backButton {
+  color: #a1c2fd;
+}
+
+.dark .backButton:hover,
+.dark .backButton:focus-visible {
+  background: #21375e;
+}
+
+.titleText {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.titleLabel {
+  margin: 0;
+  overflow: hidden;
+  color: #011232;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark .titleLabel {
+  color: #e7efff;
+}
+
+.info {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoText {
+  overflow: hidden;
+  color: #02225d;
+  font-size: 10px;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark .infoText {
+  color: #a1c2fd;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #1f1f1f;
+  cursor: pointer;
+}
+
+.actionButton:hover,
+.actionButton:focus-visible {
+  background: #f1f1f1;
+  outline: none;
+}
+
+.dark .actionButton {
+  color: #fcfcfc;
+}
+
+.dark .actionButton:hover,
+.dark .actionButton:focus-visible {
+  background: #323130;
+}
+
+@media (max-width: 700px) {
+  .tableFilters {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .container {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

@@ -1,0 +1,118 @@
+.checkboxField {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.root {
+  align-items: center;
+}
+
+.label {
+  align-items: center;
+  gap: 7px;
+}
+
+.control {
+  width: 20px !important;
+  height: 20px !important;
+  border: 1px solid #dbdbdb !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+/* Indeterminate: Figma shows an outline box with a solid inner square, distinct from the checked fill.
+   Higher specificity than the is-checked rule below so it always wins regardless of Fluent's internal checked state. */
+:global(.ms-Checkbox).checkboxField .control.controlIndeterminate {
+  border-color: #0451dd !important;
+  background: #fcfcfc !important;
+  cursor: default !important;
+}
+
+:global(.ms-Checkbox).checkboxField .control.controlIndeterminate::after {
+  top: 50% !important;
+  left: 50% !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 !important;
+  transform: translate(-50%, -50%) !important;
+  border-width: 0 !important;
+  border-radius: 3px !important;
+  background: #0451dd !important;
+}
+
+.checkboxField:hover .control {
+  border-color: #afafaf !important;
+}
+
+:global(.ms-Checkbox.is-checked) .control {
+  border-color: #0451dd !important;
+  background: #0451dd !important;
+}
+
+:global(.ms-Checkbox.is-checked):hover .control {
+  border-color: #0451dd !important;
+  background: #0451dd !important;
+}
+
+:global(.ms-Checkbox.is-disabled) .control {
+  border-color: #dbdbdb !important;
+  background: #ffffff !important;
+}
+
+:global(.ms-Checkbox.is-disabled).checkboxField .control.controlIndeterminate {
+  border-color: #c5c5c5 !important;
+  background: #fcfcfc !important;
+}
+
+:global(.ms-Checkbox.is-disabled.is-checked) .control {
+  border-color: #c5c5c5 !important;
+  background: #c5c5c5 !important;
+}
+
+:global(.ms-Checkbox.is-disabled).checkboxField .control.controlIndeterminate::after {
+  background: #c5c5c5 !important;
+}
+
+:global(.ms-Checkbox.is-disabled) .text {
+  color: #c5c5c5 !important;
+}
+
+
+.error .control {
+  border-color: #ff0224 !important;
+  background: #fcfcfc !important;
+}
+
+.checkmark {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  display: inline-block !important;
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0 !important;
+  transform: translate(-50%, -50%) !important;
+  background: url('../../foundations/icons/assets/general/checkmark.svg') center / 14px 14px no-repeat !important;
+  color: transparent !important;
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #1f1f1f;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.required {
+  color: #ff0224;
+}
+

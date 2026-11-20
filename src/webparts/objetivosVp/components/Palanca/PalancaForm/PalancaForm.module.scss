@@ -1,0 +1,23 @@
+.panel.panel :global(.ms-Panel-main) {
+	width: 480px !important;
+}
+
+.fields {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.fields.fields > * {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.fields.fields .description :global(.ms-TextField),
+.fields.fields .description :global(.ms-TextField-wrapper),
+.fields.fields .description :global(.ms-TextField-fieldGroup),
+.fields.fields .description textarea {
+	width: 100%;
+	box-sizing: border-box;
+}

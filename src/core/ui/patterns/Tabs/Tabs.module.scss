@@ -1,0 +1,288 @@
+.tabs {
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.tabs :global(.ms-Pivot) {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.horizontal :global(.ms-Pivot) {
+  flex-direction: row;
+}
+
+.vertical :global(.ms-Pivot) {
+  width: max-content;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link) {
+  position: relative;
+  display: inline-flex;
+  height: 44px;
+  box-sizing: border-box;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 12px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #424242;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.tabs :global(.ms-Pivot-link .ms-Button-flexContainer) {
+  height: auto;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link)::after {
+  display: none;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link)::before {
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 3px;
+  border-radius: 9999px;
+  background: transparent;
+}
+
+.linkContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label {
+  padding: 0 2px;
+}
+
+.icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.horizontal.small :global(.ms-Button.ms-Pivot-link) {
+  height: 32px;
+  padding: 6px;
+}
+
+.horizontal.small :global(.ms-Button.ms-Pivot-link)::before {
+  right: 8px;
+  left: 8px;
+  height: 2px;
+}
+
+.small .linkContent {
+  gap: 2px;
+}
+
+.vertical :global(.ms-Button.ms-Pivot-link) {
+  height: 32px;
+  justify-content: flex-start;
+  padding: 6px 10px;
+  color: #3d3d3d;
+}
+
+.vertical :global(.ms-Button.ms-Pivot-link)::before {
+  top: 8px;
+  right: auto;
+  bottom: 8px;
+  left: 0;
+  width: 3px;
+  height: auto;
+}
+
+.vertical.small :global(.ms-Button.ms-Pivot-link) {
+  height: 24px;
+  padding: 2px 6px;
+}
+
+.vertical.small :global(.ms-Button.ms-Pivot-link)::before {
+  top: 4px;
+  bottom: 4px;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link):hover {
+  color: #242424;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link):hover::before {
+  background: #c7c7c7;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link):active {
+  color: #1f1f1f;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link):active::before {
+  background: #c5c5c5;
+}
+
+.subtle :global(.ms-Button.ms-Pivot-link):hover {
+  background: #f5f5f5;
+}
+
+.subtle :global(.ms-Button.ms-Pivot-link):active {
+  border-color: #999999;
+  background: #dbdbdb;
+}
+
+.transparent :global(.ms-Button.ms-Pivot-link),
+.transparent :global(.ms-Button.ms-Pivot-link):hover,
+.transparent :global(.ms-Button.ms-Pivot-link):active {
+  border-color: transparent;
+  background: transparent;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-selected) {
+  color: #1f1f1f;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-selected)::before {
+  background: #0451dd;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-selected):hover::before {
+  background: #1567fa;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-selected):active::before {
+  background: #03399c;
+}
+
+.subtle :global(.ms-Button.ms-Pivot-link.is-selected):hover {
+  background: #f1f1f1;
+}
+
+.subtle :global(.ms-Button.ms-Pivot-link.is-selected):active {
+  border-color: transparent;
+  background: #f1f1f1;
+}
+
+.circular :global(.ms-Pivot) {
+  gap: 8px;
+}
+
+.circular :global(.ms-Button.ms-Pivot-link) {
+  height: 32px;
+  padding: 6px 10px;
+  border-radius: 9999px;
+}
+
+.circular :global(.ms-Button.ms-Pivot-link)::before {
+  display: none;
+}
+
+.circular.small :global(.ms-Button.ms-Pivot-link) {
+  height: 24px;
+  padding: 4px 8px;
+}
+
+.circular.small .linkContent {
+  gap: 6px;
+}
+
+.circular.small .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.circular.subtle :global(.ms-Button.ms-Pivot-link) {
+  border-color: transparent;
+  background: transparent;
+  color: #424242;
+}
+
+.circular.subtle :global(.ms-Button.ms-Pivot-link):hover {
+  border-color: #c7c7c7;
+  background: #f5f5f5;
+  color: #242424;
+}
+
+.circular.subtle :global(.ms-Button.ms-Pivot-link.is-selected) {
+  border-color: #0451dd;
+  background: #fcfcfc;
+  color: #0451dd;
+}
+
+.circular.subtle :global(.ms-Button.ms-Pivot-link.is-selected):hover {
+  border-color: #1567fa;
+  background: #a1c2fd;
+  color: #1567fa;
+}
+
+.circular.subtle :global(.ms-Button.ms-Pivot-link.is-selected):active {
+  border-color: #03399c;
+  background: #a1c2fd;
+  color: #032e7d;
+}
+
+.circular.filled :global(.ms-Button.ms-Pivot-link) {
+  border-color: transparent;
+  background: #f5f5f5;
+  color: #424242;
+}
+
+.circular.filled :global(.ms-Button.ms-Pivot-link):hover {
+  background: #ebebeb;
+  color: #242424;
+}
+
+.circular.filled :global(.ms-Button.ms-Pivot-link.is-selected) {
+  background: #0451dd;
+  color: #fcfcfc;
+}
+
+.circular.filled :global(.ms-Button.ms-Pivot-link.is-selected):hover {
+  background: #1567fa;
+  color: #ffffff;
+}
+
+.circular.filled :global(.ms-Button.ms-Pivot-link.is-selected):active {
+  background: #032e7d;
+  color: #ffffff;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link):focus {
+  outline: none;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px #ffffff, 0 0 0 4px #0d0d0d;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-disabled) {
+  border-color: transparent;
+  background: transparent;
+  color: #c5c5c5;
+  cursor: not-allowed;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-disabled)::before {
+  background: transparent;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-selected.is-disabled) {
+  border-color: #f1f1f1;
+  background: #f1f1f1;
+  color: #afafaf;
+}
+
+.tabs :global(.ms-Button.ms-Pivot-link.is-selected.is-disabled)::before {
+  background: #afafaf;
+}

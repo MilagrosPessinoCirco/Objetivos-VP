@@ -1,0 +1,8 @@
+.palancas {
+	display: flex;
+	flex-direction: column;
+}
+
+.tabs.tabs :global(.ms-Button.ms-Pivot-link.is-selected) {
+	color: var(--ds-color-brand-primary);
+}

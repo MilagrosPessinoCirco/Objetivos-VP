@@ -1,0 +1,143 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
+}
+
+.groupLabel {
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.required,
+.errorMessage {
+  color: #ff0224;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #1f1f1f;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.darkMode .groupLabel,
+.darkMode .option {
+  color: #fcfcfc;
+}
+
+.control {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 20px;
+  border: 1px solid #dbdbdb;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+:global(.ms-ChoiceField-input):focus-visible ~ .option .control {
+  outline: 2px solid #0451dd;
+  outline-offset: 1px;
+}
+
+:global(.ms-ChoiceField-input):hover ~ .option .control {
+  border-color: #5c5c5c;
+}
+
+:global(.ms-ChoiceField-input):checked ~ .option .control {
+  border-color: #0451dd;
+}
+
+:global(.ms-ChoiceField-input):checked ~ .option .control::after {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #0451dd;
+  content: '';
+}
+
+:global(.ms-ChoiceField-input):disabled ~ .option .control {
+  border-color: #c5c5c5;
+  background: #ffffff;
+}
+
+:global(.ms-ChoiceField-input):checked:disabled ~ .option .control {
+  background: rgba(255, 255, 255, 0.13);
+}
+
+:global(.ms-ChoiceField-input):checked:disabled ~ .option .control::after {
+  background: #c5c5c5;
+}
+
+:global(.ms-ChoiceField-input):disabled ~ .option .label {
+  color: #c5c5c5;
+}
+
+.error .control {
+  border-color: #ff0224;
+  background: #fcfcfc;
+}
+
+.iconOption {
+  display: grid;
+  grid-template-columns: 48px auto;
+  grid-template-areas:
+    'icon icon'
+    'label label'
+    'control control';
+  justify-items: start;
+  align-items: center;
+  row-gap: 4px;
+  column-gap: 0;
+  min-width: 72px;
+}
+
+.iconOption .icon {
+  grid-area: icon;
+  display: inline-flex;
+  width: 48px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconOption .label {
+  grid-area: label;
+  white-space: nowrap;
+  margin-left: 5px;
+}
+
+.iconOption .control {
+  grid-area: control;
+  justify-self: start;
+  margin-left: 30px;
+  margin-top: 2px;
+}
+
+.icon {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon .label {
+  white-space: nowrap;
+}
