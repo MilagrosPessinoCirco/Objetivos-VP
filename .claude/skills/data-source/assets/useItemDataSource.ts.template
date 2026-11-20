@@ -1,9 +1,0 @@
-import { useDatasource } from '../../api';
-import { __LISTA__ } from '../../entities';
-import __LISTA__DataSource from './__LISTA__DataSource';
-
-function useItem__LISTA__DataSource() {
-	return useDatasource<__LISTA__>(new __LISTA__DataSource());
-}
-
-export default useItem__LISTA__DataSource;

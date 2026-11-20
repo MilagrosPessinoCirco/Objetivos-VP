@@ -40,8 +40,9 @@ obj
 # Perfil de Edge usado para debug
 .vscode/edge-debug-profile/
 
-# Claude Code (configuración personal)
-.claude/settings.local.json
+# Claude Code y GitHub Copilot
+.claude/
+.github/
 
 # Design system template (referencia local)
 DESIGN-SYSTEM-SHP-TEMPLATE/
