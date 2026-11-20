@@ -1,4 +1,4 @@
-# Gestión de Objetivos VP RRII · Prototipo navegable · v10
+# Gestión de Objetivos VP RRII · Prototipo navegable · v11
 
 Prototipo interactivo de la app SharePoint (SPFx) de la VP RRII, alineado a la Especificación Funcional v1.7 y al DS SharePoint / Fluent UI v8.
 
@@ -13,7 +13,8 @@ Prototipo interactivo de la app SharePoint (SPFx) de la VP RRII, alineado a la E
 | v7 | 11/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v7.zip |
 | v8 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v8.zip |
 | v9 | 12/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v9.zip |
-| v10 | 16/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v10.zip (esta) |
+| v10 | 16/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v10.zip |
+| v11 | 19/11/2026 | Gestion-Objetivos-VP-RRII-prototipo_v11.zip (esta) |
 
 ## Cómo abrirlo
 El prototipo necesita un servidor local (no funciona con doble clic en index.html por restricciones del navegador sobre file://).
@@ -29,6 +30,10 @@ Requiere Python 3 o Node.js instalado.
 - Los datos son de ejemplo y viven en memoria: al recargar la página se reinician.
 - La fecha de referencia para alertas y vencimientos es 26/10/2026.
 - Desde la v7 los datos son los reales del documento «Carga de Objetivo en Maqueta» (1 objetivo, 1 iniciativa, 5 tareas). Para ver Mis iniciativas / Mis tareas usá los roles «Usuario · resp. de iniciativas» (Bárbara Adán) y «Usuario · resp. de tareas» (María Martha Grotz).
+
+## Cambios en v11
+- Cargar objetivo: el switch pasa a llamarse «¿Es objetivo de VP?» (formulario y detalle).
+- Cargar / Editar iniciativa: Accountable es un único valor (desplegable de una sola persona, obligatorio) en lugar de una lista de personas. En los datos de ejemplo, INI-01 queda con Bárbara Adán como Accountable.
 
 ## Cambios en v10
 - Cargar objetivo:

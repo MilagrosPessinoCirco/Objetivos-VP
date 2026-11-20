@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Gestión de Objetivos VP RRII – Prototipo SharePoint · v10</title>
+<title>Gestión de Objetivos VP RRII – Prototipo SharePoint · v11</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./assets/dc-runtime.js"></script>
 </head>
@@ -644,7 +644,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="lr lh c-vpo"><span>ID</span><span>Objetivo</span><span>Palanca</span><span>Departamento</span><span>Peso VP</span><span>Avance</span><span>Estado</span><span class="ra">Ver</span></div>
 <sc-for list="{{vpo.rows}}" as="o" hint-placeholder-count="3"><div class="lr c-vpo"><span>{{o.id}}</span><span><b>{{o.nombre}}</b></span><span>{{o.pal}}</span><span>{{o.dir}}</span><span>{{o.peso}}</span><span><b class="pctC {{o.col}}">{{o.avT}}</b></span><span><span class="{{o.estCls}}">{{o.est}}</span></span><span class="ra"><button class="goBtn" data-tip="Ver objetivo" aria-label="Abrir objetivo {{o.id}}" onClick="{{o.open}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7l5 5-5 5"></path></svg></button></span></div></sc-for>
 </div>
-<sc-if value="{{vpo.empty}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>No hay objetivos del VP.</b><span>Los objetivos aparecen acá cuando se cargan con «¿Es objetivo del VP?» activado.</span></div></sc-if>
+<sc-if value="{{vpo.empty}}" hint-placeholder-val="{{ false }}"><div class="emptyT"><svg class="emptyIc" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" class="eiBg"></circle><circle cx="24" cy="14.5" r="3" class="eiFg"></circle><rect x="21.3" y="20.5" width="5.4" height="15" rx="1.2" class="eiFg"></rect></svg><b>No hay objetivos del VP.</b><span>Los objetivos aparecen acá cuando se cargan con «¿Es objetivo de VP?» activado.</span></div></sc-if>
 </div>
 </sc-if>
 </sc-if>
@@ -764,7 +764,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="ro"><span>VP</span><b>{{od.vp}}</b></div>
 <div class="ro"><span>Departamento</span><b>{{od.dir}}</b></div>
 <div class="ro"><span>Gerencia</span><b>{{od.ger}}</b></div>
-<div class="ro"><span>¿Es objetivo del VP?</span><b>{{od.esVpTxt}}</b></div>
+<div class="ro"><span>¿Es objetivo de VP?</span><b>{{od.esVpTxt}}</b></div>
 <div class="ro"><span>Palanca estratégica</span><b>{{od.pal}}</b></div>
 </div>
 <div class="fGrid g1"><div class="ro"><span>Descripción</span><b>{{od.desc}}</b></div></div>
@@ -970,7 +970,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.dur}}"><label for="oDur">Duración <em>*</em></label><select id="oDur" value="{{fv.dur}}" onChange="{{fh.dur}}"><option value="">Seleccionar</option><option value="Anual">Anual</option><option value="Plurianual">Plurianual</option><option value="Permanente">Permanente</option></select><sc-if value="{{fe.dur}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dur}}</span></sc-if></div>
 <sc-if value="{{fm.isPluri}}" hint-placeholder-val="{{ false }}"><div class="{{fc.anios}}"><label for="oAn">Cantidad de años <em>*</em></label><select id="oAn" value="{{fv.anios}}" onChange="{{fh.anios}}"><option value="">Seleccionar</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><sc-if value="{{fe.anios}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.anios}}</span></sc-if></div></sc-if>
 <div class="{{fc.peso}}"><label for="oPeso">Peso del objetivo en el Departamento (%)</label><input id="oPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Definido de antemano</span></div>
-<div class="tglF"><span class="tglL" id="oEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="oEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
+<div class="tglF"><span class="tglL" id="oEvL">¿Es objetivo de VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="oEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
 <sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="oPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="oPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g4">
@@ -990,7 +990,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.desc}}"><label for="iDesc">Descripción / impacto esperado <em>*</em></label><textarea id="iDesc" placeholder="Qué se va a hacer y qué se espera lograr" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
 <div class="fGrid g3 top">
-<div class="{{fc.resp}}"><label for="iResp">Accountable <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.resp}}"><label for="iResp">Accountable <em>*</em></label><select id="iResp" value="{{fm.respSel}}" onChange="{{fm.setResp}}"><option value="">Seleccionar</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
 <div class="ff"><label for="iAreas">Áreas involucradas</label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="0"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
 <div class="dates2">
 <div class="{{fc.fini}}"><label for="iIni">Fecha de inicio <em>*</em></label><input id="iIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -1253,7 +1253,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.dur}}"><label for="soDur">Duración <em>*</em></label><select id="soDur" value="{{fv.dur}}" onChange="{{fh.dur}}"><option value="">Seleccionar</option><option value="Anual">Anual</option><option value="Plurianual">Plurianual</option><option value="Permanente">Permanente</option></select><sc-if value="{{fe.dur}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.dur}}</span></sc-if></div>
 <sc-if value="{{fm.isPluri}}" hint-placeholder-val="{{ false }}"><div class="{{fc.anios}}"><label for="soAn">Cantidad de años <em>*</em></label><select id="soAn" value="{{fv.anios}}" onChange="{{fh.anios}}"><option value="">Seleccionar</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><sc-if value="{{fe.anios}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.anios}}</span></sc-if></div></sc-if>
 <div class="{{fc.peso}}"><label for="soPeso">Peso del objetivo en el Departamento (%)</label><input id="soPeso" type="number" min="0" max="100" placeholder="Ej. 15" value="{{fv.peso}}" onChange="{{fh.peso}}"><sc-if value="{{fe.peso}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.peso}}</span></sc-if><span class="help">Definido de antemano</span></div>
-<div class="tglF"><span class="tglL" id="soEvL">¿Es objetivo del VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="soEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
+<div class="tglF"><span class="tglL" id="soEvL">¿Es objetivo de VP?</span><button type="button" class="tgl {{fm.esVpCls}}" role="switch" aria-checked="{{fm.esVpOn}}" aria-labelledby="soEvL" onClick="{{fm.toggleEsVp}}"><i></i></button></div>
 <sc-if value="{{fm.esVpSi}}" hint-placeholder-val="{{ false }}"><div class="{{fc.pesoVp}}"><label for="soPvp">Peso del objetivo para el VP (%) <em>*</em></label><input id="soPvp" type="number" min="0" max="100" placeholder="Ej. 10" value="{{fv.pesoVp}}" onChange="{{fh.pesoVp}}"><sc-if value="{{fe.pesoVp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.pesoVp}}</span></sc-if></div></sc-if>
 </div>
 <div class="fGrid g2">
@@ -1281,7 +1281,7 @@ a{color:#0451DD}a:hover{color:#03399C}
 <div class="{{fc.desc}}"><label for="iDesc">Descripción / impacto esperado <em>*</em></label><textarea id="iDesc" placeholder="Qué se va a hacer y qué se espera lograr" value="{{fv.desc}}" onChange="{{fh.desc}}"></textarea><sc-if value="{{fe.desc}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.desc}}</span></sc-if></div>
 </div>
 <div class="fGrid g3 top">
-<div class="{{fc.resp}}"><label for="iResp">Accountable <em>*</em></label><div class="mChips"><sc-for list="{{fm.respList}}" as="c" hint-placeholder-count="1"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iResp" value="" onChange="{{fm.addResp}}"><option value="">Agregar líder</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
+<div class="{{fc.resp}}"><label for="iResp">Accountable <em>*</em></label><select id="iResp" value="{{fm.respSel}}" onChange="{{fm.setResp}}"><option value="">Seleccionar</option><sc-for list="{{fm.respOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select><sc-if value="{{fe.resp}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.resp}}</span></sc-if></div>
 <div class="ff"><label for="iAreas">Áreas involucradas</label><div class="mChips"><sc-for list="{{fm.areaList}}" as="c" hint-placeholder-count="0"><span class="mChip">{{c.v}}<button type="button" aria-label="Quitar {{c.v}}" onClick="{{c.del}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for></div><select id="iAreas" value="" onChange="{{fm.addArea}}"><option value="">Agregar área</option><sc-for list="{{fm.areaOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></div>
 <div class="dates2">
 <div class="{{fc.fini}}"><label for="iIni">Fecha de inicio <em>*</em></label><input id="iIni" type="date" value="{{fv.fini}}" onChange="{{fh.fini}}"><sc-if value="{{fe.fini}}" hint-placeholder-val="{{ false }}"><span class="errTxt">{{fx.fini}}</span></sc-if></div>
@@ -1516,7 +1516,7 @@ function seed() {
     { id: 'OBJ-01', demoOtras: true, vp: 'VP RRII', dir: 'Marketing', ger: 'B2C', oArea: '', esVp: false, pesoVp: null, resp: '', nombre: 'Innovación en Retail', desc: 'Impulsar la evolución de la red de EESS mediante formatos diferenciales de estaciones y experiencias de valor agregado que permitan aumentar la relevancia de YPF, generar nuevas fuentes de crecimiento y fortalecer la propuesta comercial.', pal: 'PAL-3', dur: 'Anual', anios: '', peso: 10, fini: '2026-01-01', fcomp: '2026-12-31', estado: 'En curso' }
   ];
   var inis = [
-    { id: 'INI-01', obj: 'OBJ-01', nombre: 'Portfolio Management | Implementar la estrategia BLACK/FULL', desc: 'Diseñar, implementar y escalar el formato BLACK/FULL como propuesta diferencial de retail dentro de la red YPF, mejorando la experiencia del cliente y fortaleciendo el posicionamiento premium de las estaciones.', resp: [P.ini, P.h], areas: ['Marketing B2C', 'Imagen', 'Growth Marketing', 'IEC', 'Conexiones', 'Ingeniería', 'Compras', 'Comercial Retail', 'Otras'], peso: null, fini: '2026-01-01', fcomp: '2026-10-12', estado: 'En curso', com: null,
+    { id: 'INI-01', obj: 'OBJ-01', nombre: 'Portfolio Management | Implementar la estrategia BLACK/FULL', desc: 'Diseñar, implementar y escalar el formato BLACK/FULL como propuesta diferencial de retail dentro de la red YPF, mejorando la experiencia del cliente y fortaleciendo el posicionamiento premium de las estaciones.', resp: [P.ini], areas: ['Marketing B2C', 'Imagen', 'Growth Marketing', 'IEC', 'Conexiones', 'Ingeniería', 'Compras', 'Comercial Retail', 'Otras'], peso: null, fini: '2026-01-01', fcomp: '2026-10-12', estado: 'En curso', com: null,
       krs: [KR('KR-01', 'Implementar la estrategia BLACK/FULL en 12 estaciones de servicio', '', 'Cantidad', 'EESS', 8, 10, 12, 100, null, 10, '')] }
   ];
   var tars = [
@@ -2303,7 +2303,9 @@ class Component extends DCLogic {
         isRrii: fv.vp === 'VP RRII', isPluri: fv.dur === 'Plurianual', pesoOtros: others,
         showGuide: s.showGuide, toggleGuide: function () { self.setState({ showGuide: !self.state.showGuide }); },
         respList: (Array.isArray(fv.resp) ? fv.resp : []).map(function (p) { return { v: p, del: function () { self.multiDel('resp', p); } }; }),
-        respOpts: users.filter(function (u) { return !Array.isArray(fv.resp) || fv.resp.indexOf(u.p) < 0; }).map(function (u) { return { v: u.p, l: u.p + ' · ' + u.dir }; }),
+        respSel: Array.isArray(fv.resp) && fv.resp.length ? fv.resp[0] : '',
+        setResp: function (e) { var f2 = self.state.f, nv2 = Object.assign({}, f2.vals); nv2.resp = e.target.value ? [e.target.value] : []; self.setState({ f: Object.assign({}, f2, { vals: nv2 }) }); },
+        respOpts: users.map(function (u) { return { v: u.p, l: u.p + ' · ' + u.dir }; }),
         addResp: this.multiAdd('resp'),
         areaList: (Array.isArray(fv.areas) ? fv.areas : []).map(function (a) { return { v: a, del: function () { self.multiDel('areas', a); } }; }),
         areaOpts: AREAS_INV.filter(function (g) { return !Array.isArray(fv.areas) || fv.areas.indexOf(g) < 0; }).map(function (g) { return { v: g, l: g }; }),
