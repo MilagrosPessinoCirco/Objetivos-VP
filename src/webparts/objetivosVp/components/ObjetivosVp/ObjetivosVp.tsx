@@ -10,8 +10,9 @@ import { EMPTY_FILTROS } from '../Iniciativa/iniciativaUtils';
 import ObjetivoDetalle from '../Objetivo/ObjetivoDetalle/ObjetivoDetalle';
 import PalancaDetalle from '../Palanca/PalancaDetalle/PalancaDetalle';
 import Palancas from '../Palanca/Palancas/Palancas';
+import TareaDetalle from '../Tarea/TareaDetalle/TareaDetalle';
 import type { ObjetivosFiltro } from '../Objetivo/objetivoUtils';
-import { HOME_PATH, INICIATIVAS_PATH, INICIATIVA_DETAIL_PATH, OBJETIVO_DETAIL_PATH, PALANCAS_PATH, PALANCA_DETAIL_PATH } from './routes';
+import { HOME_PATH, INICIATIVAS_PATH, INICIATIVA_DETAIL_PATH, OBJETIVO_DETAIL_PATH, PALANCAS_PATH, PALANCA_DETAIL_PATH, TAREA_DETAIL_PATH } from './routes';
 import styles from './ObjetivosVp.module.scss';
 
 export interface IObjetivosVpProps {
@@ -26,6 +27,7 @@ const CAN_EDIT_INICIATIVA = true;
 const CAN_CHANGE_ESTADO_INICIATIVA = true;
 const CAN_LOAD_RESULTADOS_CLAVE = true;
 const CAN_TRACK_RESULTADO_CLAVE = true;
+const CAN_CREATE_TAREA = true;
 const DEFAULT_FILTRO: ObjetivosFiltro = 'todos';
 const DEFAULT_BANDEJA_STATE: IIniciativasBandejaState = { searchText: '', filtros: EMPTY_FILTROS, page: 1 };
 
@@ -39,7 +41,8 @@ const ObjetivosVpRoutes: React.FC = () => {
 			<Route path={PALANCAS_PATH} element={<Palancas canManage={CAN_MANAGE_PALANCAS} canCreateObjetivo={CAN_CREATE_OBJETIVO} filtro={filtro} onFiltroChange={setFiltro} />} />
 			<Route path={PALANCA_DETAIL_PATH} element={<PalancaDetalle canManage={CAN_MANAGE_PALANCAS} canCreateObjetivo={CAN_CREATE_OBJETIVO} filtro={filtro} />} />
 			<Route path={INICIATIVAS_PATH} element={<IniciativasBandeja canCreate={CAN_CREATE_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} state={bandejaState} onStateChange={setBandejaState} />} />
-			<Route path={INICIATIVA_DETAIL_PATH} element={<IniciativaDetalle canEdit={CAN_EDIT_INICIATIVA} canChangeEstado={CAN_CHANGE_ESTADO_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} canTrackResultadoClave={CAN_TRACK_RESULTADO_CLAVE} />} />
+			<Route path={INICIATIVA_DETAIL_PATH} element={<IniciativaDetalle canEdit={CAN_EDIT_INICIATIVA} canChangeEstado={CAN_CHANGE_ESTADO_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} canTrackResultadoClave={CAN_TRACK_RESULTADO_CLAVE} canCreateTarea={CAN_CREATE_TAREA} />} />
+			<Route path={TAREA_DETAIL_PATH} element={<TareaDetalle />} />
 			<Route path={OBJETIVO_DETAIL_PATH} element={<ObjetivoDetalle canEditObjetivo={CAN_EDIT_OBJETIVO} canCreateIniciativa={CAN_CREATE_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} />} />
 		</Routes>
 	);

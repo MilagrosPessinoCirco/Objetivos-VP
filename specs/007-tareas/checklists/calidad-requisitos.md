@@ -57,7 +57,7 @@
 - [x] CHK033 ¿Están especificados o excluidos expresamente los elementos del detalle de la tarea del prototipo que no tienen requisito (botón y panel "Ubicación en la estrategia", secciones colapsables, edición por sección)? [Gap, Spec §FR-037]
 - [x] CHK034 ¿Están definidos el orden y la disposición de los campos, el título y los textos de las acciones del panel Cargar / Editar tarea en ambos modos? [Completeness, Spec §FR-014–§FR-018]
 - [x] CHK035 ¿Están definidos el título, el orden de los campos y las acciones del panel "Registrar avance"? [Completeness, Spec §FR-021]
-- [ ] CHK036 ¿Tiene el panel "Historial de avance" definido su acceso, su contenido por entrada y la ausencia de acciones sobre las entradas? [Completeness, Spec §FR-039]
+- [x] CHK036 ¿Tiene el panel "Historial de avance" definido su acceso, su contenido por entrada y la ausencia de acciones sobre las entradas? [Completeness, Spec §FR-039] Decidido: el botón 'Historial de avance' va en el pie fijo del detalle de la tarea. A confirmar con las usuarias.
 - [x] CHK037 ¿Están definidos en la sección Tareas de la iniciativa los rótulos y el orden de los indicadores por estado, y la ubicación y el rótulo de la acción para cargar una tarea? [Completeness, Gap, Spec §FR-041–§FR-043]
 - [x] CHK038 ¿Está definido el destino de Volver y Cancelar en cada pantalla según el origen (bandeja, detalle de la iniciativa, detalle de la tarea)? [Coverage, Spec §FR-018, US3 esc. 11, US7 esc. 4]
 
@@ -82,8 +82,8 @@
 
 - Mark items `[x]` only after review confirms the requirement-quality criterion is satisfied
 - Leave items unchecked when they still require clarification, correction, or reviewer evaluation
-- Reevaluación del 2026-11-20, después de aplicar las decisiones sobre la spec: 48 de 49 ítems cumplen y quedaron tildados; CHK036 queda sin tildar.
-- CHK036 (sin tildar): el prototipo no conecta ningún botón con el panel "Historial de avance". La spec lo abre desde "Historial de avance" en el pie fijo del detalle de la tarea, y eso está anotado en Assumptions como "a confirmar". El criterio se cumple cuando las usuarias confirmen ese acceso.
+- Reevaluación del 2026-11-20, después de aplicar las decisiones sobre la spec: 48 de 49 ítems cumplían y quedaron tildados; CHK036 se tildó después como "decidido, a confirmar con las usuarias" (49 de 49).
+- CHK036 (tildado: decidido, a confirmar con las usuarias): el prototipo no conecta ningún botón con el panel "Historial de avance". La spec lo abre desde "Historial de avance" en el pie fijo del detalle de la tarea, y eso está anotado en Assumptions como "a confirmar". Falta la confirmación de las usuarias.
 - CHK002 (tildado): para una tarea Finalizada, la spec precarga Estado con En curso (única opción) y Avance en 100 %. Esa precarga no estaba en las decisiones; es lo que permite que "Registrar avance solo ofrezca reabrir".
 - CHK033 (tildado): al replicar el detalle de la iniciativa (004 y 006) se aplicó también su FR-034: el detalle de la tarea no muestra el botón "Ubicación en la estrategia", porque las migas ya muestran el recorrido. Las secciones colapsables y el lápiz por sección sí se replican.
 - CHK029 (tildado): la dependencia queda documentada en Assumptions y FR-013. La resolución de la columna "Requiere inversión" de la lista (valor por defecto u obligatoriedad) es trabajo del plan.
