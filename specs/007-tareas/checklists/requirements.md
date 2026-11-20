@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -31,5 +31,5 @@
 
 ## Notes
 
-- Quedan 3 marcadores [NEEDS CLARIFICATION] a propósito: son las diferencias entre la especificación v1.9 y el prototipo que el pedido dejó para `/speckit-clarify` (Subgerencia vs. Áreas involucradas; Descripción / qué habilita vs. dos campos; Comentario ejecutivo de la tarea). No se resuelven en la spec.
+- Los 3 marcadores [NEEDS CLARIFICATION] (Subgerencia vs. Áreas involucradas; Descripción / qué habilita; Comentario ejecutivo de la tarea) se resolvieron en `/speckit-clarify` el 2026-11-20. Ver Clarifications en la spec.
 - El prototipo v11 ya está en `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/` (carpeta actualizada el 2026-11-20).
