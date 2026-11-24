@@ -27,7 +27,8 @@ export type DatasourceHook<TItem extends BaseEntity> = [
 	(item: TItem) => Promise<TItem>,
 	(item: TItem) => Promise<void>,
 	(itemId: number) => Promise<void>,
-	(itemId: number) => Promise<void>
+	(itemId: number) => Promise<void>,
+	() => Promise<void>
 ];
 
 function useDatasource<TItem extends BaseEntity>(
@@ -123,13 +124,19 @@ function useDatasource<TItem extends BaseEntity>(
 		dispatch({ type: GET_ALL, payload: itemsResult });
 	});
 
+	const reloadItems = handleAsyncAndRethrow(async () => {
+		dispatch({ type: LOAD });
+		const itemsResult = await datasource.getItems();
+		dispatch({ type: GET_ALL, payload: itemsResult });
+	});
+
 	const getById = handleAsyncAndRethrow(async (itemId: number) => {
 		dispatch({ type: LOAD });
 		const item = await datasource.getById(itemId);
 		dispatch({ type: GET_BY_ID, payload: item });
 	});
 
-	return [datasourceState, getItems, addItem, editItem, deleteItem, getById];
+	return [datasourceState, getItems, addItem, editItem, deleteItem, getById, reloadItems];
 }
 
 export default useDatasource;

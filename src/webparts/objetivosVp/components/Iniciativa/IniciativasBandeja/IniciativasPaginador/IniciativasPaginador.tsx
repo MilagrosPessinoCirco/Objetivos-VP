@@ -1,8 +1,8 @@
 import * as React from 'react';
 import type { CSSProperties } from 'react';
 
-import { Button, Tooltip } from '../../../../../../core/ui/components';
-import { FigmaIcon, spacing, typography } from '../../../../../../core/ui/foundations';
+import { Tooltip } from '../../../../../../core/ui/components';
+import { spacing, typography } from '../../../../../../core/ui/foundations';
 import { Utils } from '../../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../../shared/getColorStep';
@@ -17,6 +17,10 @@ export interface IIniciativasPaginadorProps {
 }
 
 const FIRST_PAGE = 1;
+const ICON_PATH_FIRST = 'M17 17l-5-5 5-5M11 17l-5-5 5-5';
+const ICON_PATH_PREVIOUS = 'M14 17l-5-5 5-5';
+const ICON_PATH_NEXT = 'M10 7l5 5-5 5';
+const ICON_PATH_LAST = 'M7 7l5 5-5 5M13 7l5 5-5 5';
 
 const INFO_STYLE: CSSProperties = {
 	fontFamily: typography.family.base,
@@ -38,46 +42,34 @@ const IniciativasPaginador: React.FC<IIniciativasPaginadorProps> = ({ page, page
 	const isFirst = page === FIRST_PAGE;
 	const isLast = page === lastPage;
 
-	const chevron = (backwards: boolean): React.ReactNode => (
-		<FigmaIcon name="chevronRightPrimary" size="sm" className={backwards ? styles.backwards : undefined} />
-	);
-
-	const renderArrow = (label: string, target: number, disabled: boolean, backwards: boolean, double: boolean): React.ReactNode => (
+	const renderArrow = (label: string, target: number, disabled: boolean, iconPath: string): React.ReactNode => (
 		<Tooltip content={label}>
-			<Button
-				iconOnly
-				variant="secondary"
-				size="small"
-				className={styles.arrow}
-				disabled={disabled}
-				aria-label={label}
-				iconLeft={<span className={styles.icons}>{chevron(backwards)}{double && chevron(backwards)}</span>}
-				onClick={() => onPageChange(target)}
-			/>
+			<button type="button" className={styles.arrow} disabled={disabled} aria-label={label} onClick={() => onPageChange(target)}>
+				<svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true"><path d={iconPath} /></svg>
+			</button>
 		</Tooltip>
 	);
 
 	return (
 		<nav className={inline ? `${styles.pager} ${styles.inline}` : styles.pager} style={{ gap: spacing.md }} aria-label={strings.IniciativasPagerAriaLabel}>
 			<span className={styles.info} style={INFO_STYLE}>{info}</span>
-			<div className={styles.buttons} style={{ gap: spacing.xs }}>
-				{renderArrow(strings.IniciativasPageFirst, FIRST_PAGE, isFirst, true, true)}
-				{renderArrow(strings.IniciativasPagePrevious, page - 1, isFirst, true, false)}
+			<div className={styles.buttons} style={{ ...PAGER_COLORS, gap: spacing.xs }}>
+				{renderArrow(strings.IniciativasPageFirst, FIRST_PAGE, isFirst, ICON_PATH_FIRST)}
+				{renderArrow(strings.IniciativasPagePrevious, page - 1, isFirst, ICON_PATH_PREVIOUS)}
 				{pages.map((number) => (
-					<Button
+					<button
 						key={number}
-						variant={number === page ? 'primary' : 'secondary'}
-						size="small"
-						className={styles.number}
+						type="button"
+						className={number === page ? `${styles.number} ${styles.current}` : styles.number}
 						aria-current={number === page ? 'page' : undefined}
 						aria-label={Utils.replaceAll(strings.IniciativasPageNumber, '{0}', String(number))}
 						onClick={() => onPageChange(number)}
 					>
 						{String(number)}
-					</Button>
+					</button>
 				))}
-				{renderArrow(strings.IniciativasPageNext, page + 1, isLast, false, false)}
-				{renderArrow(strings.IniciativasPageLast, lastPage, isLast, false, true)}
+				{renderArrow(strings.IniciativasPageNext, page + 1, isLast, ICON_PATH_NEXT)}
+				{renderArrow(strings.IniciativasPageLast, lastPage, isLast, ICON_PATH_LAST)}
 			</div>
 		</nav>
 	);

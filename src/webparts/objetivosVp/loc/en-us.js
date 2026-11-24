@@ -67,7 +67,7 @@ define([], function () {
 		"ObjetivosFilterAll": "Todas las palancas",
 		"ObjetivosEmptySearch": "No hay objetivos con esta búsqueda.",
 		"ObjetivosVpEmpty": "No hay objetivos de la VP RRII cargados.",
-		"PalancasSummary": "{0} palancas activas · {1} objetivos · Avance de la VP {2}: {3}",
+		"PalancasSummary": "{0} palancas activas · {1} objetivos",
 		"PalancaColumnObjectives": "Objetivos",
 		"ObjetivoColumnId": "ID",
 		"ObjetivoColumnName": "Objetivo",
@@ -160,7 +160,7 @@ define([], function () {
 		"IniciativasFilterYear": "Año",
 		"IniciativasFilterAll": "Todos",
 		"IniciativasFiltersApply": "Aplicar",
-		"IniciativasFiltersClear": "Limpiar filtros",
+		"IniciativasFiltersClear": "Limpiar",
 		"IniciativaNew": "Cargar iniciativa",
 		"IniciativaColumnName": "Iniciativa",
 		"IniciativaAccountable": "Accountable",
@@ -314,5 +314,16 @@ define([], function () {
 		"TareaIndicatorsSection": "Indicadores de las tareas",
 		"TareaSection": "Tareas ({0} de {1} no canceladas)",
 		"TareaSectionEmpty": "Esta iniciativa todavía no tiene tareas."
+		"ViewRefreshed": "La vista se ha actualizado correctamente.",
+		"ObjetivosAllEmpty": "No hay objetivos cargados.",
+		"ObjetivosFilterTodos": "Todos los objetivos",
+		"PalancasFiltersEmpty": "No hay palancas ni objetivos con estos filtros.",
+		"PalancaConfirmCreate": "Estás por agregar la palanca \"{0}\". ¿Querés continuar?",
+		"PalancaConfirmEdit": "Estás por guardar los cambios de la palanca \"{0}\". ¿Querés continuar?",
+		"ObjetivoConfirmCreate": "Estás por cargar el objetivo aprobado en el comité. Una vez guardado, sólo el Administrador podrá modificarlo. ¿Querés continuar?",
+		"ObjetivoConfirmEdit": "Estás por modificar el objetivo. Todo cambio requiere el visto bueno del VP. ¿Querés continuar?",
+		"ObjetivoConfirmEditTitle": "Guardar cambios del objetivo",
+		"FiltersAllFeminine": "Todas",
+		"AvanceNotApplicable": "No aplica"
 	}
 });

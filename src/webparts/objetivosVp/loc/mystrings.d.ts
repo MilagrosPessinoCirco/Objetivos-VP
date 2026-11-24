@@ -247,6 +247,16 @@ declare interface IObjetivosVpWebPartStrings {
 	ResultadoClaveLastComment: string;
 	ResultadoClaveUpdated: string;
 	ResultadoClaveSaveError: string;
+	ViewRefreshed: string;
+	ObjetivosAllEmpty: string;
+	ObjetivosFilterTodos: string;
+	PalancasFiltersEmpty: string;
+	PalancaConfirmCreate: string;
+	PalancaConfirmEdit: string;
+	ObjetivoConfirmCreate: string;
+	ObjetivoConfirmEdit: string;
+	ObjetivoConfirmEditTitle: string;
+	FiltersAllFeminine: string;
 	AvanceNotApplicable: string;
 	TareasAllTitle: string;
 	TareasTabsAriaLabel: string;

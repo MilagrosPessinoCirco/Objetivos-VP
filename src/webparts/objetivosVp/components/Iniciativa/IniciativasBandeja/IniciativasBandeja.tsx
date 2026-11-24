@@ -78,10 +78,10 @@ const getAnios = (iniciativas: Iniciativa[]): number[] => {
 };
 
 const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, canLoadResultadosClave, state, onStateChange }) => {
-	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
-	const [objetivoState, getObjetivos] = useObjetivoDataSource();
-	const [departamentoState, getDepartamentos] = useDepartamentoDataSource();
-	const [resultadoState, getResultados] = useResultadoClaveDataSource();
+	const [iniciativaState, getIniciativas, , , , , reloadIniciativas] = useIniciativaDataSource();
+	const [objetivoState, getObjetivos, , , , , reloadObjetivos] = useObjetivoDataSource();
+	const [departamentoState, getDepartamentos, , , , , reloadDepartamentos] = useDepartamentoDataSource();
+	const [resultadoState, getResultados, , , , , reloadResultados] = useResultadoClaveDataSource();
 	const names = useObjetivoNames();
 	const currentUser = useCurrentUser();
 	const navigate = useNavigate();
@@ -96,6 +96,12 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, can
 	React.useEffect(() => {
 		Promise.all([getIniciativas(), getObjetivos(), getDepartamentos(), getResultados()]).then(() => setReady(true));
 	}, []);
+
+	const refresh = (): void => {
+		Promise.all([reloadIniciativas(), reloadObjetivos(), reloadDepartamentos(), reloadResultados()])
+			.then(() => setNoticeMessage(strings.ViewRefreshed))
+			.catch(() => undefined);
+	};
 
 	const vista: IniciativasVista = searchParams.get(INICIATIVAS_VISTA_PARAM) === INICIATIVAS_VISTA_TODAS ? 'todas' : 'mis';
 	const iniciativas = iniciativaState.items;
@@ -175,6 +181,7 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, can
 					searchText={state.searchText}
 					onSearchChange={(searchText) => onStateChange({ ...state, searchText, page: FIRST_PAGE })}
 					onBack={() => navigate(HOME_PATH)}
+					onRefresh={refresh}
 					onOpenFilters={() => setIsFiltersOpen(true)}
 					canCreate={canCreate}
 					onNew={() => setIsFormOpen(true)}

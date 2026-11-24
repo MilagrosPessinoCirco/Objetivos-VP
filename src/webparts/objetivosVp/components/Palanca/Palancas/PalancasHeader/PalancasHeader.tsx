@@ -1,11 +1,12 @@
 import * as React from 'react';
 import type { CSSProperties } from 'react';
 
-import { Button, Tooltip } from '../../../../../../core/ui/components';
+import { Button } from '../../../../../../core/ui/components';
 import { SearchBox } from '../../../../../../core/ui/patterns';
 import { FigmaIcon, spacing, typography } from '../../../../../../core/ui/foundations';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import BackButton from '../../../shared/BackButton/BackButton';
+import RefreshButton from '../../../shared/RefreshButton/RefreshButton';
 import { getColorStep } from '../../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../../shared/pageTitleStyle';
 import styles from './PalancasHeader.module.scss';
@@ -15,6 +16,7 @@ export interface IPalancasHeaderProps {
 	onSearchChange: (value: string) => void;
 	onBack: () => void;
 	onRefresh: () => void;
+	onOpenFilters: () => void;
 	canManage: boolean;
 	onNew?: () => void;
 	canCreateObjetivo: boolean;
@@ -29,11 +31,10 @@ const buttonStyle = (group: string, scale: string): CSSProperties => {
 };
 
 const FILTER_STYLE: CSSProperties = { ...buttonStyle('Primary', '300'), color: getColorStep('Primary', '300').textColor };
-const REFRESH_STYLE = buttonStyle('Primary', '100');
 const NEW_PALANCA_STYLE = buttonStyle('Secondary', '700');
 const NEW_OBJETIVO_STYLE = buttonStyle('Tertiary', '900');
 
-const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchChange, onBack, onRefresh, canManage, onNew, canCreateObjetivo, onNewObjetivo }) => {
+const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchChange, onBack, onRefresh, onOpenFilters, canManage, onNew, canCreateObjetivo, onNewObjetivo }) => {
 	return (
 		<div className={styles.header} style={{ gap: spacing.md }}>
 			<div className={styles.left} style={{ gap: spacing.md }}>
@@ -42,18 +43,8 @@ const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchCh
 			</div>
 			<div className={styles.tools} style={{ gap: spacing.md }}>
 				<SearchBox className={styles.search} placeholder={strings.PalancasSearchPlaceholder} value={searchText} onValueChange={onSearchChange} />
-				<Tooltip content={strings.PalancasRefresh}>
-					<Button
-						iconOnly
-						className={styles.control}
-						variant="primary"
-						style={REFRESH_STYLE}
-						iconLeft={<FigmaIcon name="reload" />}
-						aria-label={strings.PalancasRefresh}
-						onClick={onRefresh}
-					/>
-				</Tooltip>
-				<Button variant="primary" className={styles.control} style={FILTER_STYLE} iconLeft={<FigmaIcon name="list" />}>
+				<RefreshButton onClick={onRefresh} />
+				<Button variant="primary" className={styles.control} style={FILTER_STYLE} iconLeft={<FigmaIcon name="list" />} onClick={onOpenFilters}>
 					{strings.PalancasFilters}
 				</Button>
 				{canManage && onNew && (
