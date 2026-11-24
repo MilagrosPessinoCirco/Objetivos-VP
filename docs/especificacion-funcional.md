@@ -153,7 +153,7 @@ Pantalla de entrada a la estrategia de la VP, que reúne palancas y objetivos en
 
 **Criterios de aceptación**
 
-- Solo muestra palancas activas, salvo que se filtre por año.
+- Solo muestra palancas activas; los objetivos de una palanca inactiva se ven en las solapas de objetivos.
 - La cantidad de objetivos coincide con los objetivos listados.
 - Arriba de la grilla hay cuatro solapas, cada una con su cantidad: Todas las palancas, Objetivos de la VP RRII (solo los marcados con "¿Es objetivo de la VP RRII?", RF-03), Objetivos de otras VP y Todos los objetivos. La cantidad es el total, sin búsqueda ni filtros.
 - Todos los objetivos reúne en una grilla los de la VP RRII y los de otras VP, con ID, Objetivo, VP, Palanca, Departamento, Gerencia, Peso (en el departamento), Avance, Estado y Ver. Para un objetivo de otra VP, Palanca y Peso muestran "—" y Avance "No aplica". Las grillas de objetivos se paginan de a 10.
