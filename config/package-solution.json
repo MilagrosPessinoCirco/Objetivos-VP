@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "desa-shp-template-22222-client-side-solution",
-    "id": "ae74e8e5-a671-4d30-a432-6480647dd939",
+    "name": "objetivos-vp-rrii-client-side-solution",
+    "id": "e146c4fe-c71d-4410-85cc-8d00d6cce96b",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
@@ -15,10 +15,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "desa-shp-template-22222 description"
+        "default": "objetivos-vp-rrii"
       },
       "longDescription": {
-        "default": "desa-shp-template-22222 description"
+        "default": "objetivos-vp-rrii"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -26,14 +26,14 @@
     },
     "features": [
       {
-        "title": "desa-shp-template-22222 Feature",
-        "description": "The feature that activates elements of the desa-shp-template-22222 solution.",
+        "title": "objetivos-vp-rrii Feature",
+        "description": "The feature that activates elements of the objetivos-vp-rrii solution.",
         "id": "a6547678-d8f0-4acc-9a60-655822d1d07b",
         "version": "1.0.0.0"
       }
     ]
   },
   "paths": {
-    "zippedPackage": "solution/desa-shp-template-22222.sppkg"
+    "zippedPackage": "solution/objetivos-vp-rrii.sppkg"
   }
 }
