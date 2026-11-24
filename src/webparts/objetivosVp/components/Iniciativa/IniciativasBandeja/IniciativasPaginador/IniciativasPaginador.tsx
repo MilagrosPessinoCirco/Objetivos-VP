@@ -12,6 +12,7 @@ export interface IIniciativasPaginadorProps {
 	page: number;
 	pageSize: number;
 	total: number;
+	inline?: boolean;
 	onPageChange: (page: number) => void;
 }
 
@@ -28,16 +29,7 @@ const INFO_STYLE: CSSProperties = {
 	color: getColorStep('Neutral', '600').value
 };
 
-const PAGER_COLORS = {
-	'--pager-text': getColorStep('Primary', '500').value,
-	'--pager-hover': getColorStep('Primary', '50').value,
-	'--pager-current-text': getColorStep('Primary', '500').textColor,
-	'--pager-disabled': getColorStep('Neutral', '300').value,
-	fontFamily: typography.family.base,
-	fontSize: typography.size[14]
-} as CSSProperties;
-
-const IniciativasPaginador: React.FC<IIniciativasPaginadorProps> = ({ page, pageSize, total, onPageChange }) => {
+const IniciativasPaginador: React.FC<IIniciativasPaginadorProps> = ({ page, pageSize, total, inline, onPageChange }) => {
 	if (total <= pageSize) {
 		return null;
 	}
@@ -59,7 +51,7 @@ const IniciativasPaginador: React.FC<IIniciativasPaginadorProps> = ({ page, page
 	);
 
 	return (
-		<nav className={styles.pager} style={{ gap: spacing.md }} aria-label={strings.IniciativasPagerAriaLabel}>
+		<nav className={inline ? `${styles.pager} ${styles.inline}` : styles.pager} style={{ gap: spacing.md }} aria-label={strings.IniciativasPagerAriaLabel}>
 			<span className={styles.info} style={INFO_STYLE}>{info}</span>
 			<div className={styles.buttons} style={{ ...PAGER_COLORS, gap: spacing.xs }}>
 				{renderArrow(strings.IniciativasPageFirst, FIRST_PAGE, isFirst, ICON_PATH_FIRST)}

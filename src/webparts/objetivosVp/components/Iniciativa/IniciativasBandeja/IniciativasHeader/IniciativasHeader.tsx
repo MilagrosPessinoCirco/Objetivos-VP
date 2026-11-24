@@ -20,6 +20,8 @@ export interface IIniciativasHeaderProps {
 	onOpenFilters: () => void;
 	canCreate: boolean;
 	onNew?: () => void;
+	searchPlaceholder?: string;
+	newLabel?: string;
 }
 
 const BOLD_STYLE: CSSProperties = { fontWeight: typography.weight.bold };
@@ -46,7 +48,7 @@ const IniciativasHeader: React.FC<IIniciativasHeaderProps> = ({ title, searchTex
 			</Button>
 			{canCreate && onNew && (
 				<Button variant="primary" className={styles.control} style={NEW_INICIATIVA_STYLE} iconLeft={<FigmaIcon name="add" className={styles.whiteIcon} />} onClick={onNew}>
-					{strings.IniciativaNew}
+					{newLabel}
 				</Button>
 			)}
 		</div>

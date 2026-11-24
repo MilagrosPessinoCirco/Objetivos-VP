@@ -13,6 +13,7 @@ export default class TareaDataSource implements ITareaDataSource {
 		'Id', 'Title',
 		'Nombre',
 		'Descripcion',
+		'QueHabilita',
 		'Iniciativa/Id', 'Iniciativa/Title',
 		'Objetivo/Id', 'Objetivo/Title',
 		'Responsable/Id', 'Responsable/Title', 'Responsable/EMail',
@@ -23,12 +24,16 @@ export default class TareaDataSource implements ITareaDataSource {
 		'Estado',
 		'FechaFinalizacion',
 		'RequiereInversion',
-		'Area/Id', 'Area/Title',
+		'Area/Id',
+		'FechaUltimaActualizacion',
+		'ComentarioEjecutivo',
+		'ComentarioEjecutivoFecha',
+		'ComentarioEjecutivoAutor/Id', 'ComentarioEjecutivoAutor/Title', 'ComentarioEjecutivoAutor/EMail',
 		'Created', 'Modified',
 		'Author/Id', 'Author/Title', 'Author/EMail',
 		'Editor/Id', 'Editor/Title', 'Editor/EMail'
 	];
-	private expand: Array<string> = ['Author', 'Editor', 'Iniciativa', 'Objetivo', 'Responsable', 'Area'];
+	private expand: Array<string> = ['Author', 'Editor', 'Iniciativa', 'Objetivo', 'Responsable', 'Area', 'ComentarioEjecutivoAutor'];
 
 	constructor() {
 		this._sp = getSP();
