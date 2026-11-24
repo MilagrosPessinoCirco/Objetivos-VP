@@ -19,7 +19,7 @@ export interface IObjetivosTableProps {
 	objetivos: Objetivo[];
 	iniciativas: Iniciativa[];
 	resultados: ResultadoClave[];
-	variant: 'palanca' | 'delVp' | 'otrasVp';
+	variant: 'palanca' | 'delVp' | 'otrasVp' | 'todos';
 	emptyText: string;
 	onView: (id: number) => void;
 }
@@ -54,10 +54,10 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, iniciativas
 		id: formatObjetivoId(objetivo.Id),
 		nombre: objetivo.Nombre ?? '',
 		vp: objetivo.VP?.Title ?? '',
-		palanca: objetivo.Palanca?.Title ?? '',
+		palanca: isVpRrii(objetivo.VP?.Title) ? objetivo.Palanca?.Title ?? '' : strings.ObjetivoNoValue,
 		departamento: objetivo.Departamento?.Title ?? '',
 		gerencia: objetivo.Gerencia?.Title ?? '',
-		peso: objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
+		peso: !isVpRrii(objetivo.VP?.Title) ? strings.ObjetivoNoValue : objetivo.Peso === undefined ? '' : `${objetivo.Peso}%`,
 		pesoVp: objetivo.PesoVP === undefined || objetivo.PesoVP === null ? strings.ObjetivoNoValue : `${objetivo.PesoVP}%`,
 		estado: objetivo.Estado ?? '',
 		objetivo
@@ -106,7 +106,9 @@ const ObjetivosTable: React.FC<IObjetivosTableProps> = ({ objetivos, iniciativas
 		? [idColumn, nameColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
 		: variant === 'delVp'
 			? [idColumn, nameColumn, leverColumn, departmentColumn, managementColumn, weightColumn, vpWeightColumn, progressColumn, statusColumn, actionsColumn]
-			: [idColumn, nameColumn, vpColumn, departmentColumn, managementColumn, statusColumn, actionsColumn];
+			: variant === 'todos'
+				? [idColumn, nameColumn, vpColumn, leverColumn, departmentColumn, managementColumn, weightColumn, progressColumn, statusColumn, actionsColumn]
+				: [idColumn, nameColumn, vpColumn, departmentColumn, managementColumn, statusColumn, actionsColumn];
 
 	return <Table<ObjetivoRow> columns={columns} rows={rows} getRowKey={(row) => row.id} emptyText={emptyText} />;
 };

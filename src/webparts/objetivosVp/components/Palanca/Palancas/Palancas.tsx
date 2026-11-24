@@ -14,6 +14,7 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
 import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
+import IniciativasPaginador from '../../Iniciativa/IniciativasBandeja/IniciativasPaginador/IniciativasPaginador';
 import ObjetivosFiltros from '../../Objetivo/ObjetivosFiltros/ObjetivosFiltros';
 import { EMPTY_OBJETIVOS_FILTROS, IObjetivosFiltros, getAniosObjetivos, hasObjetivoFilter, matchesObjetivoFiltros } from '../../Objetivo/objetivoFiltros';
 import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, formatObjetivoId, isVpRrii } from '../../Objetivo/objetivoUtils';
@@ -32,6 +33,10 @@ export interface IPalancasProps {
 	filtro: ObjetivosFiltro;
 	onFiltroChange: (filtro: ObjetivosFiltro) => void;
 }
+
+const PAGE_SIZE = 10;
+const FIRST_PAGE = 1;
+const PAGER_SPACE = '96px';
 
 type Operation = 'load' | 'save';
 
@@ -64,6 +69,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
 	const [filtros, setFiltros] = React.useState<IObjetivosFiltros>(EMPTY_OBJETIVOS_FILTROS);
 	const [isFiltersOpen, setIsFiltersOpen] = React.useState<boolean>(false);
+	const [requestedPage, setPage] = React.useState<number>(FIRST_PAGE);
 
 	const loadObjetivos = (): void => {
 		getObjetivos();
@@ -85,6 +91,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const applyFiltros = (applied: IObjetivosFiltros): void => {
 		setIsFiltersOpen(false);
 		setFiltros(applied);
+		setPage(FIRST_PAGE);
 	};
 
 	const closeNotice = React.useCallback((): void => setSuccessMessage(undefined), []);
@@ -157,13 +164,24 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 		if (state.error && lastOperation === 'load') {
 			return <MessageBar type="error" message={strings.PalancasLoadError} />;
 		}
-		if (filtro === 'delVp' || filtro === 'otrasVp') {
+		if (filtro !== 'todos') {
 			if (!objetivosReady) {
 				return objetivosError ? null : <Spinner />;
 			}
-			return filtro === 'delVp'
-				? <ObjetivosTable objetivos={byFiltros(bySearch(vpObjetivos))} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="delVp" emptyText={objetivosEmptyText(strings.ObjetivosVpEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />
-				: <ObjetivosTable objetivos={byFiltros(bySearch(otrasVpObjetivos))} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="otrasVp" emptyText={objetivosEmptyText(strings.OtherVpObjectivesEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />;
+			const objetivosVista = filtro === 'delVp'
+				? { items: vpObjetivos, variant: 'delVp' as const, emptyText: strings.ObjetivosVpEmpty }
+				: filtro === 'otrasVp'
+					? { items: otrasVpObjetivos, variant: 'otrasVp' as const, emptyText: strings.OtherVpObjectivesEmpty }
+					: { items: objetivos, variant: 'todos' as const, emptyText: strings.ObjetivosAllEmpty };
+			const visibles = byFiltros(bySearch(objetivosVista.items));
+			const lastPage = Math.max(FIRST_PAGE, Math.ceil(visibles.length / PAGE_SIZE));
+			const page = Math.min(Math.max(FIRST_PAGE, requestedPage), lastPage);
+			return (
+				<>
+					<ObjetivosTable objetivos={visibles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant={objetivosVista.variant} emptyText={objetivosEmptyText(objetivosVista.emptyText)} onView={(id) => navigate(getObjetivoPath(id))} />
+					<IniciativasPaginador page={page} pageSize={PAGE_SIZE} total={visibles.length} onPageChange={setPage} />
+				</>
+			);
 		}
 		return (
 			<PalancasTable
@@ -183,10 +201,13 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	return (
 		<>
 			<SuccessNotice message={successMessage} onClose={closeNotice} />
-			<div className={styles.palancas} style={{ gap: spacing.lg, padding: spacing.xl }}>
+			<div className={styles.palancas} style={{ gap: spacing.lg, padding: filtro === 'todos' ? spacing.xl : `${spacing.xl} ${spacing.xl} ${PAGER_SPACE}` }}>
 				<PalancasHeader
 					searchText={searchText}
-					onSearchChange={setSearchText}
+					onSearchChange={(value) => {
+						setSearchText(value);
+						setPage(FIRST_PAGE);
+					}}
 					onBack={() => navigate(HOME_PATH)}
 					onRefresh={refresh}
 					onOpenFilters={() => setIsFiltersOpen(true)}
@@ -203,10 +224,14 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 					items={[
 						{ key: 'todos', label: `${strings.ObjetivosFilterAll} (${activePalancasCount})` },
 						{ key: 'delVp', label: `${strings.ObjetivosFilterVp} (${vpObjetivos.length})` },
-						{ key: 'otrasVp', label: `${strings.OtherVpObjectivesSection} (${otrasVpObjetivos.length})` }
+						{ key: 'otrasVp', label: `${strings.OtherVpObjectivesSection} (${otrasVpObjetivos.length})` },
+						{ key: 'todosObjetivos', label: `${strings.ObjetivosFilterTodos} (${objetivos.length})` }
 					]}
 					value={filtro}
-					onChange={(key) => onFiltroChange(key as ObjetivosFiltro)}
+					onChange={(key) => {
+						onFiltroChange(key as ObjetivosFiltro);
+						setPage(FIRST_PAGE);
+					}}
 				/>
 				{objetivosError && <MessageBar type="error" message={strings.ObjetivosLoadError} />}
 				{renderBody()}

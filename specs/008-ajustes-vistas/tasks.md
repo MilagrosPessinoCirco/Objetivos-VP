@@ -87,11 +87,11 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 **Independent Test**: escenarios 11 a 16.
 
-- [ ] T009 [US2] `Objetivo/objetivoUtils.ts` y `Objetivo/ObjetivosTable/ObjetivosTable.tsx` (plan, D5): `ObjetivosFiltro` suma `'todosObjetivos'` (`filterObjetivos` lo trata como "todos", `PalancaDetalle` no cambia); variante `'todos'` con columnas ID, Objetivo, VP, Palanca, Departamento, Gerencia, Peso, Avance, Estado, Ver; otra VP: Palanca "—", Peso "—", Avance "No aplica". **Criterio de terminado**: build sin errores; `PalancaDetalle` sin cambios visibles.
+- [X] T009 [US2] `Objetivo/objetivoUtils.ts` y `Objetivo/ObjetivosTable/ObjetivosTable.tsx` (plan, D5): `ObjetivosFiltro` suma `'todosObjetivos'` (`filterObjetivos` lo trata como "todos", `PalancaDetalle` no cambia); variante `'todos'` con columnas ID, Objetivo, VP, Palanca, Departamento, Gerencia, Peso, Avance, Estado, Ver; otra VP: Palanca "—", Peso "—", Avance "No aplica". **Criterio de terminado**: build sin errores; `PalancaDetalle` sin cambios visibles.
 
-- [ ] T010 [US2] `Palancas.tsx` (depende de T008 y T009): solapa "Todos los objetivos" después de "Objetivos de otras VP", con cantidad = total sin búsqueda ni filtros; `ObjetivosTable variant="todos"`; búsqueda y `matchesObjetivoFiltros` completo; estados vacíos `ObjetivosAllEmpty` y `PalancasFiltersEmpty`. **Criterio de terminado**: escenarios 11, 12, 13 y 15.
+- [X] T010 [US2] `Palancas.tsx` (depende de T008 y T009): solapa "Todos los objetivos" después de "Objetivos de otras VP", con cantidad = total sin búsqueda ni filtros; `ObjetivosTable variant="todos"`; búsqueda y `matchesObjetivoFiltros` completo; estados vacíos `ObjetivosAllEmpty` y `PalancasFiltersEmpty`. **Criterio de terminado**: escenarios 11, 12, 13 y 15.
 
-- [ ] T011 [US2] `Palancas.tsx` (plan, D6; depende de T010): cortar las filas de las tres grillas de objetivos en páginas de 10 y mostrar `IniciativasPaginador` debajo, con el espacio inferior `96px` de la bandeja; "Todas las palancas" no pagina; la página se acota al último disponible. **Criterio de terminado**: escenario 14.
+- [X] T011 [US2] `Palancas.tsx` (plan, D6; depende de T010): cortar las filas de las tres grillas de objetivos en páginas de 10 y mostrar `IniciativasPaginador` debajo, con el espacio inferior `96px` de la bandeja; "Todas las palancas" no pagina; la página se acota al último disponible. **Criterio de terminado**: escenario 14.
 
 **Checkpoint**: US1 y US2 funcionan.
 

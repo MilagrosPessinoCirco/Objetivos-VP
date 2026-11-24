@@ -11,7 +11,7 @@ const DATE_LOCALE = 'es-AR';
 const DATE_PART_MIN_DIGITS = 2;
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-export type ObjetivosFiltro = 'todos' | 'delVp' | 'otrasVp';
+export type ObjetivosFiltro = 'todos' | 'delVp' | 'otrasVp' | 'todosObjetivos';
 
 export const formatObjetivoId = (id: number | undefined): string =>
 	id === undefined ? '' : `${OBJETIVO_ID_PREFIX}${String(id).padStart(ID_MIN_DIGITS, '0')}`;
