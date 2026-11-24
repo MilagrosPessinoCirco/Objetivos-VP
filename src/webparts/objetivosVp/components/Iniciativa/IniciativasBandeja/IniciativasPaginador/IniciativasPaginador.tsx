@@ -53,7 +53,7 @@ const IniciativasPaginador: React.FC<IIniciativasPaginadorProps> = ({ page, page
 	return (
 		<nav className={inline ? `${styles.pager} ${styles.inline}` : styles.pager} style={{ gap: spacing.md }} aria-label={strings.IniciativasPagerAriaLabel}>
 			<span className={styles.info} style={INFO_STYLE}>{info}</span>
-			<div className={styles.buttons} style={{ ...PAGER_COLORS, gap: spacing.xs }}>
+			<div className={styles.buttons} style={{ gap: spacing.xs }}>
 				{renderArrow(strings.IniciativasPageFirst, FIRST_PAGE, isFirst, ICON_PATH_FIRST)}
 				{renderArrow(strings.IniciativasPagePrevious, page - 1, isFirst, ICON_PATH_PREVIOUS)}
 				{pages.map((number) => (

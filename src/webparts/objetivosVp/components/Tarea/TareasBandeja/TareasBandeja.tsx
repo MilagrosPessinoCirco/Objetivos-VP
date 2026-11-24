@@ -74,10 +74,10 @@ const getAnios = (objetivos: Objetivo[]): number[] => {
 };
 
 const TareasBandeja: React.FC<ITareasBandejaProps> = ({ canCreate, state, onStateChange }) => {
-	const [tareaState, getTareas] = useTareaDataSource();
-	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
-	const [objetivoState, getObjetivos] = useObjetivoDataSource();
-	const [departamentoState, getDepartamentos] = useDepartamentoDataSource();
+	const [tareaState, getTareas, , , , , reloadTareas] = useTareaDataSource();
+	const [iniciativaState, getIniciativas, , , , , reloadIniciativas] = useIniciativaDataSource();
+	const [objetivoState, getObjetivos, , , , , reloadObjetivos] = useObjetivoDataSource();
+	const [departamentoState, getDepartamentos, , , , , reloadDepartamentos] = useDepartamentoDataSource();
 	const names = useObjetivoNames();
 	const currentUser = useCurrentUser();
 	const navigate = useNavigate();
@@ -98,6 +98,12 @@ const TareasBandeja: React.FC<ITareasBandejaProps> = ({ canCreate, state, onStat
 			.then(() => setReady(true))
 			.catch(() => setLoadFailed(true));
 	}, [attempt]);
+
+	const refresh = (): void => {
+		Promise.all([reloadTareas(), reloadIniciativas(), reloadObjetivos(), reloadDepartamentos()])
+			.then(() => setNoticeMessage(strings.ViewRefreshed))
+			.catch(() => undefined);
+	};
 
 	const vista: TareasVista = searchParams.get(TAREAS_VISTA_PARAM) === TAREAS_VISTA_TODAS ? 'todas' : 'mis';
 	const tareas = tareaState.items;
@@ -193,6 +199,7 @@ const TareasBandeja: React.FC<ITareasBandejaProps> = ({ canCreate, state, onStat
 					newLabel={strings.TareaNew}
 					onSearchChange={(searchText) => onStateChange({ ...state, searchText, page: FIRST_PAGE })}
 					onBack={() => navigate(HOME_PATH)}
+						onRefresh={refresh}
 					onOpenFilters={() => setIsFiltersOpen(true)}
 					canCreate={canCreate}
 					onNew={() => setIsFormOpen(true)}

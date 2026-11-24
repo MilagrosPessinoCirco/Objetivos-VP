@@ -313,7 +313,7 @@ define([], function () {
 		"TareaProgressSaveError": "No se pudo registrar el avance de la tarea.",
 		"TareaIndicatorsSection": "Indicadores de las tareas",
 		"TareaSection": "Tareas ({0} de {1} no canceladas)",
-		"TareaSectionEmpty": "Esta iniciativa todavía no tiene tareas."
+		"TareaSectionEmpty": "Esta iniciativa todavía no tiene tareas.",
 		"ViewRefreshed": "La vista se ha actualizado correctamente.",
 		"ObjetivosAllEmpty": "No hay objetivos cargados.",
 		"ObjetivosFilterTodos": "Todos los objetivos",
