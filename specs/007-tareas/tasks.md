@@ -370,7 +370,7 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 **Independent Test**: con mocks, registrar avance en tareas de la iniciativa 1. Quickstart, escenarios 22 a 29 y 34 (avance).
 
-- [ ] T049 [US2] Crear `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx` con la estructura y los campos (spec, FR-021 a FR-023; plan, "Panel Registrar avance"; referencia: `m.is.tarUpd`). Copiar la estructura de `Iniciativa/IniciativaEstadoPanel/IniciativaEstadoPanel.tsx` (`Panel`, estilos de `../TareaForm/TareaForm.module.scss`). Props: `tarea: Tarea`, `onSaved: () => void`, `onCancel: () => void`. Depende de T019:
+- [X] T049 [US2] Crear `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx` con la estructura y los campos (spec, FR-021 a FR-023; plan, "Panel Registrar avance"; referencia: `m.is.tarUpd`). Copiar la estructura de `Iniciativa/IniciativaEstadoPanel/IniciativaEstadoPanel.tsx` (`Panel`, estilos de `../TareaForm/TareaForm.module.scss`). Props: `tarea: Tarea`, `onSaved: () => void`, `onCancel: () => void`. Depende de T019:
   - título `buildPanelTitle(strings.TareaRegisterProgress, formatIdNombre(formatTareaId(Id), Nombre))`; pie `Cancelar` `secondary` · `Accept` `primary`;
   - **Estado** (`Dropdown` `required`) y **Avance (%)** (`Input` `type="number"`, rótulo `TareaProgressField`) lado a lado (`.gridPair`); las opciones de Estado salen de `getEstadosDisponibles(tarea.Estado)`; en una **Finalizada** hay solo En curso, precargado, y el Avance se muestra en 100 y se puede modificar; en las demás, el estado actual y el avance actuales;
   - con Estado Finalizada elegido: el Avance pasa a 100 y queda `disabled`, y aparece **Fecha de finalización** (`Picker` `mode="date"` `required`, rótulo `TareaFinishDate`); con otro estado no aparece;
@@ -378,14 +378,14 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
   - sin Estado vacío posible: en una Cancelada el panel no se abre (T052).
   - **Criterio de terminado**: el panel abre con los valores vigentes; en una No iniciada, Estado ofrece No iniciada, En curso y Cancelada; en una Finalizada, solo En curso; `npm run build` sin errores.
 
-- [ ] T050 [US2] En `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx`, agregar las validaciones (spec, FR-020, FR-020a, FR-022, FR-012a). Depende de T020 y T049:
+- [X] T050 [US2] En `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx`, agregar las validaciones (spec, FR-020, FR-020a, FR-022, FR-012a). Depende de T020 y T049:
   - Avance: `getAvanceIssue(avance)` (no se valida con Finalizada, que lo fija en 100);
   - con Finalizada: `getFechaFinalizacionIssue(fecha, toDateInput(tarea.FechaInicio), hoy)` con `hoy` = `toDateInput(new Date())`;
   - Comentario: `getLengthIssue(comentario, TAREA_MAX_LENGTH.comentario, strings.TareaCommentTooLong)`;
   - errores en el campo y una línea, solo después del primer intento de guardar.
   - **Criterio de terminado**: avance "abc", "150" y "40,5" muestran "Ingresá un número entero entre 0 y 100."; Finalizada sin fecha, con fecha futura o anterior al inicio muestra el error del campo; `npm run build` sin errores.
 
-- [ ] T051 [US2] En `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx`, agregar la confirmación y el guardado en dos escrituras con reintento sin duplicar la entrada (plan, D4, R4; spec, FR-021, FR-023, FR-024, FR-025, FR-026). Depende de T050. Copiar el mecanismo de `IniciativaEstadoPanel.save` (primero el comentario/entrada, después la edición), con `useAvanceTareaDataSource` y `useTareaDataSource`:
+- [X] T051 [US2] En `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx`, agregar la confirmación y el guardado en dos escrituras con reintento sin duplicar la entrada (plan, D4, R4; spec, FR-021, FR-023, FR-024, FR-025, FR-026). Depende de T050. Copiar el mecanismo de `IniciativaEstadoPanel.save` (primero el comentario/entrada, después la edición), con `useAvanceTareaDataSource` y `useTareaDataSource`:
   - al elegir Aceptar: si `requiereConfirmacion(tarea.Estado, estado)`, `ConfirmacionModal` con título y mensaje `TareaConfirmFinishTitle`/`TareaConfirmFinish` (Finalizada) o `TareaConfirmCancelTitle`/`TareaConfirmCancel` (Cancelada), con `{0}` = "TAR-nn"; si no, guarda directo (incluida la reapertura, sin confirmación y sin pedir de nuevo la fecha);
   - `registraComentario` = el comentario recortado no está vacío y es distinto del precargado (recortado); un comentario vacío o igual al precargado no registra nada nuevo;
   - **paso 1**: `addItem` de un `AvanceTarea` con `Tarea` = `{ Id, Title }`, `Avance` (100 si Finalizada), `Estado` y `Comentario` solo si `registraComentario` (si no, sin esa propiedad); la entrada se guarda en una referencia (`useRef`) apenas se crea;
@@ -395,7 +395,7 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
   - al terminar bien, `onSaved()`.
   - **Criterio de terminado**: registrar En curso 40 % con comentario nuevo deja una entrada (con el comentario) y actualiza la tarea; con comentario sin cambios, la entrada queda sin comentario y el vigente no cambia; con la segunda escritura fallando, Estado, Avance y Comentario ejecutivo quedan deshabilitados hasta que el reintento se complete; `npm run build` sin errores.
 
-- [ ] T052 [US2] En `src/webparts/objetivosVp/components/Tarea/TareaDetalle/TareaDetalle.tsx` y `src/webparts/objetivosVp/components/ObjetivosVp/ObjetivosVp.tsx`, agregar "Registrar avance" y su permiso (spec, FR-037, FR-037a, FR-027a, FR-045). Depende de T051:
+- [X] T052 [US2] En `src/webparts/objetivosVp/components/Tarea/TareaDetalle/TareaDetalle.tsx` y `src/webparts/objetivosVp/components/ObjetivosVp/ObjetivosVp.tsx`, agregar "Registrar avance" y su permiso (spec, FR-037, FR-037a, FR-027a, FR-045). Depende de T051:
   - nuevo prop obligatorio `canRegisterProgress: boolean`;
   - en el pie, `Button` `primary` `TareaRegisterProgress` (entre Cancelar y Historial), visible solo con `canRegisterProgress && canRegistrarAvance(tarea)`;
   - `onEdit` del lápiz de `TareaComentario` abre el mismo panel, con la misma condición;
@@ -418,11 +418,11 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 **Independent Test**: con mocks, entrar desde la home. Quickstart, escenarios 1 a 5. La búsqueda y los filtros del encabezado se conectan en US6.
 
-- [ ] T055 [P] [US5] Agregar los props opcionales `searchPlaceholder?: string` y `newLabel?: string` a `src/webparts/objetivosVp/components/Iniciativa/IniciativasBandeja/IniciativasHeader/IniciativasHeader.tsx` (plan, D10, D14), con los textos actuales como valor por defecto (`strings.IniciativasSearchPlaceholder` y `strings.IniciativaNew`). Sin cambio para sus usos actuales. **Criterio de terminado**: la bandeja de iniciativas se ve igual; `npm run build` sin errores.
+- [X] T055 [P] [US5] Agregar los props opcionales `searchPlaceholder?: string` y `newLabel?: string` a `src/webparts/objetivosVp/components/Iniciativa/IniciativasBandeja/IniciativasHeader/IniciativasHeader.tsx` (plan, D10, D14), con los textos actuales como valor por defecto (`strings.IniciativasSearchPlaceholder` y `strings.IniciativaNew`). Sin cambio para sus usos actuales. **Criterio de terminado**: la bandeja de iniciativas se ve igual; `npm run build` sin errores.
 
-- [ ] T056 [US5] Agregar la variante `bandeja` a `src/webparts/objetivosVp/components/Tarea/TareasTable/TareasTable.tsx` (T027; referencia: filas `c-tb`). Con `variant="bandeja"` las columnas son ID, Tarea, Iniciativa (texto "INI-nn · nombre" de la iniciativa de la tarea, buscada en `iniciativas`, o `Iniciativa?.Title` si no está), Responsable, Compromiso, Actualizada (`formatDate(FechaUltimaActualizacion)`), Avance, Estado y Ver. Depende de T027. **Criterio de terminado**: con `variant="bandeja"` se ven las nueve columnas; la variante `iniciativa` sigue igual; `npm run build` sin errores.
+- [X] T056 [US5] Agregar la variante `bandeja` a `src/webparts/objetivosVp/components/Tarea/TareasTable/TareasTable.tsx` (T027; referencia: filas `c-tb`). Con `variant="bandeja"` las columnas son ID, Tarea, Iniciativa (texto "INI-nn · nombre" de la iniciativa de la tarea, buscada en `iniciativas`, o `Iniciativa?.Title` si no está), Responsable, Compromiso, Actualizada (`formatDate(FechaUltimaActualizacion)`), Avance, Estado y Ver. Depende de T027. **Criterio de terminado**: con `variant="bandeja"` se ven las nueve columnas; la variante `iniciativa` sigue igual; `npm run build` sin errores.
 
-- [ ] T057 [US5] Crear `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx` y `TareasBandeja.module.scss` con la carga, las solapas y el estado (spec, FR-028 a FR-030, FR-049; plan, D10). Copiar la estructura de `Iniciativa/IniciativasBandeja/IniciativasBandeja.tsx` (`useSearchParams`, `useNavigate`, `PAGER_SPACE`, `SUMMARY_STYLE`, `SuccessNotice`). Depende de T018, T022, T056 y T055:
+- [X] T057 [US5] Crear `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx` y `TareasBandeja.module.scss` con la carga, las solapas y el estado (spec, FR-028 a FR-030, FR-049; plan, D10). Copiar la estructura de `Iniciativa/IniciativasBandeja/IniciativasBandeja.tsx` (`useSearchParams`, `useNavigate`, `PAGER_SPACE`, `SUMMARY_STYLE`, `SuccessNotice`). Depende de T018, T022, T056 y T055:
   - exportar `ITareasBandejaState { searchText: string; filtros: ITareasFiltros; estado: EstadoTarea; page: number }` y props `canCreate`, `state`, `onStateChange`;
   - carga: `useTareaDataSource`, `useIniciativaDataSource`, `useObjetivoDataSource`, `useDepartamentoDataSource`, `useObjetivoNames` y `useCurrentUser`, en un `Promise.all`; `Spinner` mientras carga; si algo falla, `MessageBar` `type="error"` `TareasLoadError` con un botón `TareasRetry` que vuelve a cargar (FR-049), sin mostrar el estado vacío;
   - solapa: parámetro `TAREAS_VISTA_PARAM` (`'mis'` por defecto, `TAREAS_VISTA_TODAS`); `Tabs` `variant="transparent"` con `TareasMine (n)` y `TareasTabAll (n)`, cada n el total de la solapa sin búsqueda ni filtros; "Mis tareas" filtra por `Responsable?.Id === currentUser.user?.Id`;
@@ -431,7 +431,7 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
   - título del encabezado `TareasMine` o `TareasAllTitle`; `IniciativasHeader` con `searchPlaceholder={strings.TareasSearchPlaceholder}` y `newLabel={strings.TareaNew}`, `onBack` a `HOME_PATH`; sin botón "Actualizar".
   - **Criterio de terminado**: la bandeja carga con mocks y muestra solapas, título, contador y encabezado; `npm run build` sin errores.
 
-- [ ] T058 [US5] En `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx`, agregar las subsolapas, la grilla, el paginado y los estados vacíos (spec, FR-030 a FR-035; plan, D10). Depende de T057:
+- [X] T058 [US5] En `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx`, agregar las subsolapas, la grilla, el paginado y los estados vacíos (spec, FR-030 a FR-035; plan, D10). Depende de T057:
   - subsolapas: segundo `Tabs` `variant="subtle"` `size="small"` con En curso, Frenadas, No iniciadas, Finalizadas y Canceladas (rótulos `TareasState*`, valores `EstadoTarea`), cada una con la cantidad de la solapa; `state.estado` arranca en En curso; al cambiarla, `page` vuelve a 1;
   - grilla: `TareasTable` `variant="bandeja"` con `paginarTareas(tareasDeLaSubsolapa, state.page).pageItems`;
   - `IniciativasPaginador` (sin `inline`, fijo al pie) con `pageSize={TAREAS_PAGE_SIZE}` y `total` = las de la subsolapa; los contadores de solapas y subsolapas no dependen de la página;
@@ -439,18 +439,18 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
   - `openTarea(id)`: `navigate(getTareaPath(id), { state: { from: location.pathname + location.search } })`.
   - **Criterio de terminado**: "Todas" > En curso muestra "Mostrando 1–10 de 11" y paginador fijo; cambiar de subsolapa vuelve a la página 1; una subsolapa vacía muestra "No hay tareas en este estado."; `npm run build` sin errores.
 
-- [ ] T059 [US5] En `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx`, agregar "Cargar tarea" (spec, FR-014; plan, D10). Depende de T045 y T058:
+- [X] T059 [US5] En `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx`, agregar "Cargar tarea" (spec, FR-014; plan, D10). Depende de T045 y T058:
   - `IniciativasHeader` recibe `canCreate` y `onNew={() => setIsFormOpen(true)}`;
   - si `isFormOpen`, `<TareaFormPanel onSaved={onCreated} onCancel={() => setIsFormOpen(false)} />` (sin iniciativa fija);
   - `onCreated(tarea)`: cierra el panel, recarga las tareas y muestra `SuccessNotice` con `TareaCreated`.
   - **Criterio de terminado**: desde la bandeja se carga una tarea eligiendo la iniciativa y aparece en la grilla; `npm run build` sin errores.
 
-- [ ] T060 [US5] En `src/webparts/objetivosVp/components/ObjetivosVp/ObjetivosVp.tsx`, agregar la ruta y el estado de la bandeja (plan, D9). Depende de T057 a T059:
+- [X] T060 [US5] En `src/webparts/objetivosVp/components/ObjetivosVp/ObjetivosVp.tsx`, agregar la ruta y el estado de la bandeja (plan, D9). Depende de T057 a T059:
   - constante `DEFAULT_TAREAS_BANDEJA_STATE: ITareasBandejaState = { searchText: '', filtros: EMPTY_TAREAS_FILTROS, estado: EstadoTarea.EnCurso, page: 1 }` y `useState` en `ObjetivosVpRoutes`, como `bandejaState`;
   - `<Route path={TAREAS_PATH} element={<TareasBandeja canCreate={CAN_CREATE_TAREA} state={tareasBandejaState} onStateChange={setTareasBandejaState} />} />`.
   - **Criterio de terminado**: `#/tarea` abre la bandeja; volver desde un detalle restaura solapa, subsolapa y página; `npm run build` sin errores.
 
-- [ ] T061 [P] [US5] En `src/webparts/objetivosVp/components/Home/AccessList/AccessList.tsx`, agregar `route: TAREAS_PATH` al acceso `AccessMyTasks` (importando `TAREAS_PATH` de `../../ObjetivosVp/routes`), como los de iniciativas y palancas. No tocar los demás accesos. **Criterio de terminado**: "Mis tareas" de la home abre la bandeja; `npm run build` sin errores.
+- [X] T061 [P] [US5] En `src/webparts/objetivosVp/components/Home/AccessList/AccessList.tsx`, agregar `route: TAREAS_PATH` al acceso `AccessMyTasks` (importando `TAREAS_PATH` de `../../ObjetivosVp/routes`), como los de iniciativas y palancas. No tocar los demás accesos. **Criterio de terminado**: "Mis tareas" de la home abre la bandeja; `npm run build` sin errores.
 
 - [ ] T062 [US5] Verificar US5 con mocks: quickstart, escenarios 1 a 5, y el 8 completo (el panel desde la bandeja). Comprobar las columnas, los contadores que no cambian al paginar, el paginado fijo y que "Cargar tarea" desde la bandeja crea la tarea. **Criterio de terminado**: los escenarios pasan, o queda anotado cuáles no y por qué.
 
@@ -464,7 +464,7 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 **Independent Test**: con mocks, editar tareas de la iniciativa 1. Quickstart, escenarios 31 a 33.
 
-- [ ] T063 [US4] Agregar el modo edición a `src/webparts/objetivosVp/components/Tarea/TareaForm/TareaForm.tsx` y `TareaFormPanel.tsx` (spec, FR-017, FR-017a; plan, D12). Depende de T045:
+- [X] T063 [US4] Agregar el modo edición a `src/webparts/objetivosVp/components/Tarea/TareaForm/TareaForm.tsx` y `TareaFormPanel.tsx` (spec, FR-017, FR-017a; plan, D12). Depende de T045:
   - título `buildPanelTitle(Utils.replaceAll(strings.TareaFormEditTitle, '{0}', formatTareaId(tarea.Id)), tarea.Nombre)`; pie `Cancelar` · `SaveChanges`; confirmación con `TareaConfirmEdit`;
   - valores iniciales de `tarea`: Iniciativa y Objetivo en solo lectura (el `Dropdown` de Iniciativa `disabled`), Nombre, Responsable (el actual se sigue mostrando elegido hasta que se cambie, aunque esté inactivo, igual que las áreas; las opciones son solo los usuarios activos, así que no se puede elegir a un inactivo nuevo; plan, P-C4), Descripción, ¿Qué habilita?, Áreas, Prioridad, fechas;
   - un área de `tarea.Area` que no está en el maestro se agrega a las opciones para seguir mostrándose elegida hasta que se cambie (spec, FR-003);
@@ -472,9 +472,9 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
   - sin Estado, Avance ni Fecha de finalización.
   - **Criterio de terminado**: el panel abre con los datos de la tarea 2 y la iniciativa en lectura; `npm run build` sin errores.
 
-- [ ] T064 [US4] En `src/webparts/objetivosVp/components/Tarea/TareaForm/TareaFormPanel.tsx`, implementar `saveEdicion` (plan, D4; spec, FR-017). Depende de T063: `editItem` de un `Tarea` parcial con `Id`, `Nombre`, `Descripcion`, `QueHabilita`, `Responsable`, `Area`, `Prioridad` (o `null` si se eligió "Sin prioridad"), `FechaInicio` y `FechaCompromiso`; **sin** `Estado`, `Avance`, `FechaFinalizacion`, `FechaUltimaActualizacion`, comentario ejecutivo, `Iniciativa` ni `Objetivo`. Un solo paso, sin referencias. Al terminar, `onSaved(tarea)`. **Criterio de terminado**: editar nombre y responsable deja intactos el estado, el avance, "Actualizada", el comentario ejecutivo y el historial; `npm run build` sin errores.
+- [X] T064 [US4] En `src/webparts/objetivosVp/components/Tarea/TareaForm/TareaFormPanel.tsx`, implementar `saveEdicion` (plan, D4; spec, FR-017). Depende de T063: `editItem` de un `Tarea` parcial con `Id`, `Nombre`, `Descripcion`, `QueHabilita`, `Responsable`, `Area`, `Prioridad` (o `null` si se eligió "Sin prioridad"), `FechaInicio` y `FechaCompromiso`; **sin** `Estado`, `Avance`, `FechaFinalizacion`, `FechaUltimaActualizacion`, comentario ejecutivo, `Iniciativa` ni `Objetivo`. Un solo paso, sin referencias. Al terminar, `onSaved(tarea)`. **Criterio de terminado**: editar nombre y responsable deja intactos el estado, el avance, "Actualizada", el comentario ejecutivo y el historial; `npm run build` sin errores.
 
-- [ ] T065 [US4] En `src/webparts/objetivosVp/components/Tarea/TareaDetalle/TareaDetalle.tsx` y `src/webparts/objetivosVp/components/ObjetivosVp/ObjetivosVp.tsx`, agregar "Editar" y su permiso (spec, FR-017a, FR-037a, FR-045; plan, D8). Depende de T064:
+- [X] T065 [US4] En `src/webparts/objetivosVp/components/Tarea/TareaDetalle/TareaDetalle.tsx` y `src/webparts/objetivosVp/components/ObjetivosVp/ObjetivosVp.tsx`, agregar "Editar" y su permiso (spec, FR-017a, FR-037a, FR-045; plan, D8). Depende de T064:
   - nuevo prop obligatorio `canEdit: boolean`;
   - en el pie, `Button` `primary` `Edit` (después de Cancelar), y el lápiz de `TareaInfo` (`onEdit`), visibles solo con `canEdit && canEditTarea(tarea)`;
   - estado `isFormOpen` y `<TareaFormPanel tarea={tarea} onSaved={onEdited} onCancel={…} />`;
@@ -494,14 +494,14 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 **Independent Test**: con mocks, buscar y filtrar en la bandeja. Quickstart, escenarios 6 y 7.
 
-- [ ] T067 [P] [US6] Crear `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasFiltros/TareasFiltros.tsx` y `TareasFiltros.module.scss` (spec, US6 esc. 2; referencia: `dDir`, `dObj`, `dIni`, `dResp`, `dAnio` de `scr.tareas`). Copiar `Iniciativa/IniciativasBandeja/IniciativasFiltros/IniciativasFiltros.tsx` y su `.module.scss`. Props: `filtros: ITareasFiltros`, `departamentos`, `objetivos`, `iniciativas`, `responsables: IPersonValue[]`, `anios: number[]`, `onApply`, `onClear`, `onClose`. `Panel` (título `PalancasFilters`; pie `IniciativasFiltersClear` `secondary` · `IniciativasFiltersApply` `primary`) con cinco `Dropdown` con la opción "Todos" (`IniciativasFilterAll`): Departamento (`ObjetivoFieldDepartment`), Objetivo (`ObjetivoColumnName`), Iniciativa (`IniciativaColumnName`), Responsable (`TareaColumnResponsible`) y Año (`IniciativasFilterYear`); un solo valor por filtro. **Sin** filtro de Estado. **Criterio de terminado**: el panel muestra los cinco filtros; `npm run build` sin errores.
+- [X] T067 [P] [US6] Crear `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasFiltros/TareasFiltros.tsx` y `TareasFiltros.module.scss` (spec, US6 esc. 2; referencia: `dDir`, `dObj`, `dIni`, `dResp`, `dAnio` de `scr.tareas`). Copiar `Iniciativa/IniciativasBandeja/IniciativasFiltros/IniciativasFiltros.tsx` y su `.module.scss`. Props: `filtros: ITareasFiltros`, `departamentos`, `objetivos`, `iniciativas`, `responsables: IPersonValue[]`, `anios: number[]`, `onApply`, `onClear`, `onClose`. `Panel` (título `PalancasFilters`; pie `IniciativasFiltersClear` `secondary` · `IniciativasFiltersApply` `primary`) con cinco `Dropdown` con la opción "Todos" (`IniciativasFilterAll`): Departamento (`ObjetivoFieldDepartment`), Objetivo (`ObjetivoColumnName`), Iniciativa (`IniciativaColumnName`), Responsable (`TareaColumnResponsible`) y Año (`IniciativasFilterYear`); un solo valor por filtro. **Sin** filtro de Estado. **Criterio de terminado**: el panel muestra los cinco filtros; `npm run build` sin errores.
 
-- [ ] T068 [P] [US6] Agregar a `src/webparts/objetivosVp/components/Tarea/tareaUtils.ts` la búsqueda y los filtros (spec, FR-033; plan, D10). Depende de T018:
+- [X] T068 [P] [US6] Agregar a `src/webparts/objetivosVp/components/Tarea/tareaUtils.ts` la búsqueda y los filtros (spec, FR-033; plan, D10). Depende de T018:
   - `matchesTareaSearch(tarea, search)`: coincide con `formatTareaId(Id)` o `Nombre`, sin distinguir mayúsculas (`search` ya viene en minúsculas y recortado);
   - `matchesTareasFiltros(tarea, filtros, iniciativas, objetivos)`: toma la iniciativa de la tarea y el objetivo de la iniciativa; Departamento = `objetivo.Departamento?.Id`; Objetivo = `iniciativa.Objetivo?.Id`; Iniciativa = `tarea.Iniciativa?.Id`; Responsable = `tarea.Responsable?.Id`; Año = `getAniosObjetivo(objetivo)` incluye el año; los filtros vacíos no restringen.
   - **Criterio de terminado**: `matchesTareaSearch` encuentra "tar-03" y un nombre en otra capitalización; `npm run build` sin errores.
 
-- [ ] T069 [US6] En `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx`, conectar la búsqueda y los filtros (spec, FR-032, FR-033; plan, D10). Depende de T067 y T068:
+- [X] T069 [US6] En `src/webparts/objetivosVp/components/Tarea/TareasBandeja/TareasBandeja.tsx`, conectar la búsqueda y los filtros (spec, FR-032, FR-033; plan, D10). Depende de T067 y T068:
   - `IniciativasHeader`: `searchText={state.searchText}` y `onSearchChange` (`onStateChange({ ...state, searchText, page: FIRST_PAGE })`), `onOpenFilters` abre `TareasFiltros` con las opciones calculadas (departamentos del maestro, objetivos con nombres, iniciativas, responsables únicos de las tareas, años);
   - `onApply`/`onClear` actualizan `state.filtros` y vuelven a la página 1;
   - `visibles` = tareas de la solapa que cumplen `matchesTareaSearch` y `matchesTareasFiltros`; el contador "N tareas en esta vista", los conteos de las subsolapas y el paginado se calculan sobre `visibles`; los totales de las solapas no cambian.
@@ -517,21 +517,24 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 **Purpose**: reglas transversales, registro de cambios de `core` y confirmaciones finales.
 
-- [ ] T071 Revisión de reglas transversales con `Grep` en los archivos tocados por la feature: sin hexadecimales de color, sin `any` nuevos, sin comentarios de código, sin textos escritos en el código (todo desde `strings`), sin `RequiereInversion`, "Requiere inversión", presupuesto, riesgos ni alertas en el código nuevo (salvo la propiedad que ya tenía la entidad `Tarea`, sin tocar), sin `window.open` ni navegación nueva fuera de `useNavigate`, `deleteItem` usado solo en `TareaFormPanel.tsx` y solo para deshacer un alta fallida (T045), ninguna pantalla con una acción para eliminar una tarea ni editar o borrar una entrada del historial, `TAREAS_MAX_NO_CANCELADAS` usado solo en `tareaUtils.ts` y sus llamadores del tope, `TAREAS_PAGE_SIZE` usado solo en `tareaPaginado.ts` y sus llamadores del paginado, y sin `useMemo`. Corregir lo que aparezca. **Criterio de terminado**: `Grep` sin coincidencias indebidas.
+- [X] T071 Revisión de reglas transversales con `Grep` en los archivos tocados por la feature: sin hexadecimales de color, sin `any` nuevos, sin comentarios de código, sin textos escritos en el código (todo desde `strings`), sin `RequiereInversion`, "Requiere inversión", presupuesto, riesgos ni alertas en el código nuevo (salvo la propiedad que ya tenía la entidad `Tarea`, sin tocar), sin `window.open` ni navegación nueva fuera de `useNavigate`, `deleteItem` usado solo en `TareaFormPanel.tsx` y solo para deshacer un alta fallida (T045), ninguna pantalla con una acción para eliminar una tarea ni editar o borrar una entrada del historial, `TAREAS_MAX_NO_CANCELADAS` usado solo en `tareaUtils.ts` y sus llamadores del tope, `TAREAS_PAGE_SIZE` usado solo en `tareaPaginado.ts` y sus llamadores del paginado, y sin `useMemo`. Corregir lo que aparezca. **Criterio de terminado**: `Grep` sin coincidencias indebidas.
+  - **Nota de cierre**: el `any` de `TareaDataSource.toWritableItem` se eliminó junto con el workaround de `COLUMNAS_NUEVAS_DISPONIBLES`. Preexistentes, anotados y sin cambios: el hexadecimal `LIGHT_TEXT_COLOR` de `Home/AccessList/AccessList.tsx` (commit e2f59d2) y el JSDoc de `src/core/utils/Mappers.ts`.
 
-- [ ] T072 Registrar en `docs/plantilla-cambios.md` los cambios de `src/core` fuera de `src/core/ui` (plan, "Registro en `docs/plantilla-cambios.md`"). Agregar al final de la tabla, con la fecha del día en que se haga y la feature `007-tareas`, estas filas (mismo formato de columnas que la fila existente):
+- [X] T072 Registrar en `docs/plantilla-cambios.md` los cambios de `src/core` fuera de `src/core/ui` (plan, "Registro en `docs/plantilla-cambios.md`"). Agregar al final de la tabla, con la fecha del día en que se haga y la feature `007-tareas`, estas filas (mismo formato de columnas que la fila existente):
   - `src/core/entities/Tarea.ts` — suma `QueHabilita`, `ComentarioEjecutivo`, `ComentarioEjecutivoFecha`, `ComentarioEjecutivoAutor` y `FechaUltimaActualizacion`; `Area` pasa a lista; `Prioridad` admite `null`; `toListItem` envía `Title`, omite `Estado` y `Prioridad` sin definir y deja de enviar `RequiereInversion` — motivo: que la entidad guarde lo que pide la spec con objetos parciales;
   - `src/core/api/Tarea/TareaDataSource.ts` — el `select` suma las columnas nuevas — motivo: leer lo que la entidad ahora mapea;
   - `src/core/api/Tarea/useTareaDataSource.ts` y `useItemTareaDataSource.ts` — pasan `TareaMock` como segundo argumento — motivo: principio III;
   - `src/core/api/AvanceTarea/useAvanceTareaDataSource.ts` y `useItemAvanceTareaDataSource.ts` — pasan `AvanceTareaMock` como segundo argumento — motivo: ídem;
   - `src/core/api/Tarea/TareaMock.ts`, `useTareasIniciativa.ts` y `src/core/api/AvanceTarea/AvanceTareaMock.ts`, `useAvancesTarea.ts` — archivos nuevos: mocks y lecturas filtradas — motivo: principio III y consultas por iniciativa y por tarea.
-  - **Criterio de terminado**: `docs/plantilla-cambios.md` tiene las cinco filas nuevas con fecha y feature.
+  - `src/core/utils/Mappers.ts` — `toLookupValueArray` acepta un lookup único (un objeto con `Id`) además de una lista o `{ results }` — motivo: la columna `Area` de la lista `Tarea` sigue siendo de valor único mientras no se cumplan los preparativos P1 a P3 (commit "corrección conexion sharepoint"); afecta a toda entidad que use esa función;
+  - **Criterio de terminado**: `docs/plantilla-cambios.md` tiene las seis filas nuevas con fecha y feature.
 
-- [ ] T073 [P] Confirmar que no se modificó `src/core/ui` (`git diff --stat src/core/ui` vacío) y que no hace falta anotar nada en `docs/design-system-cambios.md`. **Criterio de terminado**: sin cambios en `src/core/ui`.
+- [X] T073 [P] Confirmar que no se modificó `src/core/ui` (`git diff --stat src/core/ui` vacío) y que no hace falta anotar nada en `docs/design-system-cambios.md`. **Criterio de terminado**: sin cambios en `src/core/ui`.
 
-- [ ] T074 [P] Confirmar la localización: las claves de `src/webparts/objetivosVp/loc/mystrings.d.ts` y de `loc/en-us.js` coinciden una a una, todas las claves nuevas se usan al menos en un archivo de `src/` y no queda ninguna sin uso ni ninguna duplicada con un texto ya existente (`Grep` de cada clave nueva). **Criterio de terminado**: lista de claves nuevas con su uso; ninguna huérfana.
+- [X] T074 [P] Confirmar la localización: las claves de `src/webparts/objetivosVp/loc/mystrings.d.ts` y de `loc/en-us.js` coinciden una a una, todas las claves nuevas se usan al menos en un archivo de `src/` y no queda ninguna sin uso ni ninguna duplicada con un texto ya existente (`Grep` de cada clave nueva). **Criterio de terminado**: lista de claves nuevas con su uso; ninguna huérfana.
+  - **Nota de cierre**: `TareaDescription`, `TareasMine` y `TareasTabAll` se eliminaron y se reutilizan `ObjetivoFieldDescription` (detalle) y `ObjetivoFormDescription` (formulario), `AccessMyTasks` e `IniciativasTabAll`. Claves nuevas de la feature: 65.
 
-- [ ] T075 Revisar que ninguna pantalla nueva muestre presupuesto, inversión, riesgos, decisiones ni alertas de vencimiento (SC-009) y que la entidad nunca envíe `RequiereInversion`: buscar con `Grep` `RequiereInversion` en `src/` (solo debe quedar el atributo y su lectura en `src/core/entities/Tarea.ts`, y no en `toListItem`), y buscar el patrón `Object.assign(new Tarea(), tarea` (y variantes con otro nombre de variable) en `src/webparts/`, que copiaría un objeto leído de la lista y lo reenviaría. **Criterio de terminado**: sin coincidencias indebidas; resultado anotado.
+- [X] T075 Revisar que ninguna pantalla nueva muestre presupuesto, inversión, riesgos, decisiones ni alertas de vencimiento (SC-009) y que la entidad nunca envíe `RequiereInversion`: buscar con `Grep` `RequiereInversion` en `src/` (solo debe quedar el atributo y su lectura en `src/core/entities/Tarea.ts`, y no en `toListItem`), y buscar el patrón `Object.assign(new Tarea(), tarea` (y variantes con otro nombre de variable) en `src/webparts/`, que copiaría un objeto leído de la lista y lo reenviaría. **Criterio de terminado**: sin coincidencias indebidas; resultado anotado.
 
 ---
 
@@ -539,9 +542,9 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 **Purpose**: build, lint, recorrido del quickstart y revisión visual.
 
-- [ ] T076 Ejecutar `npm run build` completo y registrar el resultado (lint + `heft build`). **Criterio de terminado**: sin errores; si hay advertencias preexistentes, listarlas.
+- [X] T076 Ejecutar `npm run build` completo y registrar el resultado (lint + `heft build`). **Criterio de terminado**: sin errores; si hay advertencias preexistentes, listarlas.
 
-- [ ] T077 Ejecutar `npm run lint` por separado y registrar el resultado. **Criterio de terminado**: sin errores ni advertencias nuevas respecto de T001.
+- [X] T077 Ejecutar `npm run lint` por separado y registrar el resultado. **Criterio de terminado**: sin errores ni advertencias nuevas respecto de T001.
 
 - [ ] T078 Recorrer con mocks (`npm start`, workbench local) los escenarios 1 a 35 de [quickstart.md](./quickstart.md) y anotar cuáles pasan y cuáles no, con el motivo. Los que dependen de SharePoint (guardado real, tope con datos reales, índices, permisos de borrado) quedan para T079. Medir con cronómetro, como referencia, M1 a M4 de "Mediciones de los criterios de éxito" del quickstart (SC-001, SC-002, SC-007 y SC-008). **Criterio de terminado**: informe con el resultado de cada escenario y los cuatro tiempos medidos.
 
@@ -555,16 +558,16 @@ Ids de `IniciativaMock`, `ObjetivoMock`, `UsuarioMock` (`USUARIO_PRUEBA`, `BARBA
 
 No son tareas de código y las **no ejecuta el agente**. Todo depende del acceso al sitio de SharePoint. Pasos en [quickstart.md](./quickstart.md#preparativos-en-sharepoint) y detalle de columnas en [data-model.md](./data-model.md#columnas-nuevas-y-cambios-en-sharepoint). Se hacen en el sitio de desarrollo y se repiten en cada sitio antes de desplegar. Con mocks no hacen falta.
 
-- [ ] P1 Lista `Tarea`: crear la columna `QueHabilita` (varias líneas de texto, texto sin formato, no obligatoria) y verificar su nombre interno. *Bloquea: T079 (alta y lectura de "¿Qué habilita?").*
-- [ ] P2 Lista `Tarea`: cambiar la columna `Area` para permitir varios valores (mismo nombre interno). Confirmar antes que no hay tareas cargadas que dependan del valor único y qué comportamiento tiene la relación al borrar un área. *Bloquea: T079 (áreas múltiples).*
-- [ ] P3 Lista `Tarea`: crear `ComentarioEjecutivo` (varias líneas de texto, texto sin formato), `ComentarioEjecutivoFecha` (fecha y hora), `ComentarioEjecutivoAutor` (persona, un solo valor) y `FechaUltimaActualizacion` (fecha y hora); ninguna obligatoria. *Bloquea: T079 (comentario ejecutivo y "Actualizada").*
-- [ ] P4 Lista `Tarea`: dejar `RequiereInversion` (sí/no) con valor por defecto "No", o no obligatoria. La aplicación no la envía ni la muestra. *Bloquea: T079 (alta; sin esto, el alta puede fallar).*
+- [X] P1 Lista `Tarea`: crear la columna `QueHabilita` (varias líneas de texto, texto sin formato, no obligatoria) y verificar su nombre interno. *Bloquea: T079 (alta y lectura de "¿Qué habilita?").* *(hecho por la usuaria)*
+- [X] P2 Lista `Tarea`: cambiar la columna `Area` para permitir varios valores (mismo nombre interno). Confirmar antes que no hay tareas cargadas que dependan del valor único y qué comportamiento tiene la relación al borrar un área. *Bloquea: T079 (áreas múltiples).* *(hecho por la usuaria)*
+- [X] P3 Lista `Tarea`: crear `ComentarioEjecutivo` (varias líneas de texto, texto sin formato), `ComentarioEjecutivoFecha` (fecha y hora), `ComentarioEjecutivoAutor` (persona, un solo valor) y `FechaUltimaActualizacion` (fecha y hora); ninguna obligatoria. *Bloquea: T079 (comentario ejecutivo y "Actualizada").* *(hecho por la usuaria)*
+- [X] P4 No hace falta: `RequiereInversion` no es obligatoria y la aplicación no la envía ni la muestra.
 - [ ] P5 Indexar columnas: en `Tarea`, `Iniciativa`, `Responsable` y `Objetivo`; en `Avance tarea`, `Tarea`. *Bloquea: T079 (consultas filtradas con volumen).*
 - [ ] P6 Verificar la lista `Avance tarea` (columnas `Tarea`, `Avance` sin decimales, `Estado` con las opciones de `EstadoTarea`, `Comentario`; `Comentario` y `Title` no obligatorios) y en `Tarea` las opciones de `Estado` y `Prioridad`. Si algo difiere, avisar antes de seguir. *Bloquea: T079 (historial).*
 - [ ] P7 Verificar permisos: agregar y editar en `Tarea`, borrar en `Tarea` (solo para deshacer un alta fallida) y agregar en `Avance tarea`. *Bloquea: T079 (deshacer del alta).*
 - [ ] P8 Cargar los datos de prueba del quickstart en las listas de desarrollo, con autorización: una iniciativa con 9 tareas no canceladas, otra con 10, una iniciativa Finalizada y otra Cancelada, y tareas en cada estado. *Bloquea: T079 (tope y estados reales).*
 
-**Estado actual (decisión de la usuaria)**: P1 a P5 quedan **pendientes**; no se crean ni modifican columnas por ahora. Mientras tanto `src/core/api/Tarea/TareaDataSource.ts` tiene `COLUMNAS_NUEVAS_DISPONIBLES = false`: no pide ni escribe `QueHabilita`, `ComentarioEjecutivo*` ni `FechaUltimaActualizacion`, y escribe una sola área (la primera). Al terminar P1 a P3 hay que pasar esa constante a `true` y repetir la prueba (T079).
+**Estado actual**: P1, P2 y P3 los cumplió la usuaria en el sitio de desarrollo (columnas `QueHabilita`, `ComentarioEjecutivo`, `ComentarioEjecutivoFecha`, `ComentarioEjecutivoAutor` y `FechaUltimaActualizacion`, y varios valores en `Area`). El workaround `COLUMNAS_NUEVAS_DISPONIBLES` de `src/core/api/Tarea/TareaDataSource.ts` se eliminó: el datasource lee y escribe las columnas nuevas y todas las áreas elegidas. T079 ya puede hacerse con P1 a P3 cumplidos. P4 no hace falta (`RequiereInversion` no es obligatoria). P5 a P8 siguen pendientes.
 
 **Tareas de validación que dependen de estos preparativos**: **T079** (depende de P1 a P8). T078 y T080 no dependen de ellos (se hacen con mocks). Ninguna tarea de código (T003 a T075) depende de los preparativos.
 

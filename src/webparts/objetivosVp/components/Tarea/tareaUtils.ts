@@ -147,3 +147,17 @@ export const createTopeError = (mensaje: string): Error => {
 };
 
 export const isTopeError = (error: unknown): error is Error => error instanceof Error && error.name === TOPE_ERROR_NAME;
+
+export const matchesTareaSearch = (tarea: Tarea, search: string): boolean =>
+	formatTareaId(tarea.Id).toLowerCase().indexOf(search) >= 0 ||
+	(tarea.Nombre ?? '').toLowerCase().indexOf(search) >= 0;
+
+export const matchesTareasFiltros = (tarea: Tarea, filtros: ITareasFiltros, iniciativas: Iniciativa[], objetivos: Objetivo[]): boolean => {
+	const iniciativa = iniciativas.filter((item) => item.Id === tarea.Iniciativa?.Id)[0];
+	const objetivo = objetivos.filter((item) => item.Id === iniciativa?.Objetivo?.Id)[0];
+	return (filtros.departamentoId === '' || String(objetivo?.Departamento?.Id) === filtros.departamentoId) &&
+		(filtros.objetivoId === '' || String(iniciativa?.Objetivo?.Id) === filtros.objetivoId) &&
+		(filtros.iniciativaId === '' || String(tarea.Iniciativa?.Id) === filtros.iniciativaId) &&
+		(filtros.responsableId === '' || String(tarea.Responsable?.Id) === filtros.responsableId) &&
+		(filtros.anio === '' || getAniosObjetivo(objetivo).indexOf(Number(filtros.anio)) >= 0);
+};

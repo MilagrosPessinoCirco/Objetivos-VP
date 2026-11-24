@@ -11,10 +11,10 @@ import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
-import { fromDateInput } from '../../Objetivo/objetivoUtils';
+import { fromDateInput, toDateInput } from '../../Objetivo/objetivoUtils';
 import ConfirmacionModal from '../../Iniciativa/ConfirmacionModal/ConfirmacionModal';
 import { formatIdNombre, formatIniciativaId, formatObjetivoLabel } from '../../Iniciativa/iniciativaUtils';
-import { TAREA_MAX_LENGTH, getFechasIssues, getLengthIssue, isTopeError } from '../tareaUtils';
+import { TAREA_MAX_LENGTH, formatTareaId, getFechasIssues, getLengthIssue, isTopeError } from '../tareaUtils';
 import styles from './TareaForm.module.scss';
 
 export interface ITareaFormBodyProps {
@@ -24,6 +24,7 @@ export interface ITareaFormBodyProps {
 	usuarios: Usuario[];
 	currentUser?: IPersonValue;
 	iniciativaFijaId?: number;
+	tarea?: Tarea;
 	onSave: (tarea: Tarea) => Promise<void>;
 	onCancel: () => void;
 }
@@ -59,18 +60,22 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 	usuarios,
 	currentUser,
 	iniciativaFijaId,
+	tarea,
 	onSave,
 	onCancel
 }) => {
-	const [iniciativaId, setIniciativaId] = React.useState<string>(iniciativaFijaId === undefined ? '' : String(iniciativaFijaId));
-	const [nombre, setNombre] = React.useState<string>('');
-	const [responsable, setResponsable] = React.useState<IPersonOption[]>(currentUser ? [toPersonOption(currentUser)] : []);
-	const [descripcion, setDescripcion] = React.useState<string>('');
-	const [queHabilita, setQueHabilita] = React.useState<string>('');
-	const [areaIds, setAreaIds] = React.useState<string[]>([]);
-	const [prioridad, setPrioridad] = React.useState<string>(NO_PRIORITY_KEY);
-	const [fechaInicio, setFechaInicio] = React.useState<string>('');
-	const [fechaCompromiso, setFechaCompromiso] = React.useState<string>('');
+	const iniciativaInicialId = iniciativaFijaId ?? tarea?.Iniciativa?.Id;
+	const [iniciativaId, setIniciativaId] = React.useState<string>(iniciativaInicialId === undefined ? '' : String(iniciativaInicialId));
+	const [nombre, setNombre] = React.useState<string>(tarea?.Nombre ?? '');
+	const [responsable, setResponsable] = React.useState<IPersonOption[]>(
+		tarea ? (tarea.Responsable ? [toPersonOption(tarea.Responsable)] : []) : currentUser ? [toPersonOption(currentUser)] : []
+	);
+	const [descripcion, setDescripcion] = React.useState<string>(tarea?.Descripcion ?? '');
+	const [queHabilita, setQueHabilita] = React.useState<string>(tarea?.QueHabilita ?? '');
+	const [areaIds, setAreaIds] = React.useState<string[]>((tarea?.Area ?? []).map((area) => String(area.Id)));
+	const [prioridad, setPrioridad] = React.useState<string>(tarea?.Prioridad ?? NO_PRIORITY_KEY);
+	const [fechaInicio, setFechaInicio] = React.useState<string>(toDateInput(tarea?.FechaInicio));
+	const [fechaCompromiso, setFechaCompromiso] = React.useState<string>(toDateInput(tarea?.FechaCompromiso));
 	const [submitted, setSubmitted] = React.useState<boolean>(false);
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
@@ -84,14 +89,18 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 	const peopleOptions = personas.map(toPersonOption);
 
 	const iniciativaOptions = iniciativas
-		.filter((item) => String(item.Id) === String(iniciativaFijaId)
+		.filter((item) => String(item.Id) === String(iniciativaInicialId)
 			|| (item.Estado !== EstadoIniciativa.Finalizada && item.Estado !== EstadoIniciativa.Cancelada))
 		.sort(byId)
 		.map((item) => ({ key: String(item.Id), text: formatIdNombre(formatIniciativaId(item.Id), item.Nombre) }));
-	const areaOptions = areas
+	const areaLookups: ILookupValue[] = [
+		...areas.map((area): ILookupValue => ({ Id: area.Id as number, Title: area.Nombre ?? '' })),
+		...(tarea?.Area ?? []).filter((actual) => !areas.some((area) => area.Id === actual.Id))
+	];
+	const areaOptions = areaLookups
 		.slice()
-		.sort((a, b) => (a.Nombre ?? '').localeCompare(b.Nombre ?? '', PEOPLE_LOCALE))
-		.map((area) => ({ key: String(area.Id), text: area.Nombre ?? '' }));
+		.sort((a, b) => a.Title.localeCompare(b.Title, PEOPLE_LOCALE))
+		.map((area) => ({ key: String(area.Id), text: area.Title }));
 	const prioridadOptions = [
 		{ key: NO_PRIORITY_KEY, text: strings.TareaNoPriority },
 		...Object.values(Prioridad).map((value) => ({ key: value as string, text: value as string }))
@@ -132,18 +141,20 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 		toSave.Nombre = nombre.trim();
 		toSave.Descripcion = descripcion.trim();
 		toSave.QueHabilita = queHabilita.trim();
-		toSave.Iniciativa = { Id: iniciativa?.Id as number, Title: iniciativa?.Nombre ?? '' };
-		toSave.Objetivo = { Id: objetivo?.Id as number, Title: objetivo?.Nombre ?? '' };
-		toSave.Responsable = personas.filter((persona) => String(persona.Id) === responsable[0]?.key)[0];
+		toSave.Responsable = [...personas, ...(tarea?.Responsable ? [tarea.Responsable] : [])]
+			.filter((persona) => String(persona.Id) === responsable[0]?.key)[0];
 		toSave.Area = areaIds
-			.map((id) => areas.filter((area) => String(area.Id) === id)[0])
-			.filter((area): area is Area => area !== undefined)
-			.map((area): ILookupValue => ({ Id: area.Id as number, Title: area.Nombre ?? '' }));
+			.map((id) => areaLookups.filter((area) => String(area.Id) === id)[0])
+			.filter((area): area is ILookupValue => area !== undefined);
 		toSave.Prioridad = prioridad === NO_PRIORITY_KEY ? undefined : prioridad as Prioridad;
 		toSave.FechaInicio = fromDateInput(fechaInicio);
 		toSave.FechaCompromiso = fromDateInput(fechaCompromiso);
-		toSave.Estado = EstadoTarea.NoIniciada;
-		toSave.Avance = 0;
+		if (!tarea) {
+			toSave.Iniciativa = { Id: iniciativa?.Id as number, Title: iniciativa?.Nombre ?? '' };
+			toSave.Objetivo = { Id: objetivo?.Id as number, Title: objetivo?.Nombre ?? '' };
+			toSave.Estado = EstadoTarea.NoIniciada;
+			toSave.Avance = 0;
+		}
 		return toSave;
 	};
 
@@ -173,12 +184,12 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 		<Panel
 			open
 			className={styles.panel}
-			title={buildPanelTitle(strings.TareaNew)}
+			title={tarea ? buildPanelTitle(Utils.replaceAll(strings.TareaFormEditTitle, '{0}', formatTareaId(tarea.Id)), tarea.Nombre) : buildPanelTitle(strings.TareaNew)}
 			onClose={onCancel}
 			primaryAction={<Button variant="secondary" onClick={onCancel}>{strings.Cancel}</Button>}
 			secondaryAction={
 				<Button variant="primary" disabled={isSaving} onClick={requestSave}>
-					{strings.TareaNew}
+					{tarea ? strings.SaveChanges : strings.TareaNew}
 				</Button>
 			}
 		>
@@ -189,7 +200,7 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 					placeholder={strings.ObjetivoFormSelect}
 					options={iniciativaOptions}
 					value={iniciativaId}
-					disabled={iniciativaFijaId !== undefined}
+					disabled={iniciativaInicialId !== undefined}
 					className={iniciativaError ? styles.invalid : undefined}
 					errorMessage={iniciativaError}
 					onChange={(value) => {
@@ -224,7 +235,7 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 					{renderFieldError(issues.responsable)}
 				</div>
 				<Multiline
-					label={strings.TareaDescription}
+					label={strings.ObjetivoFormDescription}
 					required
 					placeholder={strings.TareaFormDescriptionPlaceholder}
 					value={descripcion}
@@ -272,8 +283,8 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 			</div>
 			{isConfirmOpen && (
 				<ConfirmacionModal
-					title={strings.TareaNew}
-					message={Utils.replaceAll(strings.TareaConfirmCreate, '{0}', responsable[0]?.name ?? '')}
+					title={tarea ? strings.SaveChanges : strings.TareaNew}
+					message={tarea ? strings.TareaConfirmEdit : Utils.replaceAll(strings.TareaConfirmCreate, '{0}', responsable[0]?.name ?? '')}
 					isSaving={isSaving}
 					onAccept={save}
 					onCancel={() => setIsConfirmOpen(false)}

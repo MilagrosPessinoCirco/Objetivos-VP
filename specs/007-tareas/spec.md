@@ -270,6 +270,15 @@ En el detalle de la iniciativa la persona ve la sección "Tareas (N de 10 no can
 - Q: ¿Qué pasa con un Responsable inactivo al editar una tarea? → A: Se sigue mostrando elegido hasta que se cambie, igual que las áreas que ya no existen. No se puede elegir a un usuario inactivo nuevo.
 - Q: ¿Cómo se implementan los permisos de las acciones de tareas (FR-045)? → A: Como tres constantes (cargar, editar y registrar avance), todas habilitadas hasta RF-19, siguiendo la 004 y la 006. La spec no define roles.
 
+### Session 2026-11-24 (decisiones de la implementación)
+
+- Q: ¿Qué pasa con las columnas nuevas de la lista Tarea y el `Area` multivalor? → A: Diferidos hasta que la usuaria cumpla P1 a P3. Mientras tanto `COLUMNAS_NUEVAS_DISPONIBLES = false` en `TareaDataSource`: no lee ni escribe esas columnas y guarda una sola área. Al cumplirse, la constante pasa a `true` y se repite la validación (T079).
+- Q: ¿Registrar avance sin cambios escribe una entrada de historial? → A: Sí, porque renueva "Actualizada", base de la alerta de tarea sin actualizar de la Entrega 2.
+- Q: ¿Qué se bloquea en Registrar avance tras escribir la entrada? → A: Estado, Avance y Comentario ejecutivo. La Fecha de finalización queda editable: el `Picker` del Design System no tiene `disabled` y esa fecha no forma parte de la entrada del historial.
+- Q: ¿Cómo es el campo Iniciativa del alta? → A: `Dropdown` actual, sin buscador, como diferencia con RF-12.
+- Q: ¿Qué pasa con las claves de localización cuyo texto ya existe? → A: Se reutilizan y figuran como reutilizadas: "Descripción" (`ObjetivoFieldDescription` y `ObjetivoFormDescription`), "Mis tareas" (`AccessMyTasks`) y "Todas" (`IniciativasTabAll`).
+- Q: ¿Siguen diferidas las columnas nuevas de la lista Tarea y el `Area` multivalor? → A: No. La usuaria cumplió P1 a P3 en el sitio de desarrollo (columnas nuevas creadas y varios valores en `Area`), y el workaround `COLUMNAS_NUEVAS_DISPONIBLES` se eliminó de `TareaDataSource`, que ahora lee y escribe las columnas nuevas y todas las áreas elegidas. Esto reemplaza la decisión anterior de diferirlas. T079 puede hacerse con P1 a P3 cumplidos; `RequiereInversion` no es obligatoria, así que P4 no hace falta.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -409,3 +418,8 @@ Reabrir solo existe de Finalizada a En curso (FR-020).
 - El prototipo no conecta ningún botón con el panel "Historial de avance"; en esta spec se abre desde "Historial de avance" en el pie fijo del detalle de la tarea. A confirmar con las usuarias.
 - Los umbrales de color de C-07 (60 % y 80 %) son fijos, como en la 006, hasta la feature que implemente RF-22.
 - Los textos de errores, confirmaciones y estados vacíos se toman del prototipo y viven en la localización; "No hay tareas en este estado." y el aviso de falla de carga con reintento no existen en el prototipo y los define esta spec.
+- Las columnas nuevas de la lista Tarea (`QueHabilita`, `ComentarioEjecutivo`, `ComentarioEjecutivoFecha`, `ComentarioEjecutivoAutor` y `FechaUltimaActualizacion`) y el paso de `Area` a valores múltiples se crearon en el sitio de desarrollo (P1 a P3); el workaround `COLUMNAS_NUEVAS_DISPONIBLES` se eliminó. `TareaDataSource` lee y escribe esas columnas y todas las áreas elegidas. La validación contra SharePoint real se hace en T079.
+- Registrar avance sin cambiar nada (mismo estado, mismo avance y comentario sin cambios) escribe igual una entrada de historial, porque renueva "Actualizada", que es la base de la alerta de tarea sin actualizar de la Entrega 2.
+- Durante el bloqueo posterior a escribir la entrada de Registrar avance, la Fecha de finalización queda editable: el `Picker` del Design System no tiene `disabled` y esa fecha no forma parte de la entrada del historial (solo se usa en la segunda escritura, sobre la tarea). Estado, Avance y Comentario ejecutivo sí quedan deshabilitados.
+- El campo Iniciativa del panel de alta usa el `Dropdown` actual, sin buscador: es una diferencia con RF-12, que pide selección con buscador integrado, porque el Design System no tiene un `Dropdown` con buscador.
+- Toda clave de localización que reutiliza un texto existente figura como reutilizada y no se duplica: `ObjetivoFieldDescription` (detalle de la tarea) y `ObjetivoFormDescription` (formulario) para "Descripción", `AccessMyTasks` para "Mis tareas" e `IniciativasTabAll` para "Todas". `IniciativaDescription` no sirve para esto porque dice "Descripción / impacto esperado".

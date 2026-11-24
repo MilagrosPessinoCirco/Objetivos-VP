@@ -248,9 +248,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ResultadoClaveUpdated: string;
 	ResultadoClaveSaveError: string;
 	AvanceNotApplicable: string;
-	TareasMine: string;
 	TareasAllTitle: string;
-	TareasTabAll: string;
 	TareasTabsAriaLabel: string;
 	TareasStateTabsAriaLabel: string;
 	TareasStateNotStarted: string;
@@ -275,7 +273,6 @@ declare interface IObjetivosVpWebPartStrings {
 	TareaFormEditTitle: string;
 	TareaFormName: string;
 	TareaFormNamePlaceholder: string;
-	TareaDescription: string;
 	TareaFormDescriptionPlaceholder: string;
 	TareaEnables: string;
 	TareaEnablesPlaceholder: string;

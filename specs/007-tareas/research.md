@@ -108,9 +108,7 @@ Claves nuevas de `loc/mystrings.d.ts` y `loc/en-us.js`. Los textos vienen del pr
 
 | Clave | Texto |
 |---|---|
-| `TareasMine` | Mis tareas |
 | `TareasAllTitle` | Todas las tareas |
-| `TareasTabAll` | Todas |
 | `TareasTabsAriaLabel` | Tareas a mostrar |
 | `TareasStateTabsAriaLabel` | Estado de la tarea |
 | `TareasStateNotStarted` / `TareasStateInProgress` / `TareasStateStopped` / `TareasStateFinished` / `TareasStateCancelled` | No iniciadas / En curso / Frenadas / Finalizadas / Canceladas |
@@ -140,7 +138,6 @@ Claves nuevas de `loc/mystrings.d.ts` y `loc/en-us.js`. Los textos vienen del pr
 | `TareaLimitReached` (*) | La iniciativa ya tiene {0} tareas no canceladas (máximo {0}). (el prototipo dice "activas") |
 | `TareaDateOutOfRange` | La fecha debe estar entre el {0} y el {1}, las fechas de la iniciativa. (*) Sigue el texto implementado de la 004; el del prototipo es "Las fechas deben quedar dentro de las de la iniciativa ({0} a {1})." |
 | `TareaNameTooLong` / `TareaCommentTooLong` (*) | El nombre no puede superar {0} caracteres. / El comentario no puede superar {0} caracteres. |
-| `TareaDescription` | Descripción |
 | `TareaFinishDate` | Fecha de finalización |
 | `TareaInfoSection` | Información de la tarea |
 | `TareaNotFound` / `TareaLoadError` | No se encontró la tarea. / No se pudo cargar la tarea. |
@@ -165,6 +162,8 @@ Claves nuevas de `loc/mystrings.d.ts` y `loc/en-us.js`. Los textos vienen del pr
 | `TareaSection` (*) | Tareas ({0} de {1} no canceladas) |
 | `TareaSectionEmpty` | Esta iniciativa todavía no tiene tareas. |
 
+
+También se reutilizan, en lugar de claves propias: `ObjetivoFieldDescription` (detalle de la tarea) y `ObjetivoFormDescription` (formulario) para "Descripción", `AccessMyTasks` para "Mis tareas" e `IniciativasTabAll` para "Todas". Las claves nuevas de la feature son 65 en total.
 Se reutilizan sin duplicar: `Cancel`, `Accept`, `SaveChanges`, `Edit`, `RequiredField`, `ObjetivoNoValue`, `ObjetivoDateOrder`, `ObjetivoDetailProgress`, `IniciativaColumnName` (Iniciativa), `IniciativaAreas` (Áreas involucradas), `IniciativaCommentSection` (Comentario ejecutivo), `IniciativaCommentEmpty`, `IniciativaCommentMeta`, `ObjetivoFieldStartDate`, `ObjetivoFieldCommitmentDate`, `ObjetivoFormStartDate`, `ObjetivoFormCommitmentDate`, `ObjetivoFormStatus`, `ObjetivoFieldDepartment`, `ObjetivoColumnName` (Objetivo), `ObjetivoColumnId`, `ObjetivoColumnProgress`, `ObjetivoColumnStatus`, `ObjetivoColumnView`, `IniciativasFilter*`, `IniciativasFilters*` y `IniciativasPage*`. `TareaColumnResponsible` sirve también como rótulo del campo y del filtro.
 
 ## Aproximaciones y decisiones de diseño

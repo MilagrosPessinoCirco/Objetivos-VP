@@ -1,3 +1,11 @@
 .panel.panel :global(.ms-Panel-main) {
 	width: 480px !important;
 }
+
+.items article {
+	min-height: 0;
+}
+
+.items p {
+	height: auto;
+}

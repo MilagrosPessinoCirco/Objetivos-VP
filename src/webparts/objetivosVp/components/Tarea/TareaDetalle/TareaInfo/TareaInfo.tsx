@@ -53,7 +53,7 @@ const TareaInfo: React.FC<ITareaInfoProps> = ({ tarea, iniciativaText, objetivoT
 					<Field label={strings.TareaFinishDate} value={orNoValue(fechaFinalizacion)} />
 				</div>
 				<div style={{ padding: `0 ${spacing.xs}` }}>
-					<Field label={strings.TareaDescription} value={orNoValue(tarea.Descripcion)} />
+					<Field label={strings.ObjetivoFieldDescription} value={orNoValue(tarea.Descripcion)} />
 				</div>
 				<div style={{ padding: `0 ${spacing.xs}` }}>
 					<Field label={strings.TareaEnables} value={orNoValue(tarea.QueHabilita)} />

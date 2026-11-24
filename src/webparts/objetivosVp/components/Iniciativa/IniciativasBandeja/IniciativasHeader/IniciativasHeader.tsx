@@ -18,6 +18,8 @@ export interface IIniciativasHeaderProps {
 	onOpenFilters: () => void;
 	canCreate: boolean;
 	onNew?: () => void;
+	searchPlaceholder?: string;
+	newLabel?: string;
 }
 
 const BOLD_STYLE: CSSProperties = { fontWeight: typography.weight.bold };
@@ -30,20 +32,20 @@ const buttonStyle = (group: string, scale: string): CSSProperties => {
 const FILTER_STYLE: CSSProperties = { ...buttonStyle('Primary', '300'), color: getColorStep('Primary', '300').textColor };
 const NEW_INICIATIVA_STYLE = buttonStyle('Tertiary', '900');
 
-const IniciativasHeader: React.FC<IIniciativasHeaderProps> = ({ title, searchText, onSearchChange, onBack, onOpenFilters, canCreate, onNew }) => (
+const IniciativasHeader: React.FC<IIniciativasHeaderProps> = ({ title, searchText, onSearchChange, onBack, onOpenFilters, canCreate, onNew, searchPlaceholder = strings.IniciativasSearchPlaceholder, newLabel = strings.IniciativaNew }) => (
 	<div className={styles.header} style={{ gap: spacing.md }}>
 		<div className={styles.left} style={{ gap: spacing.md }}>
 			<BackButton onClick={onBack} />
 			<h1 style={HEADER_TITLE_STYLE}>{title}</h1>
 		</div>
 		<div className={styles.tools} style={{ gap: spacing.md }}>
-			<SearchBox className={styles.search} placeholder={strings.IniciativasSearchPlaceholder} value={searchText} onValueChange={onSearchChange} />
+			<SearchBox className={styles.search} placeholder={searchPlaceholder} value={searchText} onValueChange={onSearchChange} />
 			<Button variant="primary" className={styles.control} style={FILTER_STYLE} iconLeft={<FigmaIcon name="list" />} onClick={onOpenFilters}>
 				{strings.PalancasFilters}
 			</Button>
 			{canCreate && onNew && (
 				<Button variant="primary" className={styles.control} style={NEW_INICIATIVA_STYLE} iconLeft={<FigmaIcon name="add" className={styles.whiteIcon} />} onClick={onNew}>
-					{strings.IniciativaNew}
+					{newLabel}
 				</Button>
 			)}
 		</div>

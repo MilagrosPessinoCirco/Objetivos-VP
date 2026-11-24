@@ -38,7 +38,7 @@ const TareaHistorialPanel: React.FC<ITareaHistorialPanelProps> = ({ tarea, onClo
 		if (avances.isLoading) {
 			return <Spinner />;
 		}
-		return <ActivityItems items={items} title={strings.TareaHistory} emptyMessage={strings.TareaHistoryEmpty} />;
+		return <ActivityItems className={styles.items} items={items} title={strings.TareaHistory} emptyMessage={strings.TareaHistoryEmpty} />;
 	};
 
 	return (
@@ -48,6 +48,7 @@ const TareaHistorialPanel: React.FC<ITareaHistorialPanelProps> = ({ tarea, onClo
 			title={buildPanelTitle(strings.TareaHistory, formatIdNombre(formatTareaId(tarea.Id), tarea.Nombre))}
 			onClose={onClose}
 			primaryAction={<Button variant="secondary" onClick={onClose}>{strings.TareaHistoryClose}</Button>}
+			secondaryAction={<></>}
 		>
 			{renderBody()}
 		</Panel>

@@ -196,6 +196,7 @@ Detalle en [research.md](./research.md).
 **D2. Entidades.**
 
 - `Tarea`: se suman `QueHabilita`, `ComentarioEjecutivo`, `ComentarioEjecutivoFecha`, `ComentarioEjecutivoAutor` y `FechaUltimaActualizacion`; `Area` pasa a `ILookupValue[]` (`toLookupValueArray` / `toLookupIds`, como `Iniciativa`); `Prioridad` admite `null`. El `select` del datasource suma las columnas nuevas (incluida `Area/Id` y `Area/Title` como hoy).
+- **Estado actual de las columnas nuevas**: las columnas nuevas de `Tarea` y el `Area` multivalor se crearon en el sitio de desarrollo (P1 a P3); el workaround `COLUMNAS_NUEVAS_DISPONIBLES` se eliminó. `TareaDataSource` lee y escribe `QueHabilita`, `ComentarioEjecutivo`, `ComentarioEjecutivoFecha`, `ComentarioEjecutivoAutor` y `FechaUltimaActualizacion`, y escribe todas las áreas elegidas. La validación contra SharePoint real se hace en T079.
 - `toListItem` envía `Title: this.Nombre` y, para `Estado` y `Prioridad`, solo lo definido (`Estado` con `assertChoiceValue`; `Prioridad` `null` vacía). Todo campo `undefined` se omite al guardar, así que los objetos que se guardan son parciales (D4). `RequiereInversion` se quita de `toListItem`: la entidad nunca lo envía (spec, FR-013), aunque alguien copie un objeto leído de la lista.
 - `AvanceTarea`: sin cambios de estructura. Fecha y autor salen de `Created` y `Author`.
 - Quién escribe cada campo de `Tarea`: ver [data-model.md](./data-model.md#quién-escribe-cada-campo).
@@ -418,6 +419,10 @@ Antes eran los puntos "A confirmar" P-C1 a P-C5.
 | P-C3 | Campo Iniciativa "con buscador integrado" (RF-12). | `Dropdown` actual, sin buscador (A4): diferencia con RF-12, porque el DS no tiene un `Dropdown` con buscador. |
 | P-C4 | Responsable inactivo al editar. | Se sigue mostrando elegido hasta que se cambie, igual que las áreas; no se puede elegir un usuario inactivo nuevo (D12, FR-005). |
 | P-C5 | Regla de año del filtro. | Se calcula en memoria con las fechas del objetivo (D10); no se indexa. |
+| P-C6 | Registrar avance sin cambios. | Escribe igual una entrada de historial, porque renueva "Actualizada" (base de la alerta de tarea sin actualizar de la Entrega 2). |
+| P-C7 | Bloqueo posterior a escribir la entrada de Registrar avance. | La Fecha de finalización queda editable: el `Picker` del DS no tiene `disabled` y esa fecha no forma parte de la entrada del historial. Estado, Avance y Comentario ejecutivo sí se deshabilitan. |
+| P-C8 | Campo Iniciativa del alta (RF-12). | `Dropdown` actual, sin buscador (A4): diferencia con RF-12. |
+| P-C9 | Claves de localización con texto ya existente. | Se reutilizan y figuran como reutilizadas: "Descripción" con `ObjetivoFieldDescription` (detalle) y `ObjetivoFormDescription` (formulario), "Mis tareas" con `AccessMyTasks` y "Todas" con `IniciativasTabAll`. |
 
 ## Preparativos a cargo de la usuaria
 
@@ -433,6 +438,8 @@ Todo lo que depende del acceso al sitio de SharePoint. No son tareas de código.
 | P6 | Verificar la lista `Avance tarea`: columnas `Tarea` (búsqueda), `Avance` (número sin decimales), `Estado` (opciones iguales a `EstadoTarea`) y `Comentario`; que `Comentario` y `Title` no sean obligatorios. Verificar también en `Tarea` que `Estado` y `Prioridad` tengan las opciones del enum. | Antes de probar el alta y el seguimiento. |
 | P7 | Verificar los permisos sobre `Tarea` (agregar, editar y borrar, este último para deshacer un alta fallida) y sobre `Avance tarea` (agregar). El código no edita ni borra entradas del historial. | Antes de probar con SharePoint. |
 | P8 | Cargar los datos de prueba del quickstart en las listas de desarrollo (iniciativas con 9 y 10 tareas no canceladas, iniciativas Finalizada y Cancelada, tareas en cada estado). | Antes de la revisión funcional. |
+
+**Estado actual de P1 a P3**: creadas en el sitio de desarrollo; el workaround se eliminó. `TareaDataSource` ya lee y escribe las columnas de P1 y P3 y todas las áreas de P2. T079 las valida contra SharePoint real.
 
 ## Complexity Tracking
 

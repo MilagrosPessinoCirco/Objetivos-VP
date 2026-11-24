@@ -11,6 +11,7 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import AvanceText from '../../shared/AvanceText/AvanceText';
 import { ICON_BUTTON_STYLE } from '../../shared/iconButtonStyle';
 import { formatDate } from '../../Objetivo/objetivoUtils';
+import { formatIdNombre, formatIniciativaId } from '../../Iniciativa/iniciativaUtils';
 import { formatTareaId, getEstadoTareaChipColor } from '../tareaUtils';
 import styles from './TareasTable.module.scss';
 
@@ -25,6 +26,8 @@ export interface ITareasTableProps {
 type TareaRow = {
 	id: string;
 	nombre: string;
+	iniciativa: string;
+	actualizada: string;
 	responsable: string;
 	compromiso: string;
 	estado: string;
@@ -40,10 +43,17 @@ const ACTION_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 24, mi
 
 const byId = (a: Tarea, b: Tarea): number => (a.Id ?? 0) - (b.Id ?? 0);
 
-const TareasTable: React.FC<ITareasTableProps> = ({ tareas, emptyText, onView }) => {
+const getIniciativaText = (tarea: Tarea, iniciativas: Iniciativa[]): string => {
+	const iniciativa = iniciativas.filter((item) => item.Id === tarea.Iniciativa?.Id)[0];
+	return iniciativa ? formatIdNombre(formatIniciativaId(iniciativa.Id), iniciativa.Nombre) : tarea.Iniciativa?.Title ?? '';
+};
+
+const TareasTable: React.FC<ITareasTableProps> = ({ tareas, variant, emptyText, iniciativas = [], onView }) => {
 	const rows: TareaRow[] = tareas.slice().sort(byId).map((tarea) => ({
 		id: formatTareaId(tarea.Id),
 		nombre: tarea.Nombre ?? '',
+		iniciativa: getIniciativaText(tarea, iniciativas),
+		actualizada: formatDate(tarea.FechaUltimaActualizacion),
 		responsable: tarea.Responsable?.Title ?? '',
 		compromiso: formatDate(tarea.FechaCompromiso),
 		estado: tarea.Estado ?? '',
@@ -72,11 +82,14 @@ const TareasTable: React.FC<ITareasTableProps> = ({ tareas, emptyText, onView })
 		</div>
 	);
 
+	const isBandeja = variant === 'bandeja';
 	const columns: ITableColumn<TareaRow>[] = [
 		{ key: 'id', header: strings.ObjetivoColumnId, width: ID_WIDTH },
 		{ key: 'nombre', header: strings.TareaColumnName },
+		...(isBandeja ? [{ key: 'iniciativa', header: strings.IniciativaColumnName }] : []),
 		{ key: 'responsable', header: strings.TareaColumnResponsible },
 		{ key: 'compromiso', header: strings.TareaColumnCommitment, width: DATE_WIDTH },
+		...(isBandeja ? [{ key: 'actualizada', header: strings.TareaColumnUpdated, width: DATE_WIDTH }] : []),
 		{ key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (_value, row) => renderAvance(row) },
 		{ key: 'estado', header: strings.ObjetivoColumnStatus, width: STATUS_WIDTH, render: (_value, row) => renderEstado(row) },
 		{ key: 'acciones', header: strings.ObjetivoColumnView, width: ACTIONS_WIDTH, render: (_value, row) => renderActions(row) }
