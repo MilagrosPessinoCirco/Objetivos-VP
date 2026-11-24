@@ -101,7 +101,7 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 **Independent Test**: escenario 17.
 
-- [ ] T012 [US3] `Palancas.tsx` y `Objetivo/objetivoUtils.ts` (plan, D8): usar el nuevo `PalancasSummary` con solo `{0}` y `{1}`; quitar el cálculo de `{2}` y `{3}` y la constante `DEFAULT_PROGRESS` y su import. **Criterio de terminado**: la línea dice "N palancas activas · N objetivos"; `Grep` de `DEFAULT_PROGRESS` sin resultados; build sin errores.
+- [X] T012 [US3] `Palancas.tsx` y `Objetivo/objetivoUtils.ts` (plan, D8): usar el nuevo `PalancasSummary` con solo `{0}` y `{1}`; quitar el cálculo de `{2}` y `{3}` y la constante `DEFAULT_PROGRESS` y su import. **Criterio de terminado**: la línea dice "N palancas activas · N objetivos"; `Grep` de `DEFAULT_PROGRESS` sin resultados; build sin errores.
 
 ---
 

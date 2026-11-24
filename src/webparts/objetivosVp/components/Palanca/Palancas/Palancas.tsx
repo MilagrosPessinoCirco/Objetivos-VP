@@ -17,7 +17,7 @@ import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import IniciativasPaginador from '../../Iniciativa/IniciativasBandeja/IniciativasPaginador/IniciativasPaginador';
 import ObjetivosFiltros from '../../Objetivo/ObjetivosFiltros/ObjetivosFiltros';
 import { EMPTY_OBJETIVOS_FILTROS, IObjetivosFiltros, getAniosObjetivos, hasObjetivoFilter, matchesObjetivoFiltros } from '../../Objetivo/objetivoFiltros';
-import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, formatObjetivoId, isVpRrii } from '../../Objetivo/objetivoUtils';
+import { ObjetivosFiltro, filterObjetivos, formatObjetivoId, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
@@ -151,11 +151,9 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const otrasVpObjetivos = objetivos.filter((objetivo) => !isVpRrii(objetivo.VP?.Title));
 	const vpObjetivos = filterObjetivos(objetivos, 'delVp').filter((objetivo) => isVpRrii(objetivo.VP?.Title));
 	const activePalancasCount = state.items.filter((palanca) => palanca.Activa === true).length;
-	const summary = Utils.replaceAll(Utils.replaceAll(Utils.replaceAll(Utils.replaceAll(strings.PalancasSummary,
+	const summary = Utils.replaceAll(Utils.replaceAll(strings.PalancasSummary,
 		'{0}', String(activePalancasCount)),
-		'{1}', String(objetivos.length)),
-		'{2}', String(new Date().getFullYear())),
-		'{3}', `${DEFAULT_PROGRESS} %`);
+		'{1}', String(objetivos.length));
 
 	const renderBody = (): React.ReactNode => {
 		if (state.isLoading && state.items.length === 0) {
