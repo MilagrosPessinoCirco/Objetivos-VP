@@ -65,8 +65,10 @@ El llamador (el ABM, en una feature posterior) informa en una línea que la oper
 El mismo orquestador, construido con `UsuarioMock` y un `GrupoRolMock` en memoria, y con una falla inyectable:
 
 ```ts
-type PasoFallido = 'lista' | 'grupo-agregar' | 'grupo-quitar' | 'deshacer';
-createUsuarioRolServiceMock(falla?: { paso: PasoFallido; veces?: number }): IUsuarioRolService
+type PasoFallido = 'lista' | 'grupo-agregar' | 'grupo-quitar';
+createUsuarioRolServiceMock(falla?: { paso: PasoFallido; veces?: number; deshacer?: boolean }): IUsuarioRolService
 ```
 
-`veces` (por defecto 1) es la cantidad de llamadas del paso que fallan antes de volver a andar, para probar el reintento.
+- `paso`: qué operación falla: escribir la lista, agregar a un grupo o quitar de un grupo.
+- `veces` (por defecto 1): cantidad de llamadas de ese paso que fallan antes de volver a andar, para probar el reintento.
+- `deshacer` (por defecto `false`): si es `true`, cuando ocurre la falla del paso, la primera escritura posterior (el deshacer) también falla una vez.

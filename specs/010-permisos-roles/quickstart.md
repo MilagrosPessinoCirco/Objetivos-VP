@@ -124,10 +124,10 @@ Como ninguna pantalla lo invoca, se prueba con una invocación temporal, que no 
 | S3 | Cambio de rol `Usuario` → `CargadorObjetivo` | Lista con el rol nuevo; en el grupo nuevo; fuera del anterior. |
 | S4 | Cambio de rol hacia el mismo rol | Sin cambios; nada duplicado. |
 | S5 | Baja de una persona activa | `Activo = false`, `Rol` conservado, elemento conservado; fuera de su grupo. |
-| S6 | Falla en `lista` en cada operación | Rechaza con `UsuarioRolError` (`deshecho: true`); lista y grupos como antes. |
-| S7 | Falla en `grupo-agregar` en alta y en cambio de rol | Se deshace lo de la lista (el elemento creado se borra; el `Rol` anterior se restaura). |
-| S8 | Falla en `grupo-quitar` en cambio de rol y en baja | Se deshace: vuelve a estar en los grupos de los que se la había quitado y se restaura la lista. |
-| S9 | Falla en el paso y en `deshacer` | Rechaza con `UsuarioRolError` (`deshecho: false`). Reintentar con la falla ya agotada completa la operación sin duplicar elementos ni pertenencias. |
+| S6 | Falla en `lista` (`{ paso: 'lista' }`) en cada operación | Rechaza con `UsuarioRolError` (`deshecho: true`); lista y grupos como antes. |
+| S7 | Falla en `grupo-agregar` (`{ paso: 'grupo-agregar' }`) en alta y en cambio de rol | Se deshace lo de la lista (el elemento creado se borra; el `Rol` anterior se restaura). |
+| S8 | Falla en `grupo-quitar` (`{ paso: 'grupo-quitar' }`) en cambio de rol y en baja | Se deshace: vuelve a estar en los grupos de los que se la había quitado y se restaura la lista. |
+| S9 | Falla en el paso y en el deshacer (`{ paso: 'grupo-agregar', deshacer: true }` y lo mismo con `grupo-quitar`) | Rechaza con `UsuarioRolError` (`deshecho: false`). Reintentar con la falla ya agotada completa la operación sin duplicar elementos ni pertenencias. |
 | S10 | Con rol `Usuario`, `CargadorObjetivo` o `Visualizador` en el mock, cualquier operación | Rechaza con `PermisoDenegadoError`; no cambia nada. |
 
 ## Servicio de personas, contra el sitio de desarrollo
