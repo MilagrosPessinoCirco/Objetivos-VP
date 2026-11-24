@@ -10,10 +10,9 @@ Decisiones con alternativas. El detalle de cada una está en [plan.md](./plan.md
 
 ## R2. Cómo saber si una recarga terminó bien
 
-- **Hecho**: `useDatasource.getItems` usa `handleAsync`: captura el error, lo deja en `state.error` y resuelve la promesa igual; `Promise.all(...).then` no distingue éxito de fallo. `editItem`, `deleteItem` y `getById` ya relanzan (002, 006).
-- **Decisión**: `getItems` pasa a `handleAsyncAndRethrow`. El botón Actualizar espera `Promise.all([...])`: si se resuelve, muestra el éxito; si rechaza, no lo muestra y la vista pinta su error de una línea desde `state.error`. Se registra en `docs/plantilla-cambios.md`.
-- **Consecuencia revisada**: los 6 `Promise.all(...).then(setReady)` dejarían la pantalla cargando si una lista falla, y las 19 llamadas sueltas darían rechazos sin atender. Se resuelve con un helper `settleLoads` que espera sin rechazar (el error ya está en el estado) y se usa en todos esos puntos (plan, D4).
-- **Alternativas**: hook `useRefreshNotice(isBusy, hasError, onSuccess)` que mira el estado cuando la carga termina (descartada: depende de que el primer render tras el clic ya muestre `isBusy`, y suma un hook con estado); contador propio de cargas en `refresh()` (más código, y no distingue el error de cada carga).
+- **Hecho**: `useDatasource.getItems` usa `handleAsync`: captura el error, lo deja en `state.error` y resuelve la promesa igual; `Promise.all(...).then` no distingue éxito de fallo. `editItem`, `deleteItem` y `getById` ya relanzan (002, 006). Los 25 usos de `getItems` dependen de que no rechace (6 `Promise.all(...).then(setReady)`, que dejarían la pantalla cargando, y 19 llamadas sueltas).
+- **Decisión**: método nuevo `reloadItems` en `useDatasource` (como `getItems`, pero con `handleAsyncAndRethrow`), usado solo por el botón Actualizar con `Promise.all`: si se resuelve, éxito; si rechaza, la vista pinta su error desde `state.error`. Se registra en `docs/plantilla-cambios.md` al implementarlo.
+- **Alternativas**: modificar `getItems` para que relance (descartada: obliga a ajustar sus 25 usos con un helper nuevo y cambia el comportamiento de todas las pantallas); hook `useRefreshNotice(isBusy, hasError, onSuccess)` que mira el estado cuando la carga termina (descartada: depende de que el primer render tras el clic ya muestre `isBusy`); contador propio de cargas en `refresh()` (más código, y no distingue el error de cada carga).
 
 ## R3. Dónde vive el estado de filtros
 

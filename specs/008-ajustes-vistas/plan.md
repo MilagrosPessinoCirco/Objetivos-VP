@@ -11,7 +11,7 @@ Cinco ajustes sobre el webpart `objetivosVp`, todos de interfaz:
 - **Filtros** en la vista de palancas y objetivos, con el panel lateral que ya usa la bandeja de iniciativas. Se extrae su base a un componente compartido (`FiltrosPanel`) y la bandeja pasa a usarlo, sin duplicar ni tocar `src/core/ui`.
 - **Solapa "Todos los objetivos"**, con una variante nueva de `ObjetivosTable`, y paginado de 10 en las tres grillas de objetivos con el paginador existente.
 - **Resumen** sin el avance de la VP: se cambia una cadena y se quita el cálculo.
-- **Actualizar**: mensaje de éxito en la vista de palancas y en la bandeja de iniciativas (que gana el botón). `getItems` de `useDatasource` pasa a relanzar el error, y el botón usa el resultado de la promesa para decidir entre éxito y error.
+- **Actualizar**: mensaje de éxito en la vista de palancas y en la bandeja de iniciativas (que gana el botón). `useDatasource` suma un método nuevo, `reloadItems`, que recarga y relanza el error; solo lo usa el botón, que decide entre éxito y error con el resultado de la promesa. `getItems` no cambia.
 - **Confirmación al guardar** en `PalancaForm` y `ObjetivoForm`, con el `ConfirmacionModal` de iniciativas.
 
 ## Technical Context
@@ -32,18 +32,15 @@ Cinco ajustes sobre el webpart `objetivosVp`, todos de interfaz:
 
 **Constraints**: `src/core/ui` de solo lectura; sin colores, tipografías ni espaciados fuera del DS; textos en español (AR) con `loc/`; mensajes de error y estados vacíos de una línea; sin rutas nuevas; roles todavía no implementados.
 
-**Scale/Scope**: 1 componente compartido nuevo (`FiltrosPanel`), 1 botón compartido (`RefreshButton`), 1 helper (`settleLoads`), 1 cambio en el hook de la plantilla (`useDatasource.getItems`, con 6 `Promise.all` y 19 llamadas sueltas ajustadas), 1 archivo de lógica de filtros, 1 variante nueva de grilla, 1 botón agregado a la bandeja y 2 formularios con modal. Sin pantallas nuevas.
+**Scale/Scope**: 1 componente compartido nuevo (`FiltrosPanel`), 1 botón compartido (`RefreshButton`), 1 método nuevo en el hook de la plantilla (`useDatasource.reloadItems`, aditivo), 1 archivo de lógica de filtros, 1 variante nueva de grilla, 1 botón agregado a la bandeja y 2 formularios con modal. Sin pantallas nuevas.
 
 ## Hallazgos del repo
 
 - **Panel de filtros.** `IniciativasFiltros` arma el panel con `Panel` y `Dropdown` del DS, con un borrador local, "Limpiar" (`primaryAction`) y "Aplicar" (`secondaryAction`); cerrar con la X no aplica. Es específico de iniciativas solo por sus campos.
 - **Botón Filtros de palancas.** `PalancasHeader` ya tiene el botón, sin `onClick`.
 - **Actualizar.** Solo `PalancasHeader` lo tiene. `refresh()` en `Palancas.tsx` recarga palancas, objetivos, iniciativas y resultados clave, sin mensaje. `IniciativasHeader` no lo tiene.
-- **Errores de carga.** `useDatasource.getItems` usa `handleAsync`: captura el error, lo deja en `state.error` y **no lo relanza**, así que su promesa siempre se resuelve y no se puede distinguir un éxito de un fallo. `editItem`, `deleteItem` y `getById` ya relanzan (`handleAsyncAndRethrow`, features 002 y 006); `getItems` es el único que falta (D4).
-- **Usos de `getItems`** (los hooks de entidad lo exponen con distintos nombres; todos pasan por `useDatasource`; `Palancas.tsx` es el único que lo llama con el nombre `getItems`). Con el cambio, un fallo rechaza la promesa, y hoy nadie la atiende:
-  - *6 `Promise.all([...]).then(() => setReady(true))`* en `IniciativaDetalle`, `useIniciativaFormMasters`, `IniciativasBandeja`, `ObjetivoDetalle`, `useObjetivoFormMasters` y `useObjetivoNames`. Si una carga falla, `Promise.all` rechaza y `setReady(true)` no se ejecuta: la pantalla quedaría cargando para siempre en lugar de mostrar su error (que sale de `state.error`). **Rompe sin ajuste.**
-  - *19 llamadas sin esperar el resultado*: `IniciativaDetalle` (4, en `onEdited`, `onEstadoSaved` y `onTracked`), `IniciativasBandeja` (2, en `onCreated`), `ObjetivoDetalle` (2, en `reloadIniciativas`), `PalancaDetalle` (6, en la carga inicial y en `onObjetivoCreated`) y `Palancas` (5: `loadObjetivos` con 3, más `getItems()` en el efecto y en `refresh`). Un fallo daría un rechazo sin atender (aviso en consola); la pantalla sigue mostrando su error. **No rompen la pantalla, pero se atienden.**
-  - Las llamadas a `getById` y a `editItem` no cambian.
+- **Errores de carga.** `useDatasource.getItems` usa `handleAsync`: captura el error, lo deja en `state.error` y **no lo relanza**, así que su promesa siempre se resuelve y no se puede distinguir un éxito de un fallo. Sus 25 usos (6 `Promise.all(...).then(() => setReady(true))` y 19 llamadas sueltas) dependen de que nunca rechace: si rechazara, esas 6 pantallas quedarían cargando y las otras darían rechazos sin atender. Por eso `getItems` **no se modifica**. `editItem`, `deleteItem` y `getById` ya relanzan (`handleAsyncAndRethrow`, features 002 y 006); falta un método de recarga que también lo haga (D4).
+- **Hooks de entidad.** Cada `useXxxDataSource` devuelve el `DatasourceHook` de `useDatasource` (tupla de 6). Agregar un séptimo elemento al final no cambia ningún desestructurado actual.
 - **Grillas de objetivos.** `ObjetivosTable` tiene variantes `palanca`, `delVp` y `otrasVp`, sin paginado. El paginador (`IniciativasPaginador`) es una pieza chica y reutilizable (`page`, `pageSize`, `total`, `onPageChange`); en la bandeja el contenedor deja `96px` de espacio inferior para él.
 - **Solapas.** El estado `filtro: ObjetivosFiltro` (`'todos' | 'delVp' | 'otrasVp'`) vive en `ObjetivosVp.tsx` y también lo recibe `PalancaDetalle`, que lo pasa a `filterObjetivos` (solo `'delVp'` filtra; los demás valores no).
 - **Resumen.** `PalancasSummary` usa `{2}` (año) y `{3}` (avance con `DEFAULT_PROGRESS`); `DEFAULT_PROGRESS` solo lo usa ese texto.
@@ -56,9 +53,9 @@ Cinco ajustes sobre el webpart `objetivosVp`, todos de interfaz:
 |---|---|
 | I. Plataforma | Cumple. Sin dependencias nuevas. |
 | II. La interfaz no se inventa | **Desvío registrado** (Complexity Tracking): la solapa "Todos los objetivos" y el filtro Gerencia no están en la maqueta; los pidió la usuaria. El resto sale de la maqueta (Filtros, Actualizar, confirmaciones) o de pantallas ya implementadas. `src/core/ui` no se modifica, así que no hay entrada en `docs/design-system-cambios.md`. |
-| III. Datos desacoplados | Cumple. Todo sobre los hooks y mocks existentes; no se accede a SharePoint desde componentes. `getItems` solo cambia cómo informa el error (lo relanza), no de dónde lee. |
+| III. Datos desacoplados | Cumple. Todo sobre los hooks y mocks existentes; no se accede a SharePoint desde componentes. `reloadItems` lee del mismo datasource que `getItems`. |
 | IV. Simplicidad | Cumple. Cada pieza nueva existe porque dos pantallas la usan (panel, hook de Actualizar) o por una regla propia (filtros de objetivos). |
-| V. Validación | Cada tarea cierra con `npm run build`. El cambio en `useDatasource` se registra en `docs/plantilla-cambios.md` y en Complexity Tracking. |
+| V. Validación | Cada tarea cierra con `npm run build`. El método nuevo de `useDatasource` se registra en `docs/plantilla-cambios.md` al implementarlo y en Complexity Tracking. |
 
 ## Interfaz y Design System
 
@@ -90,13 +87,11 @@ No hay elementos sin componente en el DS. Los contratos de pantalla están en [c
 
 **D4. Actualizar y su mensaje.** Dos piezas:
 
-1. `useDatasource.getItems` pasa de `handleAsync` a `handleAsyncAndRethrow`, igual que `editItem` y `getById` en la 002: despacha `ERROR` (así `state.error` sigue funcionando) y relanza. El tipo del hook (`() => Promise<void>`) no cambia. Se registra en `docs/plantilla-cambios.md` (fila nueva, feature 008).
-2. Los usos actuales se ajustan para que nada dependa de que la promesa nunca rechace (ver Hallazgos). Se agrega `shared/settleLoads.ts`: `settleLoads(...loads: Array<Promise<unknown>>): Promise<void>` espera todas las cargas (`Promise.all`) y **nunca rechaza**, porque el error ya quedó en `state.error`. Los 6 `Promise.all(...).then(setReady)` pasan a `settleLoads(...).then(setReady)` (mismo comportamiento que hoy: la pantalla sale de "cargando" y muestra su error). Las llamadas sueltas también pasan por `settleLoads`. `Palancas.loadObjetivos` devuelve su promesa para que `refresh` la espere.
+1. `useDatasource` suma `reloadItems`: igual que `getItems` (`LOAD`, `datasource.getItems()`, `GET_ALL`), pero con `handleAsyncAndRethrow`: despacha `ERROR` (así `state.error` sigue funcionando y la vista muestra su error) y relanza. Se agrega al final de la tupla `DatasourceHook` (séptimo elemento, `() => Promise<void>`), por lo que los desestructurados actuales no cambian. `getItems` y sus 25 usos quedan como están. Se registra en `docs/plantilla-cambios.md` (fila nueva, feature 008) cuando se implemente.
+2. Solo el botón Actualizar usa `reloadItems`. `refresh` llama a los de las listas de la vista con `Promise.all([...])`: si se resuelve, muestra `ViewRefreshed` con `SuccessNotice`; si rechaza, el `.catch` queda vacío (el error de una línea ya lo pinta la vista desde `state.error`, FR-017). Si se pulsa Actualizar otra vez antes de que termine, vale el último resultado (el mensaje se reemplaza).
 
-`refresh` no necesita ningún hook con estado: llama a las cargas con `Promise.all([...])`; si se resuelve, muestra `ViewRefreshed` con `SuccessNotice`; si rechaza, no muestra nada propio (el error de una línea ya lo pinta la vista desde `state.error`, FR-017). Si se pulsa Actualizar otra vez antes de que termine, vale el último resultado (el mensaje se reemplaza).
-
-- Vista de palancas: `refresh` = `Promise.all([getItems(), getObjetivos(), getIniciativas(), getResultados()])`. El error que se ve es el que ya tiene (`PalancasLoadError` / `ObjetivosLoadError`).
-- Bandeja: `refresh` = `Promise.all([getIniciativas(), getObjetivos(), getDepartamentos(), getResultados()])`; el error visible es `IniciativasLoadError`. El botón va antes de Filtros en `IniciativasHeader`, con la misma pieza y estilos que `PalancasHeader` (se comparten en un componente chico `shared/RefreshButton` para no copiar el bloque con `Tooltip`).
+- Vista de palancas: `refresh` = `Promise.all([reloadPalancas(), reloadObjetivos(), reloadIniciativas(), reloadResultados()])`, con el séptimo elemento de `usePalancaDataSource`, `useObjetivoDataSource`, `useIniciativaDataSource` y `useResultadoClaveDataSource`. Error visible: `PalancasLoadError` / `ObjetivosLoadError`. `loadObjetivos` y el efecto inicial siguen con `getItems` y los getters actuales.
+- Bandeja: `refresh` = `Promise.all` de `reloadItems` de iniciativas, objetivos, departamentos y resultados clave; error visible `IniciativasLoadError`. El botón va antes de Filtros en `IniciativasHeader`, con la misma pieza y estilos que `PalancasHeader` (se comparten en un componente chico `shared/RefreshButton` para no copiar el bloque con `Tooltip`).
 - Texto nuevo: `ViewRefreshed` = "La vista se ha actualizado correctamente.".
 - La solapa, la búsqueda, los filtros y la página no se tocan en `refresh`; la página se acota al último disponible, como ya hace la bandeja.
 
@@ -125,7 +120,7 @@ specs/008-ajustes-vistas/
 ├── cambios-especificacion-funcional.md   # aplicado a docs/especificacion-funcional.md
 └── checklists/requirements.md
 
-src/core/api/useDatasource.ts                       # getItems relanza el error (D4)
+src/core/api/useDatasource.ts                       # método reloadItems (D4)
 docs/plantilla-cambios.md                              # fila nueva (D4)
 
 src/webparts/objetivosVp/
@@ -133,8 +128,7 @@ src/webparts/objetivosVp/
 └── components/
     ├── shared/
     │   ├── FiltrosPanel/FiltrosPanel.tsx + .module.scss   # nuevo (D1)
-    │   ├── RefreshButton/RefreshButton.tsx                # nuevo (D4)
-    │   └── settleLoads.ts                                 # nuevo (D4)
+    │   └── RefreshButton/RefreshButton.tsx                # nuevo (D4)
     ├── Objetivo/
     │   ├── objetivoFiltros.ts                             # nuevo (D2)
     │   ├── objetivoUtils.ts                               # 'todosObjetivos'; sin DEFAULT_PROGRESS
@@ -157,14 +151,14 @@ src/webparts/objetivosVp/
 2. `FiltrosPanel` y `IniciativasFiltros` sobre él, sin cambio visible (D1); verificar la bandeja.
 3. `objetivoFiltros.ts` y `ObjetivosFiltros` (D2); botón Filtros conectado (D3).
 4. Variante `todos` de `ObjetivosTable`, solapa y reglas por solapa (D5, D7); paginado (D6).
-5. `getItems` relanza + `settleLoads` + ajuste de los 25 usos, en un solo cambio para que ninguna pantalla quede a medias; después `RefreshButton` y Actualizar en palancas y en la bandeja (D4).
+5. `reloadItems` en `useDatasource` (con la fila en `docs/plantilla-cambios.md`); después `RefreshButton` y Actualizar en palancas y en la bandeja (D4).
 6. Modales de confirmación en `PalancaForm` y `ObjetivoForm` (D9).
 7. Recorrido del [quickstart.md](./quickstart.md).
 
 ## Riesgos
 
-- **Usos de `getItems` sin ajustar.** Un `Promise.all(...).then(setReady)` que se olvide deja una pantalla cargando para siempre si falla una lista. Se mitiga con la lista exacta de los 25 usos (Hallazgos), con una búsqueda final con `Grep` de los getters sin `settleLoads` ni `.catch`, y con los escenarios 19, 19c y 19d (pantallas con la red cortada).
-- **Cambio en la plantilla.** `getItems` lo comparten todas las pantallas; una feature futura podría asumir que no rechaza. Queda en `docs/plantilla-cambios.md` para reaplicarlo al actualizar la plantilla.
+- **Cambio en la plantilla.** `reloadItems` es aditivo (no altera a ninguna pantalla existente), pero es un cambio en `src/core`: queda en `docs/plantilla-cambios.md` para reaplicarlo al actualizar la plantilla.
+- **Posición en la tupla.** Los hooks se desestructuran por posición; un `reloadItems` mal ubicado devolvería otro método. Se agrega al final del tipo y se verifica con el build (tipos distintos) y con los escenarios 18 a 19c.
 - **Parpadeo al actualizar en palancas.** `objetivosReady` es falso mientras recarga, así que las solapas de objetivos muestran el spinner un momento; es el comportamiento actual de Actualizar y no se cambia.
 - **Estilos del panel.** Mover `.panel` y `.fields` a `FiltrosPanel` no debe cambiar la bandeja; se compara visualmente antes y después (escenario 9b).
 - **Doble modal.** El formulario es un `Panel` y el modal se abre encima, como en `IniciativaForm`; se verifica el foco y el cierre con Cancelar.
@@ -180,6 +174,5 @@ Ninguno: no hay listas, columnas ni permisos nuevos.
 | Solapa "Todos los objetivos" fuera de la maqueta (principio II) | Pedido de la usuaria; sigue el diseño de la grilla existente | No hacerla |
 | Filtro Gerencia en lugar de Responsable de la maqueta | El objetivo no tiene persona responsable; decidido en el clarify | Omitir el campo |
 | Paginado en "Objetivos de la VP RRII" y "Objetivos de otras VP", que hoy no paginan | Decidido en el clarify, para que las tres grillas sean iguales | Paginar solo la nueva |
-| `useDatasource.getItems` relanza el error (cambio en `src/core`, fuera de `src/core/ui`; se registra en `docs/plantilla-cambios.md`) | El botón Actualizar decide éxito o error con el resultado de la promesa, sin depender del orden de renders de `isLoading` ni de un hook con estado; mismo patrón que `editItem` y `getById` (002) y `deleteItem` (006) | Hook `useRefreshNotice` que mira `isBusy`/`error` (frágil por el momento del render y más código); contador propio de cargas |
-| Se ajustan 6 `Promise.all` y 19 llamadas sueltas por el cambio anterior | Sin el ajuste, una carga fallida deja la pantalla cargando o produce rechazos sin atender | Dejar `getItems` como está |
+| Método nuevo `reloadItems` en `useDatasource` (cambio en `src/core`, fuera de `src/core/ui`; se registra en `docs/plantilla-cambios.md`) | El botón Actualizar decide éxito o error con el resultado de la promesa, sin depender del orden de renders de `isLoading`; es aditivo y no toca a los 25 usos de `getItems`, que dependen de que no rechace | Modificar `getItems` para que relance (obliga a ajustar 6 `Promise.all` y 19 llamadas); hook `useRefreshNotice` que mira `isBusy`/`error` (frágil por el momento del render); contador propio de cargas |
 | `IniciativasFiltros` se reescribe sobre `FiltrosPanel` | Evitar dos paneles casi iguales (pedido de reutilizar, sin duplicar) | Copiar el panel |

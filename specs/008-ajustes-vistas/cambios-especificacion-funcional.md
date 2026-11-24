@@ -1,6 +1,6 @@
 # Cambios propuestos a docs/especificacion-funcional.md (v1.9 → v1.10)
 
-**Sin aplicar.** Para que la usuaria los revise antes de editar el documento. Tiene dos grupos: los cambios de esta feature (008) y los ya decididos en las features 004 y 006, que el documento todavía no tiene. Cada cambio del segundo grupo se verificó contra las specs y el código (tabla al final).
+**Aplicado** a `docs/especificacion-funcional.md` v1.10 en el commit `5980331`. Se conserva como registro de lo propuesto y revisado. Tiene dos grupos: los cambios de esta feature (008) y los ya decididos en las features 004 y 006, que el documento todavía no tiene. Cada cambio del segundo grupo se verificó contra las specs y el código (tabla al final).
 
 ## Encabezado
 

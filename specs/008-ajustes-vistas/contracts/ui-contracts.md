@@ -37,19 +37,18 @@ getAniosObjetivos(objetivos: Objetivo[]): number[];
 
 `variant: 'palanca' | 'delVp' | 'otrasVp' | 'todos'`. Para `'todos'`: columnas ID, Objetivo, VP, Palanca, Departamento, Gerencia, Peso, Avance, Estado y Ver. Otra VP: Palanca "—", Peso "—", Avance "No aplica".
 
-## `core/api/useDatasource.ts` (modificado)
+## `core/api/useDatasource.ts` (modificado, aditivo)
 
-`getItems` relanza el error: despacha `ERROR` y vuelve a lanzarlo (`handleAsyncAndRethrow`). La firma no cambia (`() => Promise<void>`).
+`DatasourceHook` suma un séptimo elemento al final: `reloadItems: () => Promise<void>`. Recarga la lista como `getItems` (`LOAD`, `GET_ALL`) pero con `handleAsyncAndRethrow`: despacha `ERROR` y relanza. `getItems` no cambia.
 
-## `shared/settleLoads.ts` y `shared/RefreshButton/RefreshButton.tsx` (nuevos)
+## `shared/RefreshButton/RefreshButton.tsx` (nuevo)
 
 ```ts
-settleLoads(...loads: Array<Promise<unknown>>): Promise<void>; // espera todas; nunca rechaza
-// RefreshButton: botón iconOnly con Tooltip "Actualizar" e ícono `reload`
+// botón iconOnly con Tooltip "Actualizar" e ícono `reload`
 interface IRefreshButtonProps { onClick: () => void }
 ```
 
-En `refresh`, `Promise.all([...cargas])`: si se resuelve, se muestra `ViewRefreshed` ("La vista se ha actualizado correctamente.") con `SuccessNotice`; si rechaza, no se muestra y la vista pinta su error.
+En `refresh`, `Promise.all([...reloadItems])`: si se resuelve, se muestra `ViewRefreshed` ("La vista se ha actualizado correctamente.") con `SuccessNotice`; si rechaza, no se muestra y la vista pinta su error.
 
 ## Cambios en componentes existentes
 
@@ -57,9 +56,8 @@ En `refresh`, `Promise.all([...cargas])`: si se resuelve, se muestra `ViewRefres
 |---|---|
 | `PalancasHeader` | Prop `onOpenFilters`; usa `RefreshButton`. |
 | `IniciativasHeader` | Prop `onRefresh`; botón `RefreshButton` antes de Filtros. |
-| `Palancas` | Filtros, solapa `todosObjetivos`, página, resumen sin avance, mensaje de Actualizar; cargas con `settleLoads`. |
-| `IniciativaDetalle`, `ObjetivoDetalle`, `PalancaDetalle`, `useIniciativaFormMasters`, `useObjetivoFormMasters`, `useObjetivoNames` | Sus cargas con `getItems` pasan por `settleLoads` (sin cambio visible). |
-| `IniciativasBandeja` | `refresh` con `Promise.all` y mensaje; `Promise.all(...).then(setReady)` pasa a `settleLoads`. |
+| `Palancas` | Filtros, solapa `todosObjetivos`, página, resumen sin avance, mensaje de Actualizar con los `reloadItems`. |
+| `IniciativasBandeja` | `refresh` con los `reloadItems` y mensaje. |
 | `IniciativasFiltros` | Envoltorio de `FiltrosPanel`; mismo contrato público. |
 | `PalancaForm`, `ObjetivoFormBody` | `ConfirmacionModal` entre la validación y `onSave`. |
 | `objetivoUtils` | `ObjetivosFiltro` suma `'todosObjetivos'`; se quita `DEFAULT_PROGRESS`. |

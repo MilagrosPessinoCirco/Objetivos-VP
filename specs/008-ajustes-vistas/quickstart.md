@@ -34,7 +34,6 @@ Guion de QA manual. Prerrequisitos y condiciones iguales a los del [quickstart d
 | 19 | US4 | Repetir con la carga fallando (red cortada) | No aparece el mensaje de éxito; se ve el error de una línea de la vista. |
 | 19b | US4 | Bandeja de iniciativas > Actualizar, con vista "Todas", búsqueda, filtros y página 2 elegidos | Aparece "La vista se ha actualizado correctamente." y la vista, la búsqueda, los filtros y la página se mantienen. |
 | 19c | US4 | Repetir 19b con la carga fallando | No aparece el mensaje de éxito; se ve "No se pudieron cargar las iniciativas.". |
-| 19d | US4 | Con la red cortada, abrir el detalle de una iniciativa, el de un objetivo, el de una palanca y el formulario de iniciativa | Cada pantalla sale de "cargando" y muestra su error de una línea (no queda cargando); sin errores sin atender en la consola. |
 | 20 | US5 | Palanca: guardar con el nombre vacío | Error en el campo; no se abre el modal. |
 | 21 | US5 | Alta de palanca válida > Guardar | Modal "Nueva palanca" con el texto de FR-020. Cancelar: no guarda y el formulario conserva lo ingresado. Aceptar: guarda y muestra el mensaje de éxito. |
 | 22 | US5 | Editar una palanca > Guardar | Modal "Guardar cambios" con el texto de FR-020. |

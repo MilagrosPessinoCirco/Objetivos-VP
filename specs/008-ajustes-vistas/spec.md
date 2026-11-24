@@ -10,7 +10,7 @@
 
 **Diseño de referencia**: `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`: pantalla `scr.palancas` (botones Actualizar y Filtros, estado sin resultados), panel de filtros (`dFoot`: Limpiar / Aplicar) y modales de confirmación del formulario (`obj`, línea 1769).
 
-**Modifica**: `specs/002-palancas-estrategicas/spec.md`, `specs/003-objetivos/spec.md`, `specs/005-objetivos-pesos/spec.md` y `specs/004-iniciativas/spec.md` (reutiliza su panel de filtros y su modal; cambia el texto de su botón "Limpiar filtros" a "Limpiar" y suma el botón Actualizar a su bandeja). No se reescriben: todo lo que esta spec no cambia sigue rigiendo como lo definen. La maqueta es la referencia de diseño; donde no tiene algo, esta spec lo define.
+**Modifica**: `src/core/api/useDatasource.ts` (agrega el método `reloadItems`, que recarga y relanza el error, solo para el botón Actualizar; `getItems` no cambia; se registra en `docs/plantilla-cambios.md`), `specs/002-palancas-estrategicas/spec.md`, `specs/003-objetivos/spec.md`, `specs/005-objetivos-pesos/spec.md` y `specs/004-iniciativas/spec.md` (reutiliza su panel de filtros y su modal; cambia el texto de su botón "Limpiar filtros" a "Limpiar" y suma el botón Actualizar a su bandeja). No se reescriben: todo lo que esta spec no cambia sigue rigiendo como lo definen. La maqueta es la referencia de diseño; donde no tiene algo, esta spec lo define.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -203,5 +203,5 @@ Sin cambios en el modelo de datos ni en las listas de SharePoint. Los filtros y 
 - **Lista de años**: de los años de inicio y compromiso de los objetivos cargados, de menor a mayor y sin huecos, como en la bandeja de iniciativas; los de otras VP no aportan años.
 - **Orden de los desplegables**: Palanca, Departamento y Gerencia por nombre; Estado en el orden del catálogo; Año ascendente.
 - **Mensaje de Actualizar**: el texto es nuevo y se agrega a los textos de la web part junto a los demás mensajes de éxito.
-- **Documentación**: `docs/especificacion-funcional.md` se actualiza a v1.10 solo después de que la usuaria vea los cambios propuestos: [cambios-especificacion-funcional.md](./cambios-especificacion-funcional.md). No está aplicado.
+- **Documentación**: `docs/especificacion-funcional.md` ya está en v1.10 con estos cambios (commit `5980331`); el detalle de lo aplicado está en [cambios-especificacion-funcional.md](./cambios-especificacion-funcional.md).
 - **Fuera de alcance**: roles y permisos (RF-19), y cualquier cambio al avance, a los pesos o al modelo de datos.
