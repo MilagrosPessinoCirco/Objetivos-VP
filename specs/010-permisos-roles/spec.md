@@ -73,6 +73,7 @@ El peso de las iniciativas se muestra únicamente a CargadorObjetivo y Administr
 2. **Given** un Visualizador o un Usuario, **When** abre la bandeja de iniciativas, **Then** la columna se titula "Objetivo" y no muestra ningún peso.
 3. **Given** un CargadorObjetivo o un Administrador, **When** abre "Información de la iniciativa" de un objetivo de la VP RRII, **Then** ve el peso en el objetivo y el peso en el departamento.
 4. **Given** un Visualizador o un Usuario, **When** abre "Información de la iniciativa", **Then** no ve esos dos datos.
+5. **Given** un CargadorObjetivo o un Administrador, **When** abre el detalle de un objetivo de la VP RRII, **Then** la lista de iniciativas muestra la columna de peso; un Visualizador o un Usuario no la ve.
 
 ---
 
@@ -148,7 +149,7 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 **Rol de la persona**
 
 - **FR-001**: Cada persona DEBE tener a lo sumo un rol, que es independiente de su puesto: Visualizador, Usuario, CargadorObjetivo o Administrador.
-- **FR-002**: Cada rol DEBE corresponder a un grupo de SharePoint del sitio. La aplicación DEBE obtener los grupos de la persona actual y deducir su rol a partir de ellos. Los nombres exactos de los grupos los propone el plan.
+- **FR-002**: Cada rol DEBE corresponder a un grupo de SharePoint del sitio. La aplicación DEBE obtener los grupos de la persona actual y deducir su rol a partir de ellos. Cada grupo DEBE llamarse exactamente igual que el valor de la columna Rol (Administrador, CargadorObjetivo, Usuario y Visualizador): un rol no puede tener un nombre en la columna y otro en el grupo.
 - **FR-003**: Si una persona está en más de un grupo de rol, DEBE valer el rol con más permisos: Administrador > CargadorObjetivo > Usuario > Visualizador.
 - **FR-004**: Si una persona no está en ninguno de los cuatro grupos, NO DEBE tener rol. El rol Visualizador es solo para el VP y NO DEBE asignarse por defecto.
 - **FR-005**: Los permisos DEBEN calcularse en un único lugar a partir del rol y de la relación de la persona con cada elemento (Accountable de la iniciativa, responsable de la tarea). Las pantallas DEBEN reutilizar los valores de permiso que dejaron las features anteriores, sin duplicar cálculos de permisos en cada pantalla.
@@ -184,7 +185,7 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 - **FR-010c**: El permiso de editar o seguir una iniciativa de un Usuario DEBE depender de ser su Accountable; el de actualizar una tarea, de ser su responsable o el Accountable de su iniciativa. El resultado clave no tiene responsable propio (006): su seguimiento corresponde al Accountable de la iniciativa.
 - **FR-011**: Una acción sin permiso NO DEBE mostrarse: ni su botón, ni su lápiz, ni su "+", ni su acción de fila, y NO DEBE reemplazarse por un botón deshabilitado. Esto aplica, como mínimo, a: "Nueva palanca" y Editar en la palanca; "Cargar objetivo" y el "+" de la sección de objetivos de la palanca; Editar y los lápices del objetivo; "Cargar iniciativa" y el "+" de la sección Iniciativas del objetivo; Editar, "Cambiar estado" y los lápices de la iniciativa; la acción de seguimiento de cada resultado clave; y las acciones de tareas (incluido "Cargar tarea").
 - **FR-012**: "Ver", la búsqueda, los filtros, Actualizar y la navegación DEBEN mostrarse a los cuatro roles.
-- **FR-013**: La columna "Objetivo (peso)" de la bandeja de iniciativas y los pesos de "Información de la iniciativa" (peso en el objetivo y peso en el departamento) DEBEN mostrarse solo a CargadorObjetivo y Administrador. Los demás roles DEBEN ver la columna como "Objetivo", sin peso, y NO DEBEN ver esos dos datos.
+- **FR-013**: La columna "Objetivo (peso)" de la bandeja de iniciativas, los pesos de "Información de la iniciativa" (peso en el objetivo y peso en el departamento) y la columna de peso de la lista de iniciativas del detalle del objetivo DEBEN mostrarse solo a CargadorObjetivo y Administrador. Los demás roles DEBEN ver la columna de la bandeja como "Objetivo", sin peso, y NO DEBEN ver esos tres datos. (Decisión de la usuaria del 2026-11-24: la columna del detalle del objetivo sigue al prototipo.)
 
 **Rechazo del guardado**
 
@@ -204,7 +205,7 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 **Permisos en las listas de SharePoint**
 
 - **FR-023**: Las listas de la aplicación DEBEN dar lectura solo a los cuatro grupos de roles y dejar de heredar los permisos del sitio, para que una persona sin rol tampoco vea los datos desde SharePoint.
-- **FR-024**: La escritura por rol DEBE configurarse en las listas, por grupo (por ejemplo, ninguna lista admite escritura de un Visualizador; solo el Administrador escribe en Palanca y en Usuario), para que SharePoint la imponga aunque alguien edite fuera de la aplicación.
+- **FR-024**: La escritura por rol DEBE configurarse en las listas, por grupo (por ejemplo, ninguna lista admite escritura de un Visualizador; solo el Administrador escribe en Palanca y en Usuario), para que SharePoint la imponga aunque alguien edite fuera de la aplicación. Se usan solo los niveles de permiso estándar de SharePoint (Lectura y Colaborar): como no separan crear de editar, CargadorObjetivo tiene Colaborar en Objetivo y la edición de objetivos la controla la aplicación (decisión de la usuaria, 2026-11-24).
 - **FR-025**: Los permisos por elemento (un Usuario solo edita las iniciativas de las que es Accountable y las tareas de las que es responsable) DEBE controlarlos la aplicación. NO DEBEN configurarse permisos por elemento en SharePoint.
 - **FR-026**: Para que el Administrador pueda agregar y quitar personas de los grupos, el grupo Administrador DEBE ser propietario de los cuatro grupos.
 - **FR-027**: La creación de los grupos, de la columna Rol y de la configuración de permisos la hace la usuaria. El quickstart DEBE dejar los pasos, la tabla de permisos de cada grupo en cada lista (lectura y escritura), cómo cortar la herencia y cómo dejar al grupo Administrador como propietario de los cuatro grupos, para repetirlo en cada sitio. Esta feature NO DEBE crear, modificar ni eliminar listas, columnas, grupos ni permisos reales de SharePoint por iniciativa propia.
