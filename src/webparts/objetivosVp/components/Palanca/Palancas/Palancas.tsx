@@ -56,10 +56,10 @@ const matchesObjetivo = (objetivo: Objetivo, search: string): boolean =>
 	(objetivo.Nombre ?? '').toLowerCase().indexOf(search) >= 0;
 
 const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filtro, onFiltroChange }) => {
-	const [state, getItems, addItem, editItem] = usePalancaDataSource();
-	const [objetivoState, getObjetivos] = useObjetivoDataSource();
-	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
-	const [resultadoState, getResultados] = useResultadoClaveDataSource();
+	const [state, getItems, addItem, editItem, , , reloadPalancas] = usePalancaDataSource();
+	const [objetivoState, getObjetivos, , , , , reloadObjetivos] = useObjetivoDataSource();
+	const [iniciativaState, getIniciativas, , , , , reloadIniciativas] = useIniciativaDataSource();
+	const [resultadoState, getResultados, , , , , reloadResultados] = useResultadoClaveDataSource();
 	const names = useObjetivoNames();
 	const navigate = useNavigate();
 	const [searchText, setSearchText] = React.useState<string>('');
@@ -84,8 +84,9 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 
 	const refresh = (): void => {
 		setLastOperation('load');
-		getItems();
-		loadObjetivos();
+		Promise.all([reloadPalancas(), reloadObjetivos(), reloadIniciativas(), reloadResultados()])
+			.then(() => setSuccessMessage(strings.ViewRefreshed))
+			.catch(() => undefined);
 	};
 
 	const applyFiltros = (applied: IObjetivosFiltros): void => {

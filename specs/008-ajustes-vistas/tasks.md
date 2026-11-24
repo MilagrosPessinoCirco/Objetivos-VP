@@ -109,11 +109,11 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 **Independent Test**: escenarios 18, 19, 19b y 19c.
 
-- [ ] T013 [P] [US4] Crear `components/shared/RefreshButton/RefreshButton.tsx` (prop `onClick`; `Button` `iconOnly` con `Tooltip` "Actualizar" e ícono `reload`, mismos estilos que hoy en `PalancasHeader`) y usarlo en `PalancasHeader.tsx`. **Criterio de terminado**: el botón de palancas se ve igual.
+- [X] T013 [P] [US4] Crear `components/shared/RefreshButton/RefreshButton.tsx` (prop `onClick`; `Button` `iconOnly` con `Tooltip` "Actualizar" e ícono `reload`, mismos estilos que hoy en `PalancasHeader`) y usarlo en `PalancasHeader.tsx`. **Criterio de terminado**: el botón de palancas se ve igual.
 
-- [ ] T014 [US4] `Palancas.tsx` (plan, D4; depende de T002 y T013): `refresh` usa `Promise.all` con el séptimo elemento (`reloadItems`) de `usePalancaDataSource`, `useObjetivoDataSource`, `useIniciativaDataSource` y `useResultadoClaveDataSource`, con `.catch(() => undefined)`; al resolverse muestra `ViewRefreshed` con `SuccessNotice`; al rechazar no muestra nada propio (la vista pinta su error). El efecto inicial y `loadObjetivos` siguen con `getItems` y los getters. Solapa, búsqueda, filtros y página se mantienen. **Criterio de terminado**: escenarios 18 y 19.
+- [X] T014 [US4] `Palancas.tsx` (plan, D4; depende de T002 y T013): `refresh` usa `Promise.all` con el séptimo elemento (`reloadItems`) de `usePalancaDataSource`, `useObjetivoDataSource`, `useIniciativaDataSource` y `useResultadoClaveDataSource`, con `.catch(() => undefined)`; al resolverse muestra `ViewRefreshed` con `SuccessNotice`; al rechazar no muestra nada propio (la vista pinta su error). El efecto inicial y `loadObjetivos` siguen con `getItems` y los getters. Solapa, búsqueda, filtros y página se mantienen. **Criterio de terminado**: escenarios 18 y 19.
 
-- [ ] T015 [US4] `Iniciativa/IniciativasBandeja/IniciativasHeader/IniciativasHeader.tsx` e `IniciativasBandeja.tsx` (depende de T002 y T013): prop `onRefresh`, `RefreshButton` antes de Filtros; `refresh` con `Promise.all` de los `reloadItems` de iniciativas, objetivos, departamentos y resultados clave (`.catch(() => undefined)`) y el mismo mensaje; vista, búsqueda, filtros y página se mantienen. **Criterio de terminado**: escenarios 19b y 19c.
+- [X] T015 [US4] `Iniciativa/IniciativasBandeja/IniciativasHeader/IniciativasHeader.tsx` e `IniciativasBandeja.tsx` (depende de T002 y T013): prop `onRefresh`, `RefreshButton` antes de Filtros; `refresh` con `Promise.all` de los `reloadItems` de iniciativas, objetivos, departamentos y resultados clave (`.catch(() => undefined)`) y el mismo mensaje; vista, búsqueda, filtros y página se mantienen. **Criterio de terminado**: escenarios 19b y 19c.
 
 ---
 
