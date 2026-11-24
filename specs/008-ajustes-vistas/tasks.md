@@ -46,9 +46,9 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 ## Phase 1: Foundational (bloquea las historias)
 
-- [ ] T001 Agregar y modificar las cadenas en `loc/en-us.js` y `loc/mystrings.d.ts` (plan, D10): nuevas `ViewRefreshed`, `ObjetivosAllEmpty`, `ObjetivosFilterTodos`, `PalancasFiltersEmpty`, `PalancaConfirmCreate`, `PalancaConfirmEdit`, `ObjetivoConfirmCreate`, `ObjetivoConfirmEdit`, `ObjetivoConfirmEditTitle`; modificadas `PalancasSummary` ("{0} palancas activas · {1} objetivos") e `IniciativasFiltersClear` ("Limpiar"). Textos exactos en spec FR-008, FR-013, FR-016, FR-017, FR-020, FR-021. Verificar con `Grep` qué claves de etiqueta del panel ya existen (`ObjetivoFieldDepartment`, `ObjetivoFieldManagement`, `PalancaColumnName`, `ObjetivoFormStatus`, `IniciativasFilterYear`) y agregar solo las que falten. **Criterio de terminado**: build sin errores.
+- [X] T001 Agregar y modificar las cadenas en `loc/en-us.js` y `loc/mystrings.d.ts` (plan, D10): nuevas `ViewRefreshed`, `ObjetivosAllEmpty`, `ObjetivosFilterTodos`, `PalancasFiltersEmpty`, `PalancaConfirmCreate`, `PalancaConfirmEdit`, `ObjetivoConfirmCreate`, `ObjetivoConfirmEdit`, `ObjetivoConfirmEditTitle`; modificadas `PalancasSummary` ("{0} palancas activas · {1} objetivos") e `IniciativasFiltersClear` ("Limpiar"). Textos exactos en spec FR-008, FR-013, FR-016, FR-017, FR-020, FR-021. Verificar con `Grep` qué claves de etiqueta del panel ya existen (`ObjetivoFieldDepartment`, `ObjetivoFieldManagement`, `PalancaColumnName`, `ObjetivoFormStatus`, `IniciativasFilterYear`) y agregar solo las que falten. **Criterio de terminado**: build sin errores.
 
-- [ ] T002 Agregar `reloadItems` a `src/core/api/useDatasource.ts` (plan, D4):
+- [X] T002 Agregar `reloadItems` a `src/core/api/useDatasource.ts` (plan, D4):
   - método nuevo, igual que `getItems` (`dispatch(LOAD)`, `datasource.getItems()`, `dispatch(GET_ALL, ...)`) pero con `handleAsyncAndRethrow`; no tocar `getItems` ni sus usos;
   - agregar `() => Promise<void>` como **séptimo** elemento del tipo `DatasourceHook` y del arreglo devuelto, después de `getById`;
   - verificar con `Grep` que los hooks de entidad (`useXxxDataSource`) devuelven el `DatasourceHook` sin redefinir la tupla; si alguno la redefine, ajustarlo;

@@ -67,7 +67,7 @@ define([], function () {
 		"ObjetivosFilterAll": "Todas las palancas",
 		"ObjetivosEmptySearch": "No hay objetivos con esta búsqueda.",
 		"ObjetivosVpEmpty": "No hay objetivos de la VP RRII cargados.",
-		"PalancasSummary": "{0} palancas activas · {1} objetivos · Avance de la VP {2}: {3}",
+		"PalancasSummary": "{0} palancas activas · {1} objetivos",
 		"PalancaColumnObjectives": "Objetivos",
 		"ObjetivoColumnId": "ID",
 		"ObjetivoColumnName": "Objetivo",
@@ -160,7 +160,7 @@ define([], function () {
 		"IniciativasFilterYear": "Año",
 		"IniciativasFilterAll": "Todos",
 		"IniciativasFiltersApply": "Aplicar",
-		"IniciativasFiltersClear": "Limpiar filtros",
+		"IniciativasFiltersClear": "Limpiar",
 		"IniciativaNew": "Cargar iniciativa",
 		"IniciativaColumnName": "Iniciativa",
 		"IniciativaAccountable": "Accountable",
@@ -248,6 +248,15 @@ define([], function () {
 		"ResultadoClaveLastComment": "{0} · {1}",
 		"ResultadoClaveUpdated": "El resultado clave \"{0}\" se ha actualizado correctamente.",
 		"ResultadoClaveSaveError": "No se pudo guardar el seguimiento del resultado clave.",
+		"ViewRefreshed": "La vista se ha actualizado correctamente.",
+		"ObjetivosAllEmpty": "No hay objetivos cargados.",
+		"ObjetivosFilterTodos": "Todos los objetivos",
+		"PalancasFiltersEmpty": "No hay palancas ni objetivos con estos filtros.",
+		"PalancaConfirmCreate": "Estás por agregar la palanca \"{0}\". ¿Querés continuar?",
+		"PalancaConfirmEdit": "Estás por guardar los cambios de la palanca \"{0}\". ¿Querés continuar?",
+		"ObjetivoConfirmCreate": "Estás por cargar el objetivo aprobado en el comité. Una vez guardado, sólo el Administrador podrá modificarlo. ¿Querés continuar?",
+		"ObjetivoConfirmEdit": "Estás por modificar el objetivo. Todo cambio requiere el visto bueno del VP. ¿Querés continuar?",
+		"ObjetivoConfirmEditTitle": "Guardar cambios del objetivo",
 		"AvanceNotApplicable": "No aplica"
 	}
 });
