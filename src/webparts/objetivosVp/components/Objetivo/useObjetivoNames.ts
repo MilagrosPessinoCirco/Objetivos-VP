@@ -3,7 +3,7 @@ import * as React from 'react';
 import useDepartamentoDataSource from '../../../../core/api/Departamento/useDepartamentoDataSource';
 import useGerenciaDataSource from '../../../../core/api/Gerencia/useGerenciaDataSource';
 import useVicepresidenciaDataSource from '../../../../core/api/Vicepresidencia/useVicepresidenciaDataSource';
-import { Objetivo } from '../../../../core/entities';
+import { Departamento, Gerencia, Objetivo } from '../../../../core/entities';
 import { ILookupValue } from '../../../../core/utils/Mappers';
 
 interface INamed {
@@ -15,6 +15,8 @@ export interface IObjetivoNames {
 	ready: boolean;
 	error: boolean;
 	resolve: (objetivos: Objetivo[]) => Objetivo[];
+	departamentos: Departamento[];
+	gerencias: Gerencia[];
 }
 
 const withName = (lookup: ILookupValue | undefined, masters: INamed[]): ILookupValue | undefined => {
@@ -42,7 +44,7 @@ const useObjetivoNames = (): IObjetivoNames => {
 			Gerencia: withName(objetivo.Gerencia, gerenciaState.items)
 		}));
 
-	return { ready, error: vpState.error || departamentoState.error || gerenciaState.error, resolve };
+	return { ready, error: vpState.error || departamentoState.error || gerenciaState.error, resolve, departamentos: departamentoState.items, gerencias: gerenciaState.items };
 };
 
 export default useObjetivoNames;

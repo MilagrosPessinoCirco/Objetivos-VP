@@ -14,6 +14,8 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
 import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
+import ObjetivosFiltros from '../../Objetivo/ObjetivosFiltros/ObjetivosFiltros';
+import { EMPTY_OBJETIVOS_FILTROS, IObjetivosFiltros, getAniosObjetivos, hasObjetivoFilter, matchesObjetivoFiltros } from '../../Objetivo/objetivoFiltros';
 import { DEFAULT_PROGRESS, ObjetivosFiltro, filterObjetivos, formatObjetivoId, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
@@ -60,6 +62,8 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const [form, setForm] = React.useState<FormState | undefined>(undefined);
 	const [isObjetivoFormOpen, setIsObjetivoFormOpen] = React.useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = React.useState<string | undefined>(undefined);
+	const [filtros, setFiltros] = React.useState<IObjetivosFiltros>(EMPTY_OBJETIVOS_FILTROS);
+	const [isFiltersOpen, setIsFiltersOpen] = React.useState<boolean>(false);
 
 	const loadObjetivos = (): void => {
 		getObjetivos();
@@ -76,6 +80,11 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 		setLastOperation('load');
 		getItems();
 		loadObjetivos();
+	};
+
+	const applyFiltros = (applied: IObjetivosFiltros): void => {
+		setIsFiltersOpen(false);
+		setFiltros(applied);
 	};
 
 	const closeNotice = React.useCallback((): void => setSuccessMessage(undefined), []);
@@ -102,18 +111,20 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 
 	const search = searchText.trim().toLowerCase();
 	const emptyText = search === '' ? strings.PalancasEmpty : strings.PalancasEmptySearch;
-	const objetivosEmptyText = (defaultText: string): string => search === '' ? defaultText : strings.ObjetivosEmptySearch;
+	const hasAnyFilter = filtros.palancaId !== '' || hasObjetivoFilter(filtros);
+	const objetivosEmptyText = (defaultText: string): string => hasAnyFilter ? strings.PalancasFiltersEmpty : search === '' ? defaultText : strings.ObjetivosEmptySearch;
+	const byFiltros = (items: Objetivo[]): Objetivo[] => items.filter((objetivo) => matchesObjetivoFiltros(objetivo, filtros));
 	const bySearch = (items: Objetivo[]): Objetivo[] => search === '' ? items : items.filter((objetivo) => matchesObjetivo(objetivo, search));
 
 	const objetivosError = objetivoState.error || names.error || iniciativaState.error || resultadoState.error;
 	const objetivosReady = !objetivosError && !objetivoState.isLoading && !iniciativaState.isLoading && !resultadoState.isLoading && names.ready;
 	const objetivos = objetivosReady ? names.resolve(objetivoState.items) : [];
 	const objetivosOfPalanca = (palancaId: number | undefined): Objetivo[] =>
-		filterObjetivos(objetivos, filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId);
+		byFiltros(filterObjetivos(objetivos, filtro).filter((objetivo) => objetivo.Palanca?.Id === palancaId));
 
 	// Como en el prototipo: una palanca se muestra si coincide ella (con todos sus objetivos, salvo que alguno coincida) o alguno de sus objetivos (solo los que coinciden).
 	const palancaRows = state.items
-		.filter((palanca) => palanca.Activa === true)
+		.filter((palanca) => palanca.Activa === true && (filtros.palancaId === '' || String(palanca.Id) === filtros.palancaId))
 		.map((palanca) => {
 			const own = objetivosReady ? objetivosOfPalanca(palanca.Id) : undefined;
 			const matching = own ? bySearch(own) : [];
@@ -121,6 +132,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 			return { palanca, visibleObjetivos: own ? (search === '' ? own : visibleObjetivos) : undefined };
 		})
 		.filter(({ palanca, visibleObjetivos }) => search === '' || matchesSearch(palanca, search) || (visibleObjetivos?.length ?? 0) > 0)
+		.filter(({ visibleObjetivos }) => !hasObjetivoFilter(filtros) || !visibleObjetivos || visibleObjetivos.length > 0)
 		.sort((a, b) => byNombre(a.palanca, b.palanca));
 	const visiblePalancas = palancaRows.map((row) => row.palanca);
 	const objetivosByPalanca = objetivosReady
@@ -150,13 +162,13 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 				return objetivosError ? null : <Spinner />;
 			}
 			return filtro === 'delVp'
-				? <ObjetivosTable objetivos={bySearch(vpObjetivos)} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="delVp" emptyText={objetivosEmptyText(strings.ObjetivosVpEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />
-				: <ObjetivosTable objetivos={bySearch(otrasVpObjetivos)} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="otrasVp" emptyText={objetivosEmptyText(strings.OtherVpObjectivesEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />;
+				? <ObjetivosTable objetivos={byFiltros(bySearch(vpObjetivos))} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="delVp" emptyText={objetivosEmptyText(strings.ObjetivosVpEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />
+				: <ObjetivosTable objetivos={byFiltros(bySearch(otrasVpObjetivos))} iniciativas={iniciativaState.items} resultados={resultadoState.items} variant="otrasVp" emptyText={objetivosEmptyText(strings.OtherVpObjectivesEmpty)} onView={(id) => navigate(getObjetivoPath(id))} />;
 		}
 		return (
 			<PalancasTable
 				palancas={visiblePalancas}
-				emptyText={emptyText}
+				emptyText={hasAnyFilter ? strings.PalancasFiltersEmpty : emptyText}
 				canManage={canManage}
 				objetivosByPalanca={objetivosByPalanca}
 				iniciativas={iniciativaState.items}
@@ -177,6 +189,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 					onSearchChange={setSearchText}
 					onBack={() => navigate(HOME_PATH)}
 					onRefresh={refresh}
+					onOpenFilters={() => setIsFiltersOpen(true)}
 					canManage={canManage}
 					onNew={() => setForm({ mode: 'new' })}
 					canCreateObjetivo={canCreateObjetivo}
@@ -197,6 +210,18 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 				/>
 				{objetivosError && <MessageBar type="error" message={strings.ObjetivosLoadError} />}
 				{renderBody()}
+				{isFiltersOpen && (
+					<ObjetivosFiltros
+						filtros={filtros}
+						palancas={state.items.filter((palanca) => palanca.Activa === true)}
+						departamentos={names.departamentos}
+						gerencias={names.gerencias}
+						anios={getAniosObjetivos(objetivos)}
+						onApply={applyFiltros}
+						onClear={() => applyFiltros(EMPTY_OBJETIVOS_FILTROS)}
+						onClose={() => setIsFiltersOpen(false)}
+					/>
+				)}
 				{form?.mode === 'new' && <PalancaForm onSave={createPalanca} onCancel={() => setForm(undefined)} />}
 				{form?.mode === 'edit' && <PalancaForm palanca={form.palanca} onSave={updatePalanca} onCancel={() => setForm(undefined)} />}
 				{isObjetivoFormOpen && <ObjetivoFormPanel onSaved={onObjetivoCreated} onCancel={() => setIsObjetivoFormOpen(false)} />}

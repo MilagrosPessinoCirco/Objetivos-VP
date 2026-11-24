@@ -65,17 +65,17 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 **Independent Test**: escenarios 1 a 10 y 9b del quickstart.
 
-- [ ] T003 [US1] Crear `components/shared/FiltrosPanel/FiltrosPanel.tsx` y `.module.scss` (plan, D1; contracts): mover desde `IniciativasFiltros` el `Panel`, el borrador local, "Limpiar" (`primaryAction`) y "Aplicar" (`secondaryAction`) y los estilos `.panel` y `.fields`. Props `filtros`, `fields`, `normalize?`, `onApply`, `onClear`, `onClose`. La X no aplica. **Criterio de terminado**: build sin errores.
+- [X] T003 [US1] Crear `components/shared/FiltrosPanel/FiltrosPanel.tsx` y `.module.scss` (plan, D1; contracts): mover desde `IniciativasFiltros` el `Panel`, el borrador local, "Limpiar" (`primaryAction`) y "Aplicar" (`secondaryAction`) y los estilos `.panel` y `.fields`. Props `filtros`, `fields`, `normalize?`, `onApply`, `onClear`, `onClose`. La X no aplica. **Criterio de terminado**: build sin errores.
 
-- [ ] T004 [US1] Reescribir `Iniciativa/IniciativasBandeja/IniciativasFiltros/IniciativasFiltros.tsx` como envoltorio de `FiltrosPanel` (depende de T003), con el mismo contrato público; quitar sus estilos movidos. **Criterio de terminado**: la bandeja se ve y se comporta igual, con "Limpiar" (escenario 9b).
+- [X] T004 [US1] Reescribir `Iniciativa/IniciativasBandeja/IniciativasFiltros/IniciativasFiltros.tsx` como envoltorio de `FiltrosPanel` (depende de T003), con el mismo contrato público; quitar sus estilos movidos. **Criterio de terminado**: la bandeja se ve y se comporta igual, con "Limpiar" (escenario 9b).
 
-- [ ] T005 [P] [US1] Crear `components/Objetivo/objetivoFiltros.ts` (plan, D2): `IObjetivosFiltros`, `EMPTY_OBJETIVOS_FILTROS`, `matchesObjetivoFiltros`, `hasObjetivoFilter`, `getAniosObjetivos`. Reglas de FR-007 y FR-009 (otra VP sin palanca ni fechas queda fuera si hay Palanca o Año). **Criterio de terminado**: build sin errores.
+- [X] T005 [P] [US1] Crear `components/Objetivo/objetivoFiltros.ts` (plan, D2): `IObjetivosFiltros`, `EMPTY_OBJETIVOS_FILTROS`, `matchesObjetivoFiltros`, `hasObjetivoFilter`, `getAniosObjetivos`. Reglas de FR-007 y FR-009 (otra VP sin palanca ni fechas queda fuera si hay Palanca o Año). **Criterio de terminado**: build sin errores.
 
-- [ ] T006 [US1] Crear `components/Objetivo/ObjetivosFiltros/ObjetivosFiltros.tsx` (depende de T003 y T005): campos Palanca (activas), Departamento, Gerencia (acotada por el departamento del borrador, con `normalize`), Estado y Año, en ese orden, con "Todas"/"Todos" primero. **Criterio de terminado**: build sin errores.
+- [X] T006 [US1] Crear `components/Objetivo/ObjetivosFiltros/ObjetivosFiltros.tsx` (depende de T003 y T005): campos Palanca (activas), Departamento, Gerencia (acotada por el departamento del borrador, con `normalize`), Estado y Año, en ese orden, con "Todas"/"Todos" primero. **Criterio de terminado**: build sin errores.
 
-- [ ] T007 [US1] `Palanca/Palancas/PalancasHeader/PalancasHeader.tsx` y `Palanca/Palancas/Palancas.tsx` (plan, D3; depende de T006): prop `onOpenFilters`; estado de filtros aplicados y de página en `Palancas`; abrir, aplicar (cierra), limpiar (cierra) y cerrar con X; la página vuelve a 1 al buscar, aplicar o cambiar de solapa. **Criterio de terminado**: el panel abre y aplica/limpia/descarta (escenarios 1, 8, 9).
+- [X] T007 [US1] `Palanca/Palancas/PalancasHeader/PalancasHeader.tsx` y `Palanca/Palancas/Palancas.tsx` (plan, D3; depende de T006): prop `onOpenFilters`; estado de filtros aplicados y de página en `Palancas`; abrir, aplicar (cierra), limpiar (cierra) y cerrar con X; la página vuelve a 1 al buscar, aplicar o cambiar de solapa. **Criterio de terminado**: el panel abre y aplica/limpia/descarta (escenarios 1, 8, 9).
 
-- [ ] T008 [US1] `Palancas.tsx` (plan, D7; depende de T007): aplicar los filtros en "Todas las palancas" (Palanca limita palancas; el resto limita objetivos y oculta palancas vacías con `hasObjetivoFilter`) y en "Objetivos de la VP RRII" y "Objetivos de otras VP" (`matchesObjetivoFiltros` completo, con la búsqueda). Estado vacío con filtros: `PalancasFiltersEmpty`. Las cantidades de las solapas no cambian. **Criterio de terminado**: escenarios 2 a 7 y 10.
+- [X] T008 [US1] `Palancas.tsx` (plan, D7; depende de T007): aplicar los filtros en "Todas las palancas" (Palanca limita palancas; el resto limita objetivos y oculta palancas vacías con `hasObjetivoFilter`) y en "Objetivos de la VP RRII" y "Objetivos de otras VP" (`matchesObjetivoFiltros` completo, con la búsqueda). Estado vacío con filtros: `PalancasFiltersEmpty`. Las cantidades de las solapas no cambian. **Criterio de terminado**: escenarios 2 a 7 y 10.
 
 **Checkpoint**: US1 funciona con las solapas existentes.
 

@@ -256,6 +256,7 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoConfirmCreate: string;
 	ObjetivoConfirmEdit: string;
 	ObjetivoConfirmEditTitle: string;
+	FiltersAllFeminine: string;
 	AvanceNotApplicable: string;
 }
 

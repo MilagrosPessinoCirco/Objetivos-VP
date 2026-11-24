@@ -257,6 +257,7 @@ define([], function () {
 		"ObjetivoConfirmCreate": "Estás por cargar el objetivo aprobado en el comité. Una vez guardado, sólo el Administrador podrá modificarlo. ¿Querés continuar?",
 		"ObjetivoConfirmEdit": "Estás por modificar el objetivo. Todo cambio requiere el visto bueno del VP. ¿Querés continuar?",
 		"ObjetivoConfirmEditTitle": "Guardar cambios del objetivo",
+		"FiltersAllFeminine": "Todas",
 		"AvanceNotApplicable": "No aplica"
 	}
 });

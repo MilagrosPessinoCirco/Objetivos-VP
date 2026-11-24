@@ -15,6 +15,7 @@ export interface IPalancasHeaderProps {
 	onSearchChange: (value: string) => void;
 	onBack: () => void;
 	onRefresh: () => void;
+	onOpenFilters: () => void;
 	canManage: boolean;
 	onNew?: () => void;
 	canCreateObjetivo: boolean;
@@ -33,7 +34,7 @@ const REFRESH_STYLE = buttonStyle('Primary', '100');
 const NEW_PALANCA_STYLE = buttonStyle('Secondary', '700');
 const NEW_OBJETIVO_STYLE = buttonStyle('Tertiary', '900');
 
-const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchChange, onBack, onRefresh, canManage, onNew, canCreateObjetivo, onNewObjetivo }) => {
+const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchChange, onBack, onRefresh, onOpenFilters, canManage, onNew, canCreateObjetivo, onNewObjetivo }) => {
 	return (
 		<div className={styles.header} style={{ gap: spacing.md }}>
 			<div className={styles.left} style={{ gap: spacing.md }}>
@@ -53,7 +54,7 @@ const PalancasHeader: React.FC<IPalancasHeaderProps> = ({ searchText, onSearchCh
 						onClick={onRefresh}
 					/>
 				</Tooltip>
-				<Button variant="primary" className={styles.control} style={FILTER_STYLE} iconLeft={<FigmaIcon name="list" />}>
+				<Button variant="primary" className={styles.control} style={FILTER_STYLE} iconLeft={<FigmaIcon name="list" />} onClick={onOpenFilters}>
 					{strings.PalancasFilters}
 				</Button>
 				{canManage && onNew && (
