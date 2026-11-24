@@ -11,6 +11,7 @@ import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
 import SectionBand from '../../shared/SectionBand/SectionBand';
+import ConfirmacionModal from '../../Iniciativa/ConfirmacionModal/ConfirmacionModal';
 import { formatObjetivoId, fromDateInput, isVpRrii, toDateInput } from '../objetivoUtils';
 import NombreAyuda from './NombreAyuda/NombreAyuda';
 import styles from './ObjetivoForm.module.scss';
@@ -95,6 +96,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 	const [fechaInicio, setFechaInicio] = React.useState<string>(toDateInput(objetivo?.FechaInicio));
 	const [fechaCompromiso, setFechaCompromiso] = React.useState<string>(toDateInput(objetivo?.FechaCompromiso));
 	const [submitted, setSubmitted] = React.useState<boolean>(false);
+	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
 
@@ -165,11 +167,14 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		setGerenciaId('');
 	};
 
-	const save = async (): Promise<void> => {
+	const requestSave = (): void => {
 		setSubmitted(true);
-		if (hasIssues) {
-			return;
+		if (!hasIssues) {
+			setIsConfirmOpen(true);
 		}
+	};
+
+	const save = async (): Promise<void> => {
 		const toSave = new Objetivo();
 		toSave.Id = objetivo?.Id;
 		toSave.Nombre = nombre.trim();
@@ -196,6 +201,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		catch {
 			setSaveFailed(true);
 			setIsSaving(false);
+			setIsConfirmOpen(false);
 		}
 	};
 
@@ -389,11 +395,20 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 			title={title}
 			onClose={onCancel}
 			primaryAction={<Button variant="secondary" onClick={onCancel}>{strings.Cancel}</Button>}
-			secondaryAction={<Button variant="primary" disabled={isSaving} onClick={save}>{strings.Save}</Button>}
+			secondaryAction={<Button variant="primary" disabled={isSaving} onClick={requestSave}>{strings.Save}</Button>}
 		>
 			<div className={styles.panelContent} style={{ gap: spacing.lg, paddingRight: spacing.lg, '--field-error': ERROR_COLOR } as React.CSSProperties}>
 				{content}
 			</div>
+			{isConfirmOpen && (
+				<ConfirmacionModal
+					title={isEdit ? strings.ObjetivoConfirmEditTitle : strings.ObjetivoNew}
+					message={isEdit ? strings.ObjetivoConfirmEdit : strings.ObjetivoConfirmCreate}
+					isSaving={isSaving}
+					onAccept={save}
+					onCancel={() => setIsConfirmOpen(false)}
+				/>
+			)}
 		</Panel>
 	);
 };

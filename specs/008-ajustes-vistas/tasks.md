@@ -121,9 +121,9 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 **Independent Test**: escenarios 20 a 26.
 
-- [ ] T016 [P] [US5] `Palanca/PalancaForm/PalancaForm.tsx` (plan, D9): `save()` valida y abre `ConfirmacionModal` (`isConfirmOpen`); Aceptar ejecuta el guardado actual, con `isSaving` deshabilitándolo; Cancelar cierra sin tocar el formulario; el modal se cierra al terminar, con éxito o error. Alta: título `PalancaNew`, texto `PalancaConfirmCreate`; edición: `SaveChanges` y `PalancaConfirmEdit`, con `{0}` = nombre. **Criterio de terminado**: escenarios 20, 21, 22, 25 y 26.
+- [X] T016 [P] [US5] `Palanca/PalancaForm/PalancaForm.tsx` (plan, D9): `save()` valida y abre `ConfirmacionModal` (`isConfirmOpen`); Aceptar ejecuta el guardado actual, con `isSaving` deshabilitándolo; Cancelar cierra sin tocar el formulario; el modal se cierra al terminar, con éxito o error. Alta: título `PalancaNew`, texto `PalancaConfirmCreate`; edición: `SaveChanges` y `PalancaConfirmEdit`, con `{0}` = nombre. **Criterio de terminado**: escenarios 20, 21, 22, 25 y 26.
 
-- [ ] T017 [P] [US5] `Objetivo/ObjetivoForm/ObjetivoForm.tsx` (`ObjetivoFormBody`), igual que T016: alta con `ObjetivoNew` y `ObjetivoConfirmCreate`; edición con `ObjetivoConfirmEditTitle` y `ObjetivoConfirmEdit`. **Criterio de terminado**: escenarios 23, 24 y 25.
+- [X] T017 [P] [US5] `Objetivo/ObjetivoForm/ObjetivoForm.tsx` (`ObjetivoFormBody`), igual que T016: alta con `ObjetivoNew` y `ObjetivoConfirmCreate`; edición con `ObjetivoConfirmEditTitle` y `ObjetivoConfirmEdit`. **Criterio de terminado**: escenarios 23, 24 y 25.
 
 ---
 

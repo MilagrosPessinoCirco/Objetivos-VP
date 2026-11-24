@@ -7,6 +7,7 @@ import { Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
+import ConfirmacionModal from '../../Iniciativa/ConfirmacionModal/ConfirmacionModal';
 import { formatPalancaId } from '../formatPalancaId';
 import styles from './PalancaForm.module.scss';
 
@@ -24,6 +25,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 	const [descripcion, setDescripcion] = React.useState<string>(palanca?.Descripcion ?? '');
 	const [activa, setActiva] = React.useState<boolean>(palanca ? palanca.Activa === true : true);
 	const [submitted, setSubmitted] = React.useState<boolean>(false);
+	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
 
@@ -35,11 +37,14 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 		strings.PalancaFormNote
 	);
 
-	const save = async (): Promise<void> => {
+	const requestSave = (): void => {
 		setSubmitted(true);
-		if (nombre.trim() === '' || descripcion.trim() === '') {
-			return;
+		if (nombre.trim() !== '' && descripcion.trim() !== '') {
+			setIsConfirmOpen(true);
 		}
+	};
+
+	const save = async (): Promise<void> => {
 		const toSave = new Palanca();
 		toSave.Id = palanca?.Id;
 		toSave.Nombre = nombre.trim();
@@ -53,6 +58,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 		catch {
 			setSaveFailed(true);
 			setIsSaving(false);
+			setIsConfirmOpen(false);
 		}
 	};
 
@@ -73,7 +79,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 				</Button>
 			}
 			secondaryAction={
-				<Button variant="primary" disabled={isSaving} onClick={save}>
+				<Button variant="primary" disabled={isSaving} onClick={requestSave}>
 					{strings.Save}
 				</Button>
 			}
@@ -106,6 +112,15 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 					onChange={onActivaChange}
 				/>
 			</div>
+			{isConfirmOpen && (
+				<ConfirmacionModal
+					title={palanca ? strings.SaveChanges : strings.PalancaNew}
+					message={Utils.replaceAll(palanca ? strings.PalancaConfirmEdit : strings.PalancaConfirmCreate, '{0}', nombre.trim())}
+					isSaving={isSaving}
+					onAccept={save}
+					onCancel={() => setIsConfirmOpen(false)}
+				/>
+			)}
 		</Panel>
 	);
 };
