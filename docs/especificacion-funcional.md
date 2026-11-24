@@ -7,11 +7,11 @@ Aplicación que conecta palancas estratégicas, objetivos, iniciativas, resultad
 | Proyecto | Gestión de Portfolio VP |
 | Cliente | YPF S.A. · VP RRII (Relaciones Institucionales) |
 | Documento | Especificación funcional |
-| Versión | 1.9 · 16/11/2026 |
+| Versión | 1.10 · 24/11/2026 |
 | Estado | Versión para diseño y desarrollo |
 | Autores | VIGNARDEL, FRANCISCO · PESSINO, MILAGROS |
 | Usuarias referentes | BAUMANN, ANALIA · GROTZ, MARIA MARTHA |
-| Archivo | Especificacion_Funcional_Gestion_Portfolio_VP_v1.9.docx |
+| Archivo | Especificacion_Funcional_Gestion_Portfolio_VP_v1.10.docx |
 
 ## 1. Introducción
 
@@ -22,7 +22,7 @@ Gestión de Portfolio VP es la plataforma donde la VP RRII baja su estrategia (p
 ### 1.2 Objetivos específicos
 
 - **Visibilidad ejecutiva.** El VP y los responsables de los departamentos ven cómo vienen los objetivos del año, incluidos los que el VP marca como propios, y bajan de un desvío hasta su causa.
-- **Alertas tempranas.** Un riesgo detectado en una tarea llega a los accountable de la iniciativa en el momento en que ocurre.
+- **Alertas tempranas.** Un riesgo detectado en una tarea llega al accountable de la iniciativa en el momento en que ocurre.
 - **Trazabilidad del esfuerzo.** Queda registrado en qué trabaja la VP, incluido el trabajo que presta a otras VP con sus tareas y su presupuesto.
 - **Medición homogénea.** Todos los resultados clave se expresan con el mismo esquema: tipo de medición, unidad, mínimo, meta y máximo.
 - **Transparencia.** Toda la VP ve todo lo cargado, para que cada persona sepa en qué se está trabajando.
@@ -30,7 +30,7 @@ Gestión de Portfolio VP es la plataforma donde la VP RRII baja su estrategia (p
 
 ### 1.3 Modelo de gestión
 
-La gestión se organiza en una jerarquía de cinco niveles. El avance se calcula desde los resultados clave hacia arriba. Los pesos de los objetivos los define el comité de la VP, por departamento y, para los objetivos de la VP RRII, a nivel VP; los de las iniciativas y los resultados clave se reparten en partes iguales. Las tareas no suman al porcentaje de avance: registran los riesgos que requieren una decisión de los accountable de la iniciativa y su presupuesto se suma al de la iniciativa.
+La gestión se organiza en una jerarquía de cinco niveles. El avance se calcula desde los resultados clave hacia arriba. Los pesos de los objetivos los define el comité de la VP, por departamento y, para los objetivos de la VP RRII, a nivel VP; los de las iniciativas y los resultados clave se reparten en partes iguales. Las tareas no suman al porcentaje de avance: registran los riesgos que requieren una decisión del accountable de la iniciativa y su presupuesto se suma al de la iniciativa.
 
 | Nivel | Qué es |
 |---|---|
@@ -110,12 +110,12 @@ El desarrollo se divide en entregas para llegar a la carga de los objetivos 2027
 | Valor proyectado | Valor que se espera alcanzar al cierre del año. Que puede cambiar a lo largo del año. |
 | % de cumplimiento | Grado de logro de un resultado clave (C-01). |
 | Avance | Grado de logro de una iniciativa, un objetivo o la VP (C-03 a C-05). En una tarea, porcentaje de ejecución que declara su responsable. |
-| Evidencia | Link a un sitio de SharePoint o Teams, o a un tablero, que respalda el valor actual. |
+| Evidencia | Link a un sitio de SharePoint u Office 365 que respalda el valor actual. |
 | Riesgo | Situación que pone en peligro una tarea y que puede requerir una decisión. |
 | Decisión pendiente | Decisión que necesita un riesgo para destrabarse. |
 | CECO | Centro de costo al que se imputa una inversión. |
 | Comité de la VP | Ámbito donde se definen y aprueban los objetivos del año y sus pesos. |
-| Accountable | Persona que responde por una iniciativa. Una iniciativa puede tener uno o más. |
+| Accountable | Persona que responde por una iniciativa. Cada iniciativa tiene una. |
 | Objetivo de la VP RRII | Objetivo que el VP elige entre los de todos los departamentos (uno o dos de cada uno) para seguirlo a nivel VP y compartirlo en el comité de VPs. Tiene un peso propio en la VP. |
 
 ## 4. Requerimientos funcionales
@@ -134,6 +134,7 @@ El administrador carga las palancas de la VP RRII. Son enunciativas: no tienen e
 - El nombre y la descripción se pueden editar.
 - Una palanca no se elimina: se marca como inactiva. Las palancas inactivas no aparecen al cargar objetivos, pero siguen visibles en los objetivos que ya las usan.
 - Las palancas solo existen para la VP RRII.
+- Antes de guardar, el sistema pide confirmación. Al crear: "Estás por agregar la palanca "[nombre]". ¿Querés continuar?". Al editar: "Estás por guardar los cambios de la palanca "[nombre]". ¿Querés continuar?". La validación de campos ocurre antes de la confirmación; al cancelar, el formulario conserva lo ingresado.
 
 **Campos de la palanca**
 
@@ -148,13 +149,16 @@ El administrador carga las palancas de la VP RRII. Son enunciativas: no tienen e
 
 **Descripción**
 
-Pantalla de entrada a la estrategia de la VP, que reúne palancas y objetivos en una misma sección. La grilla muestra cada palanca con su descripción y la cantidad de objetivos asociados; al entrar al detalle de una palanca se ve la lista de sus objetivos con su avance (C-04). Desde cada objetivo se navega a su detalle (RF-05).
+Pantalla de entrada a la estrategia de la VP, que reúne palancas y objetivos en una misma sección. La grilla muestra cada palanca con su descripción y la cantidad de objetivos asociados; al entrar al detalle de una palanca se ve la lista de sus objetivos con su avance (C-04). Desde cada objetivo se navega a su detalle (RF-05). Arriba de la grilla, una línea de resumen indica la cantidad de palancas activas y de objetivos.
 
 **Criterios de aceptación**
 
 - Solo muestra palancas activas, salvo que se filtre por año.
 - La cantidad de objetivos coincide con los objetivos listados.
-- Arriba de la grilla hay dos opciones: Objetivos de la VP RRII, que muestra solo los objetivos marcados con "¿Es objetivo de la VP RRII?" (RF-03), y Todos.
+- Arriba de la grilla hay cuatro solapas, cada una con su cantidad: Todas las palancas, Objetivos de la VP RRII (solo los marcados con "¿Es objetivo de la VP RRII?", RF-03), Objetivos de otras VP y Todos los objetivos. La cantidad es el total, sin búsqueda ni filtros.
+- Todos los objetivos reúne en una grilla los de la VP RRII y los de otras VP, con ID, Objetivo, VP, Palanca, Departamento, Gerencia, Peso (en el departamento), Avance, Estado y Ver. Para un objetivo de otra VP, Palanca y Peso muestran "—" y Avance "No aplica". Las grillas de objetivos se paginan de a 10.
+- El botón Filtros abre un panel con Palanca, Departamento, Gerencia, Estado y Año; los botones del pie son Limpiar y Aplicar. Los filtros se combinan con la búsqueda, se aplican sobre la solapa elegida y se mantienen al cambiar de solapa. En Todas las palancas, Palanca limita las palancas y los demás limitan los objetivos de cada una; las palancas sin objetivos que cumplan se ocultan. Un objetivo cumple el filtro Año si el año está entre el de su fecha de inicio y el de su fecha de compromiso, incluidos; un objetivo permanente, desde el año de inicio en adelante. Los objetivos de otras VP, que no tienen palanca ni fechas, se excluyen cuando se filtra por Palanca o por Año.
+- La línea de resumen no muestra el avance de la VP.
 - Al navegar palanca → objetivo → iniciativa → tarea, cada vista muestra migas de pan con un link a cada nivel superior y un botón para volver un paso atrás.
 - El despliegue de los objetivos dentro de la grilla de palancas, sin entrar al detalle, queda para una entrega posterior.
 
@@ -176,6 +180,7 @@ Los objetivos de otra VP se cargan solo para poder asociarles las iniciativas co
 - El nombre muestra un ícono de ayuda con la guía de redacción del objetivo.
 - No se puede guardar si falta un campo obligatorio; el sistema indica cuáles.
 - Las fechas de compromiso no pueden ser anteriores a las de inicio.
+- Antes de guardar, el sistema pide confirmación: "Estás por cargar el objetivo aprobado en el comité. Una vez guardado, sólo el Administrador podrá modificarlo. ¿Querés continuar?". La validación de campos ocurre antes.
 
 **Campos del objetivo**
 
@@ -195,7 +200,7 @@ Los objetivos de otra VP se cargan solo para poder asociarles las iniciativas co
 | Peso en la VP (%) | Solo si es objetivo de la VP RRII | Número 1–100 | Peso del objetivo a nivel VP, definido por el comité. Ver RF-06. |
 | Fecha de inicio | Solo VP RRII | Fecha |  |
 | Fecha de compromiso | Solo VP RRII | Fecha |  |
-| Estado | Sí | No iniciada · En curso · Finalizada | No iniciada al crearse. Se cambia manualmente. |
+| Estado | Sí | No iniciada · En curso · Finalizado cumplido · Finalizado incumplido | No iniciada al crearse. Se cambia manualmente. |
 
 #### RF-04 · Edición de objetivo
 
@@ -208,6 +213,7 @@ Una vez guardado, el objetivo solo lo puede modificar el administrador, porque c
 - Para el resto de los roles, todos los campos del objetivo se muestran en modo lectura.
 - Un objetivo no se puede eliminar: la aplicación no tiene esa acción.
 - El administrador es quien modifica los pesos y la marca de objetivo de la VP RRII.
+- Antes de guardar, el sistema pide confirmación: "Estás por modificar el objetivo. Todo cambio requiere el visto bueno del VP. ¿Querés continuar?".
 
 #### RF-05 · Vista de objetivo
 
@@ -241,7 +247,7 @@ Cada objetivo de la VP RRII tiene un peso en su departamento: los objetivos de c
 
 Cualquier usuario de la VP puede cargar una iniciativa. Toda iniciativa se asocia a un único objetivo existente; no hay iniciativas sin objetivo.
 
-Si el objetivo es de la VP RRII, en el alta se carga al menos un resultado clave (RF-09).
+Si el objetivo es de la VP RRII, en el mismo panel del alta se cargan sus resultados clave, al menos uno (RF-09).
 
 **Criterios de aceptación**
 
@@ -249,6 +255,7 @@ Si el objetivo es de la VP RRII, en el alta se carga al menos un resultado clave
 - El peso de la iniciativa lo calcula el sistema (RF-08); no se carga.
 - Una iniciativa de un objetivo de otra VP lleva su información de identificación (nombre, descripción, accountable, subgerencias, fechas y estado), sus tareas y su presupuesto. No lleva resultados clave ni avance: sirve para saber cuánta gente de la VP trabaja en objetivos de otras VP.
 - Las fechas de la iniciativa deben quedar dentro de las del objetivo, si el objetivo las tiene.
+- La iniciativa se edita en el mismo panel del alta, con el objetivo en modo lectura y sin el Estado.
 - No se puede guardar si falta un campo obligatorio.
 
 **Campos de la iniciativa**
@@ -259,12 +266,12 @@ Si el objetivo es de la VP RRII, en el alta se carga al menos un resultado clave
 | Objetivo | Sí | Lista (objetivos cargados) | Uno solo. |
 | Nombre | Sí | Texto |  |
 | Descripción / impacto esperado | Sí | Texto largo |  |
-| Accountable | Sí | Usuarios (uno o más) | Por defecto, quien la carga. Sin límite de cantidad. |
+| Accountable | Sí | Usuario (uno) | Por defecto, quien la carga. Admite una sola persona: si se elige otra, reemplaza a la anterior. |
 | Subgerencias involucradas | No | Lista múltiple (maestro Subgerencias) | Pueden ser de otro departamento o gerencia que la del objetivo. |
 | Peso en el objetivo (%) | — | Calculado | 100% ÷ cantidad de iniciativas no canceladas del objetivo (RF-08). Solo VP RRII. |
 | Fecha de inicio | Sí | Fecha |  |
 | Fecha de compromiso | Sí | Fecha |  |
-| Estado | Sí | No iniciada · En curso · Frenada · Finalizada · Cancelada | No iniciada al crearse. Lo cambia un accountable (RF-11). |
+| Estado | Sí | No iniciada · En curso · Frenada · Finalizada · Cancelada | No iniciada al crearse. Lo cambia el accountable solo desde "Cambiar estado" (RF-11); el panel de edición no muestra el campo. |
 | Comentario ejecutivo | No | Texto largo | Situación de la iniciativa en palabras del accountable. Se guardan la fecha y el autor de la última modificación. |
 
 #### RF-08 · Pesos de las iniciativas y de los resultados clave
@@ -284,7 +291,7 @@ En esta versión los pesos de iniciativas y resultados clave no se cargan ni se 
 
 **Descripción**
 
-Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados clave, cargados con un esquema homogéneo. Un resultado de hitos se expresa como cantidad.
+Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados clave, cargados con un esquema homogéneo. Un resultado de hitos se expresa como cantidad. Los resultados clave se cargan y se editan en el mismo panel que la iniciativa, en el bloque "Resultados clave", y se guardan juntos con una sola confirmación. Al editar se pueden agregar y modificar, pero no quitar los ya guardados.
 
 **Criterios de aceptación**
 
@@ -292,6 +299,8 @@ Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados c
 - Mínimo ≤ Meta ≤ Máximo; si no se cumple, el sistema no deja guardar.
 - Al crearse, el valor proyectado toma el valor de la meta.
 - No se puede guardar una iniciativa de la VP RRII sin al menos un resultado clave.
+- El valor actual, la fuente, la evidencia y el comentario no se cargan en el panel de la iniciativa: se completan en el seguimiento (RF-10).
+- La aplicación no ofrece eliminar un resultado clave ya guardado.
 
 **Campos del resultado clave**
 
@@ -300,8 +309,6 @@ Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados c
 | ID | Sí | Autonumérico |  |
 | Iniciativa | Sí | Referencia |  |
 | Nombre | Sí | Texto | Ej.: "Implementar YPF Store en 100 estaciones de servicio". |
-| Descripción | No | Texto largo |  |
-| Responsable | Sí | Usuario (uno) | No se completa por defecto. |
 | Tipo de medición | Sí | Cantidad · Porcentaje · Moneda · Indicador |  |
 | Unidad de medida | Sí | Texto | Ej.: estaciones, KUSD, puntos. |
 | Mínimo | Sí | Número |  |
@@ -310,7 +317,7 @@ Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados c
 | Peso en la iniciativa (%) | — | Calculado | 100% ÷ cantidad de resultados clave de la iniciativa (RF-08). |
 | Valor actual | No | Número | Vacío hasta el primer seguimiento. |
 | Fuente | No | Texto | De dónde sale el dato. Vale también para el valor proyectado. |
-| Evidencia | No | Link | Un único link. |
+| Evidencia | No | Link | Un único link de SharePoint u Office 365 (dominios aceptados: sharepoint.com, office.com, microsoft.com, powerbi.com, outlook.com y onedrive.com). |
 | Valor proyectado | Sí | Número | Valor esperado al 31/12. |
 | Comentario | No | Texto | Novedad del último seguimiento. Se guardan fecha y autor. |
 
@@ -318,12 +325,13 @@ Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados c
 
 **Descripción**
 
-Los accountable de la iniciativa o el responsable del resultado clave actualizan el valor actual, la fuente, la evidencia, el valor proyectado y el comentario. El valor es declarativo: no depende de las tareas. El sistema recalcula el cumplimiento y el estado del resultado clave y el avance de la iniciativa, el objetivo y la VP.
+El accountable de la iniciativa actualiza el valor actual, la fuente, la evidencia, el valor proyectado y el comentario del resultado clave. El seguimiento y cualquier aviso sobre el resultado clave corresponden al accountable de la iniciativa. El valor es declarativo: no depende de las tareas. El sistema recalcula el cumplimiento y el estado del resultado clave y el avance de la iniciativa, el objetivo y la VP.
 
 **Criterios de aceptación**
 
 - La meta, el mínimo y el máximo no se modifican en el seguimiento.
 - Los valores deben ser numéricos.
+- El valor actual puede quedar vacío o borrarse; el resultado clave vuelve a "Sin dato" (C-02).
 
 #### RF-11 · Vista y seguimiento de iniciativa
 
@@ -331,7 +339,7 @@ Los accountable de la iniciativa o el responsable del resultado clave actualizan
 
 Muestra la información de la iniciativa, el objetivo al que aporta, los resultados clave con sus valores, cumplimiento y estado, el avance real y proyectado (C-03), las tareas, los riesgos de sus tareas, el presupuesto total (C-06) y el comentario ejecutivo.
 
-Los accountable actualizan el estado y el comentario ejecutivo. El estado lo administran los accountable y no se deriva del estado de las tareas: una tarea frenada no frena por sí sola la iniciativa. La iniciativa muestra los indicadores que vienen de sus tareas (C-08).
+El accountable actualiza el estado y el comentario ejecutivo. El estado lo administra el accountable y no se deriva del estado de las tareas: una tarea frenada no frena por sí sola la iniciativa. La iniciativa muestra los indicadores que vienen de sus tareas (C-08).
 
 Para que la vista sea simple, por defecto se ven los indicadores de las tareas (C-08) y las tareas asociadas, con el responsable de cada una. El comentario ejecutivo y el resto de la información de detalle se muestran en secciones colapsables que se despliegan a pedido.
 
@@ -383,7 +391,7 @@ Cualquier usuario de la VP puede cargar una tarea en cualquier iniciativa, de un
 
 **Descripción**
 
-El responsable de la tarea, o los accountable de su iniciativa, actualizan el avance y el estado cuando hay novedades. Cada actualización queda en el historial de avance de la tarea con la fecha, el porcentaje, el estado y un comentario opcional (por ejemplo, "el barco llega en 45 días").
+El responsable de la tarea, o el accountable de su iniciativa, actualiza el avance y el estado cuando hay novedades. Cada actualización queda en el historial de avance de la tarea con la fecha, el porcentaje, el estado y un comentario opcional (por ejemplo, "el barco llega en 45 días").
 
 Los usuarios con rol Administrador o CargadorObjetivo también pueden crear y modificar tareas.
 
@@ -425,11 +433,11 @@ stateDiagram-v2
 
 **Descripción**
 
-Los riesgos se cargan en la tarea, porque es quien ejecuta la que detecta el problema. Una tarea puede tener varios riesgos. Cada riesgo puede requerir una decisión; la decisión se describe en texto (qué se necesita y de quién) y se eleva siempre a los accountable de la iniciativa, que la gestionan.
+Los riesgos se cargan en la tarea, porque es quien ejecuta la que detecta el problema. Una tarea puede tener varios riesgos. Cada riesgo puede requerir una decisión; la decisión se describe en texto (qué se necesita y de quién) y se eleva siempre al accountable de la iniciativa, que la gestiona.
 
 **Criterios de aceptación**
 
-- Al pasar un riesgo a Escalado, el sistema envía un mail a todos los accountable de la iniciativa (RF-18).
+- Al pasar un riesgo a Escalado, el sistema envía un mail al accountable de la iniciativa (RF-18).
 - Los campos de decisión solo se habilitan si el riesgo requiere decisión.
 - Una decisión está pendiente mientras el riesgo requiera decisión y no esté Resuelto.
 - Los riesgos activos y escalados se ven en la iniciativa y en las bandejas.
@@ -450,7 +458,7 @@ Los riesgos se cargan en la tarea, porque es quien ejecuta la que detecta el pro
 ```mermaid
 stateDiagram-v2
   [*] --> Activo
-  Activo --> Escalado: mail a los accountable de la iniciativa
+  Activo --> Escalado: mail al accountable de la iniciativa
   Activo --> Resuelto
   Escalado --> Resuelto
 ```
@@ -517,7 +525,7 @@ El sistema detecta las alertas a partir de las tareas y los riesgos. Todas se mu
 
 | Alerta | Se dispara cuando | Dónde se ve |
 |---|---|---|
-| Riesgo escalado | Un riesgo pasa a Escalado. | Mail a los accountable de la iniciativa · iniciativa · bandejas · tablero |
+| Riesgo escalado | Un riesgo pasa a Escalado. | Mail al accountable de la iniciativa · iniciativa · bandejas · tablero |
 | Tarea vencida | La fecha de compromiso es anterior a hoy y la tarea no está Finalizada ni Cancelada. | Iniciativa · bandejas · tablero |
 | Próxima a vencer | La fecha de compromiso cae dentro de los próximos N días (parámetro) y la tarea no está Finalizada ni Cancelada. | Iniciativa · bandejas |
 | Tarea sin actualizar | Pasaron más de 15 días (parámetro) desde la última actualización de una tarea No iniciada, En curso o Frenada. | Iniciativa · bandejas · tablero |
@@ -552,7 +560,7 @@ Los roles se implementan como grupos que el administrador mantiene.
 | Editar objetivos y sus pesos | — | — | — | Sí |
 | Crear iniciativas, resultados clave y tareas | — | Sí | Sí | Sí |
 | Editar iniciativa y resultados clave | — | Si es accountable | Sí | Sí |
-| Actualizar valores de resultados clave | — | Accountable de la iniciativa o resp. del resultado clave | Sí | Sí |
+| Actualizar valores de resultados clave | — | Accountable de la iniciativa | Sí | Sí |
 | Actualizar tarea, riesgos y presupuesto | — | Resp. de la tarea o accountable de la iniciativa | Sí | Sí |
 | Maestros, parámetros, roles y eliminar tareas | — | — | — | Sí |
 
@@ -616,20 +624,20 @@ Valores que el administrador puede cambiar sin modificar la aplicación.
 
 ## 5. Cálculos
 
-Todos los cálculos se hacen por separado con el valor actual (real) y con el valor proyectado. Los porcentajes se expresan entre 0% y 100%, salvo el % de cumplimiento del resultado clave, que puede superar 100% para mostrar sobrecumplimiento.
+Todos los cálculos se hacen por separado con el valor actual (real) y con el valor proyectado. Los porcentajes se expresan entre 0% y 100%, salvo el % de cumplimiento del resultado clave, que puede superar 100% para mostrar sobrecumplimiento. Los porcentajes de cumplimiento, avance y peso se muestran redondeados a entero; el redondeo es solo de presentación: los promedios y los colores se calculan con el valor sin redondear.
 
 | Código | Cálculo | Fórmula y reglas |
 |---|---|---|
-| C-01 | % de cumplimiento del resultado clave | Real = valor actual ÷ máximo.<br>Proyectado = valor proyectado ÷ máximo.<br>Sin valor actual, el cumplimiento real es 0%. |
-| C-02 | Estado del resultado clave | Se calcula con el valor actual (estado real) y con el proyectado (estado proyectado):<br>• valor < mínimo → No cumple (rojo)<br>• mínimo ≤ valor < meta → Mínimo (naranja)<br>• meta ≤ valor < máximo → Meta (amarillo)<br>• valor ≥ máximo → Máximo (verde) |
-| C-03 | Avance de la iniciativa | Avance = promedio simple de mín(% cumplimiento, 100%) de sus resultados clave, porque pesan en partes iguales (RF-08).<br>El avance de las tareas no interviene. |
+| C-01 | % de cumplimiento del resultado clave | Real = valor actual ÷ máximo.<br>Proyectado = valor proyectado ÷ máximo.<br>Sin valor actual, el cumplimiento real se muestra como "—" y aporta 0% al avance de la iniciativa. |
+| C-02 | Estado del resultado clave | Se calcula con el valor actual (estado real) y con el proyectado (estado proyectado):<br>• valor < mínimo → No cumple (rojo)<br>• mínimo ≤ valor < meta → Mínimo (naranja)<br>• meta ≤ valor < máximo → Meta (amarillo)<br>• valor ≥ máximo → Máximo (verde)<br>• sin valor actual → Sin dato (gris) |
+| C-03 | Avance de la iniciativa | Avance = promedio simple de máx(0%, mín(% cumplimiento, 100%)) de sus resultados clave, porque pesan en partes iguales (RF-08). Un resultado clave sin valor actual aporta 0%.<br>El avance de las tareas no interviene. |
 | C-04 | Avance del objetivo | Avance = promedio simple del avance de sus iniciativas, porque pesan en partes iguales (RF-08).<br>Solo cuentan las iniciativas no canceladas.<br>No se calcula para objetivos de otra VP. |
 | C-05 | Avance de la VP | Avance = Σ (peso en la VP × avance del objetivo) ÷ Σ pesos en la VP, sobre los objetivos marcados como objetivos de la VP RRII del año. |
 | C-06 | Presupuesto | Saldo de la tarea = presupuesto aprobado − presupuesto ejecutado.<br>Presupuesto de la iniciativa (aprobado, ejecutado y saldo) = suma de los de sus tareas no canceladas, también en iniciativas de otras VP. |
 | C-07 | Color del avance | Se aplica al avance de iniciativas, objetivos y VP:<br>• menos de 60% → rojo<br>• de 60% a menos de 80% → amarillo<br>• 80% o más → verde<br>Los umbrales son parámetros (RF-22). |
 | C-08 | Indicadores de tareas en la iniciativa | Cantidad de tareas por estado, tareas vencidas, próximas a vencer y sin actualizar (RF-18), riesgos activos y escalados, y decisiones pendientes. |
 
-Ejemplo. Una iniciativa tiene dos resultados clave: "Implementar YPF Store en 100 estaciones" (máximo 100, valor actual 40 → 40%) y "Alcanzar USD 193 K de facturación" (máximo 210, valor actual 230 → 110%, que suma como 100%). Cada uno pesa 50%, así que el avance de la iniciativa = (40% + 100%) ÷ 2 = 70% (amarillo). Si el objetivo tiene tres iniciativas, cada una pesa 1/3; si las otras dos tienen 90% y 60%, el avance del objetivo es (70% + 90% + 60%) ÷ 3 = 73,3%.
+Ejemplo. Una iniciativa tiene dos resultados clave: "Implementar YPF Store en 100 estaciones" (máximo 100, valor actual 40 → 40%) y "Alcanzar USD 193 K de facturación" (máximo 210, valor actual 230 → 110%, que suma como 100%). Cada uno pesa 50%, así que el avance de la iniciativa = (40% + 100%) ÷ 2 = 70% (amarillo). Si el objetivo tiene tres iniciativas, cada una pesa 1/3; si las otras dos tienen 90% y 60%, el avance del objetivo es (70% + 90% + 60%) ÷ 3 = 73,3% (se muestra como 73%).
 
 ## 6. Modelo de datos
 
@@ -675,7 +683,7 @@ erDiagram
 | RNF-03 | Autorización | Roles como grupos de SharePoint (RF-19). Los permisos de las listas acompañan a los de la interfaz: lectura para toda la VP y escritura controlada, para que la seguridad no dependa solo de la pantalla. |
 | RNF-04 | Volumen | Unas 100 personas. Volumen anual estimado para toda la VP: hasta 50 objetivos, 150 iniciativas, 300 resultados clave y 1.000 tareas. Las listas se indexan por año, objetivo, iniciativa y responsable para no superar el umbral de vista de SharePoint. |
 | RNF-05 | Rendimiento | Las vistas y bandejas cargan en menos de 3 segundos con el volumen de un año. |
-| RNF-06 | Usabilidad | Formularios cortos, con campos condicionales y ayudas en línea. Actualizar una tarea lleva menos de un minuto. |
+| RNF-06 | Usabilidad | Formularios cortos, con campos condicionales y ayudas en línea. Actualizar una tarea lleva menos de un minuto. En las vistas que tienen el botón Actualizar (vista de palancas y objetivos y bandeja de iniciativas), al usarlo se recargan los datos y se muestra "La vista se ha actualizado correctamente."; se mantienen la solapa, la búsqueda, los filtros y la página. Si la recarga falla, se muestra el mensaje de error de la vista y no el de éxito. |
 | RNF-07 | Idioma y formatos | Español. Fechas dd/mm/aaaa. Números con separador de miles y coma decimal. |
 | RNF-08 | Notificaciones | Mails desde una cuenta de servicio, con un link directo al elemento. |
 | RNF-09 | Trazabilidad | Fecha y autor de creación y última modificación en todas las listas; historial de avance de tareas. |
