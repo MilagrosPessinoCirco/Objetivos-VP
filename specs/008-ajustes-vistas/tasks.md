@@ -129,9 +129,9 @@ Sin prerrequisitos de SharePoint: no hay listas, columnas ni permisos nuevos.
 
 ## Phase 7: Polish
 
-- [ ] T018 Recorrer `quickstart.md` completo (con mocks y, con autorización, en el sitio de desarrollo) y registrar los resultados. Incluir la comparación visual de la bandeja antes y después (escenario 9b).
-- [ ] T019 `Grep` final: sin `useRefreshNotice` ni `DEFAULT_PROGRESS`; `git diff` de `useDatasource.ts` sin cambios en `getItems`; `docs/plantilla-cambios.md` con la fila de T002.
-- [ ] T020 Verificar que `docs/especificacion-funcional.md` (v1.10, ya aplicada en `5980331`) coincide con lo implementado: filtros, solapa, resumen, confirmaciones y RNF-06 (Actualizar). Si algo difiere, proponer el ajuste a la usuaria.
+- [X] T018 Recorrer `quickstart.md` completo (con mocks y, con autorización, en el sitio de desarrollo) y registrar los resultados. Incluir la comparación visual de la bandeja antes y después (escenario 9b).
+- [X] T019 `Grep` final: sin `useRefreshNotice` ni `DEFAULT_PROGRESS`; `git diff` de `useDatasource.ts` sin cambios en `getItems`; `docs/plantilla-cambios.md` con la fila de T002.
+- [X] T020 Verificar que `docs/especificacion-funcional.md` (v1.10, ya aplicada en `5980331`) coincide con lo implementado: filtros, solapa, resumen, confirmaciones y RNF-06 (Actualizar). Si algo difiere, proponer el ajuste a la usuaria.
 
 ---
 
