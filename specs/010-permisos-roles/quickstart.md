@@ -50,7 +50,8 @@ Se usan solo los niveles estándar: "Lectura" y "Colaborar" (Contribute: agregar
 
 | # | Historia | Pasos | Resultado esperado |
 |---|---|---|---|
-| A1 | US1 | Rol `sin-rol`, abrir la home | Solo ícono y "No tenés acceso a esta aplicación."; sin home, menú, accesos ni datos. |
+| A1 | US1 | Rol `sin-rol`, abrir la home | Solo ícono y "No tenés acceso a esta aplicación.", centrados con el contenedor de la home; sin home, menú, accesos ni datos. |
+| A8 | US1 | Abrir la home con cada rol | El botón "ABM" aparece solo con `Administrador`; con `CargadorObjetivo`, `Usuario` y `Visualizador` no aparece. |
 | A2 | US1 | Rol `sin-rol`, abrir directamente `#/iniciativa`, `#/tarea`, un detalle de palanca, objetivo, iniciativa y tarea | La misma pantalla en todas; ninguna muestra un dato ni "no encontrado". |
 | A3 | US1 | Rol `falla`, abrir la home | Ícono y "No se pudieron cargar tus permisos."; sin acceso. |
 | A4 | US1 | Recargar con el rol `Usuario` y observar el arranque (red lenta en el navegador) | Solo el indicador de carga hasta conocer el rol; nunca aparece la home, un dato ni un botón que luego se oculte. |

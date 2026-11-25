@@ -126,7 +126,8 @@ Si falla la propia verificación, no se guarda y se muestra el mensaje de falla 
 
 | Elemento | Componente | Observaciones |
 |---|---|---|
-| Acceso denegado (ícono y una línea) | `EmptyState` (`patterns`) con `FigmaIcon name="lock"` en `icon` | Título = mensaje; `description=""` y `action={<></>}` para no mostrar la descripción ni el botón por defecto (A1). |
+| Acceso denegado (ícono y una línea) | `EmptyState` (`patterns`) con `FigmaIcon name="lockPrimary" size="xl"` en `icon`, centrado, a pantalla completa y sin bordes (`className` y `AccesoDenegado.module.scss`) | Título = mensaje; `description=""` y `action={<></>}` para no mostrar la descripción ni el botón por defecto (A1). |
+| Botón "ABM" de la home | El ya implementado (`AccessList`) | Solo el Administrador lo ve (`permisos.canManageUsuarios`); para los demás queda su lugar oculto (`visibility: hidden`) y los otros botones no se mueven (FR-006b). |
 | Indicador de carga del rol | `Spinner` (`patterns`) | El ya implementado. |
 | Botones, lápices, "+", acciones de fila | Los ya implementados | No cambian; se muestran u ocultan con los permisos (FR-011). |
 | Columna "Objetivo (peso)" | `Table` (columna existente) | Cambian el encabezado y el texto de la celda con `canViewPesos`. |

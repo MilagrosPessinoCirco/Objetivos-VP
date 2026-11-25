@@ -566,6 +566,7 @@ Cada rol es un grupo de SharePoint del sitio. Si una persona está en más de un
 | Actualizar tarea, riesgos y presupuesto | — | Resp. de la tarea o accountable de la iniciativa | Sí | Sí |
 | Ver los pesos de las iniciativas | — | — | Sí | Sí |
 | Dar de alta, cambiar el rol y dar de baja personas | — | — | — | Sí |
+| Ver el acceso "ABM" en la home | — | — | — | Sí |
 | Maestros y parámetros | — | — | — | Sí |
 
 #### RF-20 · Usuarios
