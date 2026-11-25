@@ -9,6 +9,7 @@ import useAreaDataSource from '../../../../../core/api/Area/useAreaDataSource';
 import useComentariosIniciativa from '../../../../../core/api/ComentarioIniciativa/useComentariosIniciativa';
 import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import useRiesgosIniciativa from '../../../../../core/api/Riesgo/useRiesgosIniciativa';
 import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import useTareasIniciativa from '../../../../../core/api/Tarea/useTareasIniciativa';
 import { Iniciativa, ResultadoClave, Tarea } from '../../../../../core/entities';
@@ -35,6 +36,7 @@ import { getAvanceIniciativa } from '../resultadoClaveUtils';
 import IniciativaComentario from './IniciativaComentario/IniciativaComentario';
 import IniciativaInfo from './IniciativaInfo/IniciativaInfo';
 import IniciativaResultadosClave from './IniciativaResultadosClave/IniciativaResultadosClave';
+import IniciativaRiesgos from './IniciativaRiesgos/IniciativaRiesgos';
 import IniciativaTareas from './IniciativaTareas/IniciativaTareas';
 import IniciativaTareasIndicadores from './IniciativaTareasIndicadores/IniciativaTareasIndicadores';
 import styles from './IniciativaDetalle.module.scss';
@@ -78,6 +80,7 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 	const names = useObjetivoNames();
 	const comentarios = useComentariosIniciativa(isValidId ? iniciativaId : undefined);
 	const tareas = useTareasIniciativa(isValidId ? iniciativaId : undefined);
+	const riesgos = useRiesgosIniciativa(tareas.items, !tareas.isLoading && !tareas.error);
 	const [ready, setReady] = React.useState<boolean>(false);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const [isEstadoOpen, setIsEstadoOpen] = React.useState<boolean>(false);
@@ -173,8 +176,13 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 					? <MessageBar type="error" message={strings.TareasLoadError} actions={<Button variant="secondary" onClick={() => { tareas.reload(); }}>{strings.TareasRetry}</Button>} />
 					: (
 						<>
-							<IniciativaTareasIndicadores tareas={tareas.items} />
+							<IniciativaTareasIndicadores tareas={tareas.items} riesgos={riesgos.isLoading || riesgos.error ? undefined : riesgos.indicadores} />
 							<IniciativaTareas tareas={tareas.items} onView={openTarea} />
+							{riesgos.isLoading && <Spinner />}
+							{!riesgos.isLoading && riesgos.error && (
+								<MessageBar type="error" message={strings.RiesgosLoadError} actions={<Button variant="secondary" onClick={() => { riesgos.reload(); }}>{strings.TareasRetry}</Button>} />
+							)}
+							{!riesgos.isLoading && !riesgos.error && <IniciativaRiesgos items={riesgos.items} onView={openTarea} />}
 						</>
 					)}
 			</>

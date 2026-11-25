@@ -1,0 +1,46 @@
+.field {
+	display: flex;
+	flex-direction: column;
+}
+
+.panel.panel :global(.ms-Panel-main) {
+	width: 480px !important;
+}
+
+.panelContent {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.panelContent.panelContent > *,
+.panelContent.panelContent .field > * {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .multiline :global(.ms-TextField),
+.panelContent.panelContent .multiline :global(.ms-TextField-wrapper),
+.panelContent.panelContent .multiline :global(.ms-TextField-fieldGroup),
+.panelContent.panelContent .multiline textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.panelContent.panelContent .invalid [class*='control_'],
+.panelContent.panelContent .invalid textarea,
+.panelContent.panelContent .invalid :global(.ms-Dropdown-title),
+.panelContent.panelContent .field.invalid :global(.ms-TextField-fieldGroup) {
+	border-color: var(--field-error);
+	box-shadow: inset 0 0 0 1px var(--field-error);
+}
+
+.panelContent.panelContent .invalid [class*='errorMessage_'] {
+	width: 100%;
+	color: var(--field-error);
+	font-size: 12px;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 16px;
+}

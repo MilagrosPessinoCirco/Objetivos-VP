@@ -8,6 +8,9 @@ import { spacing, typography } from '../../../../../core/ui/foundations';
 import useAreaDataSource from '../../../../../core/api/Area/useAreaDataSource';
 import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
+import { canCargarRiesgo } from '../../../../../core/api/Riesgo/riesgoReglas';
+import type { IRiesgoConDecision } from '../../../../../core/api/Riesgo/IRiesgoService';
+import useRiesgosTarea from '../../../../../core/api/Riesgo/useRiesgosTarea';
 import useTareaDataSource from '../../../../../core/api/Tarea/useTareaDataSource';
 import { Tarea } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
@@ -23,17 +26,21 @@ import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb
 import { isNotFoundError, isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import { formatIdNombre, formatIniciativaId, formatObjetivoLabel } from '../../Iniciativa/iniciativaUtils';
+import RiesgoFormPanel from '../../Riesgo/RiesgoForm/RiesgoFormPanel';
 import TareaFormPanel from '../TareaForm/TareaFormPanel';
 import TareaAvancePanel from '../TareaAvancePanel/TareaAvancePanel';
 import TareaHistorialPanel from '../TareaHistorialPanel/TareaHistorialPanel';
 import { canEditTarea, canRegistrarAvance, formatTareaId, getEstadoTareaChipColor } from '../tareaUtils';
 import TareaComentario from './TareaComentario/TareaComentario';
 import TareaInfo from './TareaInfo/TareaInfo';
+import TareaRiesgos from './TareaRiesgos/TareaRiesgos';
 import styles from './TareaDetalle.module.scss';
 
 export interface ITareaDetalleProps {
 	canEdit: boolean;
 	canRegisterProgress: boolean;
+	canCreateRiesgo: boolean;
+	canEditRiesgo: boolean;
 }
 
 type LoadError = 'notFound' | 'error';
@@ -52,7 +59,7 @@ const getFrom = (state: unknown): string | undefined => {
 	return typeof from === 'string' ? from : undefined;
 };
 
-const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgress }) => {
+const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgress, canCreateRiesgo, canEditRiesgo }) => {
 	const { id } = useParams<{ id: string }>();
 	const tareaId = Number(id);
 	const isValidId = Number.isInteger(tareaId) && tareaId > 0;
@@ -63,11 +70,14 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 	const [objetivoState, , , , , getObjetivo] = useObjetivoDataSource();
 	const [areaState, getAreas] = useAreaDataSource();
 	const names = useObjetivoNames();
+	const riesgos = useRiesgosTarea(isValidId ? tareaId : undefined);
 	const [loadError, setLoadError] = React.useState<LoadError | undefined>(undefined);
 	const [attempt, setAttempt] = React.useState<number>(0);
 	const [isHistoryOpen, setIsHistoryOpen] = React.useState<boolean>(false);
 	const [isAvanceOpen, setIsAvanceOpen] = React.useState<boolean>(false);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
+	const [isRiesgoOpen, setIsRiesgoOpen] = React.useState<boolean>(false);
+	const [riesgoEnEdicion, setRiesgoEnEdicion] = React.useState<IRiesgoConDecision | undefined>(undefined);
 	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>(undefined);
 	const closeNotice = React.useCallback((): void => setNoticeMessage(undefined), []);
 
@@ -111,6 +121,7 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 
 	const canRegister = canRegisterProgress && tarea !== undefined && canRegistrarAvance(tarea);
 	const canEditar = canEdit && tarea !== undefined && canEditTarea(tarea);
+	const canCargar = canCreateRiesgo && tarea !== undefined && iniciativa !== undefined && canCargarRiesgo(tarea, iniciativa);
 
 	const onEdited = (saved: Tarea): void => {
 		setIsFormOpen(false);
@@ -122,6 +133,18 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 		setIsAvanceOpen(false);
 		getTarea(tareaId).catch(() => setLoadError('error'));
 		setNoticeMessage(Utils.replaceAll(strings.TareaProgressUpdated, '{0}', tarea?.Nombre ?? ''));
+	};
+
+	const closeRiesgoPanel = (): void => {
+		setIsRiesgoOpen(false);
+		setRiesgoEnEdicion(undefined);
+	};
+
+	const onRiesgoSaved = (escalado: boolean, descripcion: string): void => {
+		const message = riesgoEnEdicion ? (escalado ? strings.RiesgoEscalated : strings.RiesgoUpdated) : strings.RiesgoCreated;
+		closeRiesgoPanel();
+		riesgos.reload();
+		setNoticeMessage(Utils.replaceAll(message, '{0}', descripcion));
 	};
 
 	const goBack = (): void => {
@@ -163,6 +186,15 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 					onEdit={canEditar ? () => setIsFormOpen(true) : undefined}
 				/>
 				<TareaComentario tarea={tarea} onEdit={canRegister ? () => setIsAvanceOpen(true) : undefined} />
+				<TareaRiesgos
+					items={riesgos.items}
+					isLoading={riesgos.isLoading}
+					error={riesgos.error}
+					onRetry={() => { riesgos.reload(); }}
+					tarea={tarea}
+					canEdit={canEditRiesgo}
+					onEdit={setRiesgoEnEdicion}
+				/>
 			</>
 		);
 	};
@@ -209,6 +241,11 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 							{strings.TareaRegisterProgress}
 						</Button>
 					)}
+					{loaded && canCargar && (
+						<Button variant="secondary" onClick={() => setIsRiesgoOpen(true)}>
+							{strings.RiesgoNew}
+						</Button>
+					)}
 					{loaded && tarea && (
 						<Button variant="secondary" onClick={() => setIsHistoryOpen(true)}>
 							{strings.TareaHistory}
@@ -217,6 +254,9 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 				</DetailFooter>
 				{isFormOpen && tarea && <TareaFormPanel tarea={tarea} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
 				{isAvanceOpen && tarea && <TareaAvancePanel tarea={tarea} onSaved={onAvanceSaved} onCancel={() => setIsAvanceOpen(false)} />}
+				{(isRiesgoOpen || riesgoEnEdicion !== undefined) && tarea && (
+					<RiesgoFormPanel tarea={tarea} item={riesgoEnEdicion} onSaved={onRiesgoSaved} onCancel={closeRiesgoPanel} />
+				)}
 				{isHistoryOpen && tarea && <TareaHistorialPanel tarea={tarea} onClose={() => setIsHistoryOpen(false)} />}
 			</div>
 		</>

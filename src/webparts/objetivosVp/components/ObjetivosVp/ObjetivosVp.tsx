@@ -34,6 +34,8 @@ const CAN_TRACK_RESULTADO_CLAVE = true;
 const CAN_CREATE_TAREA = true;
 const CAN_EDIT_TAREA = true;
 const CAN_REGISTER_PROGRESS_TAREA = true;
+const CAN_CREATE_RIESGO = true;
+const CAN_EDIT_RIESGO = true;
 const DEFAULT_FILTRO: ObjetivosFiltro = 'todos';
 const DEFAULT_BANDEJA_STATE: IIniciativasBandejaState = { searchText: '', filtros: EMPTY_FILTROS, page: 1 };
 const DEFAULT_TAREAS_BANDEJA_STATE: ITareasBandejaState = { searchText: '', filtros: EMPTY_TAREAS_FILTROS, estado: EstadoTarea.EnCurso, page: 1 };
@@ -51,7 +53,7 @@ const ObjetivosVpRoutes: React.FC = () => {
 			<Route path={INICIATIVAS_PATH} element={<IniciativasBandeja canCreate={CAN_CREATE_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} state={bandejaState} onStateChange={setBandejaState} />} />
 			<Route path={INICIATIVA_DETAIL_PATH} element={<IniciativaDetalle canEdit={CAN_EDIT_INICIATIVA} canChangeEstado={CAN_CHANGE_ESTADO_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} canTrackResultadoClave={CAN_TRACK_RESULTADO_CLAVE} canCreateTarea={CAN_CREATE_TAREA} />} />
 			<Route path={TAREAS_PATH} element={<TareasBandeja canCreate={CAN_CREATE_TAREA} state={tareasBandejaState} onStateChange={setTareasBandejaState} />} />
-			<Route path={TAREA_DETAIL_PATH} element={<TareaDetalle canEdit={CAN_EDIT_TAREA} canRegisterProgress={CAN_REGISTER_PROGRESS_TAREA} />} />
+			<Route path={TAREA_DETAIL_PATH} element={<TareaDetalle canEdit={CAN_EDIT_TAREA} canRegisterProgress={CAN_REGISTER_PROGRESS_TAREA} canCreateRiesgo={CAN_CREATE_RIESGO} canEditRiesgo={CAN_EDIT_RIESGO} />} />
 			<Route path={OBJETIVO_DETAIL_PATH} element={<ObjetivoDetalle canEditObjetivo={CAN_EDIT_OBJETIVO} canCreateIniciativa={CAN_CREATE_INICIATIVA} canLoadResultadosClave={CAN_LOAD_RESULTADOS_CLAVE} />} />
 		</Routes>
 	);
