@@ -10,7 +10,9 @@ import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoD
 import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import { Utils } from '../../../../../core/utils';
+import { assertPermiso } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { getColorStep } from '../../shared/getColorStep';
 import { HOME_PATH, getObjetivoPath, getPalancaPath } from '../../ObjetivosVp/routes';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
@@ -56,6 +58,7 @@ const matchesObjetivo = (objetivo: Objetivo, search: string): boolean =>
 	(objetivo.Nombre ?? '').toLowerCase().indexOf(search) >= 0;
 
 const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filtro, onFiltroChange }) => {
+	const { verificar } = usePermisos();
 	const [state, getItems, addItem, editItem, , , reloadPalancas] = usePalancaDataSource();
 	const [objetivoState, getObjetivos, , , , , reloadObjetivos] = useObjetivoDataSource();
 	const [iniciativaState, getIniciativas, , , , , reloadIniciativas] = useIniciativaDataSource();
@@ -98,6 +101,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	const closeNotice = React.useCallback((): void => setSuccessMessage(undefined), []);
 
 	const createPalanca = async (palanca: Palanca): Promise<void> => {
+		assertPermiso((await verificar()).canManagePalancas);
 		setLastOperation('save');
 		await addItem(palanca);
 		setForm(undefined);
@@ -105,6 +109,7 @@ const Palancas: React.FC<IPalancasProps> = ({ canManage, canCreateObjetivo, filt
 	};
 
 	const updatePalanca = async (palanca: Palanca): Promise<void> => {
+		assertPermiso((await verificar()).canManagePalancas);
 		setLastOperation('save');
 		await editItem(palanca);
 		setForm(undefined);

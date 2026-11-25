@@ -34,6 +34,7 @@ export interface IIniciativasBandejaState {
 export interface IIniciativasBandejaProps {
 	canCreate: boolean;
 	canLoadResultadosClave: boolean;
+	canViewPesos?: boolean;
 	state: IIniciativasBandejaState;
 	onStateChange: (state: IIniciativasBandejaState) => void;
 }
@@ -77,7 +78,7 @@ const getAnios = (iniciativas: Iniciativa[]): number[] => {
 	return Array.from({ length: Math.max(...anios) - first + 1 }, (_, index) => first + index);
 };
 
-const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, canLoadResultadosClave, state, onStateChange }) => {
+const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, canLoadResultadosClave, canViewPesos, state, onStateChange }) => {
 	const [iniciativaState, getIniciativas, , , , , reloadIniciativas] = useIniciativaDataSource();
 	const [objetivoState, getObjetivos, , , , , reloadObjetivos] = useObjetivoDataSource();
 	const [departamentoState, getDepartamentos, , , , , reloadDepartamentos] = useDepartamentoDataSource();
@@ -164,6 +165,8 @@ const IniciativasBandeja: React.FC<IIniciativasBandejaProps> = ({ canCreate, can
 					resultados={resultadoState.items}
 					variant="bandeja"
 					objetivos={objetivos}
+					canViewPesos={canViewPesos}
+					todasLasIniciativas={iniciativas}
 					emptyText={deLaVista.length === 0 ? strings.IniciativasEmpty : strings.IniciativasEmptyFilters}
 					onView={openIniciativa}
 				/>

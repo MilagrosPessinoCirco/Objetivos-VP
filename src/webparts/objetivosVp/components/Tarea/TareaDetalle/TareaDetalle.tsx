@@ -11,6 +11,7 @@ import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoD
 import useTareaDataSource from '../../../../../core/api/Tarea/useTareaDataSource';
 import { Tarea } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
+import type { IPersonValue } from '../../../../../core/utils/Mappers';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { TAREAS_PATH, getIniciativaPath } from '../../ObjetivosVp/routes';
 import AvanceText from '../../shared/AvanceText/AvanceText';
@@ -33,8 +34,8 @@ import TareaInfo from './TareaInfo/TareaInfo';
 import styles from './TareaDetalle.module.scss';
 
 export interface ITareaDetalleProps {
-	canEdit: boolean;
-	canRegisterProgress: boolean;
+	canEdit: (responsable?: IPersonValue, accountable?: IPersonValue) => boolean;
+	canRegisterProgress: (responsable?: IPersonValue, accountable?: IPersonValue) => boolean;
 }
 
 type LoadError = 'notFound' | 'error';
@@ -110,8 +111,8 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 		.map((area) => areaState.items.filter((item) => item.Id === area.Id)[0]?.Nombre ?? area.Title)
 		.join(NAME_SEPARATOR);
 
-	const canRegister = canRegisterProgress && tarea !== undefined && canRegistrarAvance(tarea);
-	const canEditar = canEdit && tarea !== undefined && canEditTarea(tarea);
+	const canRegister = canRegisterProgress(tarea?.Responsable, iniciativa?.Accountable) && tarea !== undefined && canRegistrarAvance(tarea);
+	const canEditar = canEdit(tarea?.Responsable, iniciativa?.Accountable) && tarea !== undefined && canEditTarea(tarea);
 
 	const onEdited = (saved: Tarea): void => {
 		setIsFormOpen(false);
@@ -217,8 +218,8 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 						</Button>
 					)}
 				</DetailFooter>
-				{isFormOpen && tarea && <TareaFormPanel tarea={tarea} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
-				{isAvanceOpen && tarea && <TareaAvancePanel tarea={tarea} onSaved={onAvanceSaved} onCancel={() => setIsAvanceOpen(false)} />}
+				{isFormOpen && tarea && <TareaFormPanel tarea={tarea} accountable={iniciativa?.Accountable} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
+				{isAvanceOpen && tarea && <TareaAvancePanel tarea={tarea} accountable={iniciativa?.Accountable} onSaved={onAvanceSaved} onCancel={() => setIsAvanceOpen(false)} />}
 				{isHistoryOpen && tarea && <TareaHistorialPanel tarea={tarea} onClose={() => setIsHistoryOpen(false)} />}
 			</div>
 		</>

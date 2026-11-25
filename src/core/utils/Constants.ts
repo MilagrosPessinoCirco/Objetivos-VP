@@ -41,7 +41,7 @@ export enum Estado {
 
 export enum Rol {
 	Administrador = "Administrador",
-	CargadorObjetivo = "Cargador objetivo",
+	CargadorObjetivo = "CargadorObjetivo",
 	Usuario = "Usuario",
 	Visualizador = "Visualizador"
 }

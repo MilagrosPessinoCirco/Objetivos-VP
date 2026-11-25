@@ -5,6 +5,7 @@ import { MessageBar, Panel } from '../../../../../core/ui/patterns';
 import { spacing } from '../../../../../core/ui/foundations';
 import { Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
+import { isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import ConfirmacionModal from '../../Iniciativa/ConfirmacionModal/ConfirmacionModal';
@@ -28,6 +29,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 
 	const nombreError = submitted && nombre.trim() === '' ? strings.RequiredField : undefined;
 	const descripcionError = submitted && descripcion.trim() === '' ? strings.RequiredField : undefined;
@@ -52,10 +54,12 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 		toSave.Activa = activa;
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		try {
 			await onSave(toSave);
 		}
-		catch {
+		catch (error) {
+			setPermisoDenegado(isPermisoDenegadoError(error));
 			setSaveFailed(true);
 			setIsSaving(false);
 			setIsConfirmOpen(false);
@@ -85,7 +89,7 @@ const PalancaForm: React.FC<IPalancaFormProps> = ({ palanca, onSave, onCancel })
 			}
 		>
 			<div className={styles.fields} style={{ gap: spacing.lg }}>
-				{saveFailed && <MessageBar type="error" message={strings.PalancaSaveError} />}
+				{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.PalancaSaveError} />}
 				<Input
 					label={strings.PalancaFormName}
 					required

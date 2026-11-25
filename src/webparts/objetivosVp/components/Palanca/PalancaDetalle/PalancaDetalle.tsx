@@ -11,8 +11,10 @@ import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useInici
 import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import { Objetivo, Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
+import { assertPermiso } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { PALANCAS_PATH, getFrom, getObjetivoPath } from '../../ObjetivosVp/routes';
+import { usePermisos } from '../../shared/PermisosProvider';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { ObjetivosFiltro, filterObjetivos, isNotFoundError } from '../../Objetivo/objetivoUtils';
@@ -56,6 +58,7 @@ const ADD_BUTTON_STYLE: CSSProperties = {
 const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
 
 const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateObjetivo, filtro }) => {
+	const { verificar } = usePermisos();
 	const { id } = useParams<{ id: string }>();
 	const palancaId = Number(id);
 	const isValidId = Number.isInteger(palancaId) && palancaId > 0;
@@ -88,6 +91,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	const goBack = (): void => navigate(getFrom(location.state) ?? PALANCAS_PATH);
 
 	const updatePalanca = async (edited: Palanca): Promise<void> => {
+		assertPermiso((await verificar()).canManagePalancas);
 		await editItem(edited);
 		setIsFormOpen(false);
 		setSuccessMessage(Utils.replaceAll(strings.PalancaUpdated, '{0}', edited.Nombre ?? ''));

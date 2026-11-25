@@ -32,6 +32,7 @@ export interface IObjetivoDetalleProps {
 	canEditObjetivo: boolean;
 	canCreateIniciativa: boolean;
 	canLoadResultadosClave: boolean;
+	canViewPesos?: boolean;
 }
 
 type LoadError = 'notFound' | 'error';
@@ -44,7 +45,7 @@ const PROGRESS_LABEL_STYLE: CSSProperties = {
 	lineHeight: typography.lineHeight[14]
 };
 
-const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, canCreateIniciativa, canLoadResultadosClave }) => {
+const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, canCreateIniciativa, canLoadResultadosClave, canViewPesos }) => {
 	const { id } = useParams<{ id: string }>();
 	const objetivoId = Number(id);
 	const isValidId = Number.isInteger(objetivoId) && objetivoId > 0;
@@ -112,6 +113,7 @@ const ObjetivoDetalle: React.FC<IObjetivoDetalleProps> = ({ canEditObjetivo, can
 					error={dataError}
 					canCreate={canCreateIniciativa}
 					canLoadResultadosClave={canLoadResultadosClave}
+					canViewPesos={canViewPesos}
 					onCreated={onIniciativaCreated}
 					onReload={reloadIniciativas}
 				/>
