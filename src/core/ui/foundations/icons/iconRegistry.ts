@@ -89,6 +89,7 @@ const generalIcons = {
   checkmarkPrimary: require('./assets/general/checkmark-primary.svg'),
   chevronDown: require('./assets/general/chevron-down.svg'),
   chevronDownPrimary: require('./assets/general/chevron-down-primary.svg'),
+  chevronDoubleDown: require('./assets/general/chevron-double-down.svg'),
   chevronRight: require('./assets/general/chevron-right.svg'),
   chevronRightPrimary: require('./assets/general/chevron-right-primary.svg'),
   menu: require('./assets/general/menu.svg'),

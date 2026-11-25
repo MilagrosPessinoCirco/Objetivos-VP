@@ -212,6 +212,10 @@ export default class TareaMock implements ITareaDataSource {
 		return Promise.resolve(tareas.filter((tarea) => tarea.Iniciativa?.Id === iniciativaId));
 	}
 
+	public getItemsByIniciativaIds(iniciativaIds: number[]): Promise<Tarea[]> {
+		return Promise.resolve(tareas.filter((tarea) => iniciativaIds.indexOf(tarea.Iniciativa?.Id as number) >= 0));
+	}
+
 	public add(item: Tarea): Promise<Tarea> {
 		const nextId = tareas.reduce((maxId, tarea) => Math.max(maxId, tarea.Id ?? 0), 0) + 1;
 		const created = Object.assign(new Tarea(), item, { Id: nextId, Created: new Date(), Author: USUARIO_PRUEBA });

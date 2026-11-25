@@ -3,6 +3,7 @@ import { getSP } from '../../pnp/sp/pnpjs-presets';
 import { Lista } from '../../utils/Constants';
 import { Iniciativa } from "../../entities";
 import IIniciativaDataSource from './IIniciativaDataSource';
+import { buildLookupFilters } from '../lookupFilters';
 
 const TOP_DEFAULT = 5000;
 
@@ -46,6 +47,17 @@ export default class IniciativaDataSource implements IIniciativaDataSource {
 			.filter(`ObjetivoId eq ${objetivoId}`)
 			.top(TOP_DEFAULT)();
 		return items.map(item => new Iniciativa(item));
+	}
+
+	public async getItemsByObjetivoIds(objetivoIds: number[]): Promise<Array<Iniciativa>> {
+		const batches: any[][] = await Promise.all(buildLookupFilters('ObjetivoId', objetivoIds).map((filter) =>
+			this._sp.web.lists.getByTitle(this.listTitle).items
+				.select(...this.selectProperties)
+				.expand(...this.expand)
+				.filter(filter)
+				.top(TOP_DEFAULT)()
+		));
+		return batches.reduce((all, batch) => all.concat(batch), []).map(item => new Iniciativa(item));
 	}
 
 	public add(item: Iniciativa): Promise<Iniciativa> {

@@ -71,6 +71,10 @@ export default class IniciativaMock implements IIniciativaDataSource {
 		return Promise.resolve(iniciativas.filter((iniciativa) => iniciativa.Objetivo?.Id === objetivoId));
 	}
 
+	public getItemsByObjetivoIds(objetivoIds: number[]): Promise<Iniciativa[]> {
+		return Promise.resolve(iniciativas.filter((iniciativa) => objetivoIds.indexOf(iniciativa.Objetivo?.Id as number) >= 0));
+	}
+
 	public add(item: Iniciativa): Promise<Iniciativa> {
 		const nextId = iniciativas.reduce((maxId, iniciativa) => Math.max(maxId, iniciativa.Id ?? 0), 0) + 1;
 		const created = Object.assign(new Iniciativa(), item, { Id: nextId });

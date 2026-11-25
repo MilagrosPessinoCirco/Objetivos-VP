@@ -19,6 +19,7 @@ import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
+import UbicacionEstrategia from '../../shared/UbicacionEstrategia/UbicacionEstrategia';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
 import { isNotFoundError, isVpRrii } from '../../Objetivo/objetivoUtils';
@@ -191,6 +192,7 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 								<span style={PROGRESS_LABEL_STYLE}>
 									{strings.ObjetivoDetailProgress} <AvanceText value={tarea.Avance ?? 0} spaced />
 								</span>
+								<UbicacionEstrategia tipo="tarea" id={tareaId} otraVp={isRrii ? undefined : objetivo?.VP?.Title} />
 							</div>
 						</>
 					)}

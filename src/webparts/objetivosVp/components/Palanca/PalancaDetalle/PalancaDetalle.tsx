@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { CSSProperties } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Tooltip } from '../../../../../core/ui/components';
 import { MessageBar, Spinner } from '../../../../../core/ui/patterns';
@@ -13,8 +13,8 @@ import { Objetivo, Palanca } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import { assertPermiso } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { PALANCAS_PATH, getFrom, getObjetivoPath } from '../../ObjetivosVp/routes';
 import { usePermisos } from '../../shared/PermisosProvider';
-import { PALANCAS_PATH, getObjetivoPath } from '../../ObjetivosVp/routes';
 import ObjetivoFormPanel from '../../Objetivo/ObjetivoForm/ObjetivoFormPanel';
 import ObjetivosTable from '../../Objetivo/ObjetivosTable/ObjetivosTable';
 import { ObjetivosFiltro, filterObjetivos, isNotFoundError } from '../../Objetivo/objetivoUtils';
@@ -23,7 +23,7 @@ import { formatPalancaId } from '../formatPalancaId';
 import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
-import LocationButton from '../../shared/LocationButton/LocationButton';
+import UbicacionEstrategia from '../../shared/UbicacionEstrategia/UbicacionEstrategia';
 import SectionBand from '../../shared/SectionBand/SectionBand';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
@@ -63,6 +63,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	const palancaId = Number(id);
 	const isValidId = Number.isInteger(palancaId) && palancaId > 0;
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [state, , , editItem, , getById] = usePalancaDataSource();
 	const [objetivoState, getObjetivos] = useObjetivoDataSource();
 	const [iniciativaState, getIniciativas] = useIniciativaDataSource();
@@ -87,7 +88,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 	}, [palancaId]);
 
 	const palanca = !loadError && state.item?.Id === palancaId ? state.item : undefined;
-	const goPalancas = (): void => navigate(PALANCAS_PATH);
+	const goBack = (): void => navigate(getFrom(location.state) ?? PALANCAS_PATH);
 
 	const updatePalanca = async (edited: Palanca): Promise<void> => {
 		assertPermiso((await verificar()).canManagePalancas);
@@ -162,7 +163,7 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 			<div className={styles.detalle} style={{ gap: spacing.lg, padding: PAGE_PADDING }}>
 				<PalancaBreadcrumb palancaNombre={palanca?.Nombre} />
 				<div className={styles.header} style={{ gap: spacing.md }}>
-					<BackButton onClick={goPalancas} />
+					<BackButton onClick={goBack} />
 					{palanca && (
 						<>
 							<h1 style={HEADER_TITLE_STYLE}>
@@ -173,13 +174,13 @@ const PalancaDetalle: React.FC<IPalancaDetalleProps> = ({ canManage, canCreateOb
 								textColor={palanca.Activa ? ACTIVE_CHIP_TEXT_COLOR : undefined}
 								label={palanca.Activa ? strings.PalancaActiveChip : strings.PalancaInactiveChip}
 							/>
-							<LocationButton />
+							<UbicacionEstrategia tipo="palanca" id={palancaId} filtrarObjetivos={(objetivos) => filterObjetivos(objetivos, filtro)} />
 						</>
 					)}
 				</div>
 				{renderBody()}
 				<DetailFooter>
-					<Button variant="secondary" onClick={goPalancas}>
+					<Button variant="secondary" onClick={goBack}>
 						{strings.Cancel}
 					</Button>
 					{canManage && palanca && (

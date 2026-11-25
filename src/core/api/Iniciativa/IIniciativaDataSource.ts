@@ -6,6 +6,7 @@ export default interface IIniciativaDataSource {
 
 	getItems(): Promise<Iniciativa[]>;
 	getFilteredItems(objetivoId: number): Promise<Iniciativa[]>;
+	getItemsByObjetivoIds(objetivoIds: number[]): Promise<Iniciativa[]>;
 	add(item: Iniciativa): Promise<Iniciativa>;
 	edit(item: Iniciativa): Promise<Iniciativa>;
 	delete(itemId: number): Promise<void>;
