@@ -324,6 +324,10 @@ define([], function () {
 		"ObjetivoConfirmEdit": "Estás por modificar el objetivo. Todo cambio requiere el visto bueno del VP. ¿Querés continuar?",
 		"ObjetivoConfirmEditTitle": "Guardar cambios del objetivo",
 		"FiltersAllFeminine": "Todas",
-		"AvanceNotApplicable": "No aplica"
+		"AvanceNotApplicable": "No aplica",
+		"AccesoDenegado": "No tenés acceso a esta aplicación.",
+		"PermisosLoadError": "No se pudieron cargar tus permisos.",
+		"PermisoDenegado": "No tenés permiso para realizar esta acción.",
+		"ObjetivoColumnNameWeight": "Objetivo (peso)"
 	}
 });

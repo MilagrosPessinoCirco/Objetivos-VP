@@ -8,7 +8,10 @@ import useTareaDataSource from '../../../../../core/api/Tarea/useTareaDataSource
 import { AvanceTarea, Tarea } from '../../../../../core/entities';
 import { EstadoTarea } from '../../../../../core/utils/Constants';
 import { Utils } from '../../../../../core/utils';
+import { assertPermiso, isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
+import type { IPersonValue } from '../../../../../core/utils/Mappers';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
 import { fromDateInput, toDateInput } from '../../Objetivo/objetivoUtils';
@@ -27,6 +30,7 @@ import styles from '../TareaForm/TareaForm.module.scss';
 
 export interface ITareaAvancePanelProps {
 	tarea: Tarea;
+	accountable?: IPersonValue;
 	onSaved: () => void;
 	onCancel: () => void;
 }
@@ -45,7 +49,8 @@ const ERROR_STYLE: React.CSSProperties = {
 
 const toKey = (value: string | string[]): string => (Array.isArray(value) ? value[0] : value);
 
-const TareaAvancePanel: React.FC<ITareaAvancePanelProps> = ({ tarea, onSaved, onCancel }) => {
+const TareaAvancePanel: React.FC<ITareaAvancePanelProps> = ({ tarea, accountable, onSaved, onCancel }) => {
+	const { verificar } = usePermisos();
 	const [, , addEntrada] = useAvanceTareaDataSource();
 	const [, , , editTarea] = useTareaDataSource();
 	const estadoInicial = tarea.Estado === EstadoTarea.Finalizada ? EstadoTarea.EnCurso : tarea.Estado ?? EstadoTarea.NoIniciada;
@@ -60,6 +65,7 @@ const TareaAvancePanel: React.FC<ITareaAvancePanelProps> = ({ tarea, onSaved, on
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 	const [isLocked, setIsLocked] = React.useState<boolean>(false);
 
 	const finaliza = estado === EstadoTarea.Finalizada;
@@ -85,7 +91,9 @@ const TareaAvancePanel: React.FC<ITareaAvancePanelProps> = ({ tarea, onSaved, on
 	const save = async (): Promise<void> => {
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		try {
+			assertPermiso((await verificar()).canUpdateTarea(tarea.Responsable, accountable));
 			if (!entradaCreada.current) {
 				const texto = comentario.trim();
 				const nueva = new AvanceTarea();
@@ -116,7 +124,8 @@ const TareaAvancePanel: React.FC<ITareaAvancePanelProps> = ({ tarea, onSaved, on
 			await editTarea(actualizacion);
 			onSaved();
 		}
-		catch {
+		catch (error) {
+			setPermisoDenegado(isPermisoDenegadoError(error));
 			setSaveFailed(true);
 			setIsSaving(false);
 			setIsConfirmOpen(false);
@@ -185,7 +194,7 @@ const TareaAvancePanel: React.FC<ITareaAvancePanelProps> = ({ tarea, onSaved, on
 					errorMessage={shown(issues.comentario)}
 					onChange={(event) => setComentario(event.target.value)}
 				/>
-				{saveFailed && <MessageBar type="error" message={strings.TareaProgressSaveError} />}
+				{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.TareaProgressSaveError} />}
 			</div>
 			{isConfirmOpen && (
 				<ConfirmacionModal

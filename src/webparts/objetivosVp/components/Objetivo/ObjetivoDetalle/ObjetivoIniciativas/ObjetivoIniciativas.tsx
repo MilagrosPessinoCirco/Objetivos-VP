@@ -21,6 +21,7 @@ export interface IObjetivoIniciativasProps {
 	error: boolean;
 	canCreate: boolean;
 	canLoadResultadosClave: boolean;
+	canViewPesos?: boolean;
 	onCreated: (iniciativa: Iniciativa) => void;
 	onReload: () => void;
 }
@@ -33,6 +34,7 @@ const ObjetivoIniciativas: React.FC<IObjetivoIniciativasProps> = ({
 	error,
 	canCreate,
 	canLoadResultadosClave,
+	canViewPesos,
 	onCreated,
 	onReload
 }) => {
@@ -73,6 +75,7 @@ const ObjetivoIniciativas: React.FC<IObjetivoIniciativasProps> = ({
 						resultados={resultados}
 						variant="objetivo"
 						objetivo={objetivo}
+						canViewPesos={canViewPesos}
 						emptyText={strings.ObjetivoInitiativesEmpty}
 						onView={(id) => navigate(getIniciativaPath(id), { state: { from: location.pathname } })}
 					/>

@@ -8,6 +8,7 @@ import { Area, Iniciativa, Objetivo, Tarea, Usuario } from '../../../../../core/
 import { EstadoIniciativa, EstadoTarea, Prioridad } from '../../../../../core/utils/Constants';
 import { ILookupValue, IPersonValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
+import { isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
@@ -80,6 +81,7 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 	const [topeIssue, setTopeIssue] = React.useState<string | undefined>(undefined);
 
 	const personas = uniquePeople([
@@ -161,6 +163,7 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 	const save = async (): Promise<void> => {
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		setTopeIssue(undefined);
 		try {
 			await onSave(buildTarea());
@@ -172,6 +175,7 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 				setTopeIssue(saveError.message);
 			}
 			else {
+				setPermisoDenegado(isPermisoDenegadoError(saveError));
 				setSaveFailed(true);
 			}
 		}
@@ -279,7 +283,7 @@ export const TareaFormBody: React.FC<ITareaFormBodyProps> = ({
 						{renderFieldError(issues.fechaCompromiso)}
 					</div>
 				</div>
-				{saveFailed && <MessageBar type="error" message={strings.TareaSaveError} />}
+				{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.TareaSaveError} />}
 			</div>
 			{isConfirmOpen && (
 				<ConfirmacionModal

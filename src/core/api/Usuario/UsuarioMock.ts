@@ -1,5 +1,5 @@
 import { Usuario } from '../../entities';
-import { Lista } from '../../utils/Constants';
+import { Lista, Rol } from '../../utils/Constants';
 import { IPersonValue } from '../../utils/Mappers';
 import IUsuarioDataSource from './IUsuarioDataSource';
 
@@ -21,6 +21,20 @@ let usuarios: Usuario[] = [
 	createUsuario(4, INACTIVO, false)
 ];
 
+const ROL_MOCK_KEY = 'rolMock';
+const ROL_MOCK_SIN_ROL = 'sin-rol';
+const ROL_MOCK_FALLA = 'falla';
+const ROL_MOCK_DEFECTO = Rol.Administrador;
+
+const readRolMock = (): string => {
+	try {
+		return window.localStorage.getItem(ROL_MOCK_KEY) ?? ROL_MOCK_DEFECTO;
+	}
+	catch {
+		return ROL_MOCK_DEFECTO;
+	}
+};
+
 const notFoundError = (): Error => Object.assign(new Error(NOT_FOUND_MESSAGE), { status: NOT_FOUND_STATUS });
 
 export default class UsuarioMock implements IUsuarioDataSource {
@@ -32,6 +46,18 @@ export default class UsuarioMock implements IUsuarioDataSource {
 
 	public getCurrentUser(): Promise<IPersonValue> {
 		return Promise.resolve(USUARIO_PRUEBA);
+	}
+
+	public getCurrentUserGroups(): Promise<string[]> {
+		const valor = readRolMock();
+		if (valor === ROL_MOCK_FALLA) {
+			return Promise.reject(new Error('Falla simulada al obtener los grupos del usuario actual.'));
+		}
+		if (valor === ROL_MOCK_SIN_ROL) {
+			return Promise.resolve([]);
+		}
+		const rol = Object.values(Rol).filter((item) => item === valor)[0] ?? ROL_MOCK_DEFECTO;
+		return Promise.resolve([rol]);
 	}
 
 	public add(item: Usuario): Promise<Usuario> {

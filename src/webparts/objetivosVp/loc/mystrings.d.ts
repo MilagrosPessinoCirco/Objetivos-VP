@@ -323,6 +323,10 @@ declare interface IObjetivosVpWebPartStrings {
 	TareaIndicatorsSection: string;
 	TareaSection: string;
 	TareaSectionEmpty: string;
+	AccesoDenegado: string;
+	PermisosLoadError: string;
+	PermisoDenegado: string;
+	ObjetivoColumnNameWeight: string;
 }
 
 declare module 'ObjetivosVpWebPartStrings' {

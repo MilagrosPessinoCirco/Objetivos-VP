@@ -8,7 +8,10 @@ import useTareasIniciativa from '../../../../../core/api/Tarea/useTareasIniciati
 import { AvanceTarea, Tarea } from '../../../../../core/entities';
 import { EstadoTarea } from '../../../../../core/utils/Constants';
 import { Utils } from '../../../../../core/utils';
+import type { IPersonValue } from '../../../../../core/utils/Mappers';
+import { assertPermiso } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { createTopeError, formatTareaId, getTopeIssue } from '../tareaUtils';
 import { TareaFormBody } from './TareaForm';
 import useTareaFormMasters from './useTareaFormMasters';
@@ -17,6 +20,7 @@ import styles from './TareaForm.module.scss';
 export interface ITareaFormPanelProps {
 	tarea?: Tarea;
 	iniciativaFijaId?: number;
+	accountable?: IPersonValue;
 	onSaved: (tarea: Tarea) => void;
 	onCancel: () => void;
 }
@@ -29,7 +33,8 @@ const buildPrimeraEntrada = (tarea: Tarea): AvanceTarea =>
 		Comentario: strings.TareaFirstEntryComment
 	});
 
-const TareaFormPanel: React.FC<ITareaFormPanelProps> = ({ tarea, iniciativaFijaId, onSaved, onCancel }) => {
+const TareaFormPanel: React.FC<ITareaFormPanelProps> = ({ tarea, iniciativaFijaId, accountable, onSaved, onCancel }) => {
+	const { verificar } = usePermisos();
 	const masters = useTareaFormMasters();
 	const tareas = useTareasIniciativa(undefined);
 	const [, , addTarea, editTarea, deleteTarea] = useTareaDataSource();
@@ -43,6 +48,7 @@ const TareaFormPanel: React.FC<ITareaFormPanelProps> = ({ tarea, iniciativaFijaI
 	};
 
 	const saveEdicion = async (toSave: Tarea): Promise<void> => {
+		assertPermiso((await verificar()).canUpdateTarea(tarea?.Responsable, accountable));
 		const cambios = {
 			Id: tarea?.Id,
 			Nombre: toSave.Nombre,
@@ -59,6 +65,7 @@ const TareaFormPanel: React.FC<ITareaFormPanelProps> = ({ tarea, iniciativaFijaI
 	};
 
 	const save = async (toSave: Tarea): Promise<void> => {
+		assertPermiso((await verificar()).canCreateTarea);
 		if (!tareaCreada.current) {
 			const frescas = await tareas.reload(toSave.Iniciativa?.Id);
 			const topeIssue = getTopeIssue(frescas);

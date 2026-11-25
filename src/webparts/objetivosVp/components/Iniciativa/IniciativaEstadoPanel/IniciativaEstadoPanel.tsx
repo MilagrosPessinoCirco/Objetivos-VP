@@ -8,7 +8,9 @@ import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useInici
 import { ComentarioIniciativa, Iniciativa } from '../../../../../core/entities';
 import { EstadoIniciativa } from '../../../../../core/utils/Constants';
 import { Utils } from '../../../../../core/utils';
+import { assertPermiso, isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import ConfirmacionModal from '../ConfirmacionModal/ConfirmacionModal';
 import { formatIdNombre, formatIniciativaId } from '../iniciativaUtils';
@@ -24,6 +26,7 @@ export interface IIniciativaEstadoPanelProps {
 const toKey = (value: string | string[]): string => (Array.isArray(value) ? value[0] : value);
 
 const IniciativaEstadoPanel: React.FC<IIniciativaEstadoPanelProps> = ({ iniciativa, ultimoComentario, onSaved, onCancel }) => {
+	const { verificar } = usePermisos();
 	const [, , addComentario] = useComentarioIniciativaDataSource();
 	const [, , , editIniciativa] = useIniciativaDataSource();
 	const estadoActual = iniciativa.Estado ?? EstadoIniciativa.NoIniciada;
@@ -33,6 +36,7 @@ const IniciativaEstadoPanel: React.FC<IIniciativaEstadoPanelProps> = ({ iniciati
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 
 	const estadoOptions = Object.values(EstadoIniciativa).map((value) => ({ key: value, text: value }));
 	const nombre = iniciativa.Nombre ?? '';
@@ -52,7 +56,9 @@ const IniciativaEstadoPanel: React.FC<IIniciativaEstadoPanelProps> = ({ iniciati
 		}
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		try {
+			assertPermiso((await verificar()).canEditIniciativa(iniciativa.Accountable));
 			if (registraComentario) {
 				const nuevo = new ComentarioIniciativa();
 				nuevo.Iniciativa = { Id: iniciativa.Id as number, Title: nombre };
@@ -65,7 +71,8 @@ const IniciativaEstadoPanel: React.FC<IIniciativaEstadoPanelProps> = ({ iniciati
 			}
 			onSaved();
 		}
-		catch {
+		catch (error) {
+			setPermisoDenegado(isPermisoDenegadoError(error));
 			setSaveFailed(true);
 			setIsSaving(false);
 			setIsConfirmOpen(false);
@@ -100,7 +107,7 @@ const IniciativaEstadoPanel: React.FC<IIniciativaEstadoPanelProps> = ({ iniciati
 					className={styles.multiline}
 					onChange={(event) => setComentario(event.target.value)}
 				/>
-				{saveFailed && <MessageBar type="error" message={strings.IniciativaStatusSaveError} />}
+				{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.IniciativaStatusSaveError} />}
 			</div>
 			{isConfirmOpen && (
 				<ConfirmacionModal
