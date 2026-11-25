@@ -10,7 +10,7 @@
 
 **Fuente vigente**: `docs/especificacion-funcional.md` v1.10 (RF-19 y RF-20). Las reglas de negocio de esta feature salen de ahí y de lo decidido por las usuarias en el pedido de la feature; donde difieren, manda el pedido (por ejemplo, la eliminación de tareas, que RF-19 menciona y la 007 descartó).
 
-**Diseño de referencia**: `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`, que contiene el prototipo v11 (19/11/2026) aunque el nombre de la carpeta diga v5. Se toma qué botones, lápices, "+" y acciones de fila ve cada rol en la galería de palancas, el detalle de palanca, objetivo, iniciativa y tarea, la bandeja de iniciativas y la de tareas. La pantalla de acceso denegado no está en el prototipo: sigue el diseño de los estados vacíos ya implementados. El selector "Ver como (simulación de rol)" del prototipo no se implementa.
+**Diseño de referencia**: `docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`, que contiene el prototipo v11 (19/11/2026) aunque el nombre de la carpeta diga v5. Se toma qué botones, lápices, "+" y acciones de fila ve cada rol en la galería de palancas, el detalle de palanca, objetivo, iniciativa y tarea, la bandeja de iniciativas y la de tareas. La pantalla de acceso denegado no está en el prototipo: se construye con el patrón de estado vacío del Design System. El selector "Ver como (simulación de rol)" del prototipo no se implementa.
 
 **Modifica**: las pantallas de las features 002, 003, 004, 005, 006, 007 y 008, cuyas acciones pasan de estar siempre habilitadas a depender del rol (FR-045 de la 007 y los valores equivalentes de la 002, 003, 004, 005 y 006). Todo lo que esta spec no cambia sigue rigiendo como lo definen esas features.
 
@@ -32,7 +32,7 @@ Al abrir la aplicación, el sistema determina el rol de la persona a partir de l
 4. **Given** una persona sin rol, **When** entra por un link directo a un detalle o a una bandeja, **Then** ve esa misma pantalla de acceso denegado.
 5. **Given** que se está obteniendo el rol, **When** la aplicación carga, **Then** se muestra el indicador de carga ya implementado y no se muestra la aplicación, de modo que no aparezcan datos ni botones que luego haya que ocultar.
 6. **Given** que falla la obtención del rol, **When** la aplicación termina de intentarlo, **Then** no se da acceso y se muestra la pantalla de acceso denegado con "No se pudieron cargar tus permisos.".
-7. **Given** la pantalla de acceso denegado, **When** se observa, **Then** muestra un ícono y una línea de texto, como los estados vacíos ya implementados, sin textos de ayuda adicionales.
+7. **Given** la pantalla de acceso denegado, **When** se observa, **Then** muestra, con el patrón de estado vacío del Design System (`EmptyState`), un ícono y una línea de texto, sin descripción, botón ni textos de ayuda adicionales.
 
 ---
 
@@ -137,7 +137,7 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 - Falla al obtener el rol: acceso denegado con "No se pudieron cargar tus permisos." y no el mensaje de falta de rol (FR-007).
 - Usuario cuyo rol permite crear tareas en cualquier iniciativa, pero que no es responsable de la tarea ni Accountable de su iniciativa: puede crearla y asignarla a otra persona, pero luego no puede editarla ni registrar su avance (FR-010).
 - Usuario que crea una iniciativa y deja a otra persona como Accountable: pierde el permiso de editarla desde ese momento (FR-010).
-- Persona dada de baja con una sesión abierta: la aplicación conserva su rol hasta que se vuelva a abrir, pero las listas ya le impiden escribir (FR-023 y FR-024), por lo que el guardado falla y se informa como cualquier otra falla de guardado.
+- Persona dada de baja con una sesión abierta: conserva la visualización hasta que recargue la aplicación, pero cualquier guardado se rechaza con "No tenés permiso para realizar esta acción.", porque antes de guardar se vuelven a leer los grupos (FR-014); las listas también le impiden escribir (FR-023 y FR-024).
 - Tarea Cancelada: aunque el rol permita actualizar, siguen sin ofrecerse Editar ni "Registrar avance" (FR-017a y FR-027a de la 007).
 - Falla de un paso del servicio de personas, con o sin falla al deshacer (FR-019 y FR-020).
 - Cambio de rol hacia el mismo rol que ya tiene: no hace cambios ni duplica pertenencias.
@@ -157,7 +157,7 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 **Acceso a la aplicación**
 
 - **FR-006**: Si la persona no tiene rol, la aplicación DEBE mostrar, en lugar de su contenido, una pantalla de acceso denegado con el mensaje de una línea "No tenés acceso a esta aplicación.". NO DEBE mostrar la home, el menú, los accesos ni ningún dato. Lo mismo DEBE ocurrir en cualquier ruta, incluidos los links directos a un detalle o a una bandeja.
-- **FR-006a**: La pantalla de acceso denegado DEBE seguir el diseño de los estados vacíos ya implementados (ícono y una línea de texto), sin textos de ayuda adicionales.
+- **FR-006a**: La pantalla de acceso denegado DEBE construirse con el patrón de estado vacío del Design System (`EmptyState`): un ícono y una línea de texto, sin descripción, botón ni textos de ayuda adicionales. Si el patrón no se ve bien con esa configuración, se admite un componente propio armado con tokens del Design System, registrado como desvío en el plan.
 - **FR-007**: Si falla la obtención del rol, la aplicación NO DEBE dar acceso y DEBE mostrar la pantalla de acceso denegado con el mensaje de una línea "No se pudieron cargar tus permisos.".
 - **FR-008**: Mientras se obtiene el rol, la aplicación DEBE mostrar el indicador de carga ya implementado y NO DEBE mostrar ninguna pantalla de la aplicación.
 - **FR-009**: NO DEBE mostrarse el selector "Ver como (simulación de rol)" del prototipo.
@@ -193,7 +193,7 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 
 **Servicio de personas, lista Usuario y grupos**
 
-- **FR-015**: La lista Usuario DEBE guardar el rol de cada persona (Visualizador, Usuario, CargadorObjetivo o Administrador). El nombre interno y el tipo de esa columna los propone el plan, que DEBE avisar antes de usarla: la columna la crea la usuaria.
+- **FR-015**: La lista Usuario DEBE guardar el rol de cada persona (Visualizador, Usuario, CargadorObjetivo o Administrador). La columna (nombre interno `Rol`, tipo Opción, con los valores del enum de roles) ya existe en el sitio de desarrollo y la usa el código; en cada sitio nuevo la crea la usuaria.
 - **FR-016**: El sistema DEBE ofrecer un servicio que escriba a la persona en la lista Usuario y, en la misma operación, la agregue al grupo de SharePoint de su rol.
 - **FR-017**: Alta: el servicio DEBE agregar a la persona a la lista y al grupo de su rol. Cambio de rol: DEBE actualizar la columna Rol, agregarla al grupo nuevo y quitarla del anterior. Baja: DEBE quitarla de su grupo y conservar su elemento de la lista como inactivo.
 - **FR-018**: Solo el Administrador DEBE poder usar el servicio (FR-014).
@@ -256,4 +256,4 @@ Las listas de la aplicación dejan de heredar los permisos del sitio y dan lectu
 - "Actualizar una tarea" abarca editar sus datos y registrar su avance, porque la matriz de RF-19 no los separa. "Sus riesgos y su presupuesto" no aplica todavía, porque riesgos y presupuesto no están implementados.
 - La eliminación de tareas no existe (007) y se saca de RF-19 y de su matriz (v1.11).
 - Quedan fuera de alcance: la pantalla ABM de usuarios, que usará el servicio de esta feature; el resto del ABM de maestros y parámetros (M9) y el botón "ABM" de la home; reasignar elementos cuando una persona deja la VP (RF-20); y el tablero ejecutivo (RF-17).
-- Persona dada de baja con la aplicación abierta: el rol se obtiene al abrir la aplicación, por lo que lo ya cargado puede quedar desactualizado hasta que se vuelva a abrir; los permisos de las listas cubren ese caso.
+- Persona dada de baja con la aplicación abierta: el rol se obtiene al abrir la aplicación, por lo que lo ya cargado puede seguir visible hasta que recargue; como cada guardado vuelve a leer los grupos, cualquier guardado se rechaza con el mensaje de falta de permiso, y los permisos de las listas lo refuerzan.

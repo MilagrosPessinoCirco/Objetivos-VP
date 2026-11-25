@@ -42,7 +42,12 @@ interface IUsuarioDataSource {
 	getCurrentUserGroups(): Promise<string[]>;   // títulos de los grupos del usuario actual
 }
 
-function useCurrentRol(): { rol?: Rol; isLoading: boolean; error: boolean };
+function useCurrentRol(): {
+	rol?: Rol;
+	isLoading: boolean;
+	error: boolean;
+	reload: () => Promise<Rol | undefined>;   // vuelve a leer los grupos; rechaza si falla
+};
 ```
 
 - El datasource real lee los grupos del usuario actual; el mock los devuelve según `localStorage['rolMock']` (plan, D11), y falla con el valor `falla`.

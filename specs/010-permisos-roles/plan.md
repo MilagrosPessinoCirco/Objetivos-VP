@@ -44,7 +44,7 @@ Detalle en [research.md](./research.md).
 
 | # | Hallazgo | Consecuencia |
 |---|---|---|
-| H1 | `Rol` (enum), la entidad `Usuario` y `UsuarioDataSource` ya leen y escriben una columna `Rol` (R1). | Se reutilizan; la usuaria confirmó que la columna existe y sus valores (P1). El valor del enum difiere de la columna (`"Cargador objetivo"` con espacio): se corrige (D2). |
+| H1 | `Rol` (enum), la entidad `Usuario` y `UsuarioDataSource` ya leen y escriben una columna `Rol` (R1). | Se reutilizan; la columna existe en desarrollo y el valor de CargadorObjetivo se verifica antes de probar (P1). El valor del enum difiere de la columna (`"Cargador objetivo"` con espacio): se corrige (D2). |
 | H2 | No hay lectura de los grupos del usuario actual; `pnpjs-presets.ts` ya trae `site-groups`, `site-users` y `security` (R1, R8). | Método nuevo en `IUsuarioDataSource`, sin dependencias nuevas. |
 | H3 | Las 11 constantes `CAN_*` de `ObjetivosVp.tsx` se pasan por propiedades y las pantallas ya ocultan lo no permitido (R2). | Solo cambia el origen del valor; las pantallas casi no se tocan. |
 | H4 | Los permisos de elemento no se pueden expresar con un booleano global (R2). | Pasan a funciones (D6). |
@@ -74,7 +74,7 @@ Detalle en [research.md](./research.md).
 
 **D1. Nombres de los grupos.** Un grupo por rol, con **exactamente el mismo nombre que el valor de la columna `Rol`** (decisión de la usuaria, 2026-11-24): `Administrador`, `CargadorObjetivo`, `Usuario` y `Visualizador`. No hay prefijo ni tabla de correspondencia: el título del grupo es el valor de `Rol`, de modo que un rol no puede tener un nombre en la columna y otro en el grupo. Si un sitio ya tuviera un grupo con alguno de esos nombres, hay que resolverlo en el sitio, no con otro nombre.
 
-**D2. Columna `Rol` de la lista Usuario.** Confirmada por la usuaria en desarrollo: nombre interno `Rol`, tipo Opción, con los valores `Administrador`, `CargadorObjetivo`, `Usuario` y `Visualizador`. El enum `Rol` tenía `CargadorObjetivo = "Cargador objetivo"` (con espacio): se corrige el valor a `"CargadorObjetivo"` para que coincida con la columna y con el grupo. Es el único cambio en el enum (el identificador no cambia) y no hay otros usos del valor con espacio en el código.
+**D2. Columna `Rol` de la lista Usuario.** Existe en desarrollo: nombre interno `Rol`, tipo Opción. Debe tener los valores `Administrador`, `CargadorObjetivo`, `Usuario` y `Visualizador`; el de CargadorObjetivo se verifica y, si está con espacio, la usuaria lo corrige antes de probar (P1). El enum `Rol` tenía `CargadorObjetivo = "Cargador objetivo"` (con espacio): se corrige el valor a `"CargadorObjetivo"` para que coincida con la columna y con el grupo. Es el único cambio en el enum (el identificador no cambia) y no hay otros usos del valor con espacio en el código.
 
 **D3. Deducción del rol.** `getRolFromGroups(títulos)` cruza los títulos de los grupos del usuario con los valores de `Rol` y devuelve el rol de más permisos según `Administrador > CargadorObjetivo > Usuario > Visualizador`; sin coincidencias, `undefined` (sin rol). Los grupos propios de SharePoint (Propietarios, etc.) no dan rol: un propietario del sitio sin grupo de rol no accede.
 
@@ -183,7 +183,8 @@ Los hace la usuaria en el sitio de desarrollo y se repiten en cada sitio. El pas
 
 | # | Preparativo | Antes de |
 |---|---|---|
-| P1 | Columna `Rol` de la lista Usuario: **confirmada por la usuaria** (Opción, con `Administrador`, `CargadorObjetivo`, `Usuario`, `Visualizador`). | — |
+| P1 | Columna `Rol` de la lista Usuario: existe en desarrollo; verificar que el valor sea `CargadorObjetivo` (sin espacio) y, si está como `Cargador objetivo`, cambiarlo antes de las pruebas. | Probar con la aplicación |
+| P1b | Verificar en cada sitio que no existan grupos con los nombres `Administrador`, `CargadorObjetivo`, `Usuario` y `Visualizador` antes de crearlos. | P2 |
 | P2 | Crear los cuatro grupos con los mismos nombres que los valores de `Rol` (D1). | Probar con SharePoint |
 | P3 | Dar "Lectura" a los cuatro grupos en el sitio. | P5 |
 | P4 | El grupo Administrador, propietario de los cuatro grupos; agregar a las personas de prueba. | Probar el servicio |

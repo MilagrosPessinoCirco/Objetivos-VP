@@ -18,7 +18,9 @@ Guion de QA manual. Prerrequisitos iguales a los del [quickstart de la 004](../0
 
 Los hace la usuaria en el sitio de desarrollo y se repiten en cada sitio antes de desplegar. El código no los hace.
 
-**P1. Columna `Rol` de la lista `Usuario`.** Confirmada por la usuaria en desarrollo: nombre interno `Rol`, tipo Opción, con los valores `Administrador`, `CargadorObjetivo`, `Usuario` y `Visualizador`. En cada sitio nuevo, crearla igual.
+**P1. Columna `Rol` de la lista `Usuario`.** Existe en desarrollo (nombre interno `Rol`, tipo Opción). **Verificar el valor del rol de CargadorObjetivo**: tiene que ser exactamente `CargadorObjetivo`, sin espacio, igual que `Administrador`, `Usuario` y `Visualizador`. Si está como `Cargador objetivo`, la usuaria lo cambia a `CargadorObjetivo` en la configuración de la columna **antes de las pruebas**; con el valor con espacio, la aplicación no reconoce ese rol. En cada sitio nuevo, crear la columna con esos cuatro valores.
+
+**P1b. Verificar que los nombres de grupo estén libres.** En cada sitio, antes de crear los grupos: Configuración del sitio > Permisos del sitio > Grupos, y comprobar que **no existan** grupos llamados `Administrador`, `CargadorObjetivo`, `Usuario` ni `Visualizador` (los nombres de grupo son únicos en la colección de sitios). Si alguno existe, resolverlo en el sitio (renombrar o reutilizar solo si ya es el grupo de ese rol) antes de seguir: la aplicación no admite otro nombre.
 
 **P2. Grupos.** Configuración del sitio > Permisos del sitio > Crear grupo, cuatro veces, con **exactamente los mismos nombres que los valores de `Rol`**: `Administrador`, `CargadorObjetivo`, `Usuario` y `Visualizador`. Un rol no puede tener un nombre en la columna y otro en el grupo. En cada uno: "Quién puede ver la pertenencia" = miembros del grupo; "Quién puede editar la pertenencia" = propietario del grupo.
 
@@ -111,6 +113,7 @@ Casos puntuales:
 | G5 | Rol `Administrador`, panel de alta de tarea abierto; cambiar a `Usuario` sin recargar; guardar | Se guarda (Usuario puede crear tareas). |
 | G6 | Rol `Administrador`, panel de edición de objetivo; cambiar a `CargadorObjetivo` sin recargar; guardar | Rechazado (CargadorObjetivo solo crea objetivos). |
 | G6b | Rol `Administrador`, panel de alta de objetivo; cambiar a `Usuario` sin recargar; guardar | Rechazado. |
+| G8 | Rol `Administrador`, panel de editar palanca abierto; cambiar a `sin-rol` sin recargar (equivale a quien fue dado de baja con la sesión abierta); guardar | La pantalla sigue visible hasta recargar; el guardado se rechaza con "No tenés permiso para realizar esta acción."; al recargar, acceso denegado. |
 | G7 | Cambiar a `falla` sin recargar y guardar | No se guarda; el mensaje de falla de guardado propio de la pantalla. |
 
 ## Servicio de personas, con el mock
