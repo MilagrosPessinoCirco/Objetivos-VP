@@ -3,6 +3,7 @@ import { getSP } from '../../pnp/sp/pnpjs-presets';
 import { Lista } from '../../utils/Constants';
 import { Tarea } from "../../entities";
 import ITareaDataSource from './ITareaDataSource';
+import { buildLookupFilters } from '../lookupFilters';
 
 const TOP_DEFAULT = 5000;
 
@@ -55,6 +56,17 @@ export default class TareaDataSource implements ITareaDataSource {
 			.filter(`IniciativaId eq ${iniciativaId}`)
 			.top(TOP_DEFAULT)();
 		return items.map(item => new Tarea(item));
+	}
+
+	public async getItemsByIniciativaIds(iniciativaIds: number[]): Promise<Array<Tarea>> {
+		const batches: any[][] = await Promise.all(buildLookupFilters('IniciativaId', iniciativaIds).map((filter) =>
+			this._sp.web.lists.getByTitle(this.listTitle).items
+				.select(...this.selectProperties)
+				.expand(...this.expand)
+				.filter(filter)
+				.top(TOP_DEFAULT)()
+		));
+		return batches.reduce((all, batch) => all.concat(batch), []).map(item => new Tarea(item));
 	}
 
 	public add(item: Tarea): Promise<Tarea> {

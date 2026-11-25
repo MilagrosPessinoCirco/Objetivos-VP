@@ -19,6 +19,7 @@ import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
+import UbicacionEstrategia from '../../shared/UbicacionEstrategia/UbicacionEstrategia';
 import AvanceText from '../../shared/AvanceText/AvanceText';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
@@ -200,11 +201,14 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 								{formatIdNombre(formatIniciativaId(iniciativa.Id), iniciativa.Nombre)}
 							</h1>
 							<HeaderChip color={getEstadoIniciativaChipColor(iniciativa.Estado)} label={iniciativa.Estado ?? ''} />
-							{isRrii && loaded && (
+							{loaded && (
 								<div className={styles.headerEnd} style={{ gap: spacing.md }}>
-									<span style={PROGRESS_LABEL_STYLE}>
-										{strings.ObjetivoDetailProgress} <AvanceText value={getAvanceIniciativa(resultados)} spaced />
-									</span>
+									{isRrii && (
+										<span style={PROGRESS_LABEL_STYLE}>
+											{strings.ObjetivoDetailProgress} <AvanceText value={getAvanceIniciativa(resultados)} spaced />
+										</span>
+									)}
+									<UbicacionEstrategia tipo="iniciativa" id={iniciativaId} otraVp={isRrii ? undefined : objetivo?.VP?.Title} />
 								</div>
 							)}
 						</>

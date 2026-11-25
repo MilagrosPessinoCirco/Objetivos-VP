@@ -4,7 +4,7 @@ import styles from './Progress.module.scss';
 import type { IProgressBarProps, ISpinnerProps } from './Progress.types';
 
 export const Spinner: React.FC<ISpinnerProps> = ({
-  text = 'I am definitely loading...',
+  text = 'Cargando contenido...',
   labelPosition = 'above',
   darkMode = false,
   icon,

@@ -1,0 +1,21 @@
+.panel.panel :global(.ms-Panel-main) {
+	width: 480px !important;
+}
+
+.ubi {
+	position: relative;
+	margin: 0;
+	padding: 6px 0 0 34px;
+	list-style: none;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 12px;
+		bottom: 18px;
+		left: 10px;
+		width: 3px;
+		border-radius: 2px;
+		background-color: var(--ubi-dark);
+	}
+}

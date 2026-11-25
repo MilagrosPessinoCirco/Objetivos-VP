@@ -249,6 +249,18 @@ define([], function () {
 		"ResultadoClaveUpdated": "El resultado clave \"{0}\" se ha actualizado correctamente.",
 		"ResultadoClaveSaveError": "No se pudo guardar el seguimiento del resultado clave.",
 		"AvanceNotApplicable": "No aplica",
+		"UbicacionTitulo": "Ubicación en la estrategia",
+		"UbicacionSubtitulo": "{0} · recorrido desde la palanca hasta las tareas",
+		"UbicacionNivelPalanca": "Palanca estratégica ({0})",
+		"UbicacionNivelOtraVp": "Otra VP",
+		"UbicacionNivelObjetivo": "Objetivo ({0})",
+		"UbicacionNivelIniciativas": "Iniciativas ({0})",
+		"UbicacionNivelTareas": "Tareas ({0})",
+		"UbicacionVerMas": "y {0} más",
+		"UbicacionVerMenos": "Ver menos",
+		"UbicacionVacio": "Sin elementos cargados",
+		"UbicacionErrorCarga": "No se pudo cargar la ubicación en la estrategia.",
+		"UbicacionCargando": "Cargando la ubicación en la estrategia...",
 		"TareasAllTitle": "Todas las tareas",
 		"TareasTabsAriaLabel": "Tareas a mostrar",
 		"TareasStateTabsAriaLabel": "Estado de la tarea",
@@ -323,7 +335,6 @@ define([], function () {
 		"ObjetivoConfirmCreate": "Estás por cargar el objetivo aprobado en el comité. Una vez guardado, sólo el Administrador podrá modificarlo. ¿Querés continuar?",
 		"ObjetivoConfirmEdit": "Estás por modificar el objetivo. Todo cambio requiere el visto bueno del VP. ¿Querés continuar?",
 		"ObjetivoConfirmEditTitle": "Guardar cambios del objetivo",
-		"FiltersAllFeminine": "Todas",
-		"AvanceNotApplicable": "No aplica"
+		"FiltersAllFeminine": "Todas"
 	}
 });

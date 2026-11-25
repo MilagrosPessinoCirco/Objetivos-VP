@@ -12,12 +12,19 @@ const LOCATION_BUTTON_STYLE = {
 	'--location-bg-hover': getColorStep('Tertiary', '700').value
 } as CSSProperties;
 
-const LocationButton: React.FC = () => (
+export interface ILocationButtonProps {
+	onClick: () => void;
+	buttonRef?: React.Ref<HTMLButtonElement>;
+}
+
+const LocationButton: React.FC<ILocationButtonProps> = ({ onClick, buttonRef }) => (
 	<Button
 		variant="primary"
 		className={styles.location}
 		style={LOCATION_BUTTON_STYLE}
-		iconLeft={<FigmaIcon name="chevronDown" className={styles.whiteIcon} />}
+		iconLeft={<FigmaIcon name="chevronDoubleDown" size="sm" className={styles.whiteIcon} />}
+		onClick={onClick}
+		ref={buttonRef}
 	>
 		{strings.PalancaLocationButton}
 	</Button>
