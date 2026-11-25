@@ -59,7 +59,7 @@ export function toLookupValueArray(value: any): ILookupValue[] | undefined {
 		return undefined;
 	}
 
-	const items = Array.isArray(value) ? value : (value.results ?? []);
+	const items = Array.isArray(value) ? value : (value.results ?? (value.Id === undefined ? [] : [value]));
 	return items.map((item: any) => toLookupValue(item)).filter((item: ILookupValue | undefined): item is ILookupValue => item != null);
 }
 

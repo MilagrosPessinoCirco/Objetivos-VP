@@ -10,10 +10,11 @@ import useComentariosIniciativa from '../../../../../core/api/ComentarioIniciati
 import useIniciativaDataSource from '../../../../../core/api/Iniciativa/useIniciativaDataSource';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
 import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
-import { Iniciativa, ResultadoClave } from '../../../../../core/entities';
+import useTareasIniciativa from '../../../../../core/api/Tarea/useTareasIniciativa';
+import { Iniciativa, ResultadoClave, Tarea } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
 import * as strings from 'ObjetivosVpWebPartStrings';
-import { INICIATIVAS_PATH, getObjetivoPath } from '../../ObjetivosVp/routes';
+import { INICIATIVAS_PATH, getObjetivoPath, getTareaPath } from '../../ObjetivosVp/routes';
 import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
@@ -22,6 +23,8 @@ import AvanceText from '../../shared/AvanceText/AvanceText';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
+import TareaFormPanel from '../../Tarea/TareaForm/TareaFormPanel';
+import { canCargarTarea } from '../../Tarea/tareaUtils';
 import { isVpRrii } from '../../Objetivo/objetivoUtils';
 import useObjetivoNames from '../../Objetivo/useObjetivoNames';
 import IniciativaEstadoPanel from '../IniciativaEstadoPanel/IniciativaEstadoPanel';
@@ -32,6 +35,8 @@ import { getAvanceIniciativa } from '../resultadoClaveUtils';
 import IniciativaComentario from './IniciativaComentario/IniciativaComentario';
 import IniciativaInfo from './IniciativaInfo/IniciativaInfo';
 import IniciativaResultadosClave from './IniciativaResultadosClave/IniciativaResultadosClave';
+import IniciativaTareas from './IniciativaTareas/IniciativaTareas';
+import IniciativaTareasIndicadores from './IniciativaTareasIndicadores/IniciativaTareasIndicadores';
 import styles from './IniciativaDetalle.module.scss';
 
 export interface IIniciativaDetalleProps {
@@ -39,6 +44,7 @@ export interface IIniciativaDetalleProps {
 	canChangeEstado: boolean;
 	canLoadResultadosClave: boolean;
 	canTrackResultadoClave: boolean;
+	canCreateTarea: boolean;
 }
 
 const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
@@ -46,6 +52,8 @@ const NAME_SEPARATOR = ', ';
 
 const CHANGE_STATUS_COLOR = getColorStep('Secondary', '700').value;
 const CHANGE_STATUS_STYLE: CSSProperties = { backgroundColor: CHANGE_STATUS_COLOR, borderColor: CHANGE_STATUS_COLOR };
+const NEW_TAREA_COLOR = getColorStep('Tertiary', '900').value;
+const NEW_TAREA_STYLE: CSSProperties = { fontWeight: typography.weight.bold, backgroundColor: NEW_TAREA_COLOR, borderColor: NEW_TAREA_COLOR };
 const PROGRESS_LABEL_STYLE: CSSProperties = {
 	fontFamily: typography.family.base,
 	fontSize: typography.size[14],
@@ -57,7 +65,7 @@ const getFrom = (state: unknown): string | undefined => {
 	return typeof from === 'string' ? from : undefined;
 };
 
-const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChangeEstado, canLoadResultadosClave, canTrackResultadoClave }) => {
+const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChangeEstado, canLoadResultadosClave, canTrackResultadoClave, canCreateTarea }) => {
 	const { id } = useParams<{ id: string }>();
 	const iniciativaId = Number(id);
 	const isValidId = Number.isInteger(iniciativaId) && iniciativaId > 0;
@@ -69,9 +77,11 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 	const [resultadoState, getResultados] = useResultadoClaveDataSource();
 	const names = useObjetivoNames();
 	const comentarios = useComentariosIniciativa(isValidId ? iniciativaId : undefined);
+	const tareas = useTareasIniciativa(isValidId ? iniciativaId : undefined);
 	const [ready, setReady] = React.useState<boolean>(false);
 	const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
 	const [isEstadoOpen, setIsEstadoOpen] = React.useState<boolean>(false);
+	const [isTareaOpen, setIsTareaOpen] = React.useState<boolean>(false);
 	const [trackingResultado, setTrackingResultado] = React.useState<ResultadoClave | undefined>(undefined);
 	const [noticeMessage, setNoticeMessage] = React.useState<string | undefined>(undefined);
 	const closeNotice = React.useCallback((): void => setNoticeMessage(undefined), []);
@@ -107,6 +117,10 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 		}
 	};
 
+	const openTarea = (tareaId: number): void => {
+		navigate(getTareaPath(tareaId), { state: { from: location.pathname + location.search } });
+	};
+
 	const onEdited = (saved: Iniciativa): void => {
 		setIsFormOpen(false);
 		getIniciativas();
@@ -119,6 +133,12 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 		getIniciativas();
 		comentarios.reload();
 		setNoticeMessage(Utils.replaceAll(strings.IniciativaStatusUpdated, '{0}', iniciativa?.Nombre ?? ''));
+	};
+
+	const onTareaCreated = (tarea: Tarea): void => {
+		setIsTareaOpen(false);
+		tareas.reload();
+		setNoticeMessage(Utils.replaceAll(strings.TareaCreated, '{0}', tarea.Nombre ?? ''));
 	};
 
 	const onTracked = (): void => {
@@ -149,6 +169,14 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 				/>
 				{isRrii && <IniciativaResultadosClave resultados={resultados} onTrack={canTrackResultadoClave ? setTrackingResultado : undefined} />}
 				<IniciativaComentario comentario={ultimoComentario} onEdit={canChangeEstado ? () => setIsEstadoOpen(true) : undefined} />
+				{tareas.error
+					? <MessageBar type="error" message={strings.TareasLoadError} actions={<Button variant="secondary" onClick={() => { tareas.reload(); }}>{strings.TareasRetry}</Button>} />
+					: (
+						<>
+							<IniciativaTareasIndicadores tareas={tareas.items} />
+							<IniciativaTareas tareas={tareas.items} onView={openTarea} />
+						</>
+					)}
 			</>
 		);
 	};
@@ -197,6 +225,16 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 							{strings.IniciativaChangeStatus}
 						</Button>
 					)}
+					{canCreateTarea && iniciativa && (
+						<Button
+							variant="primary"
+							style={NEW_TAREA_STYLE}
+							disabled={!canCargarTarea(iniciativa, tareas.items)}
+							onClick={() => setIsTareaOpen(true)}
+						>
+							{strings.TareaNew}
+						</Button>
+					)}
 				</DetailFooter>
 				{isFormOpen && iniciativa && <IniciativaFormPanel iniciativa={iniciativa} canLoadResultadosClave={canLoadResultadosClave} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
 				{isEstadoOpen && iniciativa && (
@@ -206,6 +244,9 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 						onSaved={onEstadoSaved}
 						onCancel={() => setIsEstadoOpen(false)}
 					/>
+				)}
+				{isTareaOpen && iniciativa && (
+					<TareaFormPanel iniciativaFijaId={iniciativa.Id} onSaved={onTareaCreated} onCancel={() => setIsTareaOpen(false)} />
 				)}
 				{trackingResultado && (
 					<ResultadoClaveSeguimientoPanel

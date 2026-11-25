@@ -10,3 +10,8 @@ export const INICIATIVA_DETAIL_PATH = `${INICIATIVAS_PATH}/:id`;
 export const INICIATIVAS_VISTA_PARAM = 'vista';
 export const INICIATIVAS_VISTA_TODAS = 'todas';
 export const getIniciativaPath = (id: number): string => `${INICIATIVAS_PATH}/${id}`;
+export const TAREAS_PATH = '/tarea';
+export const TAREA_DETAIL_PATH = `${TAREAS_PATH}/:id`;
+export const TAREAS_VISTA_PARAM = 'vista';
+export const TAREAS_VISTA_TODAS = 'todas';
+export const getTareaPath = (id: number): string => `${TAREAS_PATH}/${id}`;

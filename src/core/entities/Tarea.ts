@@ -1,6 +1,6 @@
 import { BaseEntity } from './';
 import { IPersonValue, toPersonValue, toDateValue } from '../utils/Mappers';
-import { ILookupValue, toLookupValue, toLookupValueArray, toChoiceValue, toChoiceValueArray, assertChoiceValue } from '../utils/Mappers';
+import { ILookupValue, toLookupValue, toLookupValueArray, toLookupIds, toChoiceValue, toChoiceValueArray, assertChoiceValue } from '../utils/Mappers';
 import { Prioridad, EstadoTarea } from '../utils/Constants';
 
 export default class Tarea extends BaseEntity {
@@ -11,6 +11,7 @@ export default class Tarea extends BaseEntity {
 	protected mapItem(item: any): void {
 		this.Nombre = item.Nombre ?? undefined;
 		this.Descripcion = item.Descripcion ?? undefined;
+		this.QueHabilita = item.QueHabilita ?? undefined;
 		this.Iniciativa = toLookupValue(item.Iniciativa);
 		this.Objetivo = toLookupValue(item.Objetivo);
 		this.Responsable = toPersonValue(item.Responsable);
@@ -21,7 +22,11 @@ export default class Tarea extends BaseEntity {
 		this.Estado = toChoiceValue(EstadoTarea, item.Estado, 'Estado');
 		this.FechaFinalizacion = toDateValue(item.FechaFinalizacion);
 		this.RequiereInversion = item.RequiereInversion ?? undefined;
-		this.Area = toLookupValue(item.Area);
+		this.Area = toLookupValueArray(item.Area);
+		this.FechaUltimaActualizacion = toDateValue(item.FechaUltimaActualizacion);
+		this.ComentarioEjecutivo = item.ComentarioEjecutivo ?? undefined;
+		this.ComentarioEjecutivoFecha = toDateValue(item.ComentarioEjecutivoFecha);
+		this.ComentarioEjecutivoAutor = toPersonValue(item.ComentarioEjecutivoAutor);
 		this.Created = toDateValue(item.Created);
 		this.Modified = toDateValue(item.Modified);
 		this.Author = toPersonValue(item.Author);
@@ -31,35 +36,45 @@ export default class Tarea extends BaseEntity {
 	public toListItem(): any {
 		return {
 			...super.toListItem(),
+			Title: this.Nombre,
 			Nombre: this.Nombre,
 			Descripcion: this.Descripcion,
+			QueHabilita: this.QueHabilita,
 			IniciativaId: this.Iniciativa?.Id,
 			ObjetivoId: this.Objetivo?.Id,
 			ResponsableId: this.Responsable?.Id,
-			Prioridad: assertChoiceValue(Prioridad, this.Prioridad, 'Prioridad'),
+			Prioridad: this.Prioridad == null ? this.Prioridad : assertChoiceValue(Prioridad, this.Prioridad, 'Prioridad'),
 			FechaInicio: this.FechaInicio,
 			FechaCompromiso: this.FechaCompromiso,
 			Avance: this.Avance,
-			Estado: assertChoiceValue(EstadoTarea, this.Estado, 'Estado'),
+			Estado: this.Estado === undefined ? undefined : assertChoiceValue(EstadoTarea, this.Estado, 'Estado'),
 			FechaFinalizacion: this.FechaFinalizacion,
-			RequiereInversion: this.RequiereInversion,
-			AreaId: this.Area?.Id,
+			FechaUltimaActualizacion: this.FechaUltimaActualizacion,
+			ComentarioEjecutivo: this.ComentarioEjecutivo,
+			ComentarioEjecutivoFecha: this.ComentarioEjecutivoFecha,
+			ComentarioEjecutivoAutorId: this.ComentarioEjecutivoAutor?.Id,
+			AreaId: toLookupIds(this.Area),
 		};
 	}
 
 	public Nombre?: string | undefined;
 	public Descripcion?: string | undefined;
+	public QueHabilita?: string | undefined;
 	public Iniciativa?: ILookupValue | undefined;
 	public Objetivo?: ILookupValue | undefined;
 	public Responsable?: IPersonValue | undefined;
-	public Prioridad?: Prioridad | undefined;
+	public Prioridad?: Prioridad | null | undefined;
 	public FechaInicio?: Date | null | undefined;
 	public FechaCompromiso?: Date | null | undefined;
 	public Avance?: number | undefined;
 	public Estado?: EstadoTarea | undefined;
 	public FechaFinalizacion?: Date | null | undefined;
 	public RequiereInversion?: boolean | undefined;
-	public Area?: ILookupValue | undefined;
+	public Area?: ILookupValue[] | undefined;
+	public FechaUltimaActualizacion?: Date | null | undefined;
+	public ComentarioEjecutivo?: string | undefined;
+	public ComentarioEjecutivoFecha?: Date | null | undefined;
+	public ComentarioEjecutivoAutor?: IPersonValue | undefined;
 
 	public Created?: Date | null;
 	public Modified?: Date | null;
