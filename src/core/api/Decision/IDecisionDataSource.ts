@@ -6,6 +6,7 @@ export default interface IDecisionDataSource {
 
 	getItems(): Promise<Decision[]>;
 	getFilteredItems(riesgoId: number): Promise<Decision[]>;
+	getFilteredItemsByRiesgos(riesgoIds: number[]): Promise<Decision[]>;
 	add(item: Decision): Promise<Decision>;
 	edit(item: Decision): Promise<Decision>;
 	delete(itemId: number): Promise<void>;

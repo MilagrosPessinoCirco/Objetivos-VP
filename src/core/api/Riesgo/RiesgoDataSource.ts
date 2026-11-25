@@ -1,6 +1,6 @@
 import { SPFI } from "@pnp/sp";
 import { getSP } from '../../pnp/sp/pnpjs-presets';
-import { Lista } from '../../utils/Constants';
+import { EstadoRiesgo, Lista } from '../../utils/Constants';
 import { Riesgo } from "../../entities";
 import IRiesgoDataSource from './IRiesgoDataSource';
 
@@ -40,6 +40,19 @@ export default class RiesgoDataSource implements IRiesgoDataSource {
 			.select(...this.selectProperties)
 			.expand(...this.expand)
 			.filter(`TareaId eq ${tareaId}`)
+			.top(TOP_DEFAULT)();
+		return items.map(item => new Riesgo(item));
+	}
+
+	public async getActivosEscaladosByTareas(tareaIds: number[]): Promise<Array<Riesgo>> {
+		if (tareaIds.length === 0) {
+			return [];
+		}
+		const porTarea: string = tareaIds.map(id => `TareaId eq ${id}`).join(' or ');
+		const items: any[] = await this._sp.web.lists.getByTitle(this.listTitle).items
+			.select(...this.selectProperties)
+			.expand(...this.expand)
+			.filter(`(${porTarea}) and Estado ne '${EstadoRiesgo.Resuelto}'`)
 			.top(TOP_DEFAULT)();
 		return items.map(item => new Riesgo(item));
 	}

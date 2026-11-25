@@ -5,6 +5,7 @@ import { Decision } from "../../entities";
 import IDecisionDataSource from './IDecisionDataSource';
 
 const TOP_DEFAULT = 5000;
+const DECISIONES_POR_TANDA = 40;
 
 export default class DecisionDataSource implements IDecisionDataSource {
 	private _sp: SPFI;
@@ -12,9 +13,7 @@ export default class DecisionDataSource implements IDecisionDataSource {
 	private selectProperties: Array<string> = [
 		'Id', 'Title',
 		'DecisionNecesaria',
-		'FechaResolucion',
 		'Riesgo/Id', 'Riesgo/Title',
-		'Responsable',
 		'FechaLimite',
 		'Created', 'Modified',
 		'Author/Id', 'Author/Title', 'Author/EMail',
@@ -42,6 +41,20 @@ export default class DecisionDataSource implements IDecisionDataSource {
 			.filter(`RiesgoId eq ${riesgoId}`)
 			.top(TOP_DEFAULT)();
 		return items.map(item => new Decision(item));
+	}
+
+	public async getFilteredItemsByRiesgos(riesgoIds: number[]): Promise<Array<Decision>> {
+		const resultados: Decision[] = [];
+		for (let inicio = 0; inicio < riesgoIds.length; inicio += DECISIONES_POR_TANDA) {
+			const tanda: number[] = riesgoIds.slice(inicio, inicio + DECISIONES_POR_TANDA);
+			const items: any[] = await this._sp.web.lists.getByTitle(this.listTitle).items
+				.select(...this.selectProperties)
+				.expand(...this.expand)
+				.filter(tanda.map(id => `RiesgoId eq ${id}`).join(' or '))
+				.top(TOP_DEFAULT)();
+			resultados.push(...items.map(item => new Decision(item)));
+		}
+		return resultados;
 	}
 
 	public add(item: Decision): Promise<Decision> {

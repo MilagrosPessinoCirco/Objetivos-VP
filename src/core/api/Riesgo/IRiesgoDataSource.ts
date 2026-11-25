@@ -6,6 +6,7 @@ export default interface IRiesgoDataSource {
 
 	getItems(): Promise<Riesgo[]>;
 	getFilteredItems(tareaId: number): Promise<Riesgo[]>;
+	getActivosEscaladosByTareas(tareaIds: number[]): Promise<Riesgo[]>;
 	add(item: Riesgo): Promise<Riesgo>;
 	edit(item: Riesgo): Promise<Riesgo>;
 	delete(itemId: number): Promise<void>;

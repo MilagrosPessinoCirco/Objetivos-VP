@@ -323,6 +323,34 @@ declare interface IObjetivosVpWebPartStrings {
 	TareaIndicatorsSection: string;
 	TareaSection: string;
 	TareaSectionEmpty: string;
+	RiesgoSection: string;
+	RiesgoIniciativaSection: string;
+	RiesgoNew: string;
+	RiesgoFormEditTitle: string;
+	RiesgoFieldDescriptionPlaceholder: string;
+	RiesgoFieldRequiresDecision: string;
+	RiesgoFieldDecision: string;
+	RiesgoFieldDecisionPlaceholder: string;
+	RiesgoFieldDueDate: string;
+	RiesgoColRisk: string;
+	RiesgoColDueDate: string;
+	RiesgoStateActive: string;
+	RiesgoStateEscalated: string;
+	RiesgoStateResolved: string;
+	RiesgoEdit: string;
+	RiesgoSectionEmpty: string;
+	RiesgoIniciativaEmpty: string;
+	RiesgoIndicatorActive: string;
+	RiesgoIndicatorEscalated: string;
+	RiesgoIndicatorPendingDecisions: string;
+	RiesgoCreated: string;
+	RiesgoUpdated: string;
+	RiesgoEscalated: string;
+	RiesgoDueDatePast: string;
+	RiesgoSaveError: string;
+	RiesgoSaveIncompleteError: string;
+	RiesgoRuleError: string;
+	RiesgosLoadError: string;
 }
 
 declare module 'ObjetivosVpWebPartStrings' {
