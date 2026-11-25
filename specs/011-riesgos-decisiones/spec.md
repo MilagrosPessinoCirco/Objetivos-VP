@@ -38,7 +38,7 @@ La persona que ejecuta una tarea detecta un problema y abre "Cargar riesgo" desd
 5. **Given** el panel completo y válido, **When** la persona elige Guardar, **Then** el riesgo se registra con estado "Activo", con un ID RSK-NN asignado por el sistema, vinculado a la tarea del contexto; si requiere decisión, la decisión se registra junto con él, en la misma operación; el panel se cierra y la persona ve «El riesgo "[descripción]" se ha cargado correctamente.».
 6. **Given** el panel de alta, **When** la persona elige Cancelar, **Then** el panel se cierra y no se registra nada.
 7. **Given** la fecha límite de la decisión, **When** se carga o se muestra, **Then** usa el formato dd/mm/aaaa.
-8. **Given** un guardado que falla, **When** el sistema no puede registrar el riesgo o su decisión, **Then** no queda registrado un riesgo sin su decisión (o una decisión sin su riesgo) y la persona ve un aviso con la opción de reintentar; el panel conserva lo ingresado.
+8. **Given** un guardado que falla, **When** el sistema no puede registrar el riesgo o su decisión, **Then** no queda registrado un riesgo sin su decisión (o una decisión sin su riesgo): se revierte lo escrito y la persona ve un aviso con la opción de reintentar; el panel conserva lo ingresado. Si la reversión también falla, la persona ve un aviso distinto, el riesgo y su decisión pueden haber quedado a medias y el riesgo sigue editable para completarlos volviendo a pulsar Guardar.
 9. **Given** el detalle de una tarea Finalizada o Cancelada, o de una tarea de una iniciativa Finalizada o Cancelada, **When** se observa el pie fijo, **Then** no se ve "Cargar riesgo" y, si se intenta el alta por otra vía, el sistema la rechaza.
 10. **Given** el panel de alta con Requiere decisión en "Sí", **When** la Fecha límite de la decisión es anterior a hoy, **Then** no se guarda y el campo muestra «La fecha límite no puede ser anterior a hoy.». El propio día de hoy se acepta.
 
@@ -93,7 +93,7 @@ La persona abre el lápiz de un riesgo y, en el panel "Editar riesgo RSK-NN", mo
 8. **Given** una edición guardada, **When** se registra, **Then** quedan actualizadas la fecha y el autor de última modificación del riesgo y, si se modificó, de su decisión. Tras una reversión por un fallo del guardado, la fecha y el autor de última modificación reflejan la reversión.
 9. **Given** el panel de edición, **When** la persona elige Cancelar, **Then** se cierra y no se modifica nada.
 10. **Given** el riesgo en edición, **When** se muestra el panel, **Then** la Tarea no se puede cambiar.
-11. **Given** un guardado que falla, **When** el sistema no puede registrar el cambio, **Then** el riesgo y su decisión no quedan a medias y la persona ve un aviso con la opción de reintentar; el panel conserva lo ingresado.
+11. **Given** un guardado que falla, **When** el sistema no puede registrar el cambio, **Then** el riesgo y su decisión no quedan a medias: se revierte lo escrito y la persona ve un aviso con la opción de reintentar; el panel conserva lo ingresado. Si la reversión también falla, la persona ve un aviso distinto, el riesgo y su decisión pueden haber quedado a medias y el riesgo sigue editable para completarlos volviendo a pulsar Guardar.
 
 ---
 

@@ -26,7 +26,7 @@ Enfoque técnico:
 
 **Storage**: listas de SharePoint `Riesgo` y `Decision` (`Lista.Riesgo` = "Riesgo" y `Lista.Decision` = "Decision" en `src/core/utils/Constants.ts`), que ya existen, más `Tarea` e `Iniciativa` (solo lectura, para validar). El código no crea ni modifica listas ni columnas. Hay verificaciones e índices a cargo de la usuaria (V1 a V8, más abajo).
 
-**Testing**: no hay runner de pruebas. Validación: `npm run build` (principio V), escenarios de [quickstart.md](./quickstart.md) con mocks y en el workbench hospedado del sitio de desarrollo, y comparación visual con el prototipo. Se escribe solo en las listas de desarrollo y con autorización explícita.
+**Testing**: no hay runner de pruebas. Validación: `npm run build` (principio V), escenarios de [quickstart.md](./quickstart.md): §1 a §6 con mocks y §7 y §8 (fallos parciales, reversión y estados desactualizados) solo en el workbench hospedado del sitio de desarrollo, y comparación visual con el prototipo. Se escribe solo en las listas de desarrollo y con autorización explícita.
 
 **Target Platform**: SharePoint Online, navegador de escritorio.
 

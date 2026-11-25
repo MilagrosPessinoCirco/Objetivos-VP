@@ -5,8 +5,8 @@ Guion de QA manual. Prerrequisitos y condiciones iguales a los del [quickstart d
 ## Preparación
 
 1. `npm run build` termina sin errores (corre `eslint` y `heft build`).
-2. Con mocks (`npm start`, workbench local): se pueden recorrer todos los escenarios salvo los fallos parciales (punto 7). Datos: RSK-01 a RSK-06 sobre TAR-01 a TAR-07 de la iniciativa 1.
-3. Con las listas de desarrollo, además: haber hecho las verificaciones V1 a V8 del [plan](./plan.md#verificaciones-a-cargo-de-la-usuaria) y anotado el resultado en [research.md](./research.md#verificaciones-pendientes-a-cargo-de-la-usuaria).
+2. Con mocks (`npm start`, workbench local): se recorren los escenarios §1 a §6. Los §7 y §8 (fallos parciales, reversión y estados desactualizados) **no se hacen con mocks**: solo en el sitio de desarrollo. Datos: RSK-01 a RSK-06 sobre TAR-01 a TAR-07 de la iniciativa 1.
+3. Con las listas de desarrollo (solo para §7 y §8, con autorización): haber hecho las verificaciones V1 a V8 del [plan](./plan.md#verificaciones-a-cargo-de-la-usuaria) y anotado el resultado en [research.md](./research.md#verificaciones-pendientes-a-cargo-de-la-usuaria).
 
 ## Escenarios (con mocks)
 
@@ -50,6 +50,10 @@ Cada uno se contrasta con la spec y el prototipo v11 (`docs/Gestion-Objetivos-VP
 
 - Con `CAN_CREATE_RIESGO` y `CAN_EDIT_RIESGO` en `true` (valor entregado) todo lo anterior se ve. Cambiar temporalmente una a `false` y verificar que se oculta "Cargar riesgo" o el lápiz. **Volver a `true`**: no se entregan cambios en esas constantes. El bloqueo efectivo por rol y el rechazo del guardado sin permiso **no se verifican** en esta feature (RF-19).
 
+## Escenarios (solo en el sitio de desarrollo)
+
+No se corren con mocks (su estado es por página y no se puede forzar un fallo ni un estado desactualizado desde otra pestaña). Exigen la precondición V1 a V8 del plan, autorización explícita y escribir solo en las listas de desarrollo. Son los de T044.
+
 ### 7. Fallos parciales y todo o nada (FR-008b)
 
 Se verifican en el workbench hospedado, sin código de prueba: en las herramientas del navegador, bloquear la URL de la lista `Decision` (por ejemplo, con "Block request URL" sobre `…/lists/getbytitle('Decision')/items`).
@@ -61,7 +65,9 @@ Se verifican en el workbench hospedado, sin código de prueba: en las herramient
 - Con una cuenta que carga riesgos, verificar que puede eliminar los elementos que creó (V8); sin ese permiso, la reversión no funciona.
 - Anotar en cada caso qué quedó en cada lista.
 
-### 8. Reglas en el servicio, no solo en la interfaz (FR-009, FR-009a, FR-011)
+### 8. Reglas en el servicio, no solo en la interfaz (FR-009, FR-009a, FR-011, SC-007)
+
+Solo en el sitio de desarrollo, junto a los fallos parciales de §7:
 
 - Con el panel de edición de un riesgo abierto, cambiar su estado desde otra pestaña y volver a guardar: el servicio rechaza con `RiesgoRuleError` y no escribe.
 - Con el panel de "Cargar riesgo" abierto, finalizar la tarea o la iniciativa desde otra pestaña y guardar: se rechaza el alta.
@@ -70,7 +76,7 @@ Se verifican en el workbench hospedado, sin código de prueba: en las herramient
 ## Comprobaciones transversales
 
 - Sin acción de eliminar riesgos o decisiones en ninguna pantalla (FR-007); el servicio solo borra para deshacer.
-- Rendimiento: detalle de la tarea y de la iniciativa en menos de 3 s con el volumen de un año; en la pestaña Red, riesgos y decisiones suman 2 consultas por detalle (sin una por riesgo).
+- Rendimiento (solo en el sitio de desarrollo, T044): detalle de la tarea y de la iniciativa en menos de 3 s con el volumen de un año; en la pestaña Red, riesgos y decisiones suman 2 consultas por detalle (sin una por riesgo).
 - Ningún texto con la palabra "mail" ni leyenda sobre el mail (FR-012).
 - Sin colores, tipografías ni espaciados fuera del Design System.
 - Textos de `loc/` coinciden con [contracts/ui-contracts.md](./contracts/ui-contracts.md#textos-de-localización).
