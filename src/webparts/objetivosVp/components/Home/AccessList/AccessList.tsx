@@ -24,9 +24,9 @@ const LIGHT_TEXT_COLOR = '#fcfcfc';
 const ACCESS_ITEMS: IAccessItem[] = [
 	{ title: strings.AccessMyTasks, iconName: 'checkmark', colorGroup: 'Primary', colorScale: '800', route: TAREAS_PATH },
 	{ title: strings.AccessMyInitiatives, iconName: 'applications', colorGroup: 'Tertiary', colorScale: '800', route: INICIATIVAS_PATH },
-	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '200', route: PALANCAS_PATH },
-	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Primary', colorScale: '300' },
-	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '700', soloAdministrador: true }
+	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '400', route: PALANCAS_PATH },
+	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Secondary', colorScale: '700' },
+	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '800', soloAdministrador: true }
 ];
 
 const AccessList: React.FC = () => {
