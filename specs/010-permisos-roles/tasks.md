@@ -122,7 +122,7 @@ Decisiones posteriores al plan, ya incorporadas en `plan.md`, `research.md`, `da
 
 **Goal**: antes de guardar, la aplicación vuelve a verificar el permiso; sin permiso no guarda y muestra en una línea "No tenés permiso para realizar esta acción.".
 
-**Independent Test**: escenarios G1 a G7 del quickstart (cambiar `rolMock` sin recargar y guardar).
+**Independent Test**: escenarios G1 a G8 (incluidos G6b y G8) del quickstart (cambiar `rolMock` sin recargar y guardar).
 
 **Patrón común de todas las tareas**: en el punto de escritura, dentro del `try` que ya existe, antes de escribir:
 
@@ -143,7 +143,7 @@ y en el `catch`, `setSaveError(isPermisoDenegadoError(error) ? strings.PermisoDe
 - [ ] T022 [P] [US4] Tareas, alta y edición. Editar `src/webparts/objetivosVp/components/Tarea/TareaForm/TareaFormPanel.tsx`: agregar la propiedad opcional `accountable?: IPersonValue` (solo se usa al editar); al inicio de `save` (alta) verificar `canCreateTarea`, antes de consultar el tope de tareas, y al inicio de `saveEdicion` verificar `canUpdateTarea(tarea.Responsable, accountable)`. Editar `Tarea/TareaForm/TareaForm.tsx`: el `catch` de `save` distingue tres casos: error de tope (como hoy), `isPermisoDenegadoError` (muestra `strings.PermisoDenegado` en el mismo lugar que el mensaje de falla de guardado) y el resto (`strings.TareaSaveError`). Terminado cuando el alta y la edición se rechazan sin permiso y el tope de 10 tareas sigue mostrando su error en el campo Iniciativa.
 - [ ] T023 [P] [US4] Tareas, avance. Editar `src/webparts/objetivosVp/components/Tarea/TareaAvancePanel/TareaAvancePanel.tsx`: agregar la propiedad opcional `accountable?: IPersonValue`; dentro del `try` de `save`, antes de `addEntrada`, verificar `canUpdateTarea(tarea.Responsable, accountable)`; el `catch` muestra `strings.PermisoDenegado` o `strings.TareaProgressSaveError` (cambiar el booleano `saveFailed` por un estado con el texto). Terminado cuando, con el rol cambiado a `Visualizador`, no queda ninguna entrada nueva en el historial.
 - [ ] T024 [US4] Editar `src/webparts/objetivosVp/components/Tarea/TareaDetalle/TareaDetalle.tsx` (después de T013): pasar `accountable={iniciativa?.Accountable}` a `TareaFormPanel` y a `TareaAvancePanel`. Terminado cuando compila y el Usuario responsable (no Accountable) puede guardar un avance, mientras que un Usuario ajeno a la tarea no ve la acción. Depende de T013, T022 y T023.
-- [ ] T025 [US4] Validar con `npm start` los escenarios G1 a G7 del quickstart (cambiando `localStorage['rolMock']` sin recargar). Terminado cuando todos coinciden y en cada rechazo no se escribió nada. Depende de T017 a T024.
+- [ ] T025 [US4] Validar con `npm start` los escenarios G1 a G8 (incluidos G6b y G8) del quickstart (cambiando `localStorage['rolMock']` sin recargar). Terminado cuando todos coinciden y en cada rechazo no se escribió nada. Depende de T017 a T024.
 
 **Checkpoint**: ningún guardado se hace sin permiso, aunque la interfaz lo permitiera.
 
