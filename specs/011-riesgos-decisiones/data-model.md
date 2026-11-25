@@ -98,22 +98,6 @@ La edición escribe **solo lo que cambió**: si la decisión no cambia, su `Modi
 | Detalle de la iniciativa | Riesgos activos y escalados | `(TareaId eq a or … hasta 10) and Estado ne 'Resuelto'`, con las tareas no Canceladas | `Riesgo[]` |
 | Detalle de la iniciativa | Decisiones de esos riesgos | Igual que arriba, solo los que requieren decisión | `Decision[]` |
 | Ambas | Orden de las filas | En memoria: Escalado, Activo y Resuelto, y por ID ascendente dentro de cada grupo (`ordenarRiesgos`); no se resuelve en la consulta | — |
-| Servicio (validación) | `getById` de riesgo, tarea e iniciativa; decisiones del riesgo | `RiesgoId eq n` | Lo vigente en la lista |
+| Servicio (validación del alta) | `getById` de tarea e iniciativa | — | Lo vigente en la lista |
+| Servicio (validación de la edición) | `getById` de riesgo y de tarea; decisiones del riesgo (la iniciativa no se lee) | `RiesgoId eq n` | Lo vigente en la lista |
 
-## Datos de los mocks
-
-`RiesgoMock` y `DecisionMock` (estado a nivel de módulo), sobre las tareas de `TareaMock`. "Hoy" de referencia: 25/11/2026. Para recorrer los escenarios de la spec sin SharePoint:
-
-| Riesgo | Tarea (estado) | Estado | Requiere decisión | Decisión necesaria / fecha límite | Cubre |
-|---|---|---|---|---|---|
-| RSK-01 | TAR-02 (En curso) | Activo | No | — | Fila sin decisión ("—"); escalar y resolver. |
-| RSK-02 | TAR-02 (En curso) | Escalado | Sí | Texto de ejemplo / **01/10/2026** (vencida) | Fecha vencida que se acepta si no se toca (FR-010a); Requiere decisión fijo en Sí; resolver. |
-| RSK-03 | TAR-03 (En curso) | Activo | Sí | Texto de ejemplo / 31/03/2027 | Editar la decisión; rechazo de fecha anterior a hoy. |
-| RSK-04 | TAR-05 (Frenada) | Resuelto | Sí | Texto de ejemplo / 15/10/2026 | Solo lectura sin lápiz; no aparece en la iniciativa; decisión no pendiente. |
-| RSK-05 | TAR-01 (Finalizada) | Activo | No | — | Editable en tarea Finalizada; sin "Cargar riesgo"; cuenta en la iniciativa. |
-| RSK-06 | TAR-07 (Cancelada) | Activo | Sí | Texto de ejemplo / 15/01/2027 | Solo lectura sin lápiz; se ve en la tarea; no aparece ni cuenta en la iniciativa. |
-| — | TAR-04 (En curso) | — | — | — | Estado vacío de la tarea. |
-
-Resultado esperado en la **iniciativa 1** (TAR-01 a TAR-07): lista = RSK-01, RSK-02, RSK-03 y RSK-05; **Riesgos activos 3** (01, 03, 05), **Riesgos escalados 1** (02), **Decisiones pendientes 2** (02, 03). La **iniciativa 4** y las demás no tienen riesgos (estado vacío y contadores en 0). Para recorrer iniciativa cerrada: cambiar el estado de la iniciativa 1 a Finalizada desde "Cambiar estado" (el mock es mutable) y volver a abrir la tarea.
-
-`DecisionMock`: una decisión por cada riesgo con decisión (RSK-02, 03, 04 y 06). `add` asigna el próximo Id, `edit` mezcla solo lo definido (un `null` vacía la columna), `delete` quita el registro y `getById` rechaza con 404, como `TareaMock`.

@@ -27,7 +27,7 @@ Rutas relativas a `src/webparts/objetivosVp/components`.
 | `onEdit` | `(item) => void` | Solo `tarea`. |
 | `onView` | `(tareaId: number) => void` | Solo `iniciativa`. Abre el detalle de la tarea. |
 
-Columnas: **tarea** = ID, Riesgo, Requiere decisión, Decisión necesaria, Fecha límite, Estado, Acción. **iniciativa** = ID, Riesgo, Tarea (`TAR-nn · nombre`), Decisión necesaria, Fecha límite, Estado, Ver. La fecha con `formatDate`; "—" en decisión y fecha cuando no requiere decisión. Estado con `Chip` `size="small"`. Sin paginación.
+Columnas: **tarea** = ID, Riesgo, Requiere decisión, Decisión necesaria, Fecha límite, Estado, Acción. **iniciativa** = ID, Riesgo, Tarea (`TAR-nn · nombre`), Decisión necesaria, Fecha límite, Estado, Ver. La fecha con `formatDate`; "—" en decisión y fecha cuando no requiere decisión. Estado con `Chip` `size="small"`. Sin paginación. Acción: `Tooltip` «Editar riesgo» (`RiesgoEdit`) y aria-label «Editar riesgo RSK-nn» (la plantilla `RiesgoFormEditTitle` con `{0}` = el ID). Ver: `Tooltip` `TareaViewTooltip` («Ver tarea») y aria-label `TareaViewAriaLabel` con `{0}` = el ID de la tarea.
 
 **Orden de las filas** (decidido el 2026-11-25): la tabla muestra `items` en el orden recibido y no reordena. El servicio los entrega con `ordenarRiesgos`: Escalados primero, después Activos y al final Resueltos, y dentro de cada grupo por ID ascendente; en la variante `iniciativa`, el mismo criterio sin Resueltos. Se resuelve en memoria, no en la consulta.
 
@@ -37,10 +37,24 @@ Columnas: **tarea** = ID, Riesgo, Requiere decisión, Decisión necesaria, Fecha
 |---|---|---|
 | `tarea` | `Tarea` | Contexto: ID y nombre en el subtítulo y `tareaId` del alta. |
 | `item` | `IRiesgoConDecision \| undefined` | Sin valor = alta; con valor = edición. |
-| `onSaved` | `(escalado: boolean) => void` | Tras un guardado exitoso. `escalado` indica el paso de Activo a Escalado para elegir el mensaje. El detalle recarga y muestra `SuccessNotice`. |
+| `onSaved` | `(escalado: boolean, descripcion: string) => void` | Tras un guardado exitoso. `escalado` indica el paso de Activo a Escalado para elegir el mensaje; `descripcion` es la descripción guardada (recortada), que completa el `{0}` del mensaje. El detalle recarga y muestra `SuccessNotice`. |
 | `onCancel` | `() => void` | Cierra sin guardar. |
 
-Comportamiento: ver [plan.md](../plan.md#mapeo-elemento--componente) (panel) y los escenarios de la spec. Sin modal de confirmación. Valida con las reglas puras y llama al servicio; muestra el error de cada campo, `RiesgoRuleError` si el servicio rechaza por una regla, y `RiesgoSaveError` o `RiesgoSaveIncompleteError` ante un fallo del guardado. Retiene `pendiente` en un `useRef`. El Estado de la edición ofrece `getEstadosDisponibles`; Requiere decisión queda deshabilitado en "Sí" si hay decisión guardada (`isRequiereDecisionFijo`).
+Comportamiento: ver [plan.md](../plan.md#mapeo-elemento--componente) (panel) y los escenarios de la spec. Sin modal de confirmación. Valida con las reglas puras y llama al servicio; muestra el error de cada campo, `RiesgoRuleError` si el servicio rechaza por una regla, y `RiesgoSaveError` o `RiesgoSaveIncompleteError` ante un fallo del guardado. Retiene `pendiente` en un `useRef`. Mientras hay un `pendiente` (la reversión del alta falló) bloquea todos los campos (`isLocked`) para que el reintento no cambie lo ya creado; como el `Picker` del DS no tiene `disabled`, la fecha límite se muestra entonces como `Input` deshabilitado. El Estado de la edición ofrece `getEstadosDisponibles`; Requiere decisión queda deshabilitado en "Sí" si hay decisión guardada (`isRequiereDecisionFijo`).
+
+### `Riesgo/RiesgoForm/RiesgoForm.tsx`
+
+Cuerpo del panel; no guarda.
+
+| Prop | Tipo | Uso |
+|---|---|---|
+| `values` | `IRiesgoFormValues` | **Obligatoria.** Descripción, estado, requiere decisión, decisión y fecha límite. |
+| `issues` | `IRiesgoFormIssues` | **Obligatoria.** Error de cada campo. |
+| `isLocked` | `boolean` | **Obligatoria.** Bloquea los campos (hay un `pendiente` del alta). |
+| `onChange` | `(values) => void` | **Obligatoria.** |
+| `isEdit` | `boolean` | Opcional, por defecto `false`. Con `true`, Estado es un `Dropdown`; sin él, un `Input` deshabilitado con "Activo". |
+| `estadosDisponibles` | `EstadoRiesgo[]` | Opcional, por defecto `[]`. Opciones del `Dropdown` de Estado. |
+| `isRequiereDecisionFijo` | `boolean` | Opcional, por defecto `false`. Deshabilita Requiere decisión (decisión ya guardada). |
 
 ### `Tarea/TareaDetalle/TareaRiesgos/TareaRiesgos.tsx`
 

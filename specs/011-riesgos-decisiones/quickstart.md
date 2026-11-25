@@ -1,16 +1,16 @@
 # Quickstart: validación de Riesgos y decisiones
 
-Guion de QA manual. Prerrequisitos y condiciones iguales a los del [quickstart de la 007](../007-tareas/quickstart.md): `npm ci`, workbench hospedado del sitio de desarrollo, escritura solo en las listas de desarrollo y con autorización. Los datos de referencia de los mocks están en [data-model.md](./data-model.md#datos-de-los-mocks); los contratos, en [contracts/](./contracts/).
+Guion de QA manual. Prerrequisitos y condiciones iguales a los del [quickstart de la 007](../007-tareas/quickstart.md): `npm ci`, workbench hospedado del sitio de desarrollo, escritura solo en las listas de desarrollo y con autorización. Esta feature no usa mocks: todo se prueba contra las listas del sitio de desarrollo. Los contratos están en [contracts/](./contracts/).
 
 ## Preparación
 
 1. `npm run build` termina sin errores (corre `eslint` y `heft build`).
-2. Con mocks (`npm start`, workbench local): se recorren los escenarios §1 a §6. Los §7 y §8 (fallos parciales, reversión y estados desactualizados) **no se hacen con mocks**: solo en el sitio de desarrollo. Datos: RSK-01 a RSK-06 sobre TAR-01 a TAR-07 de la iniciativa 1.
-3. Con las listas de desarrollo (solo para §7 y §8, con autorización): haber hecho las verificaciones V1 a V8 del [plan](./plan.md#verificaciones-a-cargo-de-la-usuaria) y anotado el resultado en [research.md](./research.md#verificaciones-pendientes-a-cargo-de-la-usuaria).
+2. Con las listas de desarrollo (workbench hospedado) y autorización explícita para escribir en ellas: preparar riesgos y decisiones de cada tipo que usan los escenarios (los nombres RSK-nn y TAR-nn de abajo son ilustrativos): tarea En curso con un riesgo Escalado con decisión de fecha límite ya vencida y un riesgo Activo sin decisión; tarea En curso con un riesgo Activo con decisión; tarea Frenada con un riesgo Resuelto; tarea Finalizada con un riesgo Activo sin decisión; tarea Cancelada con un riesgo Activo con decisión; una tarea sin riesgos; una iniciativa sin riesgos.
+3. Antes de cualquier prueba: haber hecho las verificaciones V1 a V8 del [plan](./plan.md#verificaciones-a-cargo-de-la-usuaria) y anotado el resultado en [research.md](./research.md#verificaciones-pendientes-a-cargo-de-la-usuaria).
 
-## Escenarios (con mocks)
+## Escenarios (§1 a §6)
 
-Cada uno se contrasta con la spec y el prototipo v11 (`docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`). Los mocks guardan el estado en memoria: **recargar la página entre escenarios** para volver a los datos de partida.
+Cada uno se contrasta con la spec y el prototipo v11 (`docs/Gestion-Objetivos-VP-RRII-prototipo_v5/index.html`). Cada escenario que escribe deja datos en las listas de desarrollo: anotar qué se creó o cambió para dejarlo como estaba.
 
 ### 1. Ver los riesgos de la tarea (Story 2)
 
@@ -24,7 +24,7 @@ Cada uno se contrasta con la spec y el prototipo v11 (`docs/Gestion-Objetivos-VP
 - En TAR-04, "Cargar riesgo" en el pie, como botón `secondary` (a continuación de "Registrar avance"): panel "Cargar riesgo", subtítulo "TAR-04 · nombre", Estado "Activo" en solo lectura, Requiere decisión "No", sin campos de decisión.
 - Guardar vacío: «Este campo es obligatorio.» en Descripción. Con "Sí": aparecen Decisión necesaria y Fecha límite, obligatorias. Volver a "No": desaparecen.
 - Fecha límite del día de ayer: «La fecha límite no puede ser anterior a hoy.». Con la fecha de hoy: se acepta.
-- Guardar válido sin decisión y otro con decisión: «El riesgo "…" se ha cargado correctamente.»; ID `RSK-07`, `RSK-08`, estado Activo; contador "Riesgos (2)".
+- Guardar válido sin decisión y otro con decisión: «El riesgo "…" se ha cargado correctamente.»; dos IDs `RSK-NN` consecutivos, estado Activo; contador "Riesgos (2)".
 
 ### 3. Editar y cambiar de estado (Story 3)
 
@@ -50,9 +50,9 @@ Cada uno se contrasta con la spec y el prototipo v11 (`docs/Gestion-Objetivos-VP
 
 - Con `CAN_CREATE_RIESGO` y `CAN_EDIT_RIESGO` en `true` (valor entregado) todo lo anterior se ve. Cambiar temporalmente una a `false` y verificar que se oculta "Cargar riesgo" o el lápiz. **Volver a `true`**: no se entregan cambios en esas constantes. El bloqueo efectivo por rol y el rechazo del guardado sin permiso **no se verifican** en esta feature (RF-19).
 
-## Escenarios (solo en el sitio de desarrollo)
+## Escenarios (§7 y §8: fallos parciales y reglas del servicio)
 
-No se corren con mocks (su estado es por página y no se puede forzar un fallo ni un estado desactualizado desde otra pestaña). Exigen la precondición V1 a V8 del plan, autorización explícita y escribir solo en las listas de desarrollo. Son los de T044.
+No se pueden forzar desde la interfaz: hace falta bloquear una de las listas o cambiar un estado desde otra pestaña. Exigen la precondición V1 a V8 del plan, autorización explícita y escribir solo en las listas de desarrollo. Son los de T044.
 
 ### 7. Fallos parciales y todo o nada (FR-008b)
 
@@ -67,7 +67,7 @@ Se verifican en el workbench hospedado, sin código de prueba: en las herramient
 
 ### 8. Reglas en el servicio, no solo en la interfaz (FR-009, FR-009a, FR-011, SC-007)
 
-Solo en el sitio de desarrollo, junto a los fallos parciales de §7:
+Junto a los fallos parciales de §7:
 
 - Con el panel de edición de un riesgo abierto, cambiar su estado desde otra pestaña y volver a guardar: el servicio rechaza con `RiesgoRuleError` y no escribe.
 - Con el panel de "Cargar riesgo" abierto, finalizar la tarea o la iniciativa desde otra pestaña y guardar: se rechaza el alta.
@@ -76,7 +76,7 @@ Solo en el sitio de desarrollo, junto a los fallos parciales de §7:
 ## Comprobaciones transversales
 
 - Sin acción de eliminar riesgos o decisiones en ninguna pantalla (FR-007); el servicio solo borra para deshacer.
-- Rendimiento (solo en el sitio de desarrollo, T044): detalle de la tarea y de la iniciativa en menos de 3 s con el volumen de un año; en la pestaña Red, riesgos y decisiones suman 2 consultas por detalle (sin una por riesgo).
+- Rendimiento (T044): detalle de la tarea y de la iniciativa en menos de 3 s con el volumen de un año; en la pestaña Red, riesgos y decisiones suman 2 consultas por detalle (sin una por riesgo).
 - Ningún texto con la palabra "mail" ni leyenda sobre el mail (FR-012).
 - Sin colores, tipografías ni espaciados fuera del Design System.
 - Textos de `loc/` coinciden con [contracts/ui-contracts.md](./contracts/ui-contracts.md#textos-de-localización).

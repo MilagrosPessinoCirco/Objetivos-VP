@@ -21,13 +21,12 @@ Rutas relativas a `src/`. `WP` = `webparts/objetivosVp/components`.
 |---|---|---|
 | `Riesgo/IRiesgoDataSource.ts`, `Riesgo/RiesgoDataSource.ts` | **Se amplían** | Tienen `listTitle`, `getItems()` (sin filtro, `top(5000)`), `getFilteredItems(tareaId)` (`TareaId eq n`), `add`, `edit`, `delete`, `getById`. El `select` ya pide los campos de la spec. Falta una lectura por varias tareas con los estados Activo y Escalado: `getActivosEscaladosByTareas(tareaIds)` (D5). |
 | `Decision/IDecisionDataSource.ts`, `Decision/DecisionDataSource.ts` | **Se amplían y se recortan** | Mismos métodos; `getFilteredItems(riesgoId)` (`RiesgoId eq n`) sirve para "¿ya tiene decisión?" (D3). El `select` deja de pedir `Responsable` y `FechaResolucion`. Falta una lectura por varios riesgos: `getFilteredItemsByRiesgos(riesgoIds)`, por tandas de 40. |
-| `Riesgo/useRiesgoDataSource.ts`, `useItemRiesgoDataSource.ts`, `Decision/useDecisionDataSource.ts`, `useItemDecisionDataSource.ts` | **No se tocan** | Devuelven `useDatasource` **sin mock**: fuera de SharePoint lanzan "Datasource o mock no validos". Como la feature no los usa (usa el servicio), no se modifican (principio IV). |
-| `Tarea/TareaMock.ts`, `Iniciativa/IniciativaMock.ts` | Se reutilizan | El servicio lee `getById` de tarea e iniciativa; los mocks ya existen. |
+| `Riesgo/useRiesgoDataSource.ts`, `useItemRiesgoDataSource.ts`, `Decision/useDecisionDataSource.ts`, `useItemDecisionDataSource.ts` | **No se tocan** | Esta feature no los usa (usa el servicio), no se modifican (principio IV). |
 | `useDatasource.ts` | Se reutiliza como referencia | `deleteItem` relanza el error; el servicio no lo usa (no es un hook): llama a `delete` del datasource. |
 
 ### Lo nuevo en `core/api/Riesgo` y `core/api/Decision`
 
-`RiesgoMock`, `DecisionMock`, `IRiesgoService`, `RiesgoService` (con `getRiesgoService`), `riesgoReglas.ts`, errores tipados, `useRiesgosTarea`, `useRiesgosIniciativa`. Ver [contracts/service-contracts.md](./contracts/service-contracts.md).
+`IRiesgoService`, `RiesgoService` (con `getRiesgoService`), `riesgoReglas.ts`, errores tipados, `useRiesgosTarea`, `useRiesgosIniciativa`. Ver [contracts/service-contracts.md](./contracts/service-contracts.md).
 
 ### Constantes de listas
 
@@ -44,7 +43,6 @@ Rutas relativas a `src/`. `WP` = `webparts/objetivosVp/components`.
 | Permisos | Constantes `CAN_*` en `WP/ObjetivosVp/ObjetivosVp.tsx` (`CAN_CREATE_TAREA`, `CAN_EDIT_TAREA`, `CAN_REGISTER_PROGRESS_TAREA`, todas `true`), pasadas por props. | Dos constantes más. |
 | Guardado con deshacer y reintento | `TareaFormPanel.save`: dos `useRef` (`tareaCreada`, `entradaCreada`); si falla la entrada, borra la tarea (`deshacerAlta`) y relanza; el reintento no duplica lo ya creado. `TareaAvancePanel`: guarda la entrada y después la tarea, con `useRef` y bloqueo de campos entre intentos. Error en `MessageBar` sin botón; se reintenta pulsando de nuevo. | Mismo patrón, pero la lógica de orden, reversión y reintento vive en el servicio, no en el panel (el panel retiene solo el `pendiente`). |
 | Localización | Un solo idioma: `loc/en-us.js` (con textos en español) y `loc/mystrings.d.ts`, claves `Tarea*` y `Tareas*`, `{0}` / `{1}` con `Utils.replaceAll`. | Claves `Riesgo*`. |
-| Mocks | `TareaMock` y `AvanceTareaMock`: estado a nivel de módulo, `add` con próximo Id, `edit` que mezcla solo lo definido, `delete`, `getById` con 404; `useTareasIniciativa` y `useAvancesTarea` eligen datasource real o mock según `Environment.type` y el `listTitle`. | `RiesgoMock`, `DecisionMock` y `getRiesgoService`, con la misma selección. |
 | Reglas de dominio | `WP/Tarea/tareaUtils.ts`: funciones puras (`getEstadosDisponibles`, `canEditTarea`, `canCargarTarea`, `getFechasIssues`, `formatTareaId`, `getEstadoTareaChipColor`). | `riesgoReglas.ts` (en `core/api/Riesgo`, porque lo usa el servicio) y `riesgoUtils.ts` (solo pantallas). |
 | Fechas | `WP/Objetivo/objetivoUtils.ts`: `toDateInput`, `fromDateInput`, `formatDate` (dd/mm/aaaa). No hay una función "hoy": `TareaAvancePanel` usa `toDateInput(new Date())`. | Igual; "hoy" es `new Date()` local comparado por día (FR-010a). |
 | Rutas | `WP/ObjetivosVp/routes.ts`; el detalle de la tarea es `/tarea/:id` y el de la iniciativa `/iniciativa/:id`. | Sin rutas nuevas; "Ver" usa `getTareaPath`. |
@@ -57,7 +55,7 @@ Rutas relativas a `src/`. `WP` = `webparts/objetivosVp/components`.
 | R2 | `Responsable` y `FechaResolucion` de `Decision` | Se leen (`select`), se mapean (`mapItem`) y se envían (`toListItem`, si están definidas). La spec las descarta (FR-015, FR-016). Se quitan de la app (D1). |
 | R3 | `Title` | `BaseEntity.toListItem` envía `Title` desde `Titulo`; `Riesgo` y `Decision` no completan `Titulo` al guardar. El ID `RSK-NN` no existe en ningún archivo (`formatRiesgoId` no está). El patrón de IDs es `prefijo + padStart(2, '0')`, que devuelve vacío si no hay Id. |
 | R4 | `delete` | `IRiesgoDataSource` y `IDecisionDataSource` lo declaran y las clases lo implementan; `useDatasource` lo expone como `deleteItem`. Ninguna pantalla los usa hoy (no hay pantallas de riesgos). |
-| R5 | Mocks de `Riesgo` y `Decision` | No existen. Los hooks existentes de ambas listas llaman a `useDatasource(new XDataSource())` sin mock, así que fuera de SharePoint fallan. |
+| R5m | Mocks de `Riesgo` y `Decision` | No existen y no se crean: la feature se prueba contra el sitio de desarrollo (plan, Complexity Tracking). |
 | R6 | Uso de `Riesgo` y `Decision` fuera de su capa | Ninguna referencia en `webparts/`. `core/entities/index.ts` las reexporta; `core/utils/Constants.ts` define `Lista.Riesgo`, `Lista.Decision` y `EstadoRiesgo`; `ObjetivoMock.ts` y `ResultadoClaveMock.ts` solo tienen las palabras "decisiones" y "riesgo" en textos de ejemplo. Quitar las dos propiedades de `Decision` no rompe nada. |
 | R7 | Lecturas filtradas | Solo existen `getFilteredItems(tareaId)` en `Riesgo` y `getFilteredItems(riesgoId)` en `Decision` (un Id), y `getItems()` sin filtro. No hay lectura por varios Id. |
 | R8 | `toChoiceValue` / `assertChoiceValue` (`core/utils/Mappers.ts`) | `toChoiceValue` es tolerante: si el valor no está en el enum, avisa con `console.warn` y devuelve `undefined`. `assertChoiceValue` lanza `Error` al escribir un valor que no está en el enum. |
