@@ -1,10 +1,9 @@
 import { useDatasource } from '../../api';
 import { Tarea } from '../../entities';
 import TareaDataSource from './TareaDataSource';
-import TareaMock from './TareaMock';
 
 function useItemTareaDataSource() {
-	return useDatasource<Tarea>(new TareaDataSource(), new TareaMock());
+	return useDatasource<Tarea>(new TareaDataSource());
 }
 
 export default useItemTareaDataSource;

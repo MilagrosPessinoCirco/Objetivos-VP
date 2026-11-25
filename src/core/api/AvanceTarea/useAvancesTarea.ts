@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Environment, EnvironmentType } from '@microsoft/sp-core-library';
-import { stringIsNullOrEmpty } from '@pnp/common';
 
 import { AvanceTarea } from '../../entities';
 import AvanceTareaDataSource from './AvanceTareaDataSource';
-import AvanceTareaMock from './AvanceTareaMock';
-import IAvanceTareaDataSource from './IAvanceTareaDataSource';
 
 export interface IAvancesTareaState {
 	items: AvanceTarea[];
@@ -13,13 +9,6 @@ export interface IAvancesTareaState {
 	error: boolean;
 	reload: () => Promise<void>;
 }
-
-const getDatasource = (): IAvanceTareaDataSource => {
-	const datasource = new AvanceTareaDataSource();
-	return Environment.type === EnvironmentType.SharePoint && !stringIsNullOrEmpty(datasource.listTitle)
-		? datasource
-		: new AvanceTareaMock();
-};
 
 const byNewest = (a: AvanceTarea, b: AvanceTarea): number =>
 	(b.Created?.getTime() ?? 0) - (a.Created?.getTime() ?? 0) || (b.Id ?? 0) - (a.Id ?? 0);
@@ -36,7 +25,7 @@ function useAvancesTarea(tareaId: number | undefined): IAvancesTareaState {
 		setIsLoading(true);
 		setError(false);
 		try {
-			const loaded = await getDatasource().getFilteredItems(tareaId);
+			const loaded = await new AvanceTareaDataSource().getFilteredItems(tareaId);
 			setItems(loaded.slice().sort(byNewest));
 		}
 		catch (loadError) {

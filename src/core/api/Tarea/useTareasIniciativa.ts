@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Environment, EnvironmentType } from '@microsoft/sp-core-library';
-import { stringIsNullOrEmpty } from '@pnp/common';
 
 import { Tarea } from '../../entities';
-import ITareaDataSource from './ITareaDataSource';
 import TareaDataSource from './TareaDataSource';
-import TareaMock from './TareaMock';
 
 export interface ITareasIniciativaState {
 	items: Tarea[];
@@ -13,13 +9,6 @@ export interface ITareasIniciativaState {
 	error: boolean;
 	reload: (id?: number) => Promise<Tarea[]>;
 }
-
-const getDatasource = (): ITareaDataSource => {
-	const datasource = new TareaDataSource();
-	return Environment.type === EnvironmentType.SharePoint && !stringIsNullOrEmpty(datasource.listTitle)
-		? datasource
-		: new TareaMock();
-};
 
 function useTareasIniciativa(iniciativaId: number | undefined): ITareasIniciativaState {
 	const [items, setItems] = useState<Tarea[]>([]);
@@ -34,7 +23,7 @@ function useTareasIniciativa(iniciativaId: number | undefined): ITareasIniciativ
 		setIsLoading(true);
 		setError(false);
 		try {
-			const loaded = await getDatasource().getFilteredItems(target);
+			const loaded = await new TareaDataSource().getFilteredItems(target);
 			setItems(loaded);
 			setIsLoading(false);
 			return loaded;
