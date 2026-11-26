@@ -7,11 +7,11 @@ Aplicación que conecta palancas estratégicas, objetivos, iniciativas, resultad
 | Proyecto | Gestión de Portfolio VP |
 | Cliente | YPF S.A. · VP RRII (Relaciones Institucionales) |
 | Documento | Especificación funcional |
-| Versión | 1.11 · 24/11/2026 |
+| Versión | 1.12 · 26/11/2026 |
 | Estado | Versión para diseño y desarrollo |
 | Autores | VIGNARDEL, FRANCISCO · PESSINO, MILAGROS |
 | Usuarias referentes | BAUMANN, ANALIA · GROTZ, MARIA MARTHA |
-| Archivo | Especificacion_Funcional_Gestion_Portfolio_VP_v1.11.docx |
+| Archivo | Especificacion_Funcional_Gestion_Portfolio_VP_v1.12.docx |
 
 ## 1. Introducción
 
@@ -59,7 +59,7 @@ flowchart LR
 | M1. Palancas | Alta, edición y consulta de las palancas de la VP con sus objetivos. | RF-01 a RF-02 |
 | M2. Objetivos | Alta de objetivos de la VP RRII y de otras VP, edición, pesos por departamento y por VP, marca de objetivo de la VP RRII y consulta. | RF-03 a RF-06 |
 | M3. Iniciativas y resultados clave | Alta y seguimiento de iniciativas y de sus resultados clave, con pesos calculados en partes iguales. | RF-07 a RF-11 |
-| M4. Tareas, riesgos y presupuesto | Alta y seguimiento de tareas, historial de avance, riesgos con decisiones y presupuesto. | RF-12 a RF-15 |
+| M4. Tareas, riesgos y presupuesto | Alta y seguimiento de tareas, historial de avance, riesgos con decisiones y presupuesto por CECO. | RF-12 a RF-15 |
 | M5. Bandejas | Bandejas "Mis…" y "Todas" | RF-16 a RF-17 |
 | M6. Alertas | Detección de alertas y avisos por mail. | RF-18 |
 | M7. Seguridad | Roles de aplicación, permisos y usuarios. | RF-19 a RF-20 |
@@ -95,6 +95,7 @@ El desarrollo se divide en entregas para llegar a la carga de los objetivos 2027
 | Envío de tareas finalizadas a la app de Novedades | Evolutivo a evaluar: un botón en las tareas finalizadas (hitos) para enviarlas como novedad o, como paso intermedio, una descarga en Word. Requiere analizar la integración con esa app. |
 | Reportes de carga por persona y por subgerencia | Evolutivo a evaluar: cuántas iniciativas y tareas tiene cada persona y en cuántas iniciativas trabaja cada subgerencia. Los datos necesarios ya se registran. |
 | Plan estratégico de YPF como nivel superior a las palancas | Evolutivo a evaluar: un nivel estático y enunciativo, como las palancas, que muestre el plan estratégico de YPF y con qué palancas se correlaciona. |
+| Vista por CECO | Evolutivo a evaluar: elegir un CECO y ver las tareas que le imputan y sus montos, para el control interno de los centros de costo de la VP y para saber cuánto imputar a un CECO de otra VP. Los datos necesarios ya se registran (RF-15). |
 
 ## 3. Glosario
 
@@ -108,12 +109,13 @@ El desarrollo se divide en entregas para llegar a la carga de los objetivos 2027
 | Mínimo / Meta / Máximo | Umbrales del resultado clave. Ej.: mínimo 10 estaciones, meta 12, máximo 14. |
 | Valor actual | Dónde está hoy el resultado clave, con la fuente del dato y un link de evidencia. |
 | Valor proyectado | Valor que se espera alcanzar al cierre del año. Que puede cambiar a lo largo del año. |
-| % de cumplimiento | Grado de logro de un resultado clave (C-01). |
+| % de cumplimiento | Grado de logro de un resultado clave: 0%, 60%, 80% o 100% según el umbral que alcanzó (C-01). |
+| Cumplimiento homologado | Cumplimiento final de un resultado clave, confirmado por Control de Gestión después de revisar la evidencia. Puede diferir del % de cumplimiento que calcula la aplicación. Se carga a mano. |
 | Avance | Grado de logro de una iniciativa, un objetivo o la VP (C-03 a C-05). En una tarea, porcentaje de ejecución que declara su responsable. |
 | Evidencia | Link a un sitio de SharePoint u Office 365 que respalda el valor actual. |
 | Riesgo | Situación que pone en peligro una tarea y que puede requerir una decisión. |
 | Decisión pendiente | Decisión que necesita un riesgo para destrabarse. |
-| CECO | Centro de costo al que se imputa una inversión. |
+| CECO | Centro de costo al que se imputa una inversión. Una tarea puede imputar a varios CECO y un mismo CECO puede estar en varias tareas. |
 | Comité de la VP | Ámbito donde se definen y aprueban los objetivos del año y sus pesos. |
 | Accountable | Persona que responde por una iniciativa. Cada iniciativa tiene una. |
 | Objetivo de la VP RRII | Objetivo que el VP elige entre los de todos los departamentos (uno o dos de cada uno) para seguirlo a nivel VP y compartirlo en el comité de VPs. Tiene un peso propio en la VP. |
@@ -301,6 +303,7 @@ Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados c
 - No se puede guardar una iniciativa de la VP RRII sin al menos un resultado clave.
 - El valor actual, la fuente, la evidencia y el comentario no se cargan en el panel de la iniciativa: se completan en el seguimiento (RF-10).
 - La aplicación no ofrece eliminar un resultado clave ya guardado.
+- El cumplimiento homologado no se carga en el alta ni en el seguimiento: lo carga el Administrador cuando Control de Gestión termina su revisión (RF-19). Queda registrado para consultar cómo cerró el resultado clave en años anteriores.
 
 **Campos del resultado clave**
 
@@ -320,6 +323,7 @@ Cada iniciativa de un objetivo de la VP RRII se mide con uno o más resultados c
 | Evidencia | No | Link | Un único link de SharePoint u Office 365 (dominios aceptados: sharepoint.com, office.com, microsoft.com, powerbi.com, outlook.com y onedrive.com). |
 | Valor proyectado | Sí | Número | Valor esperado al 31/12. |
 | Comentario | No | Texto | Novedad del último seguimiento. Se guardan fecha y autor. |
+| Cumplimiento homologado (%) | No | Número 0–100 | Cumplimiento final confirmado por Control de Gestión, que puede diferir del calculado (C-01). Lo carga el Administrador a mano, una vez, cuando termina la revisión (febrero o marzo del año siguiente). No se calcula ni interviene en el avance. Se guardan fecha y autor. |
 
 #### RF-10 · Seguimiento de resultados clave
 
@@ -337,7 +341,7 @@ El accountable de la iniciativa actualiza el valor actual, la fuente, la evidenc
 
 **Descripción**
 
-Muestra la información de la iniciativa, el objetivo al que aporta, los resultados clave con sus valores, cumplimiento y estado, el avance real y proyectado (C-03), las tareas, los riesgos de sus tareas, el presupuesto total (C-06) y el comentario ejecutivo.
+Muestra la información de la iniciativa, el objetivo al que aporta, los resultados clave con sus valores, cumplimiento y estado, el avance real y proyectado (C-03), las tareas, los riesgos de sus tareas, el presupuesto total y por CECO (C-06) y el comentario ejecutivo.
 
 El accountable actualiza el estado y el comentario ejecutivo. El estado lo administra el accountable y no se deriva del estado de las tareas: una tarea frenada no frena por sí sola la iniciativa. La iniciativa muestra los indicadores que vienen de sus tareas (C-08).
 
@@ -385,7 +389,7 @@ Cualquier usuario de la VP puede cargar una tarea en cualquier iniciativa, de un
 | Estado | Sí | No iniciada · En curso · Frenada · Finalizada · Cancelada | No iniciada al crearse. |
 | Fecha de finalización | Condicional | Fecha | Obligatoria con estado Finalizada; no se muestra con otro estado. |
 | Fecha de última actualización | — | Calculado | La registra el sistema en cada actualización de avance. |
-| Requiere inversión | Sí | Sí / No | Habilita los campos de RF-15. |
+| Requiere inversión | Sí | Sí / No | Habilita el presupuesto de la tarea (RF-15). |
 
 #### RF-13 · Seguimiento de tarea
 
@@ -469,21 +473,43 @@ stateDiagram-v2
 
 **Descripción**
 
-El presupuesto nace en las tareas, donde se desglosa la acción (medios, imagen, proveedores, importación). Si la tarea requiere inversión, se cargan el CECO y el presupuesto aprobado; durante el seguimiento, el presupuesto ejecutado. La iniciativa muestra la suma de sus tareas (C-06), y como cada tarea tiene su CECO, una iniciativa puede imputar a varios. La iniciativa muestra el total sumado, sin desglose por CECO; el CECO se consulta en cada tarea.
+El presupuesto nace en las tareas, donde se desglosa la acción (medios, imagen, proveedores, importación). Una tarea puede imputarse a uno o más CECO: por cada CECO se carga una línea con su presupuesto aprobado y, durante el seguimiento, se van registrando las ejecuciones. Un mismo CECO puede aparecer en varias tareas.
+
+El presupuesto aprobado de cada línea se carga una vez y no se modifica. Si se gasta más de lo aprobado, el desvío no cambia el aprobado: queda a la vista en el saldo negativo y se explica en el comentario de la ejecución. Cada ejecución se registra con el botón "Registrar ejecución" y queda en el historial de presupuesto. La iniciativa muestra el total sumado de sus tareas y el detalle por CECO (C-06).
+
+Cargar el presupuesto es deseable pero no obligatorio: no siempre se conoce el monto al planificar. Lo carga el dueño de la tarea, que responde por el dato; no lo carga Control ni la coordinación de la VP.
 
 **Criterios de aceptación**
 
-- Los campos de presupuesto solo se habilitan con Requiere inversión = Sí.
+- Los campos de presupuesto solo se habilitan con Requiere inversión = Sí. Con Sí, la tarea puede guardarse sin líneas y completarse después.
+- Cada línea lleva un CECO y su presupuesto aprobado; ambos son obligatorios en cuanto se agrega la línea.
+- El presupuesto aprobado de una línea no se edita una vez guardado.
+- La ejecución se registra por CECO. Puede superar lo aprobado: el saldo negativo muestra el desvío. Si una ejecución deja la línea por encima de lo aprobado, el comentario es obligatorio y explica el motivo (alcance, tipo de cambio, etc.).
+- El historial de presupuesto no se edita ni se borra.
+- Cargan y modifican el presupuesto el responsable de la tarea y el accountable de su iniciativa, y también los roles CargadorObjetivo y Administrador (RF-19).
+- La iniciativa muestra el total aprobado, ejecutado y saldo, y el desglose por CECO. El detalle de cada línea se ve en la tarea.
 - El presupuesto lo ve cualquier usuario que ve la tarea.
 
-**Campos de presupuesto de la tarea**
+**Campos de la imputación de presupuesto (una línea por CECO)**
 
 | Campo | Oblig. | Tipo | Regla / observación |
 |---|---|---|---|
-| CECO | Condicional | Texto |  |
-| Presupuesto aprobado | Condicional | Moneda |  |
-| Presupuesto ejecutado | No | Moneda | Se actualiza en el seguimiento. |
-| Saldo | — | Calculado | C-06. |
+| ID | Sí | Autonumérico |  |
+| Tarea | Sí | Referencia |  |
+| CECO | Sí | Texto | Centro de costo al que se imputa. Puede ser de otra VP. Un mismo CECO puede estar en varias tareas. |
+| Presupuesto aprobado | Sí | Moneda | Se carga al agregar la línea. No se edita después. |
+| Presupuesto ejecutado | — | Calculado | Suma de las ejecuciones del historial de la línea (C-06). |
+| Saldo | — | Calculado | Aprobado − ejecutado (C-06). Puede ser negativo. |
+
+**Campos del historial de presupuesto**
+
+| Campo | Oblig. | Tipo | Regla / observación |
+|---|---|---|---|
+| Fecha | — | Calculado | La registra el sistema. |
+| Autor | — | Calculado | Usuario que registra la ejecución. |
+| Línea (CECO) | Sí | Referencia | Línea de la tarea sobre la que se registra. |
+| Monto | Sí | Moneda | Monto ejecutado. Mayor que 0. |
+| Comentario | Condicional | Texto | Obligatorio si la ejecución deja la línea por encima del presupuesto aprobado; opcional en el resto. |
 
 ### 4.5 M5. Bandejas y tablero
 
@@ -552,7 +578,7 @@ Cada rol es un grupo de SharePoint del sitio. Si una persona está en más de un
 | Visualizador | El VP | Consulta todo. No carga ni edita. |
 | Usuario | Toda la VP | Crea iniciativas, resultados clave y tareas. Edita las iniciativas de las que es accountable con sus resultados clave y tareas, y las tareas de las que es responsable. |
 | CargadorObjetivo | Gerentes y responsables de departamento designados | Lo del Usuario, más: crea objetivos para cualquier gerencia y edita las iniciativas, resultados clave y tareas (por ejemplo, si el responsable está ausente). |
-| Administrador | Coordinación de la VP y referentes designados | Todo lo anterior, más: palancas, edición de objetivos, sus pesos y la marca de objetivo de la VP RRII, maestros, parámetros y alta, cambio de rol y baja de personas. |
+| Administrador | Coordinación de la VP y referentes designados | Todo lo anterior, más: palancas, edición de objetivos, sus pesos y la marca de objetivo de la VP RRII, cumplimiento homologado de los resultados clave, maestros, parámetros y alta, cambio de rol y baja de personas. |
 
 | Acción | Visualizador | Usuario | CargadorObjetivo | Admin. |
 |---|---|---|---|---|
@@ -563,6 +589,7 @@ Cada rol es un grupo de SharePoint del sitio. Si una persona está en más de un
 | Crear iniciativas, resultados clave y tareas | — | Sí | Sí | Sí |
 | Editar iniciativa y resultados clave, y cambiar su estado | — | Si es accountable | Sí | Sí |
 | Hacer el seguimiento de un resultado clave | — | Accountable de la iniciativa | Sí | Sí |
+| Cargar el cumplimiento homologado de un resultado clave | — | — | — | Sí |
 | Actualizar tarea, riesgos y presupuesto | — | Resp. de la tarea o accountable de la iniciativa | Sí | Sí |
 | Ver los pesos de las iniciativas | — | — | Sí | Sí |
 | Dar de alta, cambiar el rol y dar de baja personas | — | — | — | Sí |
@@ -630,20 +657,20 @@ Valores que el administrador puede cambiar sin modificar la aplicación.
 
 ## 5. Cálculos
 
-Todos los cálculos se hacen por separado con el valor actual (real) y con el valor proyectado. Los porcentajes se expresan entre 0% y 100%, salvo el % de cumplimiento del resultado clave, que puede superar 100% para mostrar sobrecumplimiento. Los porcentajes de cumplimiento, avance y peso se muestran redondeados a entero; el redondeo es solo de presentación: los promedios y los colores se calculan con el valor sin redondear.
+Todos los cálculos se hacen por separado con el valor actual (real) y con el valor proyectado. Los porcentajes se expresan entre 0% y 100%. Los porcentajes de cumplimiento, avance y peso se muestran redondeados a entero; el redondeo es solo de presentación: los promedios y los colores se calculan con el valor sin redondear.
 
 | Código | Cálculo | Fórmula y reglas |
 |---|---|---|
-| C-01 | % de cumplimiento del resultado clave | Real = valor actual ÷ máximo.<br>Proyectado = valor proyectado ÷ máximo.<br>Sin valor actual, el cumplimiento real se muestra como "—" y aporta 0% al avance de la iniciativa. |
+| C-01 | % de cumplimiento del resultado clave | El cumplimiento no se prorratea: depende del umbral que alcanza el valor (estado de C-02).<br>• No cumple (valor menor que el mínimo) → 0%<br>• Mínimo → 60%<br>• Meta → 80%<br>• Máximo → 100%<br>Se calcula con el valor actual (cumplimiento real) y con el valor proyectado (cumplimiento proyectado). Ejemplo: con mínimo 8 y meta 10, un valor de 9 da 60% y un valor de 6 da 0%.<br>Sin valor actual, el cumplimiento real se muestra como "—" y aporta 0% al avance de la iniciativa.<br>El cumplimiento homologado por Control de Gestión (RF-09) es un dato manual aparte: no reemplaza este cálculo. |
 | C-02 | Estado del resultado clave | Se calcula con el valor actual (estado real) y con el proyectado (estado proyectado):<br>• valor < mínimo → No cumple (rojo)<br>• mínimo ≤ valor < meta → Mínimo (naranja)<br>• meta ≤ valor < máximo → Meta (amarillo)<br>• valor ≥ máximo → Máximo (verde)<br>• sin valor actual → Sin dato (gris) |
-| C-03 | Avance de la iniciativa | Avance = promedio simple de máx(0%, mín(% cumplimiento, 100%)) de sus resultados clave, porque pesan en partes iguales (RF-08). Un resultado clave sin valor actual aporta 0%.<br>El avance de las tareas no interviene. |
+| C-03 | Avance de la iniciativa | Avance = promedio simple del % de cumplimiento (C-01) de sus resultados clave, porque pesan en partes iguales (RF-08). Un resultado clave sin valor actual aporta 0%.<br>El avance de las tareas no interviene. |
 | C-04 | Avance del objetivo | Avance = promedio simple del avance de sus iniciativas, porque pesan en partes iguales (RF-08).<br>Solo cuentan las iniciativas no canceladas.<br>No se calcula para objetivos de otra VP. |
 | C-05 | Avance de la VP | Avance = Σ (peso en la VP × avance del objetivo) ÷ Σ pesos en la VP, sobre los objetivos marcados como objetivos de la VP RRII del año. |
-| C-06 | Presupuesto | Saldo de la tarea = presupuesto aprobado − presupuesto ejecutado.<br>Presupuesto de la iniciativa (aprobado, ejecutado y saldo) = suma de los de sus tareas no canceladas, también en iniciativas de otras VP. |
+| C-06 | Presupuesto | Por cada línea de CECO de una tarea:<br>• Aprobado = el monto cargado al agregar la línea.<br>• Ejecutado = suma de las ejecuciones del historial de presupuesto.<br>• Saldo = aprobado − ejecutado (puede ser negativo si hay desvío).<br>Presupuesto de la tarea (aprobado, ejecutado y saldo) = suma de sus líneas.<br>Presupuesto de la iniciativa (aprobado, ejecutado y saldo), en total y por CECO = suma de los de sus tareas no canceladas, también en iniciativas de otras VP. |
 | C-07 | Color del avance | Se aplica al avance de iniciativas, objetivos y VP:<br>• menos de 60% → rojo<br>• de 60% a menos de 80% → amarillo<br>• 80% o más → verde<br>Los umbrales son parámetros (RF-22). |
 | C-08 | Indicadores de tareas en la iniciativa | Cantidad de tareas por estado, tareas vencidas, próximas a vencer y sin actualizar (RF-18), riesgos activos y escalados, y decisiones pendientes. |
 
-Ejemplo. Una iniciativa tiene dos resultados clave: "Implementar YPF Store en 100 estaciones" (máximo 100, valor actual 40 → 40%) y "Alcanzar USD 193 K de facturación" (máximo 210, valor actual 230 → 110%, que suma como 100%). Cada uno pesa 50%, así que el avance de la iniciativa = (40% + 100%) ÷ 2 = 70% (amarillo). Si el objetivo tiene tres iniciativas, cada una pesa 1/3; si las otras dos tienen 90% y 60%, el avance del objetivo es (70% + 90% + 60%) ÷ 3 = 73,3% (se muestra como 73%).
+Ejemplo. Una iniciativa tiene dos resultados clave: "Implementar YPF Store en 100 estaciones" (mínimo 60, meta 80, máximo 100, valor actual 90 → Meta → 80%) y "Alcanzar USD 193 K de facturación" (mínimo 150, meta 193, máximo 210, valor actual 190 → Mínimo → 60%). Cada uno pesa 50%, así que el avance de la iniciativa = (80% + 60%) ÷ 2 = 70% (amarillo). Si el objetivo tiene tres iniciativas, cada una pesa 1/3; si las otras dos tienen 100% y 60%, el avance del objetivo es (70% + 100% + 60%) ÷ 3 = 76,7% (se muestra como 77%).
 
 ## 6. Modelo de datos
 
@@ -663,6 +690,8 @@ erDiagram
   INICIATIVA ||--o{ TAREA : "0..10 no canceladas"
   TAREA ||--o{ AVANCE_TAREA : historial
   TAREA ||--o{ RIESGO : "incluye decisión"
+  TAREA ||--o{ PRESUPUESTO_TAREA : "0..N (una por CECO)"
+  PRESUPUESTO_TAREA ||--o{ HISTORIAL_PRESUPUESTO : ejecuciones
 ```
 
 *Figura 4. Entidades y relaciones*
@@ -672,10 +701,12 @@ erDiagram
 | Palanca | RF-01 | Una palanca agrupa 0..N objetivos de la VP RRII. |
 | Objetivo | RF-03 | Pertenece a una VP, un departamento, una gerencia y, si es de la VP RRII, a una palanca. Tiene 0..N iniciativas. |
 | Iniciativa | RF-07 | Pertenece a un único objetivo. Tiene hasta 10 tareas no canceladas. Si el objetivo es de la VP RRII, tiene además 1..N resultados clave. |
-| Resultado clave | RF-09 | Pertenece a una iniciativa. |
-| Tarea | RF-12, RF-15 | Pertenece a una iniciativa. Tiene 0..N registros de avance y 0..N riesgos. |
+| Resultado clave | RF-09 | Pertenece a una iniciativa. Guarda su cumplimiento homologado. |
+| Tarea | RF-12, RF-15 | Pertenece a una iniciativa. Tiene 0..N registros de avance, 0..N riesgos y 0..N líneas de presupuesto (una por CECO). |
 | Avance de tarea | RF-13 | Pertenece a una tarea. Solo se agregan registros. |
 | Riesgo | RF-14 | Pertenece a una tarea. Incluye su decisión. |
+| Imputación de presupuesto | RF-15 | Pertenece a una tarea y corresponde a un CECO. Tiene 0..N registros en el historial de presupuesto. |
+| Historial de presupuesto | RF-15 | Pertenece a una imputación. Cada registro es una ejecución. Solo se agregan registros. |
 | Usuario de la VP | RF-20 | Persona del directorio con su departamento, gerencia y subgerencia. |
 | VP, Departamento, Gerencia, Subgerencia | RF-21 | Maestros. Un departamento tiene 0..N gerencias y una gerencia, 0..N subgerencias. |
 | Parámetro | RF-22 | Clave y valor. |
@@ -692,4 +723,4 @@ erDiagram
 | RNF-06 | Usabilidad | Formularios cortos, con campos condicionales y ayudas en línea. Actualizar una tarea lleva menos de un minuto. En las vistas que tienen el botón Actualizar (vista de palancas y objetivos y bandeja de iniciativas), al usarlo se recargan los datos y se muestra "La vista se ha actualizado correctamente."; se mantienen la solapa, la búsqueda, los filtros y la página. Si la recarga falla, se muestra el mensaje de error de la vista y no el de éxito. |
 | RNF-07 | Idioma y formatos | Español. Fechas dd/mm/aaaa. Números con separador de miles y coma decimal. |
 | RNF-08 | Notificaciones | Mails desde una cuenta de servicio, con un link directo al elemento. |
-| RNF-09 | Trazabilidad | Fecha y autor de creación y última modificación en todas las listas; historial de avance de tareas. |
+| RNF-09 | Trazabilidad | Fecha y autor de creación y última modificación en todas las listas; historial de avance de tareas y de ejecuciones de presupuesto. |
