@@ -9,7 +9,10 @@ import useComentariosResultadoClave from '../../../../../core/api/ComentarioResu
 import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/useResultadoClaveDataSource';
 import { ComentarioResultadoClave, ResultadoClave } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
+import { assertPermiso, isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
+import type { IPersonValue } from '../../../../../core/utils/Mappers';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import Field from '../../shared/Field/Field';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { formatDate } from '../../Objetivo/objetivoUtils';
@@ -24,6 +27,7 @@ import styles from '../IniciativaForm/IniciativaForm.module.scss';
 
 export interface IResultadoClaveSeguimientoPanelProps {
 	resultado: ResultadoClave;
+	accountable?: IPersonValue;
 	onSaved: (resultado: ResultadoClave) => void;
 	onCancel: () => void;
 }
@@ -66,7 +70,8 @@ const getEvidenciaIssue = (texto: string): string | undefined => {
 	return getLengthIssue(valor, RESULTADO_CLAVE_MAX_LENGTH.evidencia);
 };
 
-const ResultadoClaveSeguimientoPanel: React.FC<IResultadoClaveSeguimientoPanelProps> = ({ resultado, onSaved, onCancel }) => {
+const ResultadoClaveSeguimientoPanel: React.FC<IResultadoClaveSeguimientoPanelProps> = ({ resultado, accountable, onSaved, onCancel }) => {
+	const { verificar } = usePermisos();
 	const [, , addComentario] = useComentarioResultadoClaveDataSource();
 	const [, , , editResultado] = useResultadoClaveDataSource();
 	const comentarios = useComentariosResultadoClave(resultado.Id);
@@ -81,6 +86,7 @@ const ResultadoClaveSeguimientoPanel: React.FC<IResultadoClaveSeguimientoPanelPr
 	const [submitted, setSubmitted] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 
 	const ultimoTexto = ultimo?.Comentario ?? '';
 	const comentario = comentarioEditado ?? ultimoTexto;
@@ -112,7 +118,9 @@ const ResultadoClaveSeguimientoPanel: React.FC<IResultadoClaveSeguimientoPanelPr
 		}
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		try {
+			assertPermiso((await verificar()).canTrackResultadoClave(accountable));
 			const texto = comentario.trim();
 			if (texto !== '' && texto !== yaRegistrado) {
 				const nuevo = new ComentarioResultadoClave();
@@ -132,7 +140,8 @@ const ResultadoClaveSeguimientoPanel: React.FC<IResultadoClaveSeguimientoPanelPr
 			await editResultado(seguimiento);
 			onSaved(Object.assign(new ResultadoClave(), resultado, seguimiento));
 		}
-		catch {
+		catch (error) {
+			setPermisoDenegado(isPermisoDenegadoError(error));
 			setSaveFailed(true);
 			setIsSaving(false);
 		}
@@ -206,7 +215,7 @@ const ResultadoClaveSeguimientoPanel: React.FC<IResultadoClaveSeguimientoPanelPr
 					/>
 					{ultimoMeta && <span style={LAST_COMMENT_STYLE}>{ultimoMeta}</span>}
 				</div>
-				{saveFailed && <MessageBar type="error" message={strings.ResultadoClaveSaveError} />}
+				{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.ResultadoClaveSaveError} />}
 			</div>
 		</Panel>
 	);

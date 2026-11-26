@@ -5,7 +5,7 @@
       "name": "Hosted workbench",
       "type": "msedge",
       "request": "launch",
-      "url": "https://{site}/_layouts/workbench.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js",
+      "url": "https://circo.sharepoint.com/sites/PruebaCircoStudia/_layouts/workbench.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -16,7 +16,8 @@
       },
       "runtimeArgs": [
         "--remote-debugging-port=9222"
-      ]
+      ],
+      "preLaunchTask": "start-server"
     },
     {
       "name": "Workbench Dev",
@@ -33,24 +34,25 @@
       },
       "runtimeArgs": [
         "--remote-debugging-port=9222"
-      ]
+      ],
+      "preLaunchTask": "start-server"
     },
     {
-      "name": "Manifests Dev",
-      "type": "msedge",
-      "request": "launch",
-      "url": "https://circo.sharepoint.com/sites/PruebaCircoStudia?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fbuild%2Fmanifests.js&debug=true&noredir=true",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.././src/*": "${webRoot}/src/*",
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
-      },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
-    },
+  "name": "Manifests Dev",
+  "type": "msedge",
+  "request": "launch",
+  "url": "https://circo.sharepoint.com/sites/PruebaCircoStudia?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fbuild%2Fmanifests.js&debug=true&noredir=true",
+  "webRoot": "${workspaceRoot}",
+  "sourceMaps": true,
+  "sourceMapPathOverrides": {
+    "webpack:///.././src/*": "${webRoot}/src/*",
+    "webpack:///../../../src/*": "${webRoot}/src/*",
+    "webpack:///../../../../src/*": "${webRoot}/src/*",
+    "webpack:///../../../../../src/*": "${webRoot}/src/*"
+  },
+  "userDataDir": "${workspaceFolder}/.vscode/edge-debug-profile",
+  "runtimeArgs": ["--remote-debugging-port=9222"],
+  "preLaunchTask": "start-server"
+},
   ]
 }

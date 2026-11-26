@@ -15,3 +15,8 @@ export const TAREA_DETAIL_PATH = `${TAREAS_PATH}/:id`;
 export const TAREAS_VISTA_PARAM = 'vista';
 export const TAREAS_VISTA_TODAS = 'todas';
 export const getTareaPath = (id: number): string => `${TAREAS_PATH}/${id}`;
+
+export const getFrom = (state: unknown): string | undefined => {
+	const from = typeof state === 'object' && state !== null && 'from' in state ? (state as { from: unknown }).from : undefined;
+	return typeof from === 'string' ? from : undefined;
+};

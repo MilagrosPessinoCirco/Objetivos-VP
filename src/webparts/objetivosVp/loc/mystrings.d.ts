@@ -258,6 +258,18 @@ declare interface IObjetivosVpWebPartStrings {
 	ObjetivoConfirmEditTitle: string;
 	FiltersAllFeminine: string;
 	AvanceNotApplicable: string;
+	UbicacionTitulo: string;
+	UbicacionSubtitulo: string;
+	UbicacionNivelPalanca: string;
+	UbicacionNivelOtraVp: string;
+	UbicacionNivelObjetivo: string;
+	UbicacionNivelIniciativas: string;
+	UbicacionNivelTareas: string;
+	UbicacionVerMas: string;
+	UbicacionVerMenos: string;
+	UbicacionVacio: string;
+	UbicacionErrorCarga: string;
+	UbicacionCargando: string;
 	TareasAllTitle: string;
 	TareasTabsAriaLabel: string;
 	TareasStateTabsAriaLabel: string;
@@ -351,6 +363,10 @@ declare interface IObjetivosVpWebPartStrings {
 	RiesgoSaveIncompleteError: string;
 	RiesgoRuleError: string;
 	RiesgosLoadError: string;
+	AccesoDenegado: string;
+	PermisosLoadError: string;
+	PermisoDenegado: string;
+	ObjetivoColumnNameWeight: string;
 }
 
 declare module 'ObjetivosVpWebPartStrings' {

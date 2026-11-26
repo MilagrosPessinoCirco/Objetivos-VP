@@ -7,7 +7,9 @@ import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/
 import { Iniciativa, ResultadoClave } from '../../../../../core/entities';
 import { TipoMedicion } from '../../../../../core/utils/Constants';
 import { Utils } from '../../../../../core/utils';
+import { assertPermiso } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { formatIniciativaId } from '../iniciativaUtils';
 import { IResultadoClaveDraft, isDraftChanged } from '../resultadoClaveUtils';
 import { IniciativaFormBody } from './IniciativaForm';
@@ -37,6 +39,7 @@ const buildNuevo = (draft: IResultadoClaveDraft, iniciativa: Iniciativa): Result
 	Object.assign(buildDefinicion(draft, iniciativa), { ValorProyectado: Number(draft.meta) });
 
 const IniciativaFormPanel: React.FC<IIniciativaFormPanelProps> = ({ iniciativa, initialObjetivoId, canLoadResultadosClave, onSaved, onCancel }) => {
+	const { verificar } = usePermisos();
 	const masters = useIniciativaFormMasters(iniciativa?.Id);
 	const [, , addItem, editItem, deleteItem] = useIniciativaDataSource();
 	const [, , addResultado, editResultado, deleteResultado] = useResultadoClaveDataSource();
@@ -105,8 +108,11 @@ const IniciativaFormPanel: React.FC<IIniciativaFormPanelProps> = ({ iniciativa, 
 		return result;
 	};
 
-	const save = (toSave: Iniciativa, drafts: IResultadoClaveDraft[]): Promise<IResultadoClaveDraft[]> =>
-		iniciativa ? saveEdicion(toSave, drafts) : saveAlta(toSave, drafts);
+	const save = async (toSave: Iniciativa, drafts: IResultadoClaveDraft[]): Promise<IResultadoClaveDraft[]> => {
+		const permisos = await verificar();
+		assertPermiso(iniciativa ? permisos.canEditIniciativa(iniciativa.Accountable) : permisos.canCreateIniciativa);
+		return iniciativa ? saveEdicion(toSave, drafts) : saveAlta(toSave, drafts);
+	};
 
 	if (masters.error || !masters.ready) {
 		return (

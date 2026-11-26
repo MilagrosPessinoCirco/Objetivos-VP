@@ -14,6 +14,7 @@ import useRiesgosTarea from '../../../../../core/api/Riesgo/useRiesgosTarea';
 import useTareaDataSource from '../../../../../core/api/Tarea/useTareaDataSource';
 import { Tarea } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
+import type { IPersonValue } from '../../../../../core/utils/Mappers';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { TAREAS_PATH, getIniciativaPath } from '../../ObjetivosVp/routes';
 import AvanceText from '../../shared/AvanceText/AvanceText';
@@ -21,6 +22,7 @@ import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
+import UbicacionEstrategia from '../../shared/UbicacionEstrategia/UbicacionEstrategia';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
 import PalancaBreadcrumb from '../../Palanca/PalancaBreadcrumb/PalancaBreadcrumb';
 import { isNotFoundError, isVpRrii } from '../../Objetivo/objetivoUtils';
@@ -37,8 +39,8 @@ import TareaRiesgos from './TareaRiesgos/TareaRiesgos';
 import styles from './TareaDetalle.module.scss';
 
 export interface ITareaDetalleProps {
-	canEdit: boolean;
-	canRegisterProgress: boolean;
+	canEdit: (responsable?: IPersonValue, accountable?: IPersonValue) => boolean;
+	canRegisterProgress: (responsable?: IPersonValue, accountable?: IPersonValue) => boolean;
 	canCreateRiesgo: boolean;
 	canEditRiesgo: boolean;
 }
@@ -119,8 +121,8 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 		.map((area) => areaState.items.filter((item) => item.Id === area.Id)[0]?.Nombre ?? area.Title)
 		.join(NAME_SEPARATOR);
 
-	const canRegister = canRegisterProgress && tarea !== undefined && canRegistrarAvance(tarea);
-	const canEditar = canEdit && tarea !== undefined && canEditTarea(tarea);
+	const canRegister = canRegisterProgress(tarea?.Responsable, iniciativa?.Accountable) && tarea !== undefined && canRegistrarAvance(tarea);
+	const canEditar = canEdit(tarea?.Responsable, iniciativa?.Accountable) && tarea !== undefined && canEditTarea(tarea);
 	const canCargar = canCreateRiesgo && tarea !== undefined && iniciativa !== undefined && canCargarRiesgo(tarea, iniciativa);
 
 	const onEdited = (saved: Tarea): void => {
@@ -222,6 +224,7 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 								<span style={PROGRESS_LABEL_STYLE}>
 									{strings.ObjetivoDetailProgress} <AvanceText value={tarea.Avance ?? 0} spaced />
 								</span>
+								<UbicacionEstrategia tipo="tarea" id={tareaId} otraVp={isRrii ? undefined : objetivo?.VP?.Title} />
 							</div>
 						</>
 					)}
@@ -252,8 +255,8 @@ const TareaDetalle: React.FC<ITareaDetalleProps> = ({ canEdit, canRegisterProgre
 						</Button>
 					)}
 				</DetailFooter>
-				{isFormOpen && tarea && <TareaFormPanel tarea={tarea} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
-				{isAvanceOpen && tarea && <TareaAvancePanel tarea={tarea} onSaved={onAvanceSaved} onCancel={() => setIsAvanceOpen(false)} />}
+				{isFormOpen && tarea && <TareaFormPanel tarea={tarea} accountable={iniciativa?.Accountable} onSaved={onEdited} onCancel={() => setIsFormOpen(false)} />}
+				{isAvanceOpen && tarea && <TareaAvancePanel tarea={tarea} accountable={iniciativa?.Accountable} onSaved={onAvanceSaved} onCancel={() => setIsAvanceOpen(false)} />}
 				{(isRiesgoOpen || riesgoEnEdicion !== undefined) && tarea && (
 					<RiesgoFormPanel tarea={tarea} item={riesgoEnEdicion} onSaved={onRiesgoSaved} onCancel={closeRiesgoPanel} />
 				)}

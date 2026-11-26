@@ -7,6 +7,7 @@ export default interface IUsuarioDataSource {
 
 	getItems(): Promise<Usuario[]>;
 	getCurrentUser(): Promise<IPersonValue>;
+	getCurrentUserGroups(): Promise<string[]>;
 	add(item: Usuario): Promise<Usuario>;
 	edit(item: Usuario): Promise<Usuario>;
 	delete(itemId: number): Promise<void>;

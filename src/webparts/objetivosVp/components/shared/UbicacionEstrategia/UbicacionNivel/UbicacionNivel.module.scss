@@ -1,0 +1,36 @@
+.nivel {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 3px;
+	padding-bottom: 22px;
+}
+
+.dot,
+.dotActual {
+	position: absolute;
+	top: 0;
+	left: -34px;
+	width: 23px;
+	height: 23px;
+	border-radius: 50%;
+	box-sizing: border-box;
+	border: 4px solid var(--ubi-white);
+	background-color: var(--ubi-dot);
+}
+
+.dotActual {
+	border-color: var(--ubi-dark);
+	background-color: var(--ubi-white);
+}
+
+.items {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 3px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}

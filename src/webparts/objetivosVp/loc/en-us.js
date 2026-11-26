@@ -249,6 +249,18 @@ define([], function () {
 		"ResultadoClaveUpdated": "El resultado clave \"{0}\" se ha actualizado correctamente.",
 		"ResultadoClaveSaveError": "No se pudo guardar el seguimiento del resultado clave.",
 		"AvanceNotApplicable": "No aplica",
+		"UbicacionTitulo": "Ubicación en la estrategia",
+		"UbicacionSubtitulo": "{0} · recorrido desde la palanca hasta las tareas",
+		"UbicacionNivelPalanca": "Palanca estratégica ({0})",
+		"UbicacionNivelOtraVp": "Otra VP",
+		"UbicacionNivelObjetivo": "Objetivo ({0})",
+		"UbicacionNivelIniciativas": "Iniciativas ({0})",
+		"UbicacionNivelTareas": "Tareas ({0})",
+		"UbicacionVerMas": "y {0} más",
+		"UbicacionVerMenos": "Ver menos",
+		"UbicacionVacio": "Sin elementos cargados",
+		"UbicacionErrorCarga": "No se pudo cargar la ubicación en la estrategia.",
+		"UbicacionCargando": "Cargando la ubicación en la estrategia...",
 		"TareasAllTitle": "Todas las tareas",
 		"TareasTabsAriaLabel": "Tareas a mostrar",
 		"TareasStateTabsAriaLabel": "Estado de la tarea",
@@ -352,6 +364,10 @@ define([], function () {
 		"RiesgoSaveError": "No se pudo guardar el riesgo. Volvé a intentarlo.",
 		"RiesgoSaveIncompleteError": "No se pudo completar el guardado: el riesgo y su decisión pueden haber quedado a medias. Volvé a intentarlo.",
 		"RiesgoRuleError": "No se pudo guardar: el riesgo ya no admite este cambio.",
-		"RiesgosLoadError": "No se pudieron cargar los riesgos."
+		"RiesgosLoadError": "No se pudieron cargar los riesgos.",
+		"AccesoDenegado": "No tenés acceso a esta aplicación.",
+		"PermisosLoadError": "No se pudieron cargar tus permisos.",
+		"PermisoDenegado": "No tenés permiso para realizar esta acción.",
+		"ObjetivoColumnNameWeight": "Objetivo (peso)"
 	}
 });
