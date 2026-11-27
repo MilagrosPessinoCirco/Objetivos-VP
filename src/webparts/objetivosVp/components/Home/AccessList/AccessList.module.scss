@@ -1,18 +1,10 @@
+// --access-slots (cantidad total de accesos) se define desde AccessList.tsx.
 .list {
+	--access-gap: clamp(6px, 1.6vh, 10px);
+	--access-button-height: calc((100% - (var(--access-slots) - 1) * var(--access-gap)) / var(--access-slots));
+
 	display: flex;
 	flex-direction: column;
-	row-gap: clamp(6px, 1.6vh, 10px);
-}
-
-// Reserva el lugar del botón que no corresponde mostrar, con el mismo alto que los demás.
-.hidden {
-	display: flex;
-	flex: 1 1 0;
-	flex-direction: column;
-	min-height: 0;
-	visibility: hidden;
-
-	> * {
-		flex: 1 1 0;
-	}
+	justify-content: center;
+	row-gap: var(--access-gap);
 }

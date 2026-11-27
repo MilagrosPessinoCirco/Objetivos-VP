@@ -2,7 +2,8 @@ $icon-size: clamp(32px, 7.5vh, 50px);
 
 .card.card {
 	max-width: none;
-	flex: 1 1 0;
+	// Alto fijo calculado por AccessList (.list), igual con o sin el botón ABM.
+	flex: 0 0 var(--access-button-height);
 	min-height: 0;
 	align-items: center;
 	padding-top: clamp(10px, 2vh, 16px);

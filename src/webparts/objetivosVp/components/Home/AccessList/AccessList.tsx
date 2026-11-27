@@ -37,14 +37,19 @@ const AccessList: React.FC = () => {
 	const navigate = useNavigate();
 	const { permisos } = usePermisos();
 
+	// Los botones miden siempre lo mismo (el alto se reparte entre todos los accesos posibles) y, si alguno
+	// no corresponde al rol, los visibles quedan centrados en vertical.
+	const listStyle = { '--access-slots': ACCESS_ITEMS.length } as React.CSSProperties;
+
 	return (
-		<div className={styles.list}>
-			{ACCESS_ITEMS.map((item) => {
+		<div className={styles.list} style={listStyle}>
+			{ACCESS_ITEMS.filter((item) => !item.soloAdministrador || permisos.canManageUsuarios).map((item) => {
 				const step = getColorStep(item.colorGroup, item.colorScale);
 				const route = item.route;
 
-				const button = (
+				return (
 					<AccessButton
+						key={item.title}
 						title={item.title}
 						icon={item.icon}
 						backgroundColor={step.value}
@@ -52,10 +57,6 @@ const AccessList: React.FC = () => {
 						onClick={route ? () => navigate(route) : undefined}
 					/>
 				);
-
-				return item.soloAdministrador && !permisos.canManageUsuarios
-					? <div key={item.title} className={styles.hidden} aria-hidden="true">{button}</div>
-					: <React.Fragment key={item.title}>{button}</React.Fragment>;
 			})}
 		</div>
 	);
