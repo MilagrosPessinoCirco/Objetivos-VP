@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { spacing } from '../../../../../core/ui/foundations';
-import type { FigmaIconName } from '../../../../../core/ui/foundations';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
 import { usePermisos } from '../../shared/PermisosProvider';
@@ -12,7 +10,7 @@ import styles from './AccessList.module.scss';
 
 interface IAccessItem {
 	title: string;
-	iconName: FigmaIconName;
+	icon: string;
 	colorGroup: string;
 	colorScale: string;
 	route?: string;
@@ -21,12 +19,18 @@ interface IAccessItem {
 
 const LIGHT_TEXT_COLOR = '#fcfcfc';
 
+const tareasIcon: string = require('../../../assets/home-tareas.svg');
+const iniciativasIcon: string = require('../../../assets/home-iniciativas.svg');
+const palancasIcon: string = require('../../../assets/home-palancas.svg');
+const tableroIcon: string = require('../../../assets/home-tablero.svg');
+const abmIcon: string = require('../../../assets/home-abm.svg');
+
 const ACCESS_ITEMS: IAccessItem[] = [
-	{ title: strings.AccessMyTasks, iconName: 'checkmark', colorGroup: 'Primary', colorScale: '800', route: TAREAS_PATH },
-	{ title: strings.AccessMyInitiatives, iconName: 'applications', colorGroup: 'Tertiary', colorScale: '800', route: INICIATIVAS_PATH },
-	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '400', route: PALANCAS_PATH },
-	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Secondary', colorScale: '700' },
-	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '800', soloAdministrador: true }
+	{ title: strings.AccessMyTasks, icon: tareasIcon, colorGroup: 'Primary', colorScale: '800', route: TAREAS_PATH },
+	{ title: strings.AccessMyInitiatives, icon: iniciativasIcon, colorGroup: 'Tertiary', colorScale: '800', route: INICIATIVAS_PATH },
+	{ title: strings.AccessLeversObjectives, icon: palancasIcon, colorGroup: 'Tertiary', colorScale: '400', route: PALANCAS_PATH },
+	{ title: strings.AccessVpDashboard, icon: tableroIcon, colorGroup: 'Secondary', colorScale: '700' },
+	{ title: strings.AccessAbm, icon: abmIcon, colorGroup: 'Secondary', colorScale: '800', soloAdministrador: true }
 ];
 
 const AccessList: React.FC = () => {
@@ -34,7 +38,7 @@ const AccessList: React.FC = () => {
 	const { permisos } = usePermisos();
 
 	return (
-		<div className={styles.list} style={{ rowGap: spacing.lg }}>
+		<div className={styles.list}>
 			{ACCESS_ITEMS.map((item) => {
 				const step = getColorStep(item.colorGroup, item.colorScale);
 				const route = item.route;
@@ -42,7 +46,7 @@ const AccessList: React.FC = () => {
 				const button = (
 					<AccessButton
 						title={item.title}
-						iconName={item.iconName}
+						icon={item.icon}
 						backgroundColor={step.value}
 						textColor={LIGHT_TEXT_COLOR}
 						onClick={route ? () => navigate(route) : undefined}
@@ -50,7 +54,7 @@ const AccessList: React.FC = () => {
 				);
 
 				return item.soloAdministrador && !permisos.canManageUsuarios
-					? <div key={item.title} style={{ visibility: 'hidden' }} aria-hidden="true">{button}</div>
+					? <div key={item.title} className={styles.hidden} aria-hidden="true">{button}</div>
 					: <React.Fragment key={item.title}>{button}</React.Fragment>;
 			})}
 		</div>

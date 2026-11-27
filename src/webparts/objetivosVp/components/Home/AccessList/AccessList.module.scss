@@ -1,6 +1,18 @@
 .list {
 	display: flex;
 	flex-direction: column;
-	flex: 1;
-	justify-content: space-between;
+	row-gap: clamp(6px, 1.6vh, 10px);
+}
+
+// Reserva el lugar del botón que no corresponde mostrar, con el mismo alto que los demás.
+.hidden {
+	display: flex;
+	flex: 1 1 0;
+	flex-direction: column;
+	min-height: 0;
+	visibility: hidden;
+
+	> * {
+		flex: 1 1 0;
+	}
 }

@@ -1,17 +1,40 @@
-.content {
+$illustration-min-height: 120px;
+
+// Sombra más marcada que la de la variante raised de Surface. La tarjeta ocupa todo el alto de su
+// celda y el cuerpo de Surface (su único hijo) crece para que la ilustración use el espacio libre.
+.surface.surface {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+
+	> div {
+		display: flex;
+		flex: 1 1 auto;
+		flex-direction: column;
+		min-height: 0;
+	}
 }
 
+.content {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	min-height: 0;
+}
+
+// La ilustración ocupa el espacio disponible bajo el texto sin aportar alto propio:
+// va posicionada dentro del contenedor y se ajusta con object-fit.
 .art {
-	margin-top: auto;
+	position: relative;
+	flex: 1 1 auto;
+	min-height: $illustration-min-height;
 }
 
 .illustration {
-	display: block;
-	width: 58%;
-	max-width: 100%;
-	height: auto;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 	mix-blend-mode: multiply;
 }

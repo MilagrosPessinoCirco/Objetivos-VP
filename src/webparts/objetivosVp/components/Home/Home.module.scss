@@ -1,24 +1,53 @@
-$container-max-width: 1200px;
+// Alto que ocupa el pie (logo y botón del manual) más su separación de la tarjeta.
+$footer-reserve: 56px;
+$access-min-height: 280px;
+$access-max-height: 480px;
 
 .container {
+	--home-padding: clamp(12px, 3vh, 40px);
+
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	min-height: 100vh;
+	padding: var(--home-padding) 40px;
 	width: 100%;
-	max-width: $container-max-width;
+	max-width: 75vw;
 	margin: 0 auto;
 }
 
+// Tres filas: las dos de los extremos tienen el mismo alto, así que la del medio (tarjeta de bienvenida y
+// lista de accesos) queda centrada en vertical. El pie va en la fila inferior, pegado a la tarjeta.
 .home {
 	display: grid;
+	flex: 1 1 auto;
 	grid-template-columns: 6fr 5fr;
-	align-items: stretch;
+	grid-template-rows: 1fr auto 1fr;
 }
 
-.leftColumn,
-.rightColumn {
-	display: flex;
-	flex-direction: column;
+.welcome,
+.access {
+	display: grid;
+	grid-row: 2;
+}
+
+.welcome {
+	grid-column: 1;
+}
+
+// El alto de la lista es lo que queda de la home al descontar el padding y las filas de los extremos
+// (que como mínimo alojan el pie), de modo que todo entra sin scroll. Los botones se reparten ese alto.
+.access {
+	grid-column: 2;
+	align-self: center;
+	height: clamp(
+		#{$access-min-height},
+		calc(var(--home-height, 100vh) - 2 * (var(--home-padding) + #{$footer-reserve})),
+		#{$access-max-height}
+	);
+}
+
+.footer {
+	grid-row: 3;
+	grid-column: 1;
+	align-self: start;
 }

@@ -1,6 +1,6 @@
 .card {
   box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 10px;
   font-family: "Segoe UI", "Segoe UI Web (West European)", sans-serif;
 }
 
@@ -13,7 +13,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  padding: 19px;
+  padding: 10px 20px 10px 30px;
   border: 1px solid #0451dd;
   background: #e7efff;
   color: #0451dd;
@@ -32,7 +32,7 @@
 .simpleTitle {
   margin: 0;
   font-family: "Inter", "Segoe UI", sans-serif;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 32px;
 }
@@ -190,9 +190,9 @@
 
 .icon {
   display: inline-flex;
-  width: 72px;
-  height: 72px;
-  flex: 0 0 72px;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
   align-items: center;
   justify-content: center;
 }
