@@ -14,12 +14,14 @@ import useResultadoClaveDataSource from '../../../../../core/api/ResultadoClave/
 import useTareasIniciativa from '../../../../../core/api/Tarea/useTareasIniciativa';
 import { Iniciativa, ResultadoClave, Tarea } from '../../../../../core/entities';
 import { Utils } from '../../../../../core/utils';
+import type { IPersonValue } from '../../../../../core/utils/Mappers';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { INICIATIVAS_PATH, getObjetivoPath, getTareaPath } from '../../ObjetivosVp/routes';
 import BackButton from '../../shared/BackButton/BackButton';
 import DetailFooter from '../../shared/DetailFooter/DetailFooter';
 import HeaderChip from '../../shared/HeaderChip/HeaderChip';
 import SuccessNotice from '../../shared/SuccessNotice/SuccessNotice';
+import UbicacionEstrategia from '../../shared/UbicacionEstrategia/UbicacionEstrategia';
 import AvanceText from '../../shared/AvanceText/AvanceText';
 import { getColorStep } from '../../shared/getColorStep';
 import { HEADER_TITLE_STYLE } from '../../shared/pageTitleStyle';
@@ -42,11 +44,12 @@ import IniciativaTareasIndicadores from './IniciativaTareasIndicadores/Iniciativ
 import styles from './IniciativaDetalle.module.scss';
 
 export interface IIniciativaDetalleProps {
-	canEdit: boolean;
-	canChangeEstado: boolean;
+	canEdit: (accountable?: IPersonValue) => boolean;
+	canChangeEstado: (accountable?: IPersonValue) => boolean;
 	canLoadResultadosClave: boolean;
-	canTrackResultadoClave: boolean;
+	canTrackResultadoClave: (accountable?: IPersonValue) => boolean;
 	canCreateTarea: boolean;
+	canViewPesos?: boolean;
 }
 
 const PAGE_PADDING = `${spacing.xl} ${spacing.xl} 96px`;
@@ -67,7 +70,7 @@ const getFrom = (state: unknown): string | undefined => {
 	return typeof from === 'string' ? from : undefined;
 };
 
-const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChangeEstado, canLoadResultadosClave, canTrackResultadoClave, canCreateTarea }) => {
+const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChangeEstado, canLoadResultadosClave, canTrackResultadoClave, canCreateTarea, canViewPesos }) => {
 	const { id } = useParams<{ id: string }>();
 	const iniciativaId = Number(id);
 	const isValidId = Number.isInteger(iniciativaId) && iniciativaId > 0;
@@ -95,6 +98,9 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 
 	const iniciativa = isValidId ? iniciativaState.items.filter((item) => item.Id === iniciativaId)[0] : undefined;
 	const objetivo = names.resolve(objetivoState.items.filter((item) => item.Id === iniciativa?.Objetivo?.Id))[0];
+	const puedeEditar = canEdit(iniciativa?.Accountable);
+	const puedeCambiarEstado = canChangeEstado(iniciativa?.Accountable);
+	const puedeSeguir = canTrackResultadoClave(iniciativa?.Accountable);
 	const delObjetivo = iniciativaState.items.filter((item) => item.Objetivo?.Id === iniciativa?.Objetivo?.Id);
 	const pesos = iniciativa ? getPesosIniciativa(iniciativa, delObjetivo, objetivo) : {};
 	const areaNames = (iniciativa?.Area ?? [])
@@ -167,11 +173,11 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 					iniciativa={iniciativa}
 					objetivo={objetivo}
 					areaNames={areaNames}
-					pesos={pesos}
-					onEdit={canEdit ? () => setIsFormOpen(true) : undefined}
+					pesos={canViewPesos ? pesos : {}}
+					onEdit={puedeEditar ? () => setIsFormOpen(true) : undefined}
 				/>
-				{isRrii && <IniciativaResultadosClave resultados={resultados} onTrack={canTrackResultadoClave ? setTrackingResultado : undefined} />}
-				<IniciativaComentario comentario={ultimoComentario} onEdit={canChangeEstado ? () => setIsEstadoOpen(true) : undefined} />
+				{isRrii && <IniciativaResultadosClave resultados={resultados} onTrack={puedeSeguir ? setTrackingResultado : undefined} />}
+				<IniciativaComentario comentario={ultimoComentario} onEdit={puedeCambiarEstado ? () => setIsEstadoOpen(true) : undefined} />
 				{tareas.error
 					? <MessageBar type="error" message={strings.TareasLoadError} actions={<Button variant="secondary" onClick={() => { tareas.reload(); }}>{strings.TareasRetry}</Button>} />
 					: (
@@ -208,11 +214,14 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 								{formatIdNombre(formatIniciativaId(iniciativa.Id), iniciativa.Nombre)}
 							</h1>
 							<HeaderChip color={getEstadoIniciativaChipColor(iniciativa.Estado)} label={iniciativa.Estado ?? ''} />
-							{isRrii && loaded && (
+							{loaded && (
 								<div className={styles.headerEnd} style={{ gap: spacing.md }}>
-									<span style={PROGRESS_LABEL_STYLE}>
-										{strings.ObjetivoDetailProgress} <AvanceText value={getAvanceIniciativa(resultados)} spaced />
-									</span>
+									{isRrii && (
+										<span style={PROGRESS_LABEL_STYLE}>
+											{strings.ObjetivoDetailProgress} <AvanceText value={getAvanceIniciativa(resultados)} spaced />
+										</span>
+									)}
+									<UbicacionEstrategia tipo="iniciativa" id={iniciativaId} otraVp={isRrii ? undefined : objetivo?.VP?.Title} />
 								</div>
 							)}
 						</>
@@ -223,12 +232,12 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 					<Button variant="secondary" onClick={goBack}>
 						{strings.Cancel}
 					</Button>
-					{canEdit && iniciativa && (
+					{puedeEditar && iniciativa && (
 						<Button variant="primary" onClick={() => setIsFormOpen(true)}>
 							{strings.Edit}
 						</Button>
 					)}
-					{canChangeEstado && iniciativa && (
+					{puedeCambiarEstado && iniciativa && (
 						<Button variant="primary" style={CHANGE_STATUS_STYLE} onClick={() => setIsEstadoOpen(true)}>
 							{strings.IniciativaChangeStatus}
 						</Button>
@@ -259,6 +268,7 @@ const IniciativaDetalle: React.FC<IIniciativaDetalleProps> = ({ canEdit, canChan
 				{trackingResultado && (
 					<ResultadoClaveSeguimientoPanel
 						resultado={trackingResultado}
+						accountable={iniciativa?.Accountable}
 						onSaved={onTracked}
 						onCancel={() => setTrackingResultado(undefined)}
 					/>

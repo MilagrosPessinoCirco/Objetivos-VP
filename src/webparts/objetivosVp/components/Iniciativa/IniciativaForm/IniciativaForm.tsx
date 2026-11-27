@@ -8,6 +8,7 @@ import { Area, Iniciativa, Objetivo, ResultadoClave, Usuario } from '../../../..
 import { EstadoIniciativa } from '../../../../../core/utils/Constants';
 import { ILookupValue, IPersonValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
+import { isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
@@ -87,6 +88,7 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 	const [drafts, setDrafts] = React.useState<IResultadoClaveDraft[]>(() => initialDrafts(resultadosClave));
 
 	const personas = uniquePeople([
@@ -169,10 +171,12 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({
 	const save = async (): Promise<void> => {
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		try {
 			await onSave(buildIniciativa(), showResultadosClave ? drafts : []);
 		}
-		catch {
+		catch (error) {
+			setPermisoDenegado(isPermisoDenegadoError(error));
 			setSaveFailed(true);
 			setIsSaving(false);
 			setIsConfirmOpen(false);
@@ -258,7 +262,7 @@ export const IniciativaFormBody: React.FC<IIniciativaFormBodyProps> = ({
 				{showResultadosClave && (
 					<ResultadosClaveBloque drafts={drafts} issues={submitted ? draftIssues : []} onChange={setDrafts} />
 				)}
-				{saveFailed && <MessageBar type="error" message={strings.IniciativaSaveError} />}
+				{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.IniciativaSaveError} />}
 			</div>
 			{isConfirmOpen && (
 				<ConfirmacionModal

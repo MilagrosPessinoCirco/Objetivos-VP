@@ -537,43 +537,48 @@ El sistema detecta las alertas a partir de las tareas y los riesgos. Todas se mu
 
 **Descripción**
 
-Los permisos dependen del rol en la aplicación, que es independiente del puesto. Cada persona tiene un único rol. Toda la VP ve toda la información cargada: la restricción está en la carga y la edición, no en la visualización. La información confidencial no se carga en la plataforma.
+Los permisos dependen del rol en la aplicación, que es independiente del puesto. Cada persona tiene un único rol. Toda persona con rol ve toda la información cargada: la restricción está en la carga y la edición, no en la visualización. Una persona sin rol no accede a la aplicación. La información confidencial no se carga en la plataforma.
 
-Los roles se implementan como grupos que el administrador mantiene.
+Cada rol es un grupo de SharePoint del sitio. Si una persona está en más de un grupo, vale el rol con más permisos: Administrador > CargadorObjetivo > Usuario > Visualizador. Si no está en ninguno de los cuatro grupos, no tiene rol. El rol Visualizador nunca se asigna por defecto.
 
 **Criterios de aceptación**
 
-- Si el usuario no tiene el rol adecuado para una acción, no se le muestran los botones Editar ni Guardar; además, el sistema rechaza el guardado.
+- Si el usuario no tiene el rol adecuado para una acción, no se le muestra el botón de esa acción; además, antes de guardar el sistema vuelve a verificar el permiso y rechaza el guardado.
+- Las listas de la aplicación dan lectura solo a los cuatro grupos, y la escritura por rol se configura por grupo en cada lista. Los permisos por elemento (accountable, responsable) los controla la aplicación.
+- Los pesos de la iniciativa (en el objetivo y en el departamento) y la columna Objetivo (peso) solo los ven CargadorObjetivo y Administrador.
 
 | Rol | Quiénes | Qué puede hacer |
 |---|---|---|
 | Visualizador | El VP | Consulta todo. No carga ni edita. |
 | Usuario | Toda la VP | Crea iniciativas, resultados clave y tareas. Edita las iniciativas de las que es accountable con sus resultados clave y tareas, y las tareas de las que es responsable. |
 | CargadorObjetivo | Gerentes y responsables de departamento designados | Lo del Usuario, más: crea objetivos para cualquier gerencia y edita las iniciativas, resultados clave y tareas (por ejemplo, si el responsable está ausente). |
-| Administrador | Coordinación de la VP y referentes designados | Todo lo anterior, más: palancas, edición de objetivos, sus pesos y la marca de objetivo de la VP RRII, maestros, parámetros, asignación de roles y eliminación de tareas. |
+| Administrador | Coordinación de la VP y referentes designados | Todo lo anterior, más: palancas, edición de objetivos, sus pesos y la marca de objetivo de la VP RRII, maestros, parámetros y alta, cambio de rol y baja de personas. |
 
 | Acción | Visualizador | Usuario | CargadorObjetivo | Admin. |
 |---|---|---|---|---|
-| Ver toda la información | Sí | Sí | Sí | Sí |
-| Crear y editar palancas | — | — | — | Sí |
+| Ver toda la información (los cuatro roles; sin rol, no se accede a la aplicación) | Sí | Sí | Sí | Sí |
+| Crear, editar e inactivar palancas | — | — | — | Sí |
 | Crear objetivos | — | — | Sí | Sí |
-| Editar objetivos y sus pesos | — | — | — | Sí |
+| Editar objetivos, sus pesos y la marca de objetivo de la VP RRII | — | — | — | Sí |
 | Crear iniciativas, resultados clave y tareas | — | Sí | Sí | Sí |
-| Editar iniciativa y resultados clave | — | Si es accountable | Sí | Sí |
-| Actualizar valores de resultados clave | — | Accountable de la iniciativa | Sí | Sí |
+| Editar iniciativa y resultados clave, y cambiar su estado | — | Si es accountable | Sí | Sí |
+| Hacer el seguimiento de un resultado clave | — | Accountable de la iniciativa | Sí | Sí |
 | Actualizar tarea, riesgos y presupuesto | — | Resp. de la tarea o accountable de la iniciativa | Sí | Sí |
-| Maestros, parámetros, roles y eliminar tareas | — | — | — | Sí |
+| Ver los pesos de las iniciativas | — | — | Sí | Sí |
+| Dar de alta, cambiar el rol y dar de baja personas | — | — | — | Sí |
+| Ver el acceso "ABM" en la home | — | — | — | Sí |
+| Maestros y parámetros | — | — | — | Sí |
 
 #### RF-20 · Usuarios
 
 **Descripción**
 
-Las personas se toman del directorio corporativo; no hay alta de usuarios en la aplicación. El administrador mantiene la lista de usuarios de la VP con su departamento, gerencia y subgerencia, que se usa en los filtros y en las bandejas.
+Las personas se toman del directorio corporativo; no hay alta de usuarios en la aplicación. El administrador mantiene la lista de usuarios de la VP con su departamento, gerencia y subgerencia, que se usa en los filtros y en las bandejas. La lista guarda además el rol de cada persona. Cuando se da de alta, se cambia de rol o se da de baja a una persona desde la aplicación, el sistema actualiza la lista y su grupo de SharePoint en la misma operación; si algún paso falla, se deshace y se informa. Si la lista se edita directamente en SharePoint, el grupo no se actualiza.
 
 **Criterios de aceptación**
 
 - Cuando una persona deja la VP se reasigna sus elementos abiertos. Los elementos cerrados conservan al responsable original.
-- Las personas inactivas no aparecen en los campos de usuario.
+- Las personas inactivas no aparecen en los campos de usuario. Al darla de baja, se la quita de su grupo y deja de tener acceso a la aplicación.
 
 **Campos del usuario de la VP**
 
@@ -583,6 +588,7 @@ Las personas se toman del directorio corporativo; no hay alta de usuarios en la 
 | Departamento | Sí | Lista (maestro Departamentos) |  |
 | Gerencia | No | Lista (maestro Gerencias) | Filtrada por el departamento. Solo para departamentos con gerencias. |
 | Subgerencia | No | Lista (maestro Subgerencias) | Filtrada por la gerencia. |
+| Rol | Sí | Lista (Visualizador, Usuario, CargadorObjetivo, Administrador) | Debe coincidir con el grupo de SharePoint de la persona. |
 
 ### 4.8 M8. Cierre del período
 

@@ -7,6 +7,7 @@ import { Departamento, Gerencia, Objetivo, Palanca, Vicepresidencia } from '../.
 import { Duracion, Estado } from '../../../../../core/utils/Constants';
 import { ILookupValue } from '../../../../../core/utils/Mappers';
 import { Utils } from '../../../../../core/utils';
+import { isPermisoDenegadoError } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { buildPanelTitle } from '../../shared/panelTitle';
 import { getColorStep } from '../../shared/getColorStep';
@@ -99,6 +100,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 	const [isConfirmOpen, setIsConfirmOpen] = React.useState<boolean>(false);
 	const [isSaving, setIsSaving] = React.useState<boolean>(false);
 	const [saveFailed, setSaveFailed] = React.useState<boolean>(false);
+	const [permisoDenegado, setPermisoDenegado] = React.useState<boolean>(false);
 
 	const selectedVp = vps.filter((vp) => String(vp.Id) === vpId)[0];
 	const isRrii = isVpRrii(selectedVp?.Nombre);
@@ -195,10 +197,12 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 		}
 		setIsSaving(true);
 		setSaveFailed(false);
+		setPermisoDenegado(false);
 		try {
 			await onSave(toSave);
 		}
-		catch {
+		catch (error) {
+			setPermisoDenegado(isPermisoDenegadoError(error));
 			setSaveFailed(true);
 			setIsSaving(false);
 			setIsConfirmOpen(false);
@@ -384,7 +388,7 @@ export const ObjetivoFormBody: React.FC<IObjetivoFormBodyProps> = ({ vps, depart
 					</div>
 				</div>
 			))}
-			{saveFailed && <MessageBar type="error" message={strings.ObjetivoSaveError} />}
+			{saveFailed && <MessageBar type="error" message={permisoDenegado ? strings.PermisoDenegado : strings.ObjetivoSaveError} />}
 		</>
 	);
 

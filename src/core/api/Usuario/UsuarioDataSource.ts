@@ -42,6 +42,11 @@ export default class UsuarioDataSource implements IUsuarioDataSource {
 		return { Id: user.Id, Title: user.Title ?? '', EMail: user.Email ?? '' };
 	}
 
+	public async getCurrentUserGroups(): Promise<string[]> {
+		const groups: Array<{ Title: string }> = await this._sp.web.currentUser.groups.select('Id', 'Title')();
+		return groups.map((group) => group.Title);
+	}
+
 	public add(item: Usuario): Promise<Usuario> {
 		const listItem = item.toListItem();
 		return this._sp.web.lists.getByTitle(this.listTitle).items.add(listItem).then((result: any) => {

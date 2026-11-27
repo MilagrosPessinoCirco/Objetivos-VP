@@ -5,6 +5,7 @@ import { spacing } from '../../../../../core/ui/foundations';
 import type { FigmaIconName } from '../../../../../core/ui/foundations';
 import * as strings from 'ObjetivosVpWebPartStrings';
 import { getColorStep } from '../../shared/getColorStep';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { INICIATIVAS_PATH, PALANCAS_PATH, TAREAS_PATH } from '../../ObjetivosVp/routes';
 import AccessButton from './AccessButton';
 import styles from './AccessList.module.scss';
@@ -15,6 +16,7 @@ interface IAccessItem {
 	colorGroup: string;
 	colorScale: string;
 	route?: string;
+	soloAdministrador?: boolean;
 }
 
 const LIGHT_TEXT_COLOR = '#fcfcfc';
@@ -22,13 +24,14 @@ const LIGHT_TEXT_COLOR = '#fcfcfc';
 const ACCESS_ITEMS: IAccessItem[] = [
 	{ title: strings.AccessMyTasks, iconName: 'checkmark', colorGroup: 'Primary', colorScale: '800', route: TAREAS_PATH },
 	{ title: strings.AccessMyInitiatives, iconName: 'applications', colorGroup: 'Tertiary', colorScale: '800', route: INICIATIVAS_PATH },
-	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '200', route: PALANCAS_PATH },
-	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Primary', colorScale: '300' },
-	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '700' }
+	{ title: strings.AccessLeversObjectives, iconName: 'flag', colorGroup: 'Tertiary', colorScale: '400', route: PALANCAS_PATH },
+	{ title: strings.AccessVpDashboard, iconName: 'list', colorGroup: 'Secondary', colorScale: '700' },
+	{ title: strings.AccessAbm, iconName: 'users', colorGroup: 'Secondary', colorScale: '800', soloAdministrador: true }
 ];
 
 const AccessList: React.FC = () => {
 	const navigate = useNavigate();
+	const { permisos } = usePermisos();
 
 	return (
 		<div className={styles.list} style={{ rowGap: spacing.lg }}>
@@ -36,9 +39,8 @@ const AccessList: React.FC = () => {
 				const step = getColorStep(item.colorGroup, item.colorScale);
 				const route = item.route;
 
-				return (
+				const button = (
 					<AccessButton
-						key={item.title}
 						title={item.title}
 						iconName={item.iconName}
 						backgroundColor={step.value}
@@ -46,6 +48,10 @@ const AccessList: React.FC = () => {
 						onClick={route ? () => navigate(route) : undefined}
 					/>
 				);
+
+				return item.soloAdministrador && !permisos.canManageUsuarios
+					? <div key={item.title} style={{ visibility: 'hidden' }} aria-hidden="true">{button}</div>
+					: <React.Fragment key={item.title}>{button}</React.Fragment>;
 			})}
 		</div>
 	);

@@ -6,6 +6,7 @@ export default interface ITareaDataSource {
 
 	getItems(): Promise<Tarea[]>;
 	getFilteredItems(iniciativaId: number): Promise<Tarea[]>;
+	getItemsByIniciativaIds(iniciativaIds: number[]): Promise<Tarea[]>;
 	add(item: Tarea): Promise<Tarea>;
 	edit(item: Tarea): Promise<Tarea>;
 	delete(itemId: number): Promise<void>;

@@ -4,7 +4,9 @@ import { Button } from '../../../../../core/ui/components';
 import { MessageBar, Panel, Spinner } from '../../../../../core/ui/patterns';
 import useObjetivoDataSource from '../../../../../core/api/Objetivo/useObjetivoDataSource';
 import { Objetivo } from '../../../../../core/entities';
+import { assertPermiso } from '../../../../../core/utils/Permisos';
 import * as strings from 'ObjetivosVpWebPartStrings';
+import { usePermisos } from '../../shared/PermisosProvider';
 import { ObjetivoFormBody } from './ObjetivoForm';
 import useObjetivoFormMasters from './useObjetivoFormMasters';
 import styles from './ObjetivoForm.module.scss';
@@ -17,10 +19,13 @@ export interface IObjetivoFormPanelProps {
 }
 
 const ObjetivoFormPanel: React.FC<IObjetivoFormPanelProps> = ({ initialPalancaId, objetivo, onSaved, onCancel }) => {
+	const { verificar } = usePermisos();
 	const masters = useObjetivoFormMasters();
 	const [, , addItem, editItem] = useObjetivoDataSource();
 
 	const save = async (toSave: Objetivo): Promise<void> => {
+		const permisos = await verificar();
+		assertPermiso(objetivo ? permisos.canEditObjetivo : permisos.canCreateObjetivo);
 		if (objetivo) {
 			await editItem(toSave);
 		}

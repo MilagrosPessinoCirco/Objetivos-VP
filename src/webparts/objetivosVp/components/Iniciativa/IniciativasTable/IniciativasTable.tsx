@@ -21,6 +21,8 @@ export interface IIniciativasTableProps {
 	variant: 'bandeja' | 'objetivo';
 	objetivos?: Objetivo[];
 	objetivo?: Objetivo;
+	canViewPesos?: boolean;
+	todasLasIniciativas?: Iniciativa[];
 	emptyText: string;
 	onView: (id: number) => void;
 }
@@ -44,13 +46,19 @@ const ACTION_BUTTON_STYLE: CSSProperties = { ...ICON_BUTTON_STYLE, width: 24, mi
 
 const byId = (a: Iniciativa, b: Iniciativa): number => (a.Id ?? 0) - (b.Id ?? 0);
 
-const IniciativasTable: React.FC<IIniciativasTableProps> = ({ iniciativas, resultados, variant, objetivos, objetivo, emptyText, onView }) => {
+const IniciativasTable: React.FC<IIniciativasTableProps> = ({ iniciativas, resultados, variant, objetivos, objetivo, canViewPesos, todasLasIniciativas, emptyText, onView }) => {
 	const findObjetivo = (iniciativa: Iniciativa): Objetivo | undefined =>
 		(objetivos ?? []).filter((item) => item.Id === iniciativa.Objetivo?.Id)[0];
 
 	const objetivoText = (iniciativa: Iniciativa): string => {
 		const found = findObjetivo(iniciativa);
-		return found ? formatObjetivoLabel(found) : iniciativa.Objetivo?.Title ?? '';
+		const base = found ? formatObjetivoLabel(found) : iniciativa.Objetivo?.Title ?? '';
+		if (!canViewPesos || !found) {
+			return base;
+		}
+		const delObjetivo = (todasLasIniciativas ?? iniciativas).filter((item) => item.Objetivo?.Id === iniciativa.Objetivo?.Id);
+		const enObjetivo = getPesosIniciativa(iniciativa, delObjetivo, found).enObjetivo;
+		return enObjetivo === undefined ? base : `${base} (${formatPeso(enObjetivo)}%)`;
 	};
 
 	const isRrii = (iniciativa: Iniciativa): boolean =>
@@ -98,14 +106,14 @@ const IniciativasTable: React.FC<IIniciativasTableProps> = ({ iniciativas, resul
 
 	const idColumn: ITableColumn<IniciativaRow> = { key: 'id', header: strings.ObjetivoColumnId, width: ID_WIDTH };
 	const nameColumn: ITableColumn<IniciativaRow> = { key: 'nombre', header: strings.IniciativaColumnName };
-	const objectiveColumn: ITableColumn<IniciativaRow> = { key: 'objetivo', header: strings.ObjetivoColumnName };
+	const objectiveColumn: ITableColumn<IniciativaRow> = { key: 'objetivo', header: canViewPesos ? strings.ObjetivoColumnNameWeight : strings.ObjetivoColumnName };
 	const accountableColumn: ITableColumn<IniciativaRow> = { key: 'accountable', header: strings.IniciativaAccountable };
 	const progressColumn: ITableColumn<IniciativaRow> = { key: 'avance', header: strings.ObjetivoColumnProgress, width: PROGRESS_WIDTH, render: (_value, row) => renderAvance(row) };
 	const weightColumn: ITableColumn<IniciativaRow> = { key: 'peso', header: strings.ObjetivoColumnWeight, width: WEIGHT_WIDTH };
 	const statusColumn: ITableColumn<IniciativaRow> = { key: 'estado', header: strings.ObjetivoColumnStatus, width: STATUS_WIDTH, render: (_value, row) => renderEstado(row) };
 	const actionsColumn: ITableColumn<IniciativaRow> = { key: 'acciones', header: strings.ObjetivoColumnView, width: ACTIONS_WIDTH, render: (_value, row) => renderActions(row) };
 
-	const showWeight = variant === 'objetivo' && isVpRrii(objetivo?.VP?.Title);
+	const showWeight = variant === 'objetivo' && canViewPesos === true && isVpRrii(objetivo?.VP?.Title);
 	const columns: ITableColumn<IniciativaRow>[] = variant === 'bandeja'
 		? [idColumn, nameColumn, objectiveColumn, accountableColumn, progressColumn, statusColumn, actionsColumn]
 		: showWeight
