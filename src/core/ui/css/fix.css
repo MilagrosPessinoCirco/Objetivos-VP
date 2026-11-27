@@ -193,6 +193,13 @@ div[class*="sp-pageLayout-horizontalNav"]{
 	margin: 0 !important;
 }
 
+/* Borde de 1px (#e1dfdd) que SharePoint dibuja alrededor del contenido de la página y deja una línea
+   visible entre la barra superior y el encabezado de la app. Las clases son atómicas y generadas por
+   SharePoint: si una actualización las cambia, hay que volver a inspeccionar el elemento. */
+.a_WfskV_1x34n.a_eH4OC_1x34n {
+	border: 0 !important;
+}
+
 @media screen and (min-width: 1024px) {
 	.CanvasClassB {
 		max-width: none !important;

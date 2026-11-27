@@ -4,6 +4,10 @@ declare interface IObjetivosVpWebPartStrings {
 	DescriptionFieldLabel: string;
 	Title: string;
 	HomeTitle: string;
+	RolAdministrador: string;
+	RolCargadorObjetivo: string;
+	RolUsuario: string;
+	RolVisualizador: string;
 	HomeWelcomeText: string;
 	AccessMyTasks: string;
 	AccessMyInitiatives: string;
