@@ -9,6 +9,9 @@ import { getColorStep } from '../shared/getColorStep';
 const AVANCE_UMBRAL_AMARILLO = 60;
 const AVANCE_UMBRAL_VERDE = 80;
 const FULL_PERCENT = 100;
+const APORTE_BASE_MINIMO = 60;
+const APORTE_BASE_META = 80;
+const APORTE_AMPLITUD_TRAMO = 20;
 const NORMALIZE_FACTOR = 1000000;
 const NUMBER_LOCALE = 'es-AR';
 const NUMBER_MAX_DECIMALS = 4;
@@ -111,27 +114,67 @@ export const getEstadoResultadoClaveChip = (estado: EstadoResultadoClave): IEsta
 
 export const getPesoResultadoClave = (cantidad: number): number => FULL_PERCENT / cantidad;
 
-const getAporte = (resultado: ResultadoClave): number => Math.max(0, Math.min(getCumplimiento(resultado), FULL_PERCENT));
+type ValorResultadoClave = (resultado: ResultadoClave) => number | null | undefined;
 
-export const getAvanceIniciativa = (resultados: ResultadoClave[]): number => {
+const getValorActual: ValorResultadoClave = (resultado) => resultado.ValorActual;
+const getValorProyectado: ValorResultadoClave = (resultado) => resultado.ValorProyectado;
+
+const interpolarTramo = (valor: number, desde: number, hasta: number, base: number): number =>
+	normalizeAvance(base + (valor - desde) / (hasta - desde) * APORTE_AMPLITUD_TRAMO);
+
+const getAportePorValor = (resultado: ResultadoClave, valor: number | null | undefined): number => {
+	const { Minimo: minimo, Meta: meta, Maximo: maximo } = resultado;
+	if (valor === undefined || valor === null || minimo === undefined || meta === undefined || maximo === undefined) {
+		return 0;
+	}
+	if (valor < minimo) {
+		return 0;
+	}
+	if (valor < meta) {
+		return interpolarTramo(valor, minimo, meta, APORTE_BASE_MINIMO);
+	}
+	if (valor < maximo) {
+		return interpolarTramo(valor, meta, maximo, APORTE_BASE_META);
+	}
+	return FULL_PERCENT;
+};
+
+const getAvanceIniciativaPorValor = (resultados: ResultadoClave[], getValor: ValorResultadoClave): number => {
 	if (resultados.length === 0) {
 		return 0;
 	}
-	const suma = resultados.reduce((total, resultado) => total + getAporte(resultado), 0);
+	const suma = resultados.reduce((total, resultado) => total + getAportePorValor(resultado, getValor(resultado)), 0);
 	return normalizeAvance(suma / resultados.length);
 };
 
-export const getAvanceObjetivo = (objetivoId: number | undefined, iniciativas: Iniciativa[], resultados: ResultadoClave[]): number => {
+const getAvanceObjetivoPorValor = (
+	objetivoId: number | undefined,
+	iniciativas: Iniciativa[],
+	resultados: ResultadoClave[],
+	getValor: ValorResultadoClave
+): number => {
 	const vigentes = iniciativas.filter((iniciativa) => iniciativa.Objetivo?.Id === objetivoId && iniciativa.Estado !== EstadoIniciativa.Cancelada);
 	if (vigentes.length === 0) {
 		return 0;
 	}
 	const suma = vigentes.reduce(
-		(total, iniciativa) => total + getAvanceIniciativa(resultados.filter((resultado) => resultado.Iniciativa?.Id === iniciativa.Id)),
+		(total, iniciativa) => total + getAvanceIniciativaPorValor(resultados.filter((resultado) => resultado.Iniciativa?.Id === iniciativa.Id), getValor),
 		0
 	);
 	return normalizeAvance(suma / vigentes.length);
 };
+
+export const getAvanceIniciativa = (resultados: ResultadoClave[]): number =>
+	getAvanceIniciativaPorValor(resultados, getValorActual);
+
+export const getAvanceIniciativaProyectado = (resultados: ResultadoClave[]): number =>
+	getAvanceIniciativaPorValor(resultados, getValorProyectado);
+
+export const getAvanceObjetivo = (objetivoId: number | undefined, iniciativas: Iniciativa[], resultados: ResultadoClave[]): number =>
+	getAvanceObjetivoPorValor(objetivoId, iniciativas, resultados, getValorActual);
+
+export const getAvanceObjetivoProyectado = (objetivoId: number | undefined, iniciativas: Iniciativa[], resultados: ResultadoClave[]): number =>
+	getAvanceObjetivoPorValor(objetivoId, iniciativas, resultados, getValorProyectado);
 
 export const getAvanceColor = (avance: number): AvanceColor => {
 	const valor = normalizeAvance(avance);

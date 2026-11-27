@@ -7,11 +7,11 @@ Aplicación que conecta palancas estratégicas, objetivos, iniciativas, resultad
 | Proyecto | Gestión de Portfolio VP |
 | Cliente | YPF S.A. · VP RRII (Relaciones Institucionales) |
 | Documento | Especificación funcional |
-| Versión | 1.10 · 24/11/2026 |
+| Versión | 1.12 · 27/11/2026 |
 | Estado | Versión para diseño y desarrollo |
 | Autores | VIGNARDEL, FRANCISCO · PESSINO, MILAGROS |
 | Usuarias referentes | BAUMANN, ANALIA · GROTZ, MARIA MARTHA |
-| Archivo | Especificacion_Funcional_Gestion_Portfolio_VP_v1.10.docx |
+| Archivo | Especificacion_Funcional_Gestion_Portfolio_VP_v1.12.docx |
 
 ## 1. Introducción
 
@@ -42,7 +42,7 @@ La gestión se organiza en una jerarquía de cinco niveles. El avance se calcula
 
 ```mermaid
 flowchart LR
-  RC["Resultado clave<br>% cumplimiento (C-01)"] -- partes iguales --> I["Iniciativa<br>avance (C-03)"]
+  RC["Resultado clave<br>aporte (C-03)"] -- partes iguales --> I["Iniciativa<br>avance (C-03)"]
   T["Tareas<br>(no suman al avance)"] -. alertas, riesgos, presupuesto .-> I
   I -- partes iguales --> O["Objetivo<br>avance (C-04)"]
   O -- peso en la VP --> V["VP<br>avance (C-05)"]
@@ -90,7 +90,7 @@ El desarrollo se divide en entregas para llegar a la carga de los objetivos 2027
 | Exportación a PDF | Se evaluará para una etapa posterior. |
 | Integraciones con control de gestión, presupuesto o herramientas de planificación | Fuera del alcance de esta versión. |
 | Indicadores de eficiencia y rentabilidad | No son el foco de la herramienta. |
-| Pesos manuales de iniciativas y resultados clave | En esta versión se reparten en partes iguales (RF-08). Se evaluará después de la primera etapa de uso. |
+| Pesos manuales de iniciativas y resultados clave | En esta versión se reparten en partes iguales (RF-08). Se evaluará después de la primera etapa de uso. El usuario de la VP RRII pidió ponderar los resultados clave por un peso asignado; queda para esa evaluación. |
 | Tareas o iniciativas sin vincular | La carga sigue siempre el orden palanca → objetivo → iniciativa → tarea y resultados clave. Un elemento suelto no suma al avance ni aparece en los reportes. |
 | Envío de tareas finalizadas a la app de Novedades | Evolutivo a evaluar: un botón en las tareas finalizadas (hitos) para enviarlas como novedad o, como paso intermedio, una descarga en Word. Requiere analizar la integración con esa app. |
 | Reportes de carga por persona y por subgerencia | Evolutivo a evaluar: cuántas iniciativas y tareas tiene cada persona y en cuántas iniciativas trabaja cada subgerencia. Los datos necesarios ya se registran. |
@@ -624,20 +624,20 @@ Valores que el administrador puede cambiar sin modificar la aplicación.
 
 ## 5. Cálculos
 
-Todos los cálculos se hacen por separado con el valor actual (real) y con el valor proyectado. Los porcentajes se expresan entre 0% y 100%, salvo el % de cumplimiento del resultado clave, que puede superar 100% para mostrar sobrecumplimiento. Los porcentajes de cumplimiento, avance y peso se muestran redondeados a entero; el redondeo es solo de presentación: los promedios y los colores se calculan con el valor sin redondear.
+Todos los cálculos se hacen por separado con el valor actual (real) y con el valor proyectado. Los porcentajes se expresan entre 0% y 100%, salvo el % de cumplimiento del resultado clave, que puede superar 100% para mostrar sobrecumplimiento y no interviene en el avance. Los porcentajes de cumplimiento, avance y peso se muestran redondeados a entero; el redondeo es solo de presentación: los promedios y los colores se calculan con el valor sin redondear.
 
 | Código | Cálculo | Fórmula y reglas |
 |---|---|---|
-| C-01 | % de cumplimiento del resultado clave | Real = valor actual ÷ máximo.<br>Proyectado = valor proyectado ÷ máximo.<br>Sin valor actual, el cumplimiento real se muestra como "—" y aporta 0% al avance de la iniciativa. |
-| C-02 | Estado del resultado clave | Se calcula con el valor actual (estado real) y con el proyectado (estado proyectado):<br>• valor < mínimo → No cumple (rojo)<br>• mínimo ≤ valor < meta → Mínimo (naranja)<br>• meta ≤ valor < máximo → Meta (amarillo)<br>• valor ≥ máximo → Máximo (verde)<br>• sin valor actual → Sin dato (gris) |
-| C-03 | Avance de la iniciativa | Avance = promedio simple de máx(0%, mín(% cumplimiento, 100%)) de sus resultados clave, porque pesan en partes iguales (RF-08). Un resultado clave sin valor actual aporta 0%.<br>El avance de las tareas no interviene. |
+| C-01 | % de cumplimiento del resultado clave | Real = valor actual ÷ máximo.<br>Proyectado = valor proyectado ÷ máximo.<br>Sin valor actual, el cumplimiento real se muestra como "—".<br>Es informativo: el avance de la iniciativa sale del aporte (C-03), no del cumplimiento. |
+| C-02 | Estado del resultado clave | Se calcula con el valor actual (estado real) y con el proyectado (estado proyectado):<br>• valor < mínimo → No cumple (rojo)<br>• mínimo ≤ valor < meta → Mínimo (naranja)<br>• meta ≤ valor < máximo → Meta (amarillo)<br>• valor ≥ máximo → Máximo (verde)<br>• sin valor actual → Sin dato (gris)<br>Los umbrales mínimo, meta y máximo equivalen a un aporte de 60%, 80% y 100% al avance de la iniciativa (C-03). |
+| C-03 | Avance de la iniciativa | Avance = promedio simple del aporte de sus resultados clave, porque pesan en partes iguales (RF-08). El aporte de cada uno se calcula con su valor (actual para el real, proyectado para el proyectado):<br>• sin valor → 0%<br>• valor < mínimo → 0%<br>• mínimo ≤ valor < meta → 60% + (valor − mínimo) ÷ (meta − mínimo) × 20%<br>• meta ≤ valor < máximo → 80% + (valor − meta) ÷ (máximo − meta) × 20%<br>• valor ≥ máximo → 100%<br>El aporte nunca supera 100%, para que un resultado sobrecumplido no compense a otro incumplido.<br>El avance de las tareas no interviene. |
 | C-04 | Avance del objetivo | Avance = promedio simple del avance de sus iniciativas, porque pesan en partes iguales (RF-08).<br>Solo cuentan las iniciativas no canceladas.<br>No se calcula para objetivos de otra VP. |
 | C-05 | Avance de la VP | Avance = Σ (peso en la VP × avance del objetivo) ÷ Σ pesos en la VP, sobre los objetivos marcados como objetivos de la VP RRII del año. |
 | C-06 | Presupuesto | Saldo de la tarea = presupuesto aprobado − presupuesto ejecutado.<br>Presupuesto de la iniciativa (aprobado, ejecutado y saldo) = suma de los de sus tareas no canceladas, también en iniciativas de otras VP. |
 | C-07 | Color del avance | Se aplica al avance de iniciativas, objetivos y VP:<br>• menos de 60% → rojo<br>• de 60% a menos de 80% → amarillo<br>• 80% o más → verde<br>Los umbrales son parámetros (RF-22). |
 | C-08 | Indicadores de tareas en la iniciativa | Cantidad de tareas por estado, tareas vencidas, próximas a vencer y sin actualizar (RF-18), riesgos activos y escalados, y decisiones pendientes. |
 
-Ejemplo. Una iniciativa tiene dos resultados clave: "Implementar YPF Store en 100 estaciones" (máximo 100, valor actual 40 → 40%) y "Alcanzar USD 193 K de facturación" (máximo 210, valor actual 230 → 110%, que suma como 100%). Cada uno pesa 50%, así que el avance de la iniciativa = (40% + 100%) ÷ 2 = 70% (amarillo). Si el objetivo tiene tres iniciativas, cada una pesa 1/3; si las otras dos tienen 90% y 60%, el avance del objetivo es (70% + 90% + 60%) ÷ 3 = 73,3% (se muestra como 73%).
+Ejemplo. Una iniciativa tiene dos resultados clave: "Generar 12 estudios estratégicos" (mínimo 8, meta 10, máximo 12, valor actual 11 → aporte 80% + (11 − 10) ÷ (12 − 10) × 20% = 90%; cumplimiento 92%, estado Meta) y "Alcanzar USD 193 K de facturación" (mínimo 150, meta 193, máximo 210, valor actual 230 → aporte 100%; cumplimiento 110%, estado Máximo). Cada uno pesa 50%, así que el avance de la iniciativa = (90% + 100%) ÷ 2 = 95% (verde). Si el objetivo tiene tres iniciativas, cada una pesa 1/3; si las otras dos tienen 70% y 60%, el avance del objetivo es (95% + 70% + 60%) ÷ 3 = 75% (amarillo).
 
 ## 6. Modelo de datos
 
