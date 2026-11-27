@@ -12,6 +12,7 @@ $icon-size: clamp(32px, 7.5vh, 50px);
 	// El título y el ícono de HomeCard se achican cuando la ventana es baja o angosta.
 	p {
 		font-size: clamp(15px, min(3.3vh, 1.6vw), 21px);
+		font-weight: 500;
 		line-height: 1.3;
 	}
 
